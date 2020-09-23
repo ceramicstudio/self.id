@@ -29,6 +29,7 @@
     "eslint": "^7.9.0",
     "eslint-config-3box": "^0.1.2",
     "identity-wallet": "^2.0.0-alpha.5",
+    "next-plugin-svgr": "0.0.6",
     "prettier": "^2.1.1",
     "typescript": "^4.0.2"
   }
