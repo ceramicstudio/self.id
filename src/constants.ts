@@ -1,14 +1,14 @@
 export const CERAMIC_URL = 'http://localhost:7007'
 
 export const IDX_SCHEMAS = {
-  BasicProfile: 'ceramic://bagcqcerailew3xczbwgy32jg22mncuomkywju6osjtildsvvfxe2fx5tpaiq',
-  Definition: 'ceramic://bagcqceraeocr75pae3orq7j2yiubgx3chchivh5qrmcdidkhhrytka6w32jq',
-  DocIdDocIdMap: 'ceramic://bagcqcerayjtckagmzwgjf3gbrkri45txg7s6rsuhs2ijutd4yd5i2hgqdk6a',
-  DocIdMap: 'ceramic://bagcqceraqfub46l5jcvlyoimlntuqry7vc44wapn3kvifolgauk5aateigpa',
-  IdentityIndex: 'ceramic://bagcqceralkfqsmrt63qujcyjzdydqv7bt4l3hrvb3th5cvxbdt6vrtvrshwa',
-  StringMap: 'ceramic://bagcqcerambl4pl326vc473d6lesrmh5dxshb34mr7rd7es6vnl6p2wb3epwq',
+  BasicProfile: 'ceramic://bagcqcerao6pvaizowdjpows4ylxohvoyx4fsvlwnpllexhdacqdffnkvw52q',
+  Definition: 'ceramic://bagcqcerawjfbpprtts7qgnbmt4z76qkgmypmit2fp5vrs42walevokqyisaa',
+  DocIdDocIdMap: 'ceramic://bagcqcera4eclvjuv4is5jqb573ii53nvaucxpft4qml24intawybmsqvo5cq',
+  DocIdMap: 'ceramic://bagcqceradr7jquj4b5zvdjob7lhtf6dp3ymbksz3blxbzase35rpoulgczia',
+  IdentityIndex: 'ceramic://bagcqceranobylzu5ydctykolgtjuxztcdai4harofnafbhg6tflfdlqujnka',
+  StringMap: 'ceramic://bagcqceragpir2xcuhc32jpoadr23z6z54l2gogghhrhtmncive6azfk7czcq',
 }
 
 export const IDX_DEFINITIONS = {
-  'idx:basicProfile': 'ceramic://bagcqceragrvoestzzde3hgbyiqdty7a6cr7x57fr2wjizebiwpeq4zkn47qq',
+  basicProfile: 'ceramic://bagcqceranqr54cej3kmtnn7nngklzfgxvf7goonztv5uuevl7uxu4d57g7mq',
 }

@@ -8,10 +8,11 @@
     "lint": "eslint src",
     "dev": "next dev",
     "build": "next build",
+    "analyze": "ANALYZE=true next build",
     "start": "next start"
   },
   "dependencies": {
-    "@ceramicnetwork/ceramic-http-client": "^0.5.12",
+    "@ceramicnetwork/ceramic-http-client": "^0.6.2",
     "@ceramicstudio/idx": "^0.1.0",
     "grommet": "^2.15.0",
     "next": "9.5.3",
@@ -20,17 +21,19 @@
     "styled-components": "^5.2.0"
   },
   "devDependencies": {
-    "@ceramicnetwork/ceramic-cli": "^0.6.0",
+    "@ceramicnetwork/ceramic-cli": "^0.9.2",
     "@ceramicstudio/idx-schemas": "^0.1.5",
-    "@types/node": "^14.10.1",
-    "@types/react": "^16.9.49",
+    "@next/bundle-analyzer": "^9.5.3",
+    "@types/node": "^14.11.2",
+    "@types/react": "^16.9.50",
     "@types/styled-components": "^5.1.3",
     "babel-plugin-styled-components": "^1.11.1",
-    "eslint": "^7.9.0",
+    "eslint": "^7.10.0",
     "eslint-config-3box": "^0.1.2",
-    "identity-wallet": "^2.0.0-alpha.5",
+    "identity-wallet": "^2.0.0-alpha.11",
+    "next-compose-plugins": "^2.2.0",
     "next-plugin-svgr": "0.0.6",
-    "prettier": "^2.1.1",
-    "typescript": "^4.0.2"
+    "prettier": "^2.1.2",
+    "typescript": "^4.0.3"
   }
 }

@@ -1,25 +1,19 @@
 import { Anchor, Box, Paragraph, Text } from 'grommet'
-import { GetServerSideProps } from 'next'
+import type { GetServerSideProps } from 'next'
+import dynamic from 'next/dynamic'
+import Head from 'next/head'
 import React from 'react'
 import styled, { css } from 'styled-components'
 
-import { idx } from '../../idx'
 import { BRAND_COLOR, PLACEHOLDER_COLOR } from '../../theme'
+import type { IDXBasicProfile } from '../../types'
 
-interface IDXBasicProfile {
-  name?: string
-  image?: string
-  description?: string
-  emoji?: string
-  background?: string
-  birthDate?: string
-  url?: string
-  gender?: string
-  homeLocation?: string
-  residenceCountry?: string
-  nationalities?: string | Array<string>
-  affiliations?: Array<string>
-}
+const EditProfileButton = dynamic(() => import('../../components/EditProfileButton'), {
+  loading: function LoadingButton() {
+    return <Text>Loading...</Text>
+  },
+  ssr: false,
+})
 
 interface Props {
   profile: IDXBasicProfile | null
@@ -28,6 +22,7 @@ interface Props {
 export const getServerSideProps: GetServerSideProps<Props, { did: string }> = async (ctx) => {
   let profile = null
   try {
+    const { idx } = await import('../../idx')
     profile = await idx.get<IDXBasicProfile>('basicProfile', ctx.params?.did)
   } catch (err) {
     console.log('error loading profile from IDX', err)
@@ -73,6 +68,9 @@ const Name = styled.h1`
 function NoProfile() {
   return (
     <Box>
+      <Head>
+        <title>No profile found | self.ID</title>
+      </Head>
       <Header />
       <Box alignSelf="center" width="large">
         <Avatar />
@@ -86,6 +84,8 @@ export default function Me({ profile }: Props) {
   if (profile == null) {
     return <NoProfile />
   }
+
+  const name = profile.name ?? '(no name)'
 
   const description = profile.description ? (
     <Paragraph color="neutral-1" fill>
@@ -118,11 +118,19 @@ export default function Me({ profile }: Props) {
 
   return (
     <Box>
+      <Head>
+        <title>{name} | self.ID</title>
+      </Head>
       <Header url={profile.background} />
       <Box alignSelf="center" width="large">
-        <Avatar url={profile.image} />
+        <Box direction="row" flex>
+          <Avatar url={profile.image} />
+          <Box flex>
+            <EditProfileButton />
+          </Box>
+        </Box>
         <Name>
-          {profile.name ?? '(no name)'}
+          {name}
           {profile.emoji ? ` ${profile.emoji}` : null}
         </Name>
         {description}

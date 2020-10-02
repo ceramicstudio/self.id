@@ -6,7 +6,6 @@ export default function Home() {
     <Main pad="large">
       <Head>
         <title>self.ID</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <Heading>self.ID</Heading>
     </Main>
