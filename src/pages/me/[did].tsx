@@ -2,34 +2,40 @@ import { Anchor, Box, Paragraph, Text } from 'grommet'
 import type { GetServerSideProps } from 'next'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
-import React from 'react'
+import { useState } from 'react'
 import styled, { css } from 'styled-components'
 
 import { BRAND_COLOR, PLACEHOLDER_COLOR } from '../../theme'
 import type { IDXBasicProfile } from '../../types'
 
 const EditProfileButton = dynamic(() => import('../../components/EditProfileButton'), {
-  loading: function LoadingButton() {
-    return <Text>Loading...</Text>
-  },
+  ssr: false,
+})
+
+const LoginButton = dynamic(() => import('../../components/LoginButton'), {
   ssr: false,
 })
 
 interface Props {
-  profile: IDXBasicProfile | null
+  did: string | null
+  loadedProfile: IDXBasicProfile | null
 }
 
 export const getServerSideProps: GetServerSideProps<Props, { did: string }> = async (ctx) => {
-  let profile = null
-  try {
-    const { idx } = await import('../../idx')
-    profile = await idx.get<IDXBasicProfile>('basicProfile', ctx.params?.did)
-  } catch (err) {
-    console.log('error loading profile from IDX', err)
+  const did = ctx.params?.did ?? null
+  let loadedProfile = null
+
+  if (did !== null) {
+    try {
+      const { idx } = await import('../../server/idx')
+      loadedProfile = await idx.get<IDXBasicProfile>('basicProfile', did)
+    } catch (err) {
+      console.log('error loading profile from IDX', err)
+    }
   }
 
   return {
-    props: { profile },
+    props: { did, loadedProfile },
   }
 }
 
@@ -65,24 +71,40 @@ const Name = styled.h1`
   font-weight: 500;
 `
 
-function NoProfile() {
+interface NoProfileProps {
+  did: string | null
+  setProfile: (profile: IDXBasicProfile) => void
+}
+
+function NoProfile({ did, setProfile }: NoProfileProps) {
   return (
     <Box>
       <Head>
         <title>No profile found | self.ID</title>
       </Head>
-      <Header />
+      <Header>
+        <LoginButton />
+      </Header>
       <Box alignSelf="center" width="large">
-        <Avatar />
+        <Box direction="row" flex>
+          <Avatar />
+          <Box flex>
+            <Box alignSelf="end" margin="medium" width="150px">
+              <EditProfileButton did={did} setProfile={setProfile} />
+            </Box>
+          </Box>
+        </Box>
         <Name>No profile found</Name>
       </Box>
     </Box>
   )
 }
 
-export default function Me({ profile }: Props) {
-  if (profile == null) {
-    return <NoProfile />
+export default function Me({ did, loadedProfile }: Props) {
+  const [profile, setProfile] = useState<IDXBasicProfile | null>(loadedProfile)
+
+  if (did == null || profile == null) {
+    return <NoProfile did={did} setProfile={setProfile} />
   }
 
   const name = profile.name ?? '(no name)'
@@ -121,12 +143,16 @@ export default function Me({ profile }: Props) {
       <Head>
         <title>{name} | self.ID</title>
       </Head>
-      <Header url={profile.background} />
+      <Header url={profile.background}>
+        <LoginButton />
+      </Header>
       <Box alignSelf="center" width="large">
         <Box direction="row" flex>
           <Avatar url={profile.image} />
           <Box flex>
-            <EditProfileButton />
+            <Box alignSelf="end" margin="medium" width="150px">
+              <EditProfileButton did={did} setProfile={setProfile} />
+            </Box>
           </Box>
         </Box>
         <Name>

@@ -1,6 +1,6 @@
 const Ceramic = require('@ceramicnetwork/ceramic-http-client').default
 const { IDX } = require('@ceramicstudio/idx')
-const { publishSchemas, schemasList } = require('@ceramicstudio/idx-schemas')
+const { definitions } = require('@ceramicstudio/idx-constants')
 const Wallet = require('identity-wallet').default
 
 const SEED = '0x08b2e655d239e24e3ca9aa17bc1d05c1dee289d6ebf0b3542fd9536912d51ee0'
@@ -17,19 +17,8 @@ async function run() {
   })
   await ceramic.setDIDProvider(wallet.getDidProvider())
 
-  const schemas = await publishSchemas({ ceramic, schemas: schemasList })
-  console.log('// schemas')
-  console.log(JSON.stringify(schemas, null, 2))
-
-  const idx = new IDX({ ceramic, schemas })
-  const docID = await idx.createDefinition({
-    name: 'Basic Profile',
-    schema: schemas.BasicProfile,
-  })
-  console.log('// definitions')
-  console.log(JSON.stringify({ basicProfile: docID }, null, 2))
-
-  await idx.set(docID, {
+  const idx = new IDX({ ceramic })
+  await idx.set(definitions.basicProfile, {
     name: 'Bob Ceramic',
     emoji: '👻',
     description:

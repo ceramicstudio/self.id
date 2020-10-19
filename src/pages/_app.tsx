@@ -1,6 +1,7 @@
+import { Grommet } from 'grommet'
+import { Provider } from 'jotai'
 import NextApp, { AppInitialProps } from 'next/app'
 import Head from 'next/head'
-import { Grommet } from 'grommet'
 import { createGlobalStyle } from 'styled-components'
 
 const GlobalStyle = createGlobalStyle`   
@@ -37,14 +38,16 @@ export default class App extends NextApp<AppInitialProps> {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const { Component, pageProps } = this.props
     return (
-      <Grommet full theme={theme}>
-        <GlobalStyle />
-        <Head>
-          <link rel="icon" href="/favicon.ico" />
-          <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        </Head>
-        <Component {...pageProps} />
-      </Grommet>
+      <Provider>
+        <Grommet full theme={theme}>
+          <GlobalStyle />
+          <Head>
+            <link rel="icon" href="/favicon.ico" />
+            <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+          </Head>
+          <Component {...pageProps} />
+        </Grommet>
+      </Provider>
     )
   }
 }
