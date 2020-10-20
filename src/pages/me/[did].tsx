@@ -5,14 +5,12 @@ import Head from 'next/head'
 import { useState } from 'react'
 import styled, { css } from 'styled-components'
 
+import Navbar from '../../components/Navbar'
+import { loadProfile } from '../../profile'
 import { BRAND_COLOR, PLACEHOLDER_COLOR } from '../../theme'
 import type { IDXBasicProfile } from '../../types'
 
 const EditProfileButton = dynamic(() => import('../../components/EditProfileButton'), {
-  ssr: false,
-})
-
-const LoginButton = dynamic(() => import('../../components/LoginButton'), {
   ssr: false,
 })
 
@@ -28,7 +26,7 @@ export const getServerSideProps: GetServerSideProps<Props, { did: string }> = as
   if (did !== null) {
     try {
       const { idx } = await import('../../server/idx')
-      loadedProfile = await idx.get<IDXBasicProfile>('basicProfile', did)
+      loadedProfile = await loadProfile(idx, did)
     } catch (err) {
       console.log('error loading profile from IDX', err)
     }
@@ -83,7 +81,7 @@ function NoProfile({ did, setProfile }: NoProfileProps) {
         <title>No profile found | self.ID</title>
       </Head>
       <Header>
-        <LoginButton />
+        <Navbar />
       </Header>
       <Box alignSelf="center" width="large">
         <Box direction="row" flex>
@@ -144,7 +142,7 @@ export default function Me({ did, loadedProfile }: Props) {
         <title>{name} | self.ID</title>
       </Head>
       <Header url={profile.background}>
-        <LoginButton />
+        <Navbar />
       </Header>
       <Box alignSelf="center" width="large">
         <Box direction="row" flex>

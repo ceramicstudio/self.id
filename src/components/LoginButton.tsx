@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import { useCallback } from 'react'
 
 import { useIDXAuth } from '../client/hooks'
+import accountIcon from '../images/account.svg'
 
 export default function LoginButton() {
   const router = useRouter()
@@ -16,8 +17,12 @@ export default function LoginButton() {
   }, [auth.state, authenticate, router])
 
   return auth.id ? (
-    <Link href={`/me/${auth.id}`}>{auth.id}</Link>
+    <Link href={`/me/${auth.id}`}>
+      <img src={accountIcon} alt="Me" />
+    </Link>
   ) : (
-    <Button onClick={onClick}>Login</Button>
+    <Button onClick={onClick}>
+      <img src={accountIcon} alt="Login" />
+    </Button>
   )
 }

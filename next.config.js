@@ -2,6 +2,6 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
 const withPlugins = require('next-compose-plugins')
-const withSvgr = require('next-plugin-svgr')
+const withImages = require('next-images')
 
-module.exports = withPlugins([[withSvgr({ includeFileLoader: true })], [withBundleAnalyzer({})]])
+module.exports = withPlugins([[withBundleAnalyzer({})], withImages])

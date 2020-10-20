@@ -2,7 +2,8 @@ import { Button } from 'grommet'
 import { useCallback, useEffect, useState } from 'react'
 
 import { useIDXAuth } from '../client/hooks'
-import { loadProfile } from '../client/idx'
+import { idx } from '../client/idx'
+import { loadProfile } from '../profile'
 import { BRAND_COLOR } from '../theme'
 import type { IDXBasicProfile } from '../types'
 
@@ -23,10 +24,10 @@ export default function EditProfileButton({ did, setProfile }: Props) {
   const [auth, authenticate] = useIDXAuth()
   const [state, setState] = useState<State>({ canEdit: false })
 
-  const loadAndOpen = useCallback(() => {
-    loadProfile().then(
+  const loadAndOpen = useCallback((id) => {
+    loadProfile(idx, id).then(
       (profile) => {
-        setState({ canEdit: true, loadingProfile: false, modalOpen: true, profile })
+        setState({ canEdit: true, loadingProfile: false, modalOpen: true, profile: profile ?? {} })
       },
       (err) => {
         console.warn('Failed to load profile', err)
@@ -48,12 +49,12 @@ export default function EditProfileButton({ did, setProfile }: Props) {
   const onOpen = useCallback(() => {
     if (auth.state === 'CONFIRMED') {
       setState({ canEdit: true, loadingProfile: true, modalOpen: false })
-      loadAndOpen()
+      loadAndOpen(auth.id)
     } else if (auth.state !== 'LOADING') {
       setState({ canEdit: true, loadingProfile: true, modalOpen: false })
       authenticate().then(loadAndOpen, () => console.warn('Failed to authenticate DID'))
     }
-  }, [auth.state, authenticate, loadAndOpen])
+  }, [auth, authenticate, loadAndOpen])
 
   useEffect(() => {
     if (auth.id != null && auth.id === did) {
