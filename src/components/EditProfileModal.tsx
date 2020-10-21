@@ -1,7 +1,7 @@
-import { Box, Button, Layer, Paragraph, Text, TextArea, TextInput } from 'grommet'
+import { Avatar, Box, Button, Image, Layer, Paragraph, Text, TextArea, TextInput } from 'grommet'
 import type { TextInputProps } from 'grommet'
 import { useCallback, useState } from 'react'
-import type { FormEvent, ReactNode } from 'react'
+import type { ChangeEvent, FormEvent, ReactNode } from 'react'
 
 import { idx } from '../client/idx'
 import { IDXBasicProfile } from '../types'
@@ -80,18 +80,21 @@ function Field({ children, id, inputWidth, label }: FieldProps) {
   )
 }
 
-interface TextFieldProps extends CommonFieldProps, Omit<TextInputProps, 'value'> {
+interface TextFieldProps
+  extends CommonFieldProps,
+    Omit<TextInputProps, 'value'>,
+    Omit<JSX.IntrinsicElements['input'], 'onSelect' | 'size' | 'placeholder' | 'ref' | 'value'> {
   disabled?: boolean
   name: keyof FormValue
   setValue: (value: FormValue) => void
   value: FormValue
 }
 
-function TextField({ inputWidth, label, name, setValue, value, ...props }: TextFieldProps) {
+function TextField({ label, name, setValue, value, ...props }: TextFieldProps) {
   const id = `field-${name}`
 
   return (
-    <Field id={id} inputWidth={inputWidth} label={label}>
+    <Field id={id} label={label}>
       <TextInput
         {...props}
         id={id}
@@ -100,6 +103,46 @@ function TextField({ inputWidth, label, name, setValue, value, ...props }: TextF
         }}
         value={value[name] ?? ''}
       />
+    </Field>
+  )
+}
+
+interface ImageFieldProps extends TextFieldProps {
+  renderImage(props: { src: string; onClick: () => void }): ReactNode
+}
+
+function ImageField({
+  disabled,
+  label,
+  name,
+  renderImage,
+  setValue,
+  value,
+  ...props
+}: ImageFieldProps) {
+  const src = value[name] ?? ''
+  const [editing, toggleEditing] = useState(!src && !disabled)
+  const id = `field-${name}`
+
+  const onClick = useCallback(() => {
+    toggleEditing(!disabled)
+  }, [disabled])
+
+  const setFieldValue = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      setValue({ ...value, [name]: event.target.value })
+      toggleEditing(false)
+    },
+    [name, setValue, value]
+  )
+
+  return (
+    <Field id={id} label={label}>
+      {editing ? (
+        <TextInput {...props} id={id} onChange={setFieldValue} value={src} />
+      ) : (
+        renderImage({ onClick, src })
+      )}
     </Field>
   )
 }
@@ -153,19 +196,27 @@ export default function EditProfileModal({ onClose, profile }: ModalProps) {
         {alert}
         <Box overflow="auto">
           <Box flex="grow">
-            <TextField
+            <ImageField
               disabled={isLoading}
               label="Image"
               name="image"
               placeholder="https://mysite.com/avatar.png"
+              renderImage={(props) => <Avatar {...props} />}
               setValue={setValue}
               value={value}
             />
-            <TextField
+            <ImageField
               disabled={isLoading}
               label="Banner"
               name="background"
               placeholder="https://mysite.com/background.png"
+              renderImage={({ onClick, src }) => {
+                return (
+                  <Box height="small">
+                    <Image alt={src} fit="cover" onClick={onClick} src={src} />
+                  </Box>
+                )
+              }}
               setValue={setValue}
               value={value}
             />
@@ -189,8 +240,9 @@ export default function EditProfileModal({ onClose, profile }: ModalProps) {
             </Field>
             <TextField
               disabled={isLoading}
-              inputWidth="60px"
+              size="small"
               label="Emoji"
+              maxLength={2}
               name="emoji"
               setValue={setValue}
               value={value}
@@ -199,6 +251,13 @@ export default function EditProfileModal({ onClose, profile }: ModalProps) {
               disabled={isLoading}
               label="Location"
               name="homeLocation"
+              setValue={setValue}
+              value={value}
+            />
+            <TextField
+              disabled={isLoading}
+              label="Country"
+              name="residenceCountry"
               setValue={setValue}
               value={value}
             />

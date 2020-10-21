@@ -2,10 +2,13 @@ import { Anchor, Box, Paragraph, Text } from 'grommet'
 import type { GetServerSideProps } from 'next'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 
 import Navbar from '../../components/Navbar'
+import countryIcon from '../../images/icons/country.png'
+import linkIcon from '../../images/icons/link.svg'
+import locationIcon from '../../images/icons/location.png'
 import { loadProfile } from '../../profile'
 import { BRAND_COLOR, PLACEHOLDER_COLOR } from '../../theme'
 import type { IDXBasicProfile } from '../../types'
@@ -100,6 +103,9 @@ function NoProfile({ did, setProfile }: NoProfileProps) {
 
 export default function Me({ did, loadedProfile }: Props) {
   const [profile, setProfile] = useState<IDXBasicProfile | null>(loadedProfile)
+  useEffect(() => {
+    setProfile(loadedProfile)
+  }, [loadedProfile])
 
   if (did == null || profile == null) {
     return <NoProfile did={did} setProfile={setProfile} />
@@ -114,19 +120,30 @@ export default function Me({ did, loadedProfile }: Props) {
   ) : null
 
   const link = profile.url ? (
-    <Anchor href={profile.url} label={profile.url} target="_blank" />
+    <Anchor href={profile.url} label={profile.url} margin={{ left: 'small' }} target="_blank" />
   ) : null
-  const linksContainer = link ? <Box margin={{ vertical: 'small' }}>{link}</Box> : null
+  const linksContainer = link ? (
+    <Box direction="row" margin={{ vertical: 'small' }}>
+      <img alt="Link" src={linkIcon} />
+      {link}
+    </Box>
+  ) : null
 
   const location = profile.homeLocation ? (
-    <Text color="neutral-4" margin={{ left: 'medium' }}>
-      {profile.homeLocation}
-    </Text>
+    <Box direction="row" flex={false} margin={{ left: 'medium' }}>
+      <img alt="Home location" src={locationIcon} />
+      <Text color="neutral-4" margin={{ left: 'small' }}>
+        {profile.homeLocation}
+      </Text>
+    </Box>
   ) : null
   const country = profile.residenceCountry ? (
-    <Text color="neutral-4" margin={{ left: 'medium' }}>
-      {profile.residenceCountry}
-    </Text>
+    <Box direction="row" flex={false} margin={{ left: 'medium' }}>
+      <img alt="Residence country" src={countryIcon} />
+      <Text color="neutral-4" margin={{ left: 'small' }}>
+        {profile.residenceCountry}
+      </Text>
+    </Box>
   ) : null
   const locationContainer =
     location || country ? (
@@ -144,11 +161,11 @@ export default function Me({ did, loadedProfile }: Props) {
       <Header url={profile.background}>
         <Navbar />
       </Header>
-      <Box alignSelf="center" width="large">
+      <Box alignSelf="center" width="large" pad="medium">
         <Box direction="row" flex>
           <Avatar url={profile.image} />
           <Box flex>
-            <Box alignSelf="end" margin="medium" width="150px">
+            <Box alignSelf="end" width="150px">
               <EditProfileButton did={did} setProfile={setProfile} />
             </Box>
           </Box>
