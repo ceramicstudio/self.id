@@ -47,6 +47,7 @@ const Header = styled.div<{ url?: string }>`
     props.url &&
     css`
       background-image: url(${props.url});
+      background-position: center;
       background-size: cover;
     `}
 `
@@ -153,10 +154,40 @@ export default function Me({ did, loadedProfile }: Props) {
       </Box>
     ) : null
 
+  const socialTitle = profile.name ? `${profile.name} on self.ID` : 'self.ID'
+
+  const metaDescription = profile.description ? (
+    <>
+      <meta name="description" content={profile.description} />
+      <meta name="twitter:description" content={profile.description} />
+      <meta property="og:description" content={profile.description} />
+    </>
+  ) : null
+
+  const metaImage = profile.image ? (
+    <>
+      <meta name="twitter:card" content="summary" />
+      <meta name="twitter:image" content={profile.image} />
+      <meta name="twitter:image:alt" content={`Image for ${socialTitle}`} />
+      <meta property="og:image" content={profile.image} />
+    </>
+  ) : profile.background ? (
+    <>
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:image" content={profile.background} />
+      <meta name="twitter:image:alt" content={`Background image for ${socialTitle}`} />
+      <meta property="og:image" content={profile.background} />
+    </>
+  ) : null
+
   return (
     <Box>
       <Head>
         <title>{name} | self.ID</title>
+        <meta name="twitter:title" content={socialTitle} />
+        <meta property="og:title" content={socialTitle} />
+        {metaDescription}
+        {metaImage}
       </Head>
       <Header url={profile.background}>
         <Navbar />

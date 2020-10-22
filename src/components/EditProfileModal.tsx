@@ -3,6 +3,7 @@ import type { TextInputProps } from 'grommet'
 import { useCallback, useState } from 'react'
 import type { ChangeEvent, FormEvent, ReactNode } from 'react'
 
+import { useImageUpload } from '../client/hooks'
 import { idx } from '../client/idx'
 import { IDXBasicProfile } from '../types'
 
@@ -107,42 +108,33 @@ function TextField({ label, name, setValue, value, ...props }: TextFieldProps) {
   )
 }
 
-interface ImageFieldProps extends TextFieldProps {
-  renderImage(props: { src: string; onClick: () => void }): ReactNode
+interface ImageFieldProps extends CommonFieldProps {
+  disabled?: boolean
+  name: keyof FormValue
+  renderImage(props: { src: string; onClick?: () => void }): ReactNode
+  setValue: (value: FormValue) => void
+  value: FormValue
 }
 
-function ImageField({
-  disabled,
-  label,
-  name,
-  renderImage,
-  setValue,
-  value,
-  ...props
-}: ImageFieldProps) {
+function ImageField({ disabled, label, name, renderImage, setValue, value }: ImageFieldProps) {
+  const { input, state, trigger } = useImageUpload((hash) => {
+    setValue({ ...value, [name]: `https://ipfs.infura.io/ipfs/${hash}` })
+  })
+
   const src = value[name] ?? ''
-  const [editing, toggleEditing] = useState(!src && !disabled)
-  const id = `field-${name}`
-
-  const onClick = useCallback(() => {
-    toggleEditing(!disabled)
-  }, [disabled])
-
-  const setFieldValue = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      setValue({ ...value, [name]: event.target.value })
-      toggleEditing(false)
-    },
-    [name, setValue, value]
-  )
+  let content = null
+  if (state === 'UPLOADING') {
+    content = <Button disabled fill label="Uploading..." />
+  } else if (src) {
+    content = renderImage({ onClick: disabled ? undefined : trigger, src })
+  } else {
+    content = <Button fill label="Select" onClick={trigger} />
+  }
 
   return (
-    <Field id={id} label={label}>
-      {editing ? (
-        <TextInput {...props} id={id} onChange={setFieldValue} value={src} />
-      ) : (
-        renderImage({ onClick, src })
-      )}
+    <Field id={`field-${name}`} label={label}>
+      {input}
+      {content}
     </Field>
   )
 }
@@ -198,18 +190,16 @@ export default function EditProfileModal({ onClose, profile }: ModalProps) {
           <Box flex="grow">
             <ImageField
               disabled={isLoading}
-              label="Image"
+              label="Image (max 2.5 MB)"
               name="image"
-              placeholder="https://mysite.com/avatar.png"
               renderImage={(props) => <Avatar {...props} />}
               setValue={setValue}
               value={value}
             />
             <ImageField
               disabled={isLoading}
-              label="Banner"
+              label="Banner (max 2.5 MB)"
               name="background"
-              placeholder="https://mysite.com/background.png"
               renderImage={({ onClick, src }) => {
                 return (
                   <Box height="small">
