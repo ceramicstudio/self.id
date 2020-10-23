@@ -10,17 +10,29 @@ interface EthProvider {
   enable(): Promise<Array<string>>
 }
 
-export const idx = new IDXWeb({
-  ceramic: CERAMIC_URL,
-  connect: CONNECT_URL,
-  definitions,
-})
+function createIDX(): IDXWeb {
+  return new IDXWeb({
+    ceramic: CERAMIC_URL,
+    connect: CONNECT_URL,
+    definitions,
+  })
+}
 
-export async function connectEthProvider(clearCachedProvider = false): Promise<EthProvider> {
+export let idx = createIDX()
+
+export async function connectEthProvider(clearCachedProvider = false): Promise<EthProvider | null> {
   if (clearCachedProvider) {
     web3modal.clearCachedProvider()
   }
-  return (await web3modal.connect()) as EthProvider
+
+  try {
+    return (await web3modal.connect()) as EthProvider
+  } catch (message) {
+    if (message === 'Modal closed by user') {
+      return null
+    }
+    throw new Error(message)
+  }
 }
 
 export async function getEthereumAuthProvider(
@@ -30,12 +42,23 @@ export async function getEthereumAuthProvider(
   return new EthereumAuthProvider(ethProvider, addresses[0])
 }
 
-export async function authenticateIDX(
+// TODO: keep track of multiple in-flight auth calls
+// Ideally it should merge the paths and clearCachedProvider options to merge multiple calls into a single one
+
+export async function authenticate(
   paths?: Array<string>,
   clearCachedProvider?: boolean
-): Promise<IDXWeb> {
+): Promise<boolean> {
   const ethProvider = await connectEthProvider(clearCachedProvider)
+  if (ethProvider == null) {
+    return false
+  }
   const authProvider = await getEthereumAuthProvider(ethProvider)
   await idx.authenticate({ authProvider, paths })
-  return idx
+  return true
+}
+
+export function reset() {
+  idx = createIDX()
+  web3modal.clearCachedProvider()
 }

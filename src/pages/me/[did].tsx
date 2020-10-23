@@ -154,7 +154,7 @@ export default function Me({ did, loadedProfile }: Props) {
       </Box>
     ) : null
 
-  const socialTitle = profile.name ? `${profile.name} on self.ID` : 'self.ID'
+  const socialTitle = profile.name ? `${profile.name} on Self.ID` : 'Self.ID'
 
   const metaDescription = profile.description ? (
     <>
@@ -166,7 +166,6 @@ export default function Me({ did, loadedProfile }: Props) {
 
   const metaImage = profile.image ? (
     <>
-      <meta name="twitter:card" content="summary" />
       <meta name="twitter:image" content={profile.image} />
       <meta name="twitter:image:alt" content={`Image for ${socialTitle}`} />
       <meta property="og:image" content={profile.image} />
@@ -178,12 +177,14 @@ export default function Me({ did, loadedProfile }: Props) {
       <meta name="twitter:image:alt" content={`Background image for ${socialTitle}`} />
       <meta property="og:image" content={profile.background} />
     </>
-  ) : null
+  ) : (
+    <meta name="twitter:card" content="summary" />
+  )
 
   return (
     <Box>
       <Head>
-        <title>{name} | self.ID</title>
+        <title>{name} | Self.ID</title>
         <meta name="twitter:title" content={socialTitle} />
         <meta property="og:title" content={socialTitle} />
         {metaDescription}

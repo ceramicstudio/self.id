@@ -21,7 +21,7 @@ type EditableState =
 type State = { canEdit: false } | ({ canEdit: true } & EditableState)
 
 export default function EditProfileButton({ did, setProfile }: Props) {
-  const [auth, authenticate] = useIDXAuth()
+  const [auth, login] = useIDXAuth()
   const [state, setState] = useState<State>({ canEdit: false })
 
   const loadAndOpen = useCallback((id) => {
@@ -52,13 +52,22 @@ export default function EditProfileButton({ did, setProfile }: Props) {
       loadAndOpen(auth.id)
     } else if (auth.state !== 'LOADING') {
       setState({ canEdit: true, loadingProfile: true, modalOpen: false })
-      authenticate().then(loadAndOpen, () => console.warn('Failed to authenticate DID'))
+      login().then(
+        (id) => {
+          if (id != null) {
+            loadAndOpen(id)
+          }
+        },
+        () => console.warn('Failed to authenticate DID')
+      )
     }
-  }, [auth, authenticate, loadAndOpen])
+  }, [auth, loadAndOpen, login])
 
   useEffect(() => {
     if (auth.id != null && auth.id === did) {
       setState({ canEdit: true, loadingProfile: false, modalOpen: false })
+    } else {
+      setState({ canEdit: false })
     }
   }, [auth.id, did])
 

@@ -1,7 +1,7 @@
 import { Avatar, Box, Button, Image, Layer, Paragraph, Text, TextArea, TextInput } from 'grommet'
 import type { TextInputProps } from 'grommet'
 import { useCallback, useState } from 'react'
-import type { ChangeEvent, FormEvent, ReactNode } from 'react'
+import type { FormEvent, ReactNode } from 'react'
 
 import { useImageUpload } from '../client/hooks'
 import { idx } from '../client/idx'
@@ -183,7 +183,7 @@ export default function EditProfileModal({ onClose, profile }: ModalProps) {
   ) : null
 
   return (
-    <Layer margin="small" onEsc={() => onClose()} onClickOutside={() => onClose()}>
+    <Layer margin="small" onEsc={() => onClose()}>
       <Box as="form" margin="medium" onSubmit={onSubmit}>
         {alert}
         <Box overflow="auto">

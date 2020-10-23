@@ -2,28 +2,38 @@ import { useAtom } from 'jotai'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { ChangeEvent } from 'react'
 
-import { authenticateIDX, idx } from './idx'
+import { idx, authenticate, reset } from './idx'
 import { uploadImage } from './ipfs'
 import { idxAuth, getLocalDID, setLocalDID } from './state'
 import type { IDXAuth } from './state'
 
-export function useIDXAuth(): [IDXAuth, (paths?: Array<string>) => Promise<string>] {
+export function useIDXAuth(): [
+  IDXAuth,
+  (paths?: Array<string>, clearCachedProvider?: boolean) => Promise<string | null>
+] {
   const [auth, setAuth] = useAtom(idxAuth)
 
-  const authenticate = useCallback(
-    async (paths?: Array<string>): Promise<string> => {
+  const login = useCallback(
+    async (paths?: Array<string>, clearCachedProvider?: boolean): Promise<string | null> => {
+      const initialAuth = auth
       void setAuth({ state: 'LOADING', id: auth.id })
+
       try {
-        await authenticateIDX(paths)
-        setLocalDID(idx.id)
-        void setAuth({ state: 'CONFIRMED', id: idx.id })
-        return idx.id
+        const authenticated = await authenticate(paths, clearCachedProvider)
+        if (authenticated) {
+          setLocalDID(idx.id)
+          void setAuth({ state: 'CONFIRMED', id: idx.id })
+          return idx.id
+        } else {
+          void setAuth(initialAuth)
+          return null
+        }
       } catch (err) {
         void setAuth({ state: 'ERROR', id: auth.id, error: err as Error })
         throw err
       }
     },
-    [auth.id, setAuth]
+    [auth, setAuth]
   )
 
   useEffect(() => {
@@ -40,7 +50,17 @@ export function useIDXAuth(): [IDXAuth, (paths?: Array<string>) => Promise<strin
     }
   }, [auth.id, auth.state, setAuth])
 
-  return [auth, authenticate]
+  return [auth, login]
+}
+
+export function useLogout() {
+  const [_auth, setAuth] = useAtom(idxAuth)
+
+  return useCallback(() => {
+    reset()
+    setLocalDID()
+    void setAuth({ state: 'UNKNOWN' })
+  }, [setAuth])
 }
 
 const UPLOAD_MAX_SIZE = 2500000
