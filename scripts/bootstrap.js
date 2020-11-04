@@ -2,15 +2,14 @@ const Ceramic = require('@ceramicnetwork/ceramic-http-client').default
 const { IDX } = require('@ceramicstudio/idx')
 const { definitions } = require('@ceramicstudio/idx-constants')
 const Wallet = require('identity-wallet').default
-
-const SEED = '0x08b2e655d239e24e3ca9aa17bc1d05c1dee289d6ebf0b3542fd9536912d51ee0'
+const fromString = require('uint8arrays/from-string')
 
 const ceramic = new Ceramic('http://localhost:7007')
 
 async function run() {
   const wallet = await Wallet.create({
     ceramic,
-    seed: SEED,
+    seed: fromString('08b2e655d239e24e3ca9aa17bc1d05c1dee289d6ebf0b3542fd9536912d51ee0'),
     getPermission() {
       return Promise.resolve([])
     },

@@ -26,7 +26,10 @@ export async function connectEthProvider(clearCachedProvider = false): Promise<E
   }
 
   try {
-    return (await web3modal.connect()) as EthProvider
+    const provider = (await web3modal.connect()) as EthProvider
+    // TODO: listen to disconnect, account and chain changed event to trigger logout
+    // this should probably be part of React tree (atoms?) so it can be tracked
+    return provider
   } catch (message) {
     if (message === 'Modal closed by user') {
       return null
@@ -38,6 +41,8 @@ export async function connectEthProvider(clearCachedProvider = false): Promise<E
 export async function getEthereumAuthProvider(
   ethProvider: EthProvider
 ): Promise<EthereumAuthProvider> {
+  // TODO: replace by ethProvider.send('eth_requestAccounts')
+  // https://eips.ethereum.org/EIPS/eip-1102
   const addresses = await ethProvider.enable()
   return new EthereumAuthProvider(ethProvider, addresses[0])
 }
