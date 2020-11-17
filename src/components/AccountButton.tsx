@@ -2,12 +2,13 @@ import { Button, Menu } from 'grommet'
 import { useRouter } from 'next/router'
 import { useCallback } from 'react'
 
-import { useIDXAuth, useLogout } from '../client/hooks'
+import { useIDXAuth, useLogin, useLogout } from '../client/hooks'
 import accountIcon from '../images/icons/account.svg'
 
 export default function AccountButton() {
   const router = useRouter()
-  const [auth, login] = useIDXAuth()
+  const [auth] = useIDXAuth()
+  const login = useLogin()
   const logout = useLogout()
 
   const toProfile = useCallback(
@@ -27,7 +28,7 @@ export default function AccountButton() {
 
   const onClickSwitch = useCallback(() => {
     if (auth.state !== 'LOADING') {
-      void login([], true).then(toProfile)
+      void login(true).then(toProfile)
     }
   }, [auth.state, login, toProfile])
 

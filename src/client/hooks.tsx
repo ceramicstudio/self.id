@@ -1,27 +1,142 @@
 import { useAtom } from 'jotai'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import type { ChangeEvent } from 'react'
 
+import { connectEthereumProvider, normalizeChainId } from './ethereum'
+import type { ConnectedEthereumProvider, EthereumProvider } from './ethereum'
 import { idx, authenticate, reset } from './idx'
 import { uploadImage } from './ipfs'
-import { idxAuth, getLocalDID, setLocalDID } from './state'
-import type { IDXAuth } from './state'
+import { ethereumProvider, idxAuth, knownDIDs } from './state'
+import type { EthereumProviderState, IDXAuth } from './state'
+
+export function useKnownDIDs() {
+  return useAtom(knownDIDs)
+}
+
+export function useEthereum(): [
+  EthereumProviderState,
+  (
+    selectProvider?: boolean,
+    restoreConnected?: boolean
+  ) => Promise<ConnectedEthereumProvider | null>,
+  () => void
+] {
+  const [providerState, setProviderState] = useAtom(ethereumProvider)
+  const accountsChangedListenerRef = useRef<(addresses: Array<string>) => void>()
+  const chainChangedListenerRef = useRef<(chainId: string) => void>()
+  const disconnectListenerRef = useRef<() => void>()
+
+  const addEventListeners = useCallback(
+    (provider: EthereumProvider) => {
+      accountsChangedListenerRef.current = (accounts: Array<string>) => {
+        if (providerState.status === 'CONNECTED' && providerState.provider === provider) {
+          void setProviderState({ ...providerState, accounts })
+        }
+      }
+      provider.on('accountsChanged', accountsChangedListenerRef.current)
+
+      chainChangedListenerRef.current = (chainId: string) => {
+        if (providerState.status === 'CONNECTED' && providerState.provider === provider) {
+          void setProviderState({ ...providerState, chainId: normalizeChainId(chainId) })
+        }
+      }
+      provider.on('chainChanged', chainChangedListenerRef.current)
+
+      disconnectListenerRef.current = () => {
+        if (providerState.status === 'CONNECTED' && providerState.provider === provider) {
+          void setProviderState({ status: 'DISCONNECTED' })
+        }
+      }
+      provider.on('disconnect', disconnectListenerRef.current)
+    },
+    [providerState, setProviderState]
+  )
+
+  const removeEventListeners = useCallback((provider: EthereumProvider) => {
+    if (accountsChangedListenerRef.current != null) {
+      provider.off('accountsChanged', accountsChangedListenerRef.current)
+    }
+    if (chainChangedListenerRef.current != null) {
+      provider.off('chainChanged', chainChangedListenerRef.current)
+    }
+    if (disconnectListenerRef.current != null) {
+      provider.off('disconnect', disconnectListenerRef.current)
+    }
+  }, [])
+
+  const connect = useCallback(
+    (
+      selectProvider = false,
+      restoreConnected = true
+    ): Promise<ConnectedEthereumProvider | null> => {
+      if (providerState.status === 'CONNECTING') {
+        return providerState.promise
+      }
+
+      const initialState = providerState
+      const promise = connectEthereumProvider(selectProvider).then(
+        (connectedProvider: ConnectedEthereumProvider | null) => {
+          if (connectedProvider == null) {
+            const { status, ...provider } = initialState
+            if (restoreConnected && status === 'CONNECTED') {
+              // Restore current provider if already connected
+              return provider as ConnectedEthereumProvider
+            } else {
+              void setProviderState({ status: 'DISCONNECTED' })
+              return null
+            }
+          } else {
+            if (initialState.status === 'CONNECTED') {
+              removeEventListeners(initialState.provider)
+            }
+            addEventListeners(connectedProvider.provider)
+            void setProviderState({ status: 'CONNECTED', ...connectedProvider })
+            return connectedProvider
+          }
+        },
+        (error: Error) => {
+          void setProviderState({ status: 'FAILED', error })
+          return null
+        }
+      )
+      void setProviderState({ status: 'CONNECTING', promise })
+
+      return promise
+    },
+    [providerState, setProviderState, addEventListeners, removeEventListeners]
+  )
+
+  const disconnect = useCallback(() => {
+    if (providerState.status === 'CONNECTED') {
+      removeEventListeners(providerState.provider)
+    }
+    void setProviderState({ status: 'DISCONNECTED' })
+  }, [providerState, removeEventListeners, setProviderState])
+
+  return [providerState, connect, disconnect]
+}
 
 export function useIDXAuth(): [
   IDXAuth,
-  (paths?: Array<string>, clearCachedProvider?: boolean) => Promise<string | null>
+  (provider: EthereumProvider, address: string, paths?: Array<string>) => Promise<string | null>,
+  () => void
 ] {
+  const [_, setKnownDIDs] = useKnownDIDs()
   const [auth, setAuth] = useAtom(idxAuth)
 
-  const login = useCallback(
-    async (paths?: Array<string>, clearCachedProvider?: boolean): Promise<string | null> => {
+  const tryAuthenticate = useCallback(
+    async (
+      provider: EthereumProvider,
+      address: string,
+      paths?: Array<string>
+    ): Promise<string | null> => {
       const initialAuth = auth
       void setAuth({ state: 'LOADING', id: auth.id })
 
       try {
-        const authenticated = await authenticate(paths, clearCachedProvider)
-        if (authenticated) {
-          setLocalDID(idx.id)
+        const knownDIDs = await authenticate(provider, address, paths)
+        if (knownDIDs) {
+          void setKnownDIDs(knownDIDs)
           void setAuth({ state: 'CONFIRMED', id: idx.id })
           return idx.id
         } else {
@@ -33,34 +148,51 @@ export function useIDXAuth(): [
         throw err
       }
     },
-    [auth, setAuth]
+    [auth, setAuth, setKnownDIDs]
   )
 
-  useEffect(() => {
-    if (idx.authenticated) {
-      setLocalDID(idx.id)
-      if (auth.state !== 'CONFIRMED' || auth.id !== idx.id) {
-        void setAuth({ state: 'CONFIRMED', id: idx.id })
-      }
-    } else if (auth.state === 'UNKNOWN') {
-      const id = getLocalDID()
-      if (id) {
-        void setAuth({ state: 'LOCAL', id })
-      }
-    }
-  }, [auth.id, auth.state, setAuth])
+  const clearAuth = useCallback(() => {
+    reset()
+    void setKnownDIDs({})
+    void setAuth({ state: 'UNKNOWN' })
+  }, [setAuth, setKnownDIDs])
 
-  return [auth, login]
+  return [auth, tryAuthenticate, clearAuth]
+}
+
+export function useLogin(): (clear?: boolean) => Promise<string | null> {
+  const [ethereum, connect, disconnect] = useEthereum()
+  const [auth, tryAuth, clearAuth] = useIDXAuth()
+
+  return useCallback(
+    async (switchAccount?: boolean) => {
+      if (auth.state === 'CONFIRMED' && ethereum.status === 'CONNECTED' && !switchAccount) {
+        return Promise.resolve(auth.id)
+      }
+
+      let eth
+      if (switchAccount) {
+        clearAuth()
+        disconnect()
+        eth = await connect(true)
+      } else {
+        eth = await (ethereum.status === 'CONNECTING' ? ethereum.promise : connect())
+      }
+
+      return eth ? await tryAuth(eth.provider, eth.accounts[0]) : null
+    },
+    [auth, clearAuth, connect, disconnect, ethereum, tryAuth]
+  )
 }
 
 export function useLogout() {
-  const [_auth, setAuth] = useAtom(idxAuth)
+  const [_eth, _connect, disconnect] = useEthereum()
+  const [__auth, _tryAuth, clearAuth] = useIDXAuth()
 
   return useCallback(() => {
-    reset()
-    setLocalDID()
-    void setAuth({ state: 'UNKNOWN' })
-  }, [setAuth])
+    clearAuth()
+    disconnect()
+  }, [clearAuth, disconnect])
 }
 
 const UPLOAD_MAX_SIZE = 2500000

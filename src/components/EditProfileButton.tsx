@@ -1,7 +1,7 @@
 import { Button } from 'grommet'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { useIDXAuth } from '../client/hooks'
+import { useIDXAuth, useKnownDIDs, useLogin } from '../client/hooks'
 import { idx } from '../client/idx'
 import { loadProfile } from '../profile'
 import { BRAND_COLOR } from '../theme'
@@ -21,7 +21,11 @@ type EditableState =
 type State = { canEdit: false } | ({ canEdit: true } & EditableState)
 
 export default function EditProfileButton({ did, setProfile }: Props) {
-  const [auth, login] = useIDXAuth()
+  const [auth] = useIDXAuth()
+  const [knownDIDs] = useKnownDIDs()
+  const login = useLogin()
+
+  const ownDIDs = useMemo(() => Object.keys(knownDIDs), [knownDIDs])
   const [state, setState] = useState<State>({ canEdit: false })
 
   const loadAndOpen = useCallback((id) => {
@@ -64,12 +68,12 @@ export default function EditProfileButton({ did, setProfile }: Props) {
   }, [auth, loadAndOpen, login])
 
   useEffect(() => {
-    if (auth.id != null && auth.id === did) {
+    if (did != null && ownDIDs.includes(did)) {
       setState({ canEdit: true, loadingProfile: false, modalOpen: false })
     } else {
       setState({ canEdit: false })
     }
-  }, [auth.id, did])
+  }, [did, ownDIDs])
 
   const button = state.canEdit ? (
     <Button
