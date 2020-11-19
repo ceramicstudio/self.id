@@ -22,27 +22,27 @@ export function useEthereum(): [
   const addEventListeners = useCallback(
     (provider: EthereumProvider) => {
       accountsChangedListenerRef.current = (accounts: Array<string>) => {
-        if (providerState.status === 'CONNECTED' && providerState.provider === provider) {
-          void setProviderState({ ...providerState, accounts })
-        }
+        void setProviderState((current) => {
+          return current.status === 'CONNECTED' ? { ...current, accounts } : current
+        })
       }
       provider.on('accountsChanged', accountsChangedListenerRef.current)
 
       chainChangedListenerRef.current = (chainId: string) => {
-        if (providerState.status === 'CONNECTED' && providerState.provider === provider) {
-          void setProviderState({ ...providerState, chainId: normalizeChainId(chainId) })
-        }
+        void setProviderState((current) => {
+          return current.status === 'CONNECTED'
+            ? { ...current, chainId: normalizeChainId(chainId) }
+            : current
+        })
       }
       provider.on('chainChanged', chainChangedListenerRef.current)
 
       disconnectListenerRef.current = () => {
-        if (providerState.status === 'CONNECTED' && providerState.provider === provider) {
-          void setProviderState({ status: 'DISCONNECTED' })
-        }
+        void setProviderState({ status: 'DISCONNECTED' })
       }
       provider.on('disconnect', disconnectListenerRef.current)
     },
-    [providerState, setProviderState]
+    [setProviderState]
   )
 
   const removeEventListeners = useCallback((provider: EthereumProvider) => {
@@ -82,8 +82,8 @@ export function useEthereum(): [
             if (initialState.status === 'CONNECTED') {
               removeEventListeners(initialState.provider)
             }
-            addEventListeners(connectedProvider.provider)
             void setProviderState({ status: 'CONNECTED', ...connectedProvider })
+            addEventListeners(connectedProvider.provider)
             return connectedProvider
           }
         },

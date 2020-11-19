@@ -1,8 +1,10 @@
+import type { AccountIDParams } from 'caip'
 import { useAtom } from 'jotai'
-import { useCallback } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
+import { useEthereum } from './ethereum'
 import type { EthereumProvider } from '../ethereum'
-import { authenticate } from '../idx'
+import { authenticate, linkAccount } from '../idx'
 import { idxAuth, idxEnv, knownDIDs } from '../state'
 import type { IDXAuth } from '../state'
 
@@ -61,4 +63,40 @@ export function useIDXAuth(): [
   }, [resetEnv, setAuth, setKnownDIDs])
 
   return [auth, tryAuthenticate, clearAuth]
+}
+
+export function useAccountLinks(): [
+  Array<AccountIDParams>,
+  string | null,
+  (address: string) => Promise<boolean>
+] {
+  const [dids, setDIDs] = useAtom(knownDIDs)
+  const [eth] = useEthereum()
+  const [auth] = useIDXAuth()
+  const env = useIDXEnv()
+  const [linkingAddress, setLinkingAddress] = useState<string | null>(null)
+
+  const links = useMemo(() => {
+    return (auth.state === 'CONFIRMED' && dids[auth.id]?.accounts) || []
+  }, [auth, dids])
+
+  const link = useCallback(
+    async (address: string) => {
+      if (auth.state === 'CONFIRMED' && eth.status === 'CONNECTED' && linkingAddress == null) {
+        setLinkingAddress(address)
+        try {
+          const newDIDs = await linkAccount(env, eth.provider, auth.id, address)
+          void setDIDs(newDIDs)
+          return true
+        } catch (err) {
+          console.warn('Failed to link account', err)
+        }
+        setLinkingAddress(null)
+      }
+      return false
+    },
+    [auth, eth, env, linkingAddress, setDIDs]
+  )
+
+  return [links, linkingAddress, link]
 }

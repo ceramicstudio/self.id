@@ -29,6 +29,14 @@ export function createIDXEnv(existing?: IDXEnv): IDXEnv {
   return { ceramic, connect, idx }
 }
 
+async function loadKnownDIDs(connect: ThreeIdConnect): Promise<KnownDIDs> {
+  const accounts = await connect.accounts()
+  return Object.entries(accounts).reduce((acc, [did, accounts]) => {
+    acc[did] = { accounts: accounts.map((id) => AccountID.parse(id)) }
+    return acc
+  }, {} as KnownDIDs)
+}
+
 export async function authenticate(
   env: IDXEnv,
   provider: EthereumProvider,
@@ -37,10 +45,16 @@ export async function authenticate(
 ): Promise<KnownDIDs> {
   const authProvider = new EthereumAuthProvider(provider, address)
   await env.idx.authenticate({ authProvider, paths })
-  // @ts-ignore
-  const accounts = await env.connect.accounts()
-  return Object.entries(accounts).reduce((acc, [did, accounts]) => {
-    acc[did] = { accounts: accounts.map((id) => AccountID.parse(id)) }
-    return acc
-  }, {} as KnownDIDs)
+  return await loadKnownDIDs(env.connect)
+}
+
+export async function linkAccount(
+  env: IDXEnv,
+  provider: EthereumProvider,
+  did: string,
+  address: string
+): Promise<KnownDIDs> {
+  env.connect.setAuthProvider(new EthereumAuthProvider(provider, address))
+  await env.connect.addAuthAndLink(did)
+  return await loadKnownDIDs(env.connect)
 }

@@ -1,31 +1,58 @@
-import { Box, Text } from 'grommet'
+import { Box, Button, Text } from 'grommet'
+import type { ReactNode } from 'react'
 
-import { useIDXAuth, useKnownDIDs } from '../hooks'
+import { useAccountLinks, useEthereum, useIDXAuth } from '../hooks'
 
 import LoginButton from './LoginButton'
 
-export default function Accounts() {
+type ItemProps = {
+  address: string
+  children?: ReactNode
+}
+
+function AccountItem({ address, children }: ItemProps) {
+  return (
+    <Box
+      border={{ color: 'neutral-5', side: 'bottom' }}
+      direction="row"
+      key={address}
+      pad={{ vertical: 'medium' }}>
+      <Box flex>
+        <Text weight="bold">{address}</Text>
+      </Box>
+      <Box>{children}</Box>
+    </Box>
+  )
+}
+
+export default function AccountsList() {
+  const [linkedAccounts, linkingAddress, linkAddress] = useAccountLinks()
+  const [eth] = useEthereum()
   const [auth] = useIDXAuth()
-  const knownDIDs = useKnownDIDs()
 
   if (auth.state !== 'CONFIRMED') {
     return <LoginButton />
   }
 
-  const accounts = (knownDIDs[auth.id]?.accounts ?? []).map((account) => {
-    return (
-      <Box
-        border={{ color: 'neutral-5', side: 'bottom' }}
-        direction="row"
-        key={account.address}
-        pad={{ vertical: 'medium' }}>
-        <Box flex>
-          <Text weight="bold">{account.address}</Text>
-        </Box>
-        <Box>{account.address === auth.address ? <Text color="brand">Active</Text> : null}</Box>
-      </Box>
-    )
-  })
+  const knownAccounts = linkedAccounts.map((account) => (
+    <AccountItem address={account.address} key={account.address}>
+      {account.address === auth.address ? <Text color="brand">Active</Text> : <Text>Linked</Text>}
+    </AccountItem>
+  ))
+
+  const ethAddresses =
+    eth.status === 'CONNECTED'
+      ? eth.accounts.filter((address) => !linkedAccounts.find((a) => a.address === address))
+      : []
+  const connectedAccounts = ethAddresses.map((address) => (
+    <AccountItem address={address} key={address}>
+      {linkingAddress === address ? (
+        <Button disabled label="Linking..." plain />
+      ) : (
+        <Button label="Link" onClick={() => linkAddress(address)} plain />
+      )}
+    </AccountItem>
+  ))
 
   return (
     <Box>
@@ -34,7 +61,8 @@ export default function Accounts() {
           <Text size="large">Accounts</Text>
         </Box>
       </Box>
-      {accounts}
+      {knownAccounts}
+      {connectedAccounts}
     </Box>
   )
 }

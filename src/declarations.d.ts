@@ -6,5 +6,7 @@ declare module '3id-connect' {
   export class ThreeIdConnect {
     constructor(iframeURL?: string)
     accounts(): Promise<Record<string, Array<string>>>
+    addAuthAndLink(did: string): Promise<void>
+    setAuthProvider(provider: EthereumAuthProvider): void
   }
 }
