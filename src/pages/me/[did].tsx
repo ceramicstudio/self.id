@@ -13,7 +13,7 @@ import { loadProfile } from '../../profile'
 import { BRAND_COLOR, PLACEHOLDER_COLOR } from '../../theme'
 import type { IDXBasicProfile } from '../../types'
 
-const EditProfileButton = dynamic(() => import('../../components/EditProfileButton'), {
+const EditProfileButton = dynamic(() => import('../../client/components/EditProfileButton'), {
   ssr: false,
 })
 
@@ -85,7 +85,7 @@ function NoProfile({ did, setProfile }: NoProfileProps) {
         <title>No profile found | self.ID</title>
       </Head>
       <Header>
-        <Navbar />
+        <Navbar variant="white" />
       </Header>
       <Box alignSelf="center" width="large">
         <Box direction="row" flex>
@@ -191,7 +191,7 @@ export default function Me({ did, loadedProfile }: Props) {
         {metaImage}
       </Head>
       <Header url={profile.background}>
-        <Navbar />
+        <Navbar variant="white" />
       </Header>
       <Box alignSelf="center" width="large" pad="medium">
         <Box direction="row" flex>

@@ -1,11 +1,10 @@
 import { Button } from 'grommet'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { useIDXAuth, useKnownDIDs, useLogin } from '../client/hooks'
-import { idx } from '../client/idx'
-import { loadProfile } from '../profile'
-import { BRAND_COLOR } from '../theme'
-import type { IDXBasicProfile } from '../types'
+import { useIDXAuth, useIDXEnv, useKnownDIDs, useLogin } from '../hooks'
+import { loadProfile } from '../../profile'
+import { BRAND_COLOR } from '../../theme'
+import type { IDXBasicProfile } from '../../types'
 
 import EditProfileModal from './EditProfileModal'
 
@@ -22,8 +21,9 @@ type State = { canEdit: false } | ({ canEdit: true } & EditableState)
 
 export default function EditProfileButton({ did, setProfile }: Props) {
   const [auth] = useIDXAuth()
-  const [knownDIDs] = useKnownDIDs()
-  const login = useLogin()
+  const { idx } = useIDXEnv()
+  const knownDIDs = useKnownDIDs()
+  const [login, loginModal] = useLogin()
 
   const ownDIDs = useMemo(() => Object.keys(knownDIDs), [knownDIDs])
   const [state, setState] = useState<State>({ canEdit: false })
@@ -92,6 +92,7 @@ export default function EditProfileButton({ did, setProfile }: Props) {
   return (
     <>
       {button}
+      {loginModal}
       {modal}
     </>
   )

@@ -1,6 +1,8 @@
 import { atom } from 'jotai'
 
+import { web3modal } from './ethereum'
 import type { ConnectedEthereumProvider } from './ethereum'
+import { createIDXEnv } from './idx'
 import type { KnownDIDs } from './idx'
 
 export type EthereumProviderState =
@@ -32,15 +34,7 @@ export type IDXAuth =
   | { state: 'LOCAL'; id: string }
   | { state: 'LOADING'; id?: string }
   | { state: 'ERROR'; id?: string; error?: Error }
-  | { state: 'CONFIRMED'; id: string }
-
-function setSelectedDID(did?: string): void {
-  if (did == null) {
-    localStorage.removeItem(SELECTED_DID_KEY)
-  } else {
-    localStorage.setItem(SELECTED_DID_KEY, did)
-  }
-}
+  | { state: 'CONFIRMED'; id: string; address: string }
 
 function getAuthState(): IDXAuth {
   const id = localStorage.getItem(SELECTED_DID_KEY) || null
@@ -48,6 +42,16 @@ function getAuthState(): IDXAuth {
 }
 
 export const idxAuth = atom(getAuthState(), (_get, set, auth: IDXAuth) => {
-  setSelectedDID(auth.id)
+  if (auth.id == null) {
+    localStorage.removeItem(SELECTED_DID_KEY)
+  } else {
+    localStorage.setItem(SELECTED_DID_KEY, auth.id)
+  }
   set(idxAuth, auth)
+})
+
+export const idxEnv = atom(createIDXEnv(), (get, set, _) => {
+  web3modal.clearCachedProvider()
+  const existing = get(idxEnv)
+  set(idxEnv, createIDXEnv(existing))
 })

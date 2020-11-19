@@ -7,46 +7,40 @@ import type { AccountIDParams } from 'caip'
 
 import { CERAMIC_URL, CONNECT_URL } from '../constants'
 
-import { web3modal } from './ethereum'
 import type { EthereumProvider } from './ethereum'
+
+export type IDXEnv = {
+  ceramic: Ceramic
+  connect: ThreeIdConnect
+  idx: IDXWeb
+}
 
 export type KnownDID = { accounts: Array<AccountIDParams> }
 export type KnownDIDs = Record<string, KnownDID>
 
-const connect = new ThreeIdConnect(CONNECT_URL)
-let ceramic: Ceramic | null = null
-
-function createIDX(): IDXWeb {
-  if (ceramic != null) {
-    void ceramic.close()
+export function createIDXEnv(existing?: IDXEnv): IDXEnv {
+  if (existing != null) {
+    void existing.ceramic.close()
   }
-  ceramic = new Ceramic(CERAMIC_URL)
+  const ceramic = new Ceramic(CERAMIC_URL)
+  const connect = new ThreeIdConnect(CONNECT_URL)
   // @ts-ignore ceramic instance type
-  return new IDXWeb({ ceramic, connect, definitions })
+  const idx = new IDXWeb({ ceramic, connect, definitions })
+  return { ceramic, connect, idx }
 }
 
-export let idx = createIDX()
-
 export async function authenticate(
+  env: IDXEnv,
   provider: EthereumProvider,
   address: string,
   paths?: Array<string>
 ): Promise<KnownDIDs> {
   const authProvider = new EthereumAuthProvider(provider, address)
-  await idx.authenticate({ authProvider, paths })
+  await env.idx.authenticate({ authProvider, paths })
   // @ts-ignore
-  const accounts = await connect.accounts()
+  const accounts = await env.connect.accounts()
   return Object.entries(accounts).reduce((acc, [did, accounts]) => {
     acc[did] = { accounts: accounts.map((id) => AccountID.parse(id)) }
     return acc
   }, {} as KnownDIDs)
-}
-
-export function reset() {
-  if (ceramic != null) {
-    void ceramic.close()
-    ceramic = null
-  }
-  idx = createIDX()
-  web3modal.clearCachedProvider()
 }

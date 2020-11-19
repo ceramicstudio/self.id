@@ -3,9 +3,8 @@ import type { TextInputProps } from 'grommet'
 import { useCallback, useState } from 'react'
 import type { FormEvent, ReactNode } from 'react'
 
-import { useImageUpload } from '../client/hooks'
-import { idx } from '../client/idx'
-import { IDXBasicProfile } from '../types'
+import { useIDXEnv, useImageUpload } from '../hooks'
+import { IDXBasicProfile } from '../../types'
 
 export type FormValue = {
   name?: string
@@ -147,6 +146,7 @@ interface ModalProps {
 }
 
 export default function EditProfileModal({ onClose, profile }: ModalProps) {
+  const { idx } = useIDXEnv()
   const [value, setValue] = useState<FormValue>(() => profileToForm(profile))
   const [savingState, setSavingState] = useState<SavingState>('PENDING')
 
@@ -171,7 +171,7 @@ export default function EditProfileModal({ onClose, profile }: ModalProps) {
         }
       )
     },
-    [isLoading, onClose, profile, value]
+    [idx, isLoading, onClose, profile, value]
   )
 
   const alert = isLoading ? (
