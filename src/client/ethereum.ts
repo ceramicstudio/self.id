@@ -2,13 +2,8 @@
 // import WalletConnectProvider from '@walletconnect/web3-provider'
 // import Authereum from 'authereum'
 // import Fortmatic from 'fortmatic'
+import type { EthereumProvider } from '3id-connect'
 import Web3Modal from 'web3modal'
-
-export interface EthereumProvider {
-  request(req: { method: string }): Promise<unknown>
-  on(event: string, listener: (...args: any) => void): void
-  off(event: string, listener: (...args: any) => void): void
-}
 
 export interface ConnectedEthereumProvider {
   accounts: Array<string>

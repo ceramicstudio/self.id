@@ -1,18 +1,16 @@
-import Ceramic from '@ceramicnetwork/ceramic-http-client'
-import { definitions } from '@ceramicstudio/idx-constants'
-import { IDXWeb } from '@ceramicstudio/idx-web'
+import Ceramic from '@ceramicnetwork/http-client'
+import { IDX } from '@ceramicstudio/idx'
 import { EthereumAuthProvider, ThreeIdConnect } from '3id-connect'
+import type { EthereumProvider } from '3id-connect'
 import { AccountID } from 'caip'
 import type { AccountIDParams } from 'caip'
 
 import { CERAMIC_URL, CONNECT_URL } from '../constants'
 
-import type { EthereumProvider } from './ethereum'
-
 export type IDXEnv = {
   ceramic: Ceramic
-  connect: ThreeIdConnect
-  idx: IDXWeb
+  idx: IDX
+  threeId: ThreeIdConnect
 }
 
 export type KnownDID = { accounts: Array<AccountIDParams> }
@@ -23,14 +21,13 @@ export function createIDXEnv(existing?: IDXEnv): IDXEnv {
     void existing.ceramic.close()
   }
   const ceramic = new Ceramic(CERAMIC_URL)
-  const connect = new ThreeIdConnect(CONNECT_URL)
-  // @ts-ignore ceramic instance type
-  const idx = new IDXWeb({ ceramic, connect, definitions })
-  return { ceramic, connect, idx }
+  const idx = new IDX({ ceramic })
+  const threeId = new ThreeIdConnect(CONNECT_URL)
+  return { ceramic, idx, threeId }
 }
 
-async function loadKnownDIDs(connect: ThreeIdConnect): Promise<KnownDIDs> {
-  const accounts = await connect.accounts()
+async function loadKnownDIDs(threeId: ThreeIdConnect): Promise<KnownDIDs> {
+  const accounts = await threeId.accounts()
   return Object.entries(accounts).reduce((acc, [did, accounts]) => {
     acc[did] = { accounts: accounts.map((id) => AccountID.parse(id)) }
     return acc
@@ -44,8 +41,9 @@ export async function authenticate(
   paths?: Array<string>
 ): Promise<KnownDIDs> {
   const authProvider = new EthereumAuthProvider(provider, address)
-  await env.idx.authenticate({ authProvider, paths })
-  return await loadKnownDIDs(env.connect)
+  await env.threeId.connect(authProvider)
+  await env.idx.authenticate({ paths, provider: env.threeId.getDidProvider() })
+  return await loadKnownDIDs(env.threeId)
 }
 
 export async function linkAccount(
@@ -54,7 +52,17 @@ export async function linkAccount(
   did: string,
   address: string
 ): Promise<KnownDIDs> {
-  env.connect.setAuthProvider(new EthereumAuthProvider(provider, address))
-  await env.connect.addAuthAndLink(did)
-  return await loadKnownDIDs(env.connect)
+  env.threeId.setAuthProvider(new EthereumAuthProvider(provider, address))
+  await env.threeId.addAuthAndLink(did)
+  return await loadKnownDIDs(env.threeId)
+}
+
+export async function switchAccount(
+  env: IDXEnv,
+  provider: EthereumProvider,
+  address: string
+): Promise<KnownDIDs> {
+  // TODO: investivate how to get new ID when changing provider, so we need to call another method?
+  env.threeId.setAuthProvider(new EthereumAuthProvider(provider, address))
+  return await loadKnownDIDs(env.threeId)
 }

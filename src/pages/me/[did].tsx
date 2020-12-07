@@ -102,7 +102,7 @@ function NoProfile({ did, setProfile }: NoProfileProps) {
   )
 }
 
-export default function Me({ did, loadedProfile }: Props) {
+export default function ProfilePage({ did, loadedProfile }: Props) {
   const [profile, setProfile] = useState<IDXBasicProfile | null>(loadedProfile)
   useEffect(() => {
     setProfile(loadedProfile)

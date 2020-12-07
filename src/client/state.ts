@@ -11,22 +11,22 @@ export type EthereumProviderState =
   | { status: 'CONNECTING'; promise: Promise<ConnectedEthereumProvider | null> }
   | { status: 'FAILED'; error?: Error }
 
-export const ethereumProvider = atom<EthereumProviderState>({ status: 'DISCONNECTED' })
+export const ethereumProviderAtom = atom<EthereumProviderState>({ status: 'DISCONNECTED' })
 
 const KNOWN_DIDS_KEY = 'selfID-knownDIDs-v0'
 const SELECTED_DID_KEY = 'selfID-selectedDID-v0'
 
-export function getKnownDIDs(): KnownDIDs {
+function getKnownDIDs(): KnownDIDs {
   const item = localStorage.getItem(KNOWN_DIDS_KEY)
   return (item ? JSON.parse(item) : {}) as KnownDIDs
 }
-export function setKnownDIDs(dids: KnownDIDs = {}): void {
+function setKnownDIDs(dids: KnownDIDs = {}): void {
   return localStorage.setItem(KNOWN_DIDS_KEY, JSON.stringify(dids))
 }
 
-export const knownDIDs = atom(getKnownDIDs(), (_get, set, dids: KnownDIDs) => {
+export const knownDIDsAtom = atom(getKnownDIDs(), (_get, set, dids: KnownDIDs) => {
   setKnownDIDs(dids)
-  set(knownDIDs, dids)
+  set(knownDIDsAtom, dids)
 })
 
 export type IDXAuth =
@@ -41,17 +41,19 @@ function getAuthState(): IDXAuth {
   return id ? { state: 'LOCAL', id } : { state: 'UNKNOWN' }
 }
 
-export const idxAuth = atom(getAuthState(), (_get, set, auth: IDXAuth) => {
+export const idxAuthAtom = atom(getAuthState(), (_get, set, auth: IDXAuth) => {
   if (auth.id == null) {
     localStorage.removeItem(SELECTED_DID_KEY)
   } else {
     localStorage.setItem(SELECTED_DID_KEY, auth.id)
   }
-  set(idxAuth, auth)
+  set(idxAuthAtom, auth)
 })
 
-export const idxEnv = atom(createIDXEnv(), (get, set, _) => {
+export const idxEnvAtom = atom(createIDXEnv(), (get, set, _) => {
   web3modal.clearCachedProvider()
-  const existing = get(idxEnv)
-  set(idxEnv, createIDXEnv(existing))
+  const existing = get(idxEnvAtom)
+  set(idxEnvAtom, createIDXEnv(existing))
 })
+
+export const linkingAddressAtom = atom<string | null>(null)

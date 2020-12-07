@@ -1,24 +1,17 @@
-import { Anchor, Box, Paragraph, Text } from 'grommet'
-import type { GetServerSideProps } from 'next'
+import { Box, Button, Text } from 'grommet'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
-import { useEffect, useState } from 'react'
-import styled, { css } from 'styled-components'
+import { useState } from 'react'
 
 import Navbar from '../components/Navbar'
 
-const AccountsList = dynamic(() => import('../client/components/AccountsList'), {
-  ssr: false,
-})
-
-const DisplayDID = dynamic(() => import('../client/components/DisplayDID'), {
-  loading: function LoadingDID() {
-    return <Text color="neutral-3">Loading DID...</Text>
-  },
+const DIDsList = dynamic(() => import('../client/components/DIDsList'), {
   ssr: false,
 })
 
 export default function AccountsPage() {
+  const [selected, select] = useState<string | null>(null)
+
   return (
     <Box>
       <Head>
@@ -26,10 +19,15 @@ export default function AccountsPage() {
       </Head>
       <Navbar />
       <Box alignSelf="center" margin="large" width="large">
-        <Text size="xxlarge">My Identity</Text>
-        <DisplayDID />
+        <Button
+          label="My Identity"
+          onClick={() => select(null)}
+          plain
+          style={{ fontSize: 42, lineHeight: 1.2 }}
+        />
+        {selected ? <Text color="neutral-3">{selected}</Text> : null}
         <Box pad={{ top: 'medium' }}>
-          <AccountsList />
+          <DIDsList selected={selected} select={select} />
         </Box>
       </Box>
     </Box>

@@ -1,13 +1,15 @@
-import { Heading, Main } from 'grommet'
+import { Box } from 'grommet'
 import Head from 'next/head'
+
+import Navbar from '../components/Navbar'
 
 export default function Home() {
   return (
-    <Main pad="large">
+    <Box>
       <Head>
-        <title>self.ID</title>
+        <title>Self.ID</title>
       </Head>
-      <Heading>self.ID</Heading>
-    </Main>
+      <Navbar />
+    </Box>
   )
 }

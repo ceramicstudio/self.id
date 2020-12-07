@@ -1,9 +1,10 @@
+import type { EthereumProvider } from '3id-connect'
 import { useAtom } from 'jotai'
 import { useCallback, useRef } from 'react'
 
 import { connectEthereumProvider, normalizeChainId } from '../ethereum'
-import type { ConnectedEthereumProvider, EthereumProvider } from '../ethereum'
-import { ethereumProvider } from '../state'
+import type { ConnectedEthereumProvider } from '../ethereum'
+import { ethereumProviderAtom } from '../state'
 import type { EthereumProviderState } from '../state'
 
 export function useEthereum(): [
@@ -14,7 +15,7 @@ export function useEthereum(): [
   ) => Promise<ConnectedEthereumProvider | null>,
   () => void
 ] {
-  const [providerState, setProviderState] = useAtom(ethereumProvider)
+  const [providerState, setProviderState] = useAtom(ethereumProviderAtom)
   const accountsChangedListenerRef = useRef<(addresses: Array<string>) => void>()
   const chainChangedListenerRef = useRef<(chainId: string) => void>()
   const disconnectListenerRef = useRef<() => void>()

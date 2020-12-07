@@ -1,23 +1,24 @@
+import type { EthereumProvider } from '3id-connect'
 import type { AccountIDParams } from 'caip'
 import { useAtom } from 'jotai'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo } from 'react'
 
-import { useEthereum } from './ethereum'
-import type { EthereumProvider } from '../ethereum'
-import { authenticate, linkAccount } from '../idx'
-import { idxAuth, idxEnv, knownDIDs } from '../state'
+import { authenticate, linkAccount, switchAccount } from '../idx'
+import { idxAuthAtom, idxEnvAtom, knownDIDsAtom, linkingAddressAtom } from '../state'
 import type { IDXAuth } from '../state'
 
+import { useEthereum } from './ethereum'
+
 export function useKnownDIDs() {
-  return useAtom(knownDIDs)[0]
+  return useAtom(knownDIDsAtom)[0]
 }
 
 export function useIDXEnv() {
-  return useAtom(idxEnv)[0]
+  return useAtom(idxEnvAtom)[0]
 }
 
 export function useResetIDXEnv(): () => void {
-  return useAtom(idxEnv)[1]
+  return useAtom(idxEnvAtom)[1]
 }
 
 export function useIDXAuth(): [
@@ -25,9 +26,9 @@ export function useIDXAuth(): [
   (provider: EthereumProvider, address: string, paths?: Array<string>) => Promise<string | null>,
   () => void
 ] {
-  const [auth, setAuth] = useAtom(idxAuth)
-  const [env, resetEnv] = useAtom(idxEnv)
-  const [_, setKnownDIDs] = useAtom(knownDIDs)
+  const [auth, setAuth] = useAtom(idxAuthAtom)
+  const [env, resetEnv] = useAtom(idxEnvAtom)
+  const [_, setKnownDIDs] = useAtom(knownDIDsAtom)
 
   const tryAuthenticate = useCallback(
     async (
@@ -70,11 +71,11 @@ export function useAccountLinks(): [
   string | null,
   (address: string) => Promise<boolean>
 ] {
-  const [dids, setDIDs] = useAtom(knownDIDs)
+  const [dids, setDIDs] = useAtom(knownDIDsAtom)
+  const [linkingAddress, setLinkingAddress] = useAtom(linkingAddressAtom)
   const [eth] = useEthereum()
   const [auth] = useIDXAuth()
   const env = useIDXEnv()
-  const [linkingAddress, setLinkingAddress] = useState<string | null>(null)
 
   const links = useMemo(() => {
     return (auth.state === 'CONFIRMED' && dids[auth.id]?.accounts) || []
@@ -83,7 +84,7 @@ export function useAccountLinks(): [
   const link = useCallback(
     async (address: string) => {
       if (auth.state === 'CONFIRMED' && eth.status === 'CONNECTED' && linkingAddress == null) {
-        setLinkingAddress(address)
+        void setLinkingAddress(address)
         try {
           const newDIDs = await linkAccount(env, eth.provider, auth.id, address)
           void setDIDs(newDIDs)
@@ -91,12 +92,40 @@ export function useAccountLinks(): [
         } catch (err) {
           console.warn('Failed to link account', err)
         }
-        setLinkingAddress(null)
+        void setLinkingAddress(null)
       }
       return false
     },
-    [auth, eth, env, linkingAddress, setDIDs]
+    [auth, eth, env, linkingAddress, setDIDs, setLinkingAddress]
   )
 
   return [links, linkingAddress, link]
+}
+
+export function useSwitchAccount() {
+  const [_, setDIDs] = useAtom(knownDIDsAtom)
+  const [eth, connect] = useEthereum()
+  const env = useIDXEnv()
+
+  const trySwitch = useCallback(
+    async (provider: EthereumProvider, address: string) => {
+      const newDIDs = await switchAccount(env, provider, address)
+      void setDIDs(newDIDs)
+    },
+    [env, setDIDs]
+  )
+
+  return useCallback(
+    async (address: string) => {
+      if (eth.status === 'CONNECTED') {
+        await trySwitch(eth.provider, address)
+      } else {
+        const ethereum = await connect()
+        if (ethereum != null) {
+          await trySwitch(ethereum.provider, address)
+        }
+      }
+    },
+    [eth, connect, trySwitch]
+  )
 }
