@@ -1,15 +1,17 @@
-import { IPFS_ADD_URL } from '../constants'
+import { IPFS_API_URL } from '../constants'
 
-interface AddResponse {
+export type LinkData = {
   Name: string
   Hash: string
-  Size: string
+  Size: number
 }
 
-export async function uploadImage(data: FormData): Promise<string> {
-  const res = await fetch(IPFS_ADD_URL, { method: 'POST', body: data })
+export async function addFile(blob: Blob, fileName?: string): Promise<string> {
+  const body = new FormData()
+  body.append('path', blob, fileName)
+  const res = await fetch(`${IPFS_API_URL}/add`, { method: 'POST', body })
   if (res.ok) {
-    const { Hash } = (await res.json()) as AddResponse
+    const { Hash } = (await res.json()) as LinkData
     return Hash
   }
   throw new Error(`Upload failed: ${res.statusText}`)

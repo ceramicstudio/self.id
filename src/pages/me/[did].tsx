@@ -1,3 +1,4 @@
+import type { BasicProfile, ImageSources } from '@ceramicstudio/idx-constants'
 import { Anchor, Box, Paragraph, Text } from 'grommet'
 import type { GetServerSideProps } from 'next'
 import dynamic from 'next/dynamic'
@@ -6,12 +7,20 @@ import { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 
 import Navbar from '../../components/Navbar'
+import { getImageSrc } from '../../image'
+import type { Dimensions } from '../../image'
 import countryIcon from '../../images/icons/country.png'
 import linkIcon from '../../images/icons/link.svg'
 import locationIcon from '../../images/icons/location.png'
 import { loadProfile } from '../../profile'
 import { BRAND_COLOR, PLACEHOLDER_COLOR } from '../../theme'
-import type { IDXBasicProfile } from '../../types'
+
+export function getImageURL(
+  sources: ImageSources | undefined,
+  dimensions: Dimensions
+): string | undefined {
+  return sources ? getImageSrc(sources, dimensions) : undefined
+}
 
 const EditProfileButton = dynamic(() => import('../../client/components/EditProfileButton'), {
   ssr: false,
@@ -19,7 +28,7 @@ const EditProfileButton = dynamic(() => import('../../client/components/EditProf
 
 interface Props {
   did: string | null
-  loadedProfile: IDXBasicProfile | null
+  loadedProfile: BasicProfile | null
 }
 
 export const getServerSideProps: GetServerSideProps<Props, { did: string }> = async (ctx) => {
@@ -75,7 +84,7 @@ const Name = styled.h1`
 
 interface NoProfileProps {
   did: string | null
-  setProfile: (profile: IDXBasicProfile) => void
+  setProfile: (profile: BasicProfile) => void
 }
 
 function NoProfile({ did, setProfile }: NoProfileProps) {
@@ -103,7 +112,7 @@ function NoProfile({ did, setProfile }: NoProfileProps) {
 }
 
 export default function ProfilePage({ did, loadedProfile }: Props) {
-  const [profile, setProfile] = useState<IDXBasicProfile | null>(loadedProfile)
+  const [profile, setProfile] = useState<BasicProfile | null>(loadedProfile)
   useEffect(() => {
     setProfile(loadedProfile)
   }, [loadedProfile])
@@ -166,16 +175,16 @@ export default function ProfilePage({ did, loadedProfile }: Props) {
 
   const metaImage = profile.image ? (
     <>
-      <meta name="twitter:image" content={profile.image} />
+      <meta name="twitter:image" content={profile.image.original.src} />
       <meta name="twitter:image:alt" content={`Image for ${socialTitle}`} />
-      <meta property="og:image" content={profile.image} />
+      <meta property="og:image" content={profile.image.original.src} />
     </>
   ) : profile.background ? (
     <>
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:image" content={profile.background} />
+      <meta name="twitter:image" content={profile.background.original.src} />
       <meta name="twitter:image:alt" content={`Background image for ${socialTitle}`} />
-      <meta property="og:image" content={profile.background} />
+      <meta property="og:image" content={profile.background.original.src} />
     </>
   ) : (
     <meta name="twitter:card" content="summary" />
@@ -190,12 +199,12 @@ export default function ProfilePage({ did, loadedProfile }: Props) {
         {metaDescription}
         {metaImage}
       </Head>
-      <Header url={profile.background}>
+      <Header url={getImageURL(profile.background, { height: 310, width: 2000 })}>
         <Navbar variant="white" />
       </Header>
       <Box alignSelf="center" width="large" pad="medium">
         <Box direction="row" flex>
-          <Avatar url={profile.image} />
+          <Avatar url={getImageURL(profile.image, { height: 150, width: 150 })} />
           <Box flex>
             <Box alignSelf="end" width="150px">
               <EditProfileButton did={did} setProfile={setProfile} />

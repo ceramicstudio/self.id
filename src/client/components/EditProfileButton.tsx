@@ -1,21 +1,21 @@
+import type { BasicProfile } from '@ceramicstudio/idx-constants'
 import { Button } from 'grommet'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { useIDXAuth, useIDXEnv, useKnownDIDs, useLogin } from '../hooks'
 import { loadProfile } from '../../profile'
 import { BRAND_COLOR } from '../../theme'
-import type { IDXBasicProfile } from '../../types'
 
 import EditProfileModal from './EditProfileModal'
 
 export interface Props {
   did: string | null
-  setProfile: (profile: IDXBasicProfile) => void
+  setProfile: (profile: BasicProfile) => void
 }
 
 type EditableState =
-  | { loadingProfile: boolean; modalOpen: false; profile?: IDXBasicProfile }
-  | { loadingProfile: boolean; modalOpen: true; profile: IDXBasicProfile }
+  | { loadingProfile: boolean; modalOpen: false; profile?: BasicProfile }
+  | { loadingProfile: boolean; modalOpen: true; profile: BasicProfile }
 
 type State = { canEdit: false } | ({ canEdit: true } & EditableState)
 
@@ -41,7 +41,7 @@ export default function EditProfileButton({ did, setProfile }: Props) {
   }, [])
 
   const onClose = useCallback(
-    (profile?: IDXBasicProfile) => {
+    (profile?: BasicProfile) => {
       if (profile != null) {
         setProfile(profile)
       }

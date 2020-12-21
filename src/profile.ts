@@ -1,7 +1,7 @@
 import type { IDX } from '@ceramicstudio/idx'
+import type { BasicProfile } from '@ceramicstudio/idx-constants'
 
 // import { PROFILE_URL } from './constants'
-import type { IDXBasicProfile } from './types'
 
 // type LegacyProfile = {
 //   name?: string
@@ -12,8 +12,8 @@ import type { IDXBasicProfile } from './types'
 //   birthday?: string
 // }
 
-export async function loadProfile(idx: IDX, did: string): Promise<IDXBasicProfile | null> {
-  const profile: IDXBasicProfile | null = await idx.get('basicProfile', did)
+export async function loadProfile(idx: IDX, did: string): Promise<BasicProfile | null> {
+  const profile: BasicProfile | null = await idx.get('basicProfile', did)
   // if (profile == null) {
   //   const res = await fetch(`${PROFILE_URL}?did=${did}`)
   //   if (res.ok) {

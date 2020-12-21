@@ -3,8 +3,8 @@ import type { AccountIDParams } from 'caip'
 import { useAtom } from 'jotai'
 import { useCallback, useMemo } from 'react'
 
-import { authenticate, linkAccount, switchAccount } from '../idx'
-import { idxAuthAtom, idxEnvAtom, knownDIDsAtom, linkingAddressAtom } from '../state'
+import { authenticate, createAccount, linkAccount, switchAccount } from '../idx'
+import { createDIDAtom, idxAuthAtom, idxEnvAtom, knownDIDsAtom, linkingAddressAtom } from '../state'
 import type { IDXAuth } from '../state'
 
 import { useEthereum } from './ethereum'
@@ -23,7 +23,7 @@ export function useResetIDXEnv(): () => void {
 
 export function useIDXAuth(): [
   IDXAuth,
-  (provider: EthereumProvider, address: string, paths?: Array<string>) => Promise<string | null>,
+  (provider: EthereumProvider, address: string) => Promise<string | null>,
   () => void
 ] {
   const [auth, setAuth] = useAtom(idxAuthAtom)
@@ -31,16 +31,12 @@ export function useIDXAuth(): [
   const [_, setKnownDIDs] = useAtom(knownDIDsAtom)
 
   const tryAuthenticate = useCallback(
-    async (
-      provider: EthereumProvider,
-      address: string,
-      paths?: Array<string>
-    ): Promise<string | null> => {
+    async (provider: EthereumProvider, address: string): Promise<string | null> => {
       const initialAuth = auth
       void setAuth({ state: 'LOADING', id: auth.id })
 
       try {
-        const knownDIDs = await authenticate(env, provider, address, paths)
+        const knownDIDs = await authenticate(env, provider, address)
         if (knownDIDs) {
           void setKnownDIDs(knownDIDs)
           void setAuth({ state: 'CONFIRMED', id: env.idx.id, address })
@@ -128,4 +124,45 @@ export function useSwitchAccount() {
     },
     [eth, connect, trySwitch]
   )
+}
+
+export function useCreateAccount(): [boolean, (address: string) => void, Error | undefined] {
+  const [_, setDIDs] = useAtom(knownDIDsAtom)
+  const [eth, connect] = useEthereum()
+  const env = useIDXEnv()
+  const [createState, setCreateState] = useAtom(createDIDAtom)
+
+  const tryCreate = useCallback(
+    async (provider: EthereumProvider, address: string) => {
+      if (createState.creating) {
+        return
+      }
+      void setCreateState({ creating: true })
+      try {
+        const newDIDs = await createAccount(env, provider, address)
+        void setDIDs(newDIDs)
+        void setCreateState({ creating: false })
+      } catch (error) {
+        console.warn('Error creating DID', error)
+        void setCreateState({ creating: false, error: error as Error })
+      }
+    },
+    [createState.creating, env, setDIDs, setCreateState]
+  )
+
+  const create = useCallback(
+    async (address: string) => {
+      if (eth.status === 'CONNECTED') {
+        await tryCreate(eth.provider, address)
+      } else {
+        const ethereum = await connect()
+        if (ethereum != null) {
+          await tryCreate(ethereum.provider, address)
+        }
+      }
+    },
+    [eth, connect, tryCreate]
+  )
+
+  return [createState.creating, create, createState.error]
 }

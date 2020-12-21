@@ -1,17 +1,19 @@
+import type { BasicProfile, ImageSources } from '@ceramicstudio/idx-constants'
 import { Avatar, Box, Button, Image, Layer, Paragraph, Text, TextArea, TextInput } from 'grommet'
 import type { TextInputProps } from 'grommet'
 import { useCallback, useState } from 'react'
 import type { FormEvent, ReactNode } from 'react'
 
+import { getImageSrc } from '../../image'
+import type { Dimensions } from '../../image'
 import { useIDXEnv, useImageUpload } from '../hooks'
-import { IDXBasicProfile } from '../../types'
 
 export type FormValue = {
   name?: string
-  image?: string
+  image?: ImageSources
   description?: string
   emoji?: string
-  background?: string
+  background?: ImageSources
   birthDate?: string
   url?: string
   gender?: string
@@ -20,14 +22,13 @@ export type FormValue = {
   nationality?: string // Array<string> in IDX
 }
 
-function profileToForm({ nationalities, ...profile }: IDXBasicProfile): FormValue {
+type ImageKey = 'image' | 'background'
+
+function profileToForm({ nationalities, ...profile }: BasicProfile): FormValue {
   return { ...profile, nationality: nationalities?.[0] }
 }
 
-function changeProfile(
-  profile: IDXBasicProfile,
-  { nationality, ...value }: FormValue
-): IDXBasicProfile {
+function changeProfile(profile: BasicProfile, { nationality, ...value }: FormValue): BasicProfile {
   const changed = { ...profile, ...value }
 
   const nationalities = profile.nationalities ?? []
@@ -85,7 +86,7 @@ interface TextFieldProps
     Omit<TextInputProps, 'value'>,
     Omit<JSX.IntrinsicElements['input'], 'onSelect' | 'size' | 'placeholder' | 'ref' | 'value'> {
   disabled?: boolean
-  name: keyof FormValue
+  name: Exclude<keyof FormValue, ImageKey>
   setValue: (value: FormValue) => void
   value: FormValue
 }
@@ -109,23 +110,35 @@ function TextField({ label, name, setValue, value, ...props }: TextFieldProps) {
 
 interface ImageFieldProps extends CommonFieldProps {
   disabled?: boolean
-  name: keyof FormValue
-  renderImage(props: { src: string; onClick?: () => void }): ReactNode
+  maxSize?: number
+  name: ImageKey
+  renderImage(props: { sources: ImageSources; onClick?: () => void }): ReactNode
+  resizeDimensions?: Array<Dimensions>
   setValue: (value: FormValue) => void
   value: FormValue
 }
 
-function ImageField({ disabled, label, name, renderImage, setValue, value }: ImageFieldProps) {
-  const { input, state, trigger } = useImageUpload((hash) => {
-    setValue({ ...value, [name]: `https://ipfs.infura.io/ipfs/${hash}` })
-  })
+function ImageField({
+  disabled,
+  label,
+  maxSize,
+  name,
+  renderImage,
+  resizeDimensions,
+  setValue,
+  value,
+}: ImageFieldProps) {
+  const { input, state, trigger } = useImageUpload(
+    (sources) => setValue({ ...value, [name]: sources }),
+    { maxSize, dimensions: resizeDimensions }
+  )
 
-  const src = value[name] ?? ''
+  const sources = value[name]
   let content = null
   if (state === 'UPLOADING') {
     content = <Button disabled fill label="Uploading..." />
-  } else if (src) {
-    content = renderImage({ onClick: disabled ? undefined : trigger, src })
+  } else if (sources != null) {
+    content = renderImage({ sources, onClick: disabled ? undefined : trigger })
   } else {
     content = <Button fill label="Select" onClick={trigger} />
   }
@@ -141,8 +154,8 @@ function ImageField({ disabled, label, name, renderImage, setValue, value }: Ima
 type SavingState = 'PENDING' | 'LOADING' | 'FAILED' | 'DONE'
 
 interface ModalProps {
-  onClose: (profile?: IDXBasicProfile) => void
-  profile: IDXBasicProfile
+  onClose: (profile?: BasicProfile) => void
+  profile: BasicProfile
 }
 
 export default function EditProfileModal({ onClose, profile }: ModalProps) {
@@ -192,7 +205,10 @@ export default function EditProfileModal({ onClose, profile }: ModalProps) {
               disabled={isLoading}
               label="Image (max 2.5 MB)"
               name="image"
-              renderImage={(props) => <Avatar {...props} />}
+              renderImage={({ onClick, sources }) => (
+                <Avatar onClick={onClick} src={getImageSrc(sources, { height: 50, width: 50 })} />
+              )}
+              resizeDimensions={[{ width: 150, height: 150 }]}
               setValue={setValue}
               value={value}
             />
@@ -200,7 +216,8 @@ export default function EditProfileModal({ onClose, profile }: ModalProps) {
               disabled={isLoading}
               label="Banner (max 2.5 MB)"
               name="background"
-              renderImage={({ onClick, src }) => {
+              renderImage={({ onClick, sources }) => {
+                const src = getImageSrc(sources, { width: 300, height: 100 })
                 return (
                   <Box height="small">
                     <Image alt={src} fit="cover" onClick={onClick} src={src} />

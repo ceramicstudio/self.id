@@ -57,3 +57,5 @@ export const idxEnvAtom = atom(createIDXEnv(), (get, set, _) => {
 })
 
 export const linkingAddressAtom = atom<string | null>(null)
+
+export const createDIDAtom = atom<{ creating: boolean; error?: Error }>({ creating: false })

@@ -1,7 +1,7 @@
 import { Box, Button, Text } from 'grommet'
 import type { ReactNode } from 'react'
 
-import { useIDXAuth, useKnownDIDs } from '../hooks'
+import { useCreateAccount, useEthereum, useIDXAuth, useKnownDIDs } from '../hooks'
 
 import AccountsList from './DIDAccountsList'
 import LoginButton from './LoginButton'
@@ -27,6 +27,20 @@ function DIDItem({ id, onClick, children }: ItemProps) {
   )
 }
 
+function CreateDIDButton() {
+  const [eth] = useEthereum()
+  const [creating, create] = useCreateAccount()
+
+  return eth.status === 'CONNECTED' ? (
+    <Button
+      color="brand"
+      disabled={creating}
+      label={creating ? 'Creating new DID' : 'Create new DID'}
+      onClick={() => create(eth.accounts[0])}
+    />
+  ) : null
+}
+
 export type Props = {
   select: (did: string | null) => void
   selected: string | null
@@ -48,10 +62,16 @@ export default function DIDsList({ select, selected }: Props) {
     <AccountsList id={selected} select={select} />
   ) : (
     <Box>
-      <Box border={{ color: 'neutral-5', side: 'bottom' }} pad={{ vertical: 'medium' }}>
-        <Box width="small">
+      <Box
+        border={{ color: 'neutral-5', side: 'bottom' }}
+        direction="row"
+        pad={{ vertical: 'medium' }}>
+        <Box flex>
           <Text size="large">DIDs</Text>
         </Box>
+        {/* <Box width="small">
+          <CreateDIDButton />
+        </Box> */}
       </Box>
       {Object.keys(knownDIDs).map((id) => (
         <DIDItem id={id} key={id} onClick={() => select(id)}>

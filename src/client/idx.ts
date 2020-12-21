@@ -37,32 +37,41 @@ async function loadKnownDIDs(threeId: ThreeIdConnect): Promise<KnownDIDs> {
 export async function authenticate(
   env: IDXEnv,
   provider: EthereumProvider,
-  address: string,
-  paths?: Array<string>
+  address: string
 ): Promise<KnownDIDs> {
   const authProvider = new EthereumAuthProvider(provider, address)
   await env.threeId.connect(authProvider)
-  await env.idx.authenticate({ paths, provider: env.threeId.getDidProvider() })
+  await env.ceramic.setDIDProvider(env.threeId.getDidProvider())
   return await loadKnownDIDs(env.threeId)
 }
 
 export async function linkAccount(
-  env: IDXEnv,
+  { threeId }: IDXEnv,
   provider: EthereumProvider,
   did: string,
   address: string
 ): Promise<KnownDIDs> {
-  env.threeId.setAuthProvider(new EthereumAuthProvider(provider, address))
-  await env.threeId.addAuthAndLink(did)
-  return await loadKnownDIDs(env.threeId)
+  threeId.setAuthProvider(new EthereumAuthProvider(provider, address))
+  await threeId.addAuthAndLink(did)
+  return await loadKnownDIDs(threeId)
 }
 
 export async function switchAccount(
-  env: IDXEnv,
+  { threeId }: IDXEnv,
   provider: EthereumProvider,
   address: string
 ): Promise<KnownDIDs> {
   // TODO: investivate how to get new ID when changing provider, so we need to call another method?
-  env.threeId.setAuthProvider(new EthereumAuthProvider(provider, address))
-  return await loadKnownDIDs(env.threeId)
+  threeId.setAuthProvider(new EthereumAuthProvider(provider, address))
+  return await loadKnownDIDs(threeId)
+}
+
+export async function createAccount(
+  { threeId }: IDXEnv,
+  provider: EthereumProvider,
+  address: string
+): Promise<KnownDIDs> {
+  threeId.setAuthProvider(new EthereumAuthProvider(provider, address))
+  await threeId.createAccount()
+  return await loadKnownDIDs(threeId)
 }
