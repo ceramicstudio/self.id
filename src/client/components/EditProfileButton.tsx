@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { useIDXAuth, useIDXEnv, useKnownDIDs, useLogin } from '../hooks'
 import { loadProfile } from '../../profile'
-import { BRAND_COLOR } from '../../theme'
+import { ACCENT_COLOR, BRAND_COLOR } from '../../theme'
 
 import EditProfileModal from './EditProfileModal'
 
@@ -78,7 +78,7 @@ export default function EditProfileButton({ did, setProfile }: Props) {
   const button = state.canEdit ? (
     <Button
       primary
-      color="rgba(247, 101, 55, 0.1)"
+      color={ACCENT_COLOR}
       label={state.loadingProfile ? 'Loading...' : 'Edit'}
       onClick={onOpen}
       style={{ border: 0, color: BRAND_COLOR }}

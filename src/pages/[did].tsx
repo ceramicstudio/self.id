@@ -6,14 +6,15 @@ import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 
-import Navbar from '../../components/Navbar'
-import { getImageSrc } from '../../image'
-import type { Dimensions } from '../../image'
-import countryIcon from '../../images/icons/country.png'
-import linkIcon from '../../images/icons/link.svg'
-import locationIcon from '../../images/icons/location.png'
-import { loadProfile } from '../../profile'
-import { BRAND_COLOR, PLACEHOLDER_COLOR } from '../../theme'
+import Navbar from '../components/Navbar'
+import { getImageSrc } from '../image'
+import type { Dimensions } from '../image'
+import avatarPlaceholder from '../images/avatar-placeholder.png'
+import countryIcon from '../images/icons/country.png'
+import linkIcon from '../images/icons/link.svg'
+import locationIcon from '../images/icons/location.png'
+import { loadProfile } from '../profile'
+import { BRAND_COLOR, PLACEHOLDER_COLOR } from '../theme'
 
 export function getImageURL(
   sources: ImageSources | undefined,
@@ -22,7 +23,7 @@ export function getImageURL(
   return sources ? getImageSrc(sources, dimensions) : undefined
 }
 
-const EditProfileButton = dynamic(() => import('../../client/components/EditProfileButton'), {
+const EditProfileButton = dynamic(() => import('../client/components/EditProfileButton'), {
   ssr: false,
 })
 
@@ -37,7 +38,7 @@ export const getServerSideProps: GetServerSideProps<Props, { did: string }> = as
 
   if (did !== null) {
     try {
-      const { idx } = await import('../../server/idx')
+      const { idx } = await import('../server/idx')
       loadedProfile = await loadProfile(idx, did)
     } catch (err) {
       console.log('error loading profile from IDX', err)
@@ -50,7 +51,7 @@ export const getServerSideProps: GetServerSideProps<Props, { did: string }> = as
 }
 
 const Header = styled.div<{ url?: string }>`
-  height: 307px;
+  height: 386px;
   background-color: ${PLACEHOLDER_COLOR};
   ${(props) =>
     props.url &&
@@ -68,12 +69,10 @@ const Avatar = styled.div<{ url?: string }>`
   border: 3px solid white;
   border-radius: 78px;
   margin-top: -78px;
-  ${(props) =>
-    props.url &&
-    css`
-      background-image: url(${props.url});
-      background-size: cover;
-    `}
+  background-size: cover;
+  ${(props) => css`
+    background-image: url(${props.url ?? avatarPlaceholder});
+  `}
 `
 
 const Name = styled.h1`
@@ -94,7 +93,7 @@ function NoProfile({ did, setProfile }: NoProfileProps) {
         <title>No profile found | self.ID</title>
       </Head>
       <Header>
-        <Navbar variant="white" />
+        <Navbar />
       </Header>
       <Box alignSelf="center" width="large">
         <Box direction="row" flex>
@@ -200,7 +199,7 @@ export default function ProfilePage({ did, loadedProfile }: Props) {
         {metaImage}
       </Head>
       <Header url={getImageURL(profile.background, { height: 310, width: 2000 })}>
-        <Navbar variant="white" />
+        <Navbar />
       </Header>
       <Box alignSelf="center" width="large" pad="medium">
         <Box direction="row" flex>
