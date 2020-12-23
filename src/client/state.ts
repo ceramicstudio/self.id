@@ -3,7 +3,7 @@ import { atom } from 'jotai'
 import { web3modal } from './ethereum'
 import type { ConnectedEthereumProvider } from './ethereum'
 import { createIDXEnv } from './idx'
-import type { KnownDIDs } from './idx'
+import type { KnownDIDs, KnownDIDsData } from './idx'
 
 export type EthereumProviderState =
   | { status: 'DISCONNECTED' }
@@ -28,6 +28,8 @@ export const knownDIDsAtom = atom(getKnownDIDs(), (_get, set, dids: KnownDIDs) =
   setKnownDIDs(dids)
   set(knownDIDsAtom, dids)
 })
+
+export const knownDIDsDataAtom = atom<KnownDIDsData | null>(null)
 
 export type IDXAuth =
   | { state: 'UNKNOWN'; id?: undefined }

@@ -1,15 +1,13 @@
 import { Avatar, Box, Button, DropButton, Text } from 'grommet'
 import { useRouter } from 'next/router'
-import { useCallback } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 
 import avatarPlaceholder from '../../images/avatar-placeholder.png'
 import linkIcon from '../../images/icons/link.svg'
-import { useIDXAuth, useLogin, useLogout } from '../hooks'
+import { useIDXAuth, useDIDsData, useLogin, useLogout } from '../hooks'
+import { getImageSrc } from '../../image'
 import { ACCENT_COLOR, BRAND_COLOR } from '../../theme'
-
-function formatDID(did: string): string {
-  return did.length <= 20 ? did : `${did.slice(0, 10)}...${did.slice(-6, -1)}`
-}
+import { formatDID } from '../../utils'
 
 type DisplayAvatarProps = {
   label: string
@@ -59,6 +57,11 @@ export default function AccountButton() {
   const [auth] = useIDXAuth()
   const [login, loginModal] = useLogin()
   const logout = useLogout()
+  const [knownDIDsData, loadDIDsData] = useDIDsData()
+
+  useEffect(() => {
+    void loadDIDsData()
+  }, [])
 
   const toProfile = useCallback(
     (id: string | null) => {
@@ -81,9 +84,20 @@ export default function AccountButton() {
   //   }
   // }, [auth.state, login, toProfile])
 
-  if (auth.id != null) {
-    const displayDID = formatDID(auth.id)
+  const [displayName, avatarSrc] = useMemo(() => {
+    if (auth.id == null) {
+      return ['', avatarPlaceholder]
+    }
 
+    const profile = knownDIDsData?.[auth.id]?.profile
+    const name = profile?.name ?? formatDID(auth.id)
+    const src = profile?.image
+      ? getImageSrc(profile.image, { height: 60, width: 60 })
+      : avatarPlaceholder
+    return [name, src]
+  }, [auth.id, knownDIDsData])
+
+  if (auth.id != null) {
     const content = (
       <Box border={{ color: 'neutral-5' }} margin={{ top: '30px' }} round={{ size: 'small' }}>
         <Box
@@ -92,9 +106,9 @@ export default function AccountButton() {
           gap="small"
           pad="medium"
           round={{ corner: 'top', size: 'small' }}>
-          <Avatar size="60px" src={avatarPlaceholder} />
-          <Text size="medium" weight="bold">
-            {displayDID}
+          <Avatar size="60px" src={avatarSrc} />
+          <Text size="medium" truncate weight="bold">
+            {displayName}
           </Text>
         </Box>
         <Box
@@ -113,7 +127,7 @@ export default function AccountButton() {
         dropAlign={{ top: 'bottom', right: 'right' }}
         dropContent={content}
         dropProps={{ plain: true }}>
-        <DisplayAvatar label={displayDID} />
+        <DisplayAvatar label={displayName} src={avatarSrc} />
       </DropButton>
     )
   }

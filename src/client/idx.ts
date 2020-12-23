@@ -1,5 +1,6 @@
 import Ceramic from '@ceramicnetwork/http-client'
 import { IDX } from '@ceramicstudio/idx'
+import type { BasicProfile } from '@ceramicstudio/idx-constants'
 import { EthereumAuthProvider, ThreeIdConnect } from '3id-connect'
 import type { EthereumProvider } from '3id-connect'
 import { AccountID } from 'caip'
@@ -15,6 +16,9 @@ export type IDXEnv = {
 
 export type KnownDID = { accounts: Array<AccountIDParams> }
 export type KnownDIDs = Record<string, KnownDID>
+
+export type KnownDIDData = KnownDID & { profile: BasicProfile | null }
+export type KnownDIDsData = Record<string, KnownDIDData>
 
 export function createIDXEnv(existing?: IDXEnv): IDXEnv {
   if (existing != null) {
@@ -74,4 +78,18 @@ export async function createAccount(
   threeId.setAuthProvider(new EthereumAuthProvider(provider, address))
   await threeId.createAccount()
   return await loadKnownDIDs(threeId)
+}
+
+export async function loadKnownDIDsData(
+  { idx }: IDXEnv,
+  knownDIDs: KnownDIDs
+): Promise<KnownDIDsData> {
+  const dids = Object.keys(knownDIDs)
+  const profiles = await Promise.all(
+    dids.map(async (did) => await idx.get<BasicProfile>('basicProfile', did))
+  )
+  return dids.reduce((acc, did, i) => {
+    acc[did] = { accounts: knownDIDs[did].accounts, profile: profiles[i] ?? null }
+    return acc
+  }, {} as KnownDIDsData)
 }

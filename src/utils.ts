@@ -10,3 +10,7 @@ export function deferred<T>(): Deferred<T> {
   })
   return Object.assign(promise, methods) as Deferred<T>
 }
+
+export function formatDID(did: string): string {
+  return did.length <= 20 ? did : `${did.slice(0, 10)}...${did.slice(-6, -1)}`
+}

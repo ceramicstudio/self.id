@@ -3,9 +3,11 @@ export { useEthereum } from './ethereum'
 export {
   useAccountLinks,
   useCreateAccount,
+  useDIDsData,
   useIDXAuth,
   useIDXEnv,
   useKnownDIDs,
+  useKnownDIDsData,
   useResetIDXEnv,
   useSwitchAccount,
 } from './idx'

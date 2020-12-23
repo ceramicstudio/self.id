@@ -3,14 +3,26 @@ import type { AccountIDParams } from 'caip'
 import { useAtom } from 'jotai'
 import { useCallback, useMemo } from 'react'
 
-import { authenticate, createAccount, linkAccount, switchAccount } from '../idx'
-import { createDIDAtom, idxAuthAtom, idxEnvAtom, knownDIDsAtom, linkingAddressAtom } from '../state'
+import { authenticate, createAccount, linkAccount, loadKnownDIDsData, switchAccount } from '../idx'
+import type { KnownDIDsData } from '../idx'
+import {
+  createDIDAtom,
+  idxAuthAtom,
+  idxEnvAtom,
+  knownDIDsAtom,
+  knownDIDsDataAtom,
+  linkingAddressAtom,
+} from '../state'
 import type { IDXAuth } from '../state'
 
 import { useEthereum } from './ethereum'
 
 export function useKnownDIDs() {
   return useAtom(knownDIDsAtom)[0]
+}
+
+export function useKnownDIDsData() {
+  return useAtom(knownDIDsDataAtom)[0]
 }
 
 export function useIDXEnv() {
@@ -21,6 +33,19 @@ export function useResetIDXEnv(): () => void {
   return useAtom(idxEnvAtom)[1]
 }
 
+export function useDIDsData(): [KnownDIDsData | null, () => Promise<void>] {
+  const env = useIDXEnv()
+  const knownDIDs = useKnownDIDs()
+  const [knownDIDsData, setKnownDIDsData] = useAtom(knownDIDsDataAtom)
+
+  const load = useCallback(async () => {
+    const data = await loadKnownDIDsData(env, knownDIDs)
+    await setKnownDIDsData(data)
+  }, [env, knownDIDs, setKnownDIDsData])
+
+  return [knownDIDsData, load]
+}
+
 export function useIDXAuth(): [
   IDXAuth,
   (provider: EthereumProvider, address: string) => Promise<string | null>,
@@ -28,7 +53,8 @@ export function useIDXAuth(): [
 ] {
   const [auth, setAuth] = useAtom(idxAuthAtom)
   const [env, resetEnv] = useAtom(idxEnvAtom)
-  const [_, setKnownDIDs] = useAtom(knownDIDsAtom)
+  const setKnownDIDs = useAtom(knownDIDsAtom)[1]
+  const setKnownDIDsData = useAtom(knownDIDsDataAtom)[1]
 
   const tryAuthenticate = useCallback(
     async (provider: EthereumProvider, address: string): Promise<string | null> => {
@@ -40,6 +66,7 @@ export function useIDXAuth(): [
         if (knownDIDs) {
           void setKnownDIDs(knownDIDs)
           void setAuth({ state: 'CONFIRMED', id: env.idx.id, address })
+          void loadKnownDIDsData(env, knownDIDs).then(setKnownDIDsData)
           return env.idx.id
         } else {
           void setAuth(initialAuth)
@@ -50,7 +77,7 @@ export function useIDXAuth(): [
         throw err
       }
     },
-    [auth, env, setAuth, setKnownDIDs]
+    [auth, env, setAuth, setKnownDIDs, setKnownDIDsData]
   )
 
   const clearAuth = useCallback(() => {
