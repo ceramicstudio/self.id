@@ -78,12 +78,6 @@ export default function AccountButton() {
     }
   }, [auth.state, login, toProfile])
 
-  // const onClickSwitch = useCallback(() => {
-  //   if (auth.state !== 'LOADING') {
-  //     void login(true).then(toProfile)
-  //   }
-  // }, [auth.state, login, toProfile])
-
   const [displayName, avatarSrc] = useMemo(() => {
     if (auth.id == null) {
       return ['', avatarPlaceholder]
@@ -110,6 +104,19 @@ export default function AccountButton() {
           <Text size="medium" truncate weight="bold">
             {displayName}
           </Text>
+          <Button
+            label="Switch identities"
+            onClick={() => router.push('/me/identities')}
+            plain
+            size="small"
+            style={{
+              backgroundColor: 'white',
+              border: '1px solid #A8A8A8',
+              borderRadius: 30,
+              fontSize: '14px',
+              padding: '6px 12px',
+            }}
+          />
         </Box>
         <Box
           background="white"

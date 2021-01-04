@@ -6,7 +6,7 @@ import type { FormEvent, ReactNode } from 'react'
 
 import { getImageSrc } from '../../image'
 import type { Dimensions } from '../../image'
-import { useIDXEnv, useImageUpload } from '../hooks'
+import { useEditProfile, useImageUpload } from '../hooks'
 
 export type FormValue = {
   name?: string
@@ -151,19 +151,16 @@ function ImageField({
   )
 }
 
-type SavingState = 'PENDING' | 'LOADING' | 'FAILED' | 'DONE'
-
 interface ModalProps {
   onClose: (profile?: BasicProfile) => void
   profile: BasicProfile
 }
 
 export default function EditProfileModal({ onClose, profile }: ModalProps) {
-  const { idx } = useIDXEnv()
+  const [editProfileState, editProfile] = useEditProfile()
   const [value, setValue] = useState<FormValue>(() => profileToForm(profile))
-  const [savingState, setSavingState] = useState<SavingState>('PENDING')
 
-  const isLoading = savingState === 'LOADING'
+  const isLoading = editProfileState.status === 'EDITING'
 
   const onSubmit = useCallback(
     (e: FormEvent) => {
@@ -171,27 +168,25 @@ export default function EditProfileModal({ onClose, profile }: ModalProps) {
       if (isLoading) {
         return
       }
-      setSavingState('LOADING')
+
       const newProfile = changeProfile(profile, value)
-      idx.set('basicProfile', newProfile).then(
+      editProfile(newProfile).then(
         () => {
-          setSavingState('DONE')
           onClose(newProfile)
         },
         (err) => {
           console.warn('Failed to save profile', err)
-          setSavingState('FAILED')
         }
       )
     },
-    [idx, isLoading, onClose, profile, value]
+    [editProfile, isLoading, onClose, profile, value]
   )
 
   const alert = isLoading ? (
     <Alert color="brand" text="Saving profile..." />
-  ) : savingState === 'FAILED' ? (
+  ) : editProfileState.status === 'FAILED' ? (
     <Alert color="status-error" text="Failed to save profile" />
-  ) : savingState === 'DONE' ? (
+  ) : editProfileState.status === 'DONE' ? (
     <Alert color="status-ok" text="Profile successfully saved!" />
   ) : null
 

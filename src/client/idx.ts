@@ -93,3 +93,23 @@ export async function loadKnownDIDsData(
     return acc
   }, {} as KnownDIDsData)
 }
+
+export async function editProfile(
+  { idx, threeId }: IDXEnv,
+  knownDIDs: KnownDIDsData,
+  profile: BasicProfile
+): Promise<KnownDIDsData> {
+  const id = idx.id
+
+  let accounts = knownDIDs[id]?.accounts
+  if (accounts == null) {
+    const didsData = await loadKnownDIDs(threeId)
+    accounts = didsData[id]?.accounts
+    if (accounts == null) {
+      throw new Error(`No associated data for DID ${id}`)
+    }
+  }
+
+  await idx.set('basicProfile', profile)
+  return { ...knownDIDs, [id]: { accounts, profile } }
+}

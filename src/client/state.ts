@@ -61,3 +61,6 @@ export const idxEnvAtom = atom(createIDXEnv(), (get, set, _) => {
 export const linkingAddressAtom = atom<string | null>(null)
 
 export const createDIDAtom = atom<{ creating: boolean; error?: Error }>({ creating: false })
+
+export type EditProfileState = { status: 'PENDING' | 'EDITING' | 'FAILED' | 'DONE'; error?: Error }
+export const editProfileAtom = atom<EditProfileState>({ status: 'PENDING' })

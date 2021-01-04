@@ -1,19 +1,28 @@
+import type { BasicProfile } from '@ceramicstudio/idx-constants'
 import type { EthereumProvider } from '3id-connect'
 import type { AccountIDParams } from 'caip'
 import { useAtom } from 'jotai'
 import { useCallback, useMemo } from 'react'
 
-import { authenticate, createAccount, linkAccount, loadKnownDIDsData, switchAccount } from '../idx'
+import {
+  authenticate,
+  createAccount,
+  editProfile,
+  linkAccount,
+  loadKnownDIDsData,
+  switchAccount,
+} from '../idx'
 import type { KnownDIDsData } from '../idx'
 import {
   createDIDAtom,
+  editProfileAtom,
   idxAuthAtom,
   idxEnvAtom,
   knownDIDsAtom,
   knownDIDsDataAtom,
   linkingAddressAtom,
 } from '../state'
-import type { IDXAuth } from '../state'
+import type { IDXAuth, EditProfileState } from '../state'
 
 import { useEthereum } from './ethereum'
 
@@ -192,4 +201,33 @@ export function useCreateAccount(): [boolean, (address: string) => void, Error |
   )
 
   return [createState.creating, create, createState.error]
+}
+
+export function useEditProfile(): [EditProfileState, (profile: BasicProfile) => Promise<void>] {
+  const [editState, setEditState] = useAtom(editProfileAtom)
+  const [knownDIDsData, setKnownDIDsData] = useAtom(knownDIDsDataAtom)
+  const env = useIDXEnv()
+
+  const edit = useCallback(
+    async (profile: BasicProfile) => {
+      if (editState.status === 'EDITING') {
+        return
+      }
+      if (knownDIDsData == null) {
+        throw new Error('DID data is not available')
+      }
+
+      await setEditState({ status: 'EDITING' })
+      try {
+        const updatedDIDsData = await editProfile(env, knownDIDsData, profile)
+        await setKnownDIDsData(updatedDIDsData)
+        await setEditState({ status: 'DONE' })
+      } catch (error) {
+        await setEditState({ status: 'FAILED', error: error as Error })
+      }
+    },
+    [editState.status, env, knownDIDsData, setEditState, setKnownDIDsData]
+  )
+
+  return [editState, edit]
 }
