@@ -13,7 +13,7 @@ export const theme: ThemeType = {
       'accent-1': ACCENT_COLOR,
       'neutral-1': '#757575',
       'neutral-2': '#888888',
-      'neutral-3': '#949494',
+      'neutral-3': '#909090',
       'neutral-4': '#A8A8A8',
       'neutral-5': '#D8D8D8',
       'neutral-6': '#F7F7F7',

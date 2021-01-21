@@ -162,7 +162,11 @@ export function useSwitchAccount() {
   )
 }
 
-export function useCreateAccount(): [boolean, (address: string) => void, Error | undefined] {
+export function useCreateAccount(): [
+  boolean,
+  (address: string) => Promise<void>,
+  Error | undefined
+] {
   const [_, setDIDs] = useAtom(knownDIDsAtom)
   const [eth, connect] = useEthereum()
   const env = useIDXEnv()
