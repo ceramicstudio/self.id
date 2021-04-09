@@ -1,8 +1,11 @@
-import type { EthereumProvider } from '3id-connect'
 import { useAtom } from 'jotai'
 import { useCallback, useRef } from 'react'
 
-import { connectEthereumProvider, normalizeChainId } from '../ethereum'
+import { injected } from '../../multiauth/ethereum/connectors'
+import { useWeb3ReactKey } from '../../multiauth/ethereum/hooks'
+import { toChainID } from '../../multiauth/ethereum/utils'
+
+import { connectEthereumProvider } from '../ethereum'
 import type { ConnectedEthereumProvider } from '../ethereum'
 import { ethereumProviderAtom } from '../state'
 import type { EthereumProviderState } from '../state'
@@ -15,16 +18,17 @@ export function useEthereum(): [
   ) => Promise<ConnectedEthereumProvider | null>,
   () => void
 ] {
+  const { activate, deactivate } = useWeb3ReactKey()
   const [providerState, setProviderState] = useAtom(ethereumProviderAtom)
   const accountsChangedListenerRef = useRef<(addresses: Array<string>) => void>()
   const chainChangedListenerRef = useRef<(chainId: string) => void>()
   const disconnectListenerRef = useRef<() => void>()
 
   const addEventListeners = useCallback(
-    (provider: EthereumProvider) => {
+    (provider: NodeJS.EventEmitter) => {
       accountsChangedListenerRef.current = (accounts: Array<string>) => {
         void setProviderState((current) => {
-          return current.status === 'CONNECTED' ? { ...current, accounts } : current
+          return current.status === 'CONNECTED' ? { ...current, account: accounts[0] } : current
         })
       }
       provider.on('accountsChanged', accountsChangedListenerRef.current)
@@ -32,7 +36,7 @@ export function useEthereum(): [
       chainChangedListenerRef.current = (chainId: string) => {
         void setProviderState((current) => {
           return current.status === 'CONNECTED'
-            ? { ...current, chainId: normalizeChainId(chainId) }
+            ? { ...current, chainID: toChainID(chainId) }
             : current
         })
       }
@@ -46,7 +50,7 @@ export function useEthereum(): [
     [setProviderState]
   )
 
-  const removeEventListeners = useCallback((provider: EthereumProvider) => {
+  const removeEventListeners = useCallback((provider: NodeJS.EventEmitter) => {
     if (accountsChangedListenerRef.current != null) {
       provider.off('accountsChanged', accountsChangedListenerRef.current)
     }
@@ -60,7 +64,7 @@ export function useEthereum(): [
 
   const connect = useCallback(
     (
-      selectProvider = false,
+      _selectProvider = false, // TODO: add support for selecting alternative providers
       restoreConnected = true
     ): Promise<ConnectedEthereumProvider | null> => {
       if (providerState.status === 'CONNECTING') {
@@ -68,44 +72,47 @@ export function useEthereum(): [
       }
 
       const initialState = providerState
-      const promise = connectEthereumProvider(selectProvider).then(
-        (connectedProvider: ConnectedEthereumProvider | null) => {
-          if (connectedProvider == null) {
-            const { status, ...provider } = initialState
-            if (restoreConnected && status === 'CONNECTED') {
-              // Restore current provider if already connected
-              return provider as ConnectedEthereumProvider
+      const promise = activate(injected, undefined, true)
+        .then(() => connectEthereumProvider())
+        .then(
+          (connectedProvider: ConnectedEthereumProvider | null) => {
+            if (connectedProvider == null) {
+              const { status, ...provider } = initialState
+              if (restoreConnected && status === 'CONNECTED') {
+                // Restore current provider if already connected
+                return provider as ConnectedEthereumProvider
+              } else {
+                void setProviderState({ status: 'DISCONNECTED' })
+                return null
+              }
             } else {
-              void setProviderState({ status: 'DISCONNECTED' })
-              return null
+              if (initialState.status === 'CONNECTED') {
+                removeEventListeners(initialState.provider)
+              }
+              void setProviderState({ status: 'CONNECTED', ...connectedProvider })
+              addEventListeners(connectedProvider.provider)
+              return connectedProvider
             }
-          } else {
-            if (initialState.status === 'CONNECTED') {
-              removeEventListeners(initialState.provider)
-            }
-            void setProviderState({ status: 'CONNECTED', ...connectedProvider })
-            addEventListeners(connectedProvider.provider)
-            return connectedProvider
+          },
+          (error: Error) => {
+            void setProviderState({ status: 'FAILED', error })
+            return null
           }
-        },
-        (error: Error) => {
-          void setProviderState({ status: 'FAILED', error })
-          return null
-        }
-      )
+        )
       void setProviderState({ status: 'CONNECTING', promise })
 
       return promise
     },
-    [providerState, setProviderState, addEventListeners, removeEventListeners]
+    [activate, providerState, setProviderState, addEventListeners, removeEventListeners]
   )
 
   const disconnect = useCallback(() => {
+    deactivate()
     if (providerState.status === 'CONNECTED') {
       removeEventListeners(providerState.provider)
     }
     void setProviderState({ status: 'DISCONNECTED' })
-  }, [providerState, removeEventListeners, setProviderState])
+  }, [deactivate, providerState, removeEventListeners, setProviderState])
 
   return [providerState, connect, disconnect]
 }

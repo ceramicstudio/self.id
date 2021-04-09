@@ -1,8 +1,10 @@
 import { Grommet } from 'grommet'
-import { Provider } from 'jotai'
+import { Provider as StateProvider } from 'jotai'
 import NextApp, { AppInitialProps } from 'next/app'
 import Head from 'next/head'
 import { createGlobalStyle } from 'styled-components'
+
+import { Provider as MultiauthProvider } from '../multiauth/ethereum/components'
 
 const GlobalStyle = createGlobalStyle`   
   @font-face {
@@ -38,16 +40,18 @@ export default class App extends NextApp<AppInitialProps> {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const { Component, pageProps } = this.props
     return (
-      <Provider>
-        <Grommet full theme={theme}>
-          <GlobalStyle />
-          <Head>
-            <link rel="icon" href="/favicon.ico" />
-            <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-          </Head>
-          <Component {...pageProps} />
-        </Grommet>
-      </Provider>
+      <MultiauthProvider>
+        <StateProvider>
+          <Grommet full theme={theme}>
+            <GlobalStyle />
+            <Head>
+              <link rel="icon" href="/favicon.ico" />
+              <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+            </Head>
+            <Component {...pageProps} />
+          </Grommet>
+        </StateProvider>
+      </MultiauthProvider>
     )
   }
 }

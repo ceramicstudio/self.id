@@ -2,7 +2,7 @@ import { Box, Button, Layer, Text } from 'grommet'
 import { useCallback, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 
-import { deferred } from '../../utils'
+// import { deferred } from '../../utils'
 import type { Deferred } from '../../utils'
 
 import { useEthereum } from './ethereum'
@@ -16,7 +16,7 @@ type LoginSelectAccount = {
 export function useLogin(): [(switchAccount?: boolean) => Promise<string | null>, ReactNode] {
   const [ethereum, connect, disconnect] = useEthereum()
   const [auth, tryAuth, clearAuth] = useIDXAuth()
-  const [select, setSelect] = useState<LoginSelectAccount | null>(null)
+  const [select, _setSelect] = useState<LoginSelectAccount | null>(null)
 
   const login = useCallback(
     async (switchAccount?: boolean) => {
@@ -33,18 +33,13 @@ export function useLogin(): [(switchAccount?: boolean) => Promise<string | null>
         eth = await (ethereum.status === 'CONNECTING' ? ethereum.promise : connect())
       }
 
-      if (eth == null) {
-        return null
-      }
-      if (eth.accounts.length === 1) {
-        return await tryAuth(eth.provider, eth.accounts[0])
-      }
+      return eth ? await tryAuth(eth.provider, eth.account) : null
 
-      const value = deferred<string | null>()
-      setSelect({ accounts: eth.accounts, value })
-      const selected = await value
-      setSelect(null)
-      return selected ? await tryAuth(eth.provider, selected) : null
+      // const value = deferred<string | null>()
+      // setSelect({ accounts: eth.accounts, value })
+      // const selected = await value
+      // setSelect(null)
+      // return selected ? await tryAuth(eth.provider, selected) : null
     },
     [auth, clearAuth, connect, disconnect, ethereum, tryAuth]
   )

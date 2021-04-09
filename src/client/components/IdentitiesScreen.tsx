@@ -1,11 +1,13 @@
 import { Avatar, Box, Button, Collapsible, Heading, Text } from 'grommet'
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 import { getImageSrc } from '../../image'
 import avatarPlaceholder from '../../images/avatar-placeholder.png'
+import arrowDownIcon from '../../images/icons/arrow-down.svg'
+import arrowUpIcon from '../../images/icons/arrow-up.svg'
 import { formatDID } from '../../utils'
-import { useIDXAuth, useDIDsData } from '../hooks'
-import { KnownDIDData } from '../idx'
+import { useCreateAccount, useDIDsData, useEthereum, useIDXAuth } from '../hooks'
+import type { KnownDIDData, KnownDIDsData } from '../idx'
 
 import ConnectedContainer from './ConnectedContainer'
 
@@ -34,6 +36,8 @@ function IdentityItem({ data, did, selected }: ItemProps) {
 
   // TODO: add button to connect account if not selected
 
+  const icon = isOpen ? <img alt="↑" src={arrowUpIcon} /> : <img alt="↓" src={arrowDownIcon} />
+
   return (
     <Box border={{ color: 'neutral-5' }} margin={{ bottom: 'medium' }} round="small">
       <Box direction="row" gap="small" pad="medium">
@@ -49,11 +53,100 @@ function IdentityItem({ data, did, selected }: ItemProps) {
         ) : null}
       </Box>
       <Box border={{ color: 'neutral-5', side: 'top' }} pad="medium">
-        <Button color="neutral-3" label="Accounts" onClick={() => setOpen(!isOpen)} plain />
+        <Button
+          color="neutral-3"
+          icon={icon}
+          label="Accounts"
+          onClick={() => setOpen(!isOpen)}
+          plain
+          reverse
+          style={{ alignSelf: 'flex-start' }}
+        />
         <Collapsible open={isOpen}>
           <Box pad={{ top: 'small' }}>{displayAccounts}</Box>
         </Collapsible>
       </Box>
+    </Box>
+  )
+}
+
+type CreateProps = {
+  didsData: KnownDIDsData | null
+}
+
+type CreateState = { open: boolean; address?: string }
+
+function CreateNewDID({ didsData }: CreateProps) {
+  const [ethState] = useEthereum()
+  const [createState, setCreateState] = useState<CreateState>({ open: false })
+  const [creating, create] = useCreateAccount()
+
+  const createAccount = useCallback(
+    (address: string) => {
+      setCreateState({ open: true, address })
+      create(address).then(
+        () => {
+          console.log('create account success')
+          setCreateState({ open: false })
+        },
+        (err) => {
+          console.log('create account error', err)
+          setCreateState({ open: false })
+        }
+      )
+    },
+    [create, setCreateState]
+  )
+
+  // TODO: add collapsible to show addresses, with ones already used disabled
+  // also handle state of creating auth provider + calling createAccount()
+
+  const accountToDID = useMemo(() => {
+    return Object.entries(didsData ?? {}).reduce((acc, [did, data]) => {
+      for (const account of data.accounts) {
+        acc[account.address] = did
+      }
+      return acc
+    }, {} as Record<string, string>)
+  }, [didsData])
+
+  let account = null
+  if (ethState.status === 'CONNECTED') {
+    let action
+    if (accountToDID[ethState.account] != null) {
+      action = <Text>{formatDID(accountToDID[ethState.account])}</Text>
+    } else if (creating) {
+      action = createState.address === ethState.account ? <Text>Creating DID...</Text> : null
+    } else {
+      action = <Button label="Use this address" onClick={() => createAccount(ethState.account)} />
+    }
+    account = (
+      <Box key={ethState.account} direction="row" pad={{ bottom: 'small' }}>
+        <Box flex justify="center">
+          {ethState.account}
+        </Box>
+        <Box>{action}</Box>
+      </Box>
+    )
+  }
+
+  return (
+    <Box border={{ color: 'neutral-5' }} round="small">
+      <Box direction="row">
+        <Box flex pad="medium">
+          <Text weight="bold">Create a new ID</Text>
+        </Box>
+        <Box pad="medium">
+          <Button onClick={() => setCreateState({ open: !createState.open })} plain>
+            <Text color="brand" weight="bold">
+              New ID
+            </Text>
+          </Button>
+        </Box>
+      </Box>
+      <Collapsible open={createState.open}>
+        <Box pad={{ horizontal: 'medium', vertical: 'small' }}>{account}</Box>
+      </Collapsible>
     </Box>
   )
 }
@@ -74,6 +167,7 @@ export default function IdentitiesScreen() {
     <ConnectedContainer>
       <Heading>Identities</Heading>
       {items}
+      <CreateNewDID didsData={didsData} />
     </ConnectedContainer>
   )
 }

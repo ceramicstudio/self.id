@@ -167,7 +167,8 @@ export function useCreateAccount(): [
   (address: string) => Promise<void>,
   Error | undefined
 ] {
-  const [_, setDIDs] = useAtom(knownDIDsAtom)
+  const setDIDs = useAtom(knownDIDsAtom)[1]
+  const setKnownDIDsData = useAtom(knownDIDsDataAtom)[1]
   const [eth, connect] = useEthereum()
   const env = useIDXEnv()
   const [createState, setCreateState] = useAtom(createDIDAtom)
@@ -181,13 +182,14 @@ export function useCreateAccount(): [
       try {
         const newDIDs = await createAccount(env, provider, address)
         void setDIDs(newDIDs)
+        void loadKnownDIDsData(env, newDIDs).then(setKnownDIDsData)
         void setCreateState({ creating: false })
       } catch (error) {
         console.warn('Error creating DID', error)
         void setCreateState({ creating: false, error: error as Error })
       }
     },
-    [createState.creating, env, setDIDs, setCreateState]
+    [createState.creating, env, setDIDs, setKnownDIDsData, setCreateState]
   )
 
   const create = useCallback(

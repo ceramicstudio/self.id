@@ -4,4 +4,13 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 const withPlugins = require('next-compose-plugins')
 const withImages = require('next-images')
 
-module.exports = withPlugins([[withBundleAnalyzer({})], withImages])
+const nextConfig = {
+  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+    config.node = {
+      fs: 'empty',
+    }
+    return config
+  },
+}
+
+module.exports = withPlugins([[withBundleAnalyzer({})], nextConfig, withImages])
