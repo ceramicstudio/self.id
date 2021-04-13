@@ -1,16 +1,7 @@
 import { atom } from 'jotai'
 
-import type { ConnectedEthereumProvider } from './ethereum'
 import { createIDXEnv } from './idx'
 import type { KnownDIDs, KnownDIDsData } from './idx'
-
-export type EthereumProviderState =
-  | { status: 'DISCONNECTED' }
-  | ({ status: 'CONNECTED' } & ConnectedEthereumProvider)
-  | { status: 'CONNECTING'; promise: Promise<ConnectedEthereumProvider | null> }
-  | { status: 'FAILED'; error?: Error }
-
-export const ethereumProviderAtom = atom<EthereumProviderState>({ status: 'DISCONNECTED' })
 
 const KNOWN_DIDS_KEY = 'selfID-knownDIDs-v0'
 const SELECTED_DID_KEY = 'selfID-selectedDID-v0'

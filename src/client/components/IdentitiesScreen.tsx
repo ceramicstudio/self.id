@@ -1,12 +1,14 @@
 import { Avatar, Box, Button, Collapsible, Heading, Text } from 'grommet'
 import { useCallback, useMemo, useState } from 'react'
 
+import { useEthereum } from '../../multiauth/ethereum/hooks'
+
 import { getImageSrc } from '../../image'
 import avatarPlaceholder from '../../images/avatar-placeholder.png'
 import arrowDownIcon from '../../images/icons/arrow-down.svg'
 import arrowUpIcon from '../../images/icons/arrow-up.svg'
 import { formatDID } from '../../utils'
-import { useCreateAccount, useDIDsData, useEthereum, useIDXAuth } from '../hooks'
+import { useCreateAccount, useDIDsData, useIDXAuth } from '../hooks'
 import type { KnownDIDData, KnownDIDsData } from '../idx'
 
 import ConnectedContainer from './ConnectedContainer'

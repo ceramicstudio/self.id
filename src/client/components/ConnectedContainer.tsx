@@ -1,7 +1,9 @@
 import { Button } from 'grommet'
 import type { ReactNode } from 'react'
 
-import { useEthereum, useIDXAuth, useLogin } from '../hooks'
+import { useEthereum } from '../../multiauth/ethereum/hooks'
+
+import { useIDXAuth, useLogin } from '../hooks'
 
 const style = { color: 'white', width: 200 }
 

@@ -1,3 +1,5 @@
 import { atom } from 'jotai'
 
-export const connectInjectedAtom = atom<Promise<void> | null>(null)
+import type { ConnectionState } from './types'
+
+export const connectInjectedAtom = atom<ConnectionState>({ status: 'PENDING' })

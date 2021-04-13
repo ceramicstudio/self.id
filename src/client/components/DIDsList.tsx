@@ -1,7 +1,9 @@
 import { Box, Button, Text } from 'grommet'
 import type { ReactNode } from 'react'
 
-import { useCreateAccount, useEthereum, useIDXAuth, useKnownDIDs } from '../hooks'
+import { useEthereum } from '../../multiauth/ethereum/hooks'
+
+import { useCreateAccount, useIDXAuth, useKnownDIDs } from '../hooks'
 
 import AccountsList from './DIDAccountsList'
 import LoginButton from './LoginButton'
@@ -36,7 +38,7 @@ function CreateDIDButton() {
       color="brand"
       disabled={creating}
       label={creating ? 'Creating new DID' : 'Create new DID'}
-      onClick={() => create(eth.accounts[0])}
+      onClick={() => create(eth.account)}
     />
   ) : null
 }

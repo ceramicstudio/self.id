@@ -3,7 +3,9 @@ import { Box, Button, Text } from 'grommet'
 import { useMemo } from 'react'
 import type { ReactNode } from 'react'
 
-import { useAccountLinks, useEthereum, useIDXAuth, useKnownDIDs, useSwitchAccount } from '../hooks'
+import { useEthereum } from '../../multiauth/ethereum/hooks'
+
+import { useAccountLinks, useIDXAuth, useKnownDIDs, useSwitchAccount } from '../hooks'
 
 type ItemProps = {
   address: string

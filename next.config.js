@@ -5,7 +5,8 @@ const withPlugins = require('next-compose-plugins')
 const withImages = require('next-images')
 
 const nextConfig = {
-  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+  reactStrictMode: true,
+  webpack: (config) => {
     config.node = {
       fs: 'empty',
     }

@@ -4,6 +4,8 @@ import type { AccountIDParams } from 'caip'
 import { useAtom } from 'jotai'
 import { useCallback, useMemo } from 'react'
 
+import { useEthereum } from '../../multiauth/ethereum/hooks'
+
 import {
   authenticate,
   createAccount,
@@ -23,8 +25,6 @@ import {
   linkingAddressAtom,
 } from '../state'
 import type { IDXAuth, EditProfileState } from '../state'
-
-import { useEthereum } from './ethereum'
 
 export function useKnownDIDs() {
   return useAtom(knownDIDsAtom)[0]

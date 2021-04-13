@@ -2,9 +2,10 @@ import type { BasicProfile } from '@ceramicstudio/idx-constants'
 import { Button } from 'grommet'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { useIDXAuth, useIDXEnv, useKnownDIDs, useLogin } from '../hooks'
 import { loadProfile } from '../../profile'
 import { ACCENT_COLOR, BRAND_COLOR } from '../../theme'
+
+import { useIDXAuth, useIDXEnv, useKnownDIDs, useLogin } from '../hooks'
 
 import EditProfileModal from './EditProfileModal'
 

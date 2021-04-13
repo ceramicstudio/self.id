@@ -2,6 +2,11 @@ import { createWeb3ReactRoot, Web3ReactProvider } from '@web3-react/core'
 import type { ReactNode } from 'react'
 
 import { WEB3_REACT_KEY } from './constants'
+import { useEthereumRootConnect, useEthereumRootEvents } from './hooks'
+
+function getLibrary() {
+  // No library to return
+}
 
 export type ProviderProps = { children?: ReactNode }
 
@@ -11,14 +16,21 @@ function NoopRoot({ children }: ProviderProps) {
 }
 const Web3ReactRoot = process.browser ? createWeb3ReactRoot(WEB3_REACT_KEY) : NoopRoot
 
-function getLibrary() {
-  // No library to return
+function EthereumRoot({ children }: ProviderProps) {
+  useEthereumRootConnect()
+  useEthereumRootEvents()
+
+  return <>{children}</>
 }
 
 export function Provider({ children }: ProviderProps) {
   return process.browser ? (
-    <Web3ReactRoot getLibrary={getLibrary}>{children}</Web3ReactRoot>
+    <Web3ReactRoot getLibrary={getLibrary}>
+      <EthereumRoot>{children}</EthereumRoot>
+    </Web3ReactRoot>
   ) : (
-    <Web3ReactProvider getLibrary={getLibrary}>{children}</Web3ReactProvider>
+    <Web3ReactProvider getLibrary={getLibrary}>
+      <EthereumRoot>{children}</EthereumRoot>
+    </Web3ReactProvider>
   )
 }

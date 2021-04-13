@@ -2,10 +2,11 @@ import { Box, Button, Layer, Text } from 'grommet'
 import { useCallback, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 
+import { useEthereum } from '../../multiauth/ethereum/hooks'
+
 // import { deferred } from '../../utils'
 import type { Deferred } from '../../utils'
 
-import { useEthereum } from './ethereum'
 import { useIDXAuth, useResetIDXEnv } from './idx'
 
 type LoginSelectAccount = {
@@ -28,7 +29,7 @@ export function useLogin(): [(switchAccount?: boolean) => Promise<string | null>
       if (switchAccount) {
         clearAuth()
         disconnect()
-        eth = await connect(true)
+        eth = await connect()
       } else {
         eth = await (ethereum.status === 'CONNECTING' ? ethereum.promise : connect())
       }

@@ -1,145 +1,133 @@
 import { useWeb3React } from '@web3-react/core'
 import { useAtom } from 'jotai'
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 
 import { injected } from './connectors'
 import { WEB3_REACT_KEY } from './constants'
+import { getConnectorState } from './data'
 import { connectInjectedAtom } from './state'
+import type { ConnectedState, ConnectionState, ConnectorState } from './types'
+import { toChainID } from './utils'
 
 export function useWeb3ReactKey() {
   return useWeb3React(process.browser ? WEB3_REACT_KEY : undefined)
 }
 
-// TODO: when mounting, check for existing window.ethereum, check authorized and try authenticate
-// keep track of events to keep track of known accounts
+export function useEthereum(): [
+  ConnectionState,
+  (useExistingPromise?: boolean) => Promise<ConnectedState | null>,
+  () => void
+] {
+  const { activate, deactivate } = useWeb3ReactKey()
+  const [connectionState, setConnectionState] = useAtom(connectInjectedAtom)
 
-// What are possible states for injected?
-// 0 default state = loading
-// 1 (sync) check for window.ethereum, state = available/unavailable
-// 2 (async) try auth and load state, next state = connected/available
-// 3 (event sync) account or chain changed, state = updating + async load state, next state = connected/available
+  const connect = useCallback(
+    (useExistingPromise = true): Promise<ConnectedState | null> => {
+      if (connectionState.status === 'CONNECTING' && useExistingPromise) {
+        return connectionState.promise
+      }
 
-// type InjectedStatus = 'pending' | 'available' | 'unavailable' | 'connected' | 'updating'
-
-type ConnectInjected = {
-  connect: () => Promise<void>
-  connected: () => Promise<void>
-  connecting: boolean
-}
-
-export function useConnectInjected(): ConnectInjected {
-  const { activate } = useWeb3ReactKey()
-  const [connectPromise, setConnectPromise] = useAtom(connectInjectedAtom)
-
-  const connect = useCallback(() => {
-    return new Promise<void>((resolve) => {
       const promise = activate(injected, undefined, true)
-      void setConnectPromise(promise)
-      promise
+        .then(() => getConnectorState(injected))
         .then(
-          () => resolve(),
-          (err) => {
-            console.warn('Failed to handle activation on connect', err)
+          (connectorState: ConnectorState) => {
+            if (connectorState.account == null) {
+              void setConnectionState({ status: 'DISCONNECTED' })
+              return null
+            } else {
+              void setConnectionState({ status: 'CONNECTED', ...connectorState } as ConnectionState)
+              return connectorState as ConnectedState
+            }
+          },
+          (error: Error) => {
+            void setConnectionState({ status: 'FAILED', error })
+            return null
           }
         )
-        .finally(() => {
-          void setConnectPromise(null)
-        })
-    })
-  }, [activate, setConnectPromise])
+      void setConnectionState({ status: 'CONNECTING', promise })
 
-  const connected = useCallback(() => {
-    return connectPromise ?? connect()
-  }, [connectPromise, connect])
+      return promise
+    },
+    [activate, setConnectionState, connectionState.status]
+  )
 
-  return { connect, connected, connecting: connectPromise != null }
+  const disconnect = useCallback(() => {
+    deactivate()
+    void setConnectionState({ status: 'DISCONNECTED' })
+  }, [deactivate, setConnectionState])
+
+  return [connectionState, connect, disconnect]
 }
 
-// export function useInjectedEthereumRoot() {
-//   const { activate, error } = useWeb3React<Manager>()
-//   const [data, setData] = useAtom(ethereumDataAtom)
+export function useEthereumRootConnect() {
+  const setConnectionState = useAtom(connectInjectedAtom)[1]
+  const [connectionState, connect] = useEthereum()
 
-//   const handleAccount = useCallback(
-//     async (providedAddress?: string, providedChainId?: ChainIDParams | string | number) => {
-//       try {
-//         const [provider, address, chainId] = await Promise.all([
-//           injected.getProvider(),
-//           providedAddress ?? injected.getAccount(),
-//           providedChainId ?? injected.getChainId(),
-//         ])
-//         if (address == null) {
-//           throw new Error('Could not get address')
-//         }
-//         const account = new AccountID({
-//           address,
-//           chainId: toChainId(chainId),
-//         })
-//         const manager = getManager(provider)
-//         // @ts-ignore
-//         window.manager = manager
-//         setData({ account, manager, provider })
-//       } catch (err) {
-//         console.warn('Failed to handle setting accountId', err)
-//       }
-//     },
-//     [setData]
-//   )
+  useEffect(() => {
+    // Auto-connect if authorized
+    if (connectionState.status === 'PENDING') {
+      const promise = injected.isAuthorized().then(
+        (authorized) => {
+          if (authorized) {
+            return connect(false)
+          }
+          void setConnectionState({ status: 'DISCONNECTED' })
+          return null
+        },
+        (_err) => {
+          void setConnectionState({ status: 'DISCONNECTED' })
+          return null
+        }
+      )
+      void setConnectionState({ status: 'CONNECTING', promise })
+    }
+  }, [connectionState.status, connect, setConnectionState])
+}
 
-//   useEffect(() => {
-//     const { ethereum } = window as any
-//     if (ethereum != null && typeof ethereum.on === 'function') {
-//       const handleChainChanged = (chainId: string | number) => {
-//         activate(injected).then(
-//           () => handleAccount(data?.account.address, chainId),
-//           (err) => {
-//             console.warn('Failed to handle activation on chain changed', err)
-//           }
-//         )
-//       }
+export function useEthereumRootEvents() {
+  const [connectionState, setConnectionState] = useAtom(connectInjectedAtom)
 
-//       const handleAccountsChanged = (accounts: Array<string>) => {
-//         if (accounts.length > 0) {
-//           activate(injected).then(
-//             () =>
-//               handleAccount(
-//                 accounts[0],
-//                 data?.account.chainId ? toChainId(data.account.chainId.toString()) : undefined
-//               ),
-//             (err) => {
-//               console.warn('Failed to handle activation on accounts changed', err)
-//             }
-//           )
-//         }
-//       }
+  const onAccountsChanged = useCallback(
+    (accounts: Array<string>) => {
+      void setConnectionState((current) => {
+        return current.status === 'CONNECTED' ? { ...current, account: accounts[0] } : current
+      })
+    },
+    [setConnectionState]
+  )
 
-//       const handleNetworkChanged = (networkId: string | number) => {
-//         activate(injected).then(
-//           () => {
-//             if (data?.account == null) {
-//               handleAccount()
-//             }
-//           },
-//           (err) => {
-//             console.warn('Failed to handle activation on accounts changed', err)
-//           }
-//         )
-//       }
+  const onChainChanged = useCallback(
+    (chainId: string) => {
+      void setConnectionState((current) => {
+        return current.status === 'CONNECTED'
+          ? { ...current, chainID: toChainID(chainId) }
+          : current
+      })
+    },
+    [setConnectionState]
+  )
 
-//       ethereum.on('connect', connect)
-//       ethereum.on('chainChanged', handleChainChanged)
-//       ethereum.on('accountsChanged', handleAccountsChanged)
-//       ethereum.on('networkChanged', handleNetworkChanged)
+  const onDisconnect = useCallback(() => {
+    void setConnectionState({ status: 'DISCONNECTED' })
+  }, [setConnectionState])
 
-//       return () => {
-//         if (typeof ethereum.removeListener === 'function') {
-//           ethereum.removeListener('connect', connect)
-//           ethereum.removeListener('chainChanged', handleChainChanged)
-//           ethereum.removeListener('accountsChanged', handleAccountsChanged)
-//           ethereum.removeListener('networkChanged', handleNetworkChanged)
-//         }
-//       }
-//     }
-//   }, [data?.account, activate, connect, error, handleAccount])
+  useEffect(() => {
+    if (connectionState.status === 'CONNECTED') {
+      const provider = connectionState.provider
 
-//   return [data, connect]
-// }
+      if (typeof provider.on === 'function') {
+        provider.on('accountsChanged', onAccountsChanged)
+        provider.on('chainChanged', onChainChanged)
+        provider.on('disconnect', onDisconnect)
+      }
+
+      return () => {
+        if (typeof provider.off === 'function') {
+          provider.off('accountsChanged', onAccountsChanged)
+          provider.off('chainChanged', onChainChanged)
+          provider.off('disconnect', onDisconnect)
+        }
+      }
+    }
+  }, [connectionState.status, onAccountsChanged, onChainChanged, onDisconnect])
+}
