@@ -25,7 +25,8 @@ export function createIDXEnv(existing?: IDXEnv): IDXEnv {
     void existing.ceramic.close()
   }
   const ceramic = new Ceramic(CERAMIC_URL)
-  const idx = new IDX({ ceramic })
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const idx = new IDX({ ceramic: ceramic as any })
   const threeId = new ThreeIdConnect(CONNECT_URL)
   return { ceramic, idx, threeId }
 }

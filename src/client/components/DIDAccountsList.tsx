@@ -62,11 +62,12 @@ function CurrentDIDAccountsList({ select }: CurrentAccountsProps) {
     )
   })
 
-  const ethAddresses =
-    eth.status === 'CONNECTED'
-      ? eth.accounts.filter((address) => !linkedAccounts.find((a) => a.address === address))
-      : []
-  const connectedAccounts = ethAddresses.map((address) => {
+  let connectedAccount = null
+  const address =
+    eth.status === 'CONNECTED' && !linkedAccounts.find((a) => a.address === eth.account)
+      ? eth.account
+      : null
+  if (address != null) {
     const did = addressDID[address]
     let content
     if (linkingAddress === address) {
@@ -80,12 +81,12 @@ function CurrentDIDAccountsList({ select }: CurrentAccountsProps) {
         <Button color="brand" label="Linked to other DID" onClick={() => select(did)} plain />
       )
     }
-    return (
+    connectedAccount = (
       <AccountItem address={address} key={address}>
         {content}
       </AccountItem>
     )
-  })
+  }
 
   return (
     <Box>
@@ -95,7 +96,7 @@ function CurrentDIDAccountsList({ select }: CurrentAccountsProps) {
         </Box>
       </Box>
       {knownAccounts}
-      {connectedAccounts}
+      {connectedAccount}
     </Box>
   )
 }
@@ -108,20 +109,20 @@ function OtherDIDAccountsList({ accounts }: OtherAccountsProps) {
   // TODO: track state of account switch in dedicated atom
   const switchAccount = useSwitchAccount()
   const [eth] = useEthereum()
-  const addresses = eth.status === 'CONNECTED' ? eth.accounts : []
 
   const connectableAccounts = accounts.map((account) => {
-    const button = addresses.includes(account.address) ? (
-      <Button
-        color="brand"
-        label="Connect"
-        onClick={() => {
-          console.log('connect with account', account)
-          void switchAccount(account.address)
-        }}
-        plain
-      />
-    ) : null
+    const button =
+      eth.status === 'CONNECTED' && eth.account === account.address ? (
+        <Button
+          color="brand"
+          label="Connect"
+          onClick={() => {
+            console.log('connect with account', account)
+            void switchAccount(account.address)
+          }}
+          plain
+        />
+      ) : null
     return (
       <AccountItem address={account.address} key={account.address}>
         {button}

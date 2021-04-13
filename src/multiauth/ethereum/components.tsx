@@ -11,10 +11,7 @@ function getLibrary() {
 export type ProviderProps = { children?: ReactNode }
 
 // Workaround for SSR issue, cf https://github.com/NoahZinsmeister/web3-react/issues/176
-function NoopRoot({ children }: ProviderProps) {
-  return <>{children}</>
-}
-const Web3ReactRoot = process.browser ? createWeb3ReactRoot(WEB3_REACT_KEY) : NoopRoot
+const Web3ReactRoot = process.browser ? createWeb3ReactRoot(WEB3_REACT_KEY) : Web3ReactProvider
 
 function EthereumRoot({ children }: ProviderProps) {
   useEthereumRootConnect()
@@ -24,13 +21,9 @@ function EthereumRoot({ children }: ProviderProps) {
 }
 
 export function Provider({ children }: ProviderProps) {
-  return process.browser ? (
+  return (
     <Web3ReactRoot getLibrary={getLibrary}>
       <EthereumRoot>{children}</EthereumRoot>
     </Web3ReactRoot>
-  ) : (
-    <Web3ReactProvider getLibrary={getLibrary}>
-      <EthereumRoot>{children}</EthereumRoot>
-    </Web3ReactProvider>
   )
 }
