@@ -29,7 +29,7 @@ export default function EditProfileButton({ did, setProfile }: Props) {
   const [state, setState] = useState<State>({ canEdit: false })
 
   const loadAndOpen = useCallback((id) => {
-    idx.get('basicProfile', id).then(
+    idx.get<BasicProfile>('basicProfile', id).then(
       (profile) => {
         setState({ canEdit: true, loadingProfile: false, modalOpen: true, profile: profile ?? {} })
       },
