@@ -1,3 +1,4 @@
+import { getLegacy3BoxProfileAsBasicProfile, isCaip10, isDid } from '@ceramicstudio/idx'
 import type { BasicProfile, ImageSources } from '@ceramicstudio/idx-constants'
 import { Anchor, Box, Paragraph, Text } from 'grommet'
 import type { GetServerSideProps } from 'next'
@@ -13,8 +14,10 @@ import avatarPlaceholder from '../images/avatar-placeholder.png'
 import countryIcon from '../images/icons/country.png'
 import linkIcon from '../images/icons/link.svg'
 import locationIcon from '../images/icons/location.png'
-import { loadProfile } from '../profile'
 import { BRAND_COLOR, PLACEHOLDER_COLOR } from '../theme'
+import { isEthereumAddress, isSupportedDid } from '../utils'
+
+const ETH_CHAIN_ID = `@eip155:1`
 
 export function getImageURL(
   sources: ImageSources | undefined,
@@ -27,26 +30,73 @@ const EditProfileButton = dynamic(() => import('../client/components/EditProfile
   ssr: false,
 })
 
-interface Props {
-  did: string | null
-  loadedProfile: BasicProfile | null
+type Support =
+  | 'invalid' // not a DID or CAIP-10
+  | 'legacy' // legacy 3Box profile loaded from Ethereum address
+  | 'supported' // did:3 or did:key
+  | 'unsupported' // other DID method, not supported by Ceramic node
+
+function canEditProfile(support: Support): boolean {
+  return support === 'supported' || support === 'legacy'
 }
 
-export const getServerSideProps: GetServerSideProps<Props, { did: string }> = async (ctx) => {
-  const did = ctx.params?.did ?? null
-  let loadedProfile = null
+type Props = {
+  id: string | null
+  loadedProfile: BasicProfile | null
+  support: Support
+}
 
-  if (did !== null) {
-    try {
+export const getServerSideProps: GetServerSideProps<Props, { id: string }> = async (ctx) => {
+  const id = ctx.params?.id ?? null
+  if (id === null) {
+    return {
+      redirect: { destination: '/', permanent: true },
+    }
+  }
+
+  let loadedProfile = null
+  let support: Support = 'unsupported'
+
+  if (isDid(id)) {
+    if (isSupportedDid(id)) {
+      // Main case: we expect a DID to be provided
+      support = 'supported'
       const { idx } = await import('../server/idx')
-      loadedProfile = await loadProfile(idx, did)
+      loadedProfile = await idx.get<BasicProfile>('basicProfile', id)
+    } else {
+      support = 'unsupported'
+    }
+  } else if (isEthereumAddress(id)) {
+    // If an Ethereum address is provided, redirect to CAIP-10 URL
+    return {
+      redirect: { destination: `/${id}${ETH_CHAIN_ID}`, permanent: true },
+    }
+  } else if (isCaip10(id)) {
+    const { idx } = await import('../server/idx')
+
+    try {
+      const linkedDid = await idx.caip10ToDid(id.toLowerCase())
+      if (linkedDid != null) {
+        // If there is a linked DID, redirect to the DID URL
+        // This is a temporary redirect as the CAIP-10 could get linked to another DID
+        return {
+          redirect: { destination: `/${linkedDid}`, permanent: false },
+        }
+      }
     } catch (err) {
-      console.log('error loading profile from IDX', err)
+      // Ignore error trying to get DID from CAIP-10
+    }
+
+    if (id.endsWith(ETH_CHAIN_ID)) {
+      // Fallback for legacy 3Box profiles
+      support = 'legacy'
+      const address = id.slice(0, -ETH_CHAIN_ID.length)
+      loadedProfile = await getLegacy3BoxProfileAsBasicProfile(address)
     }
   }
 
   return {
-    props: { did, loadedProfile },
+    props: { id, loadedProfile, support },
   }
 }
 
@@ -81,12 +131,21 @@ const Name = styled.h1`
   font-weight: 500;
 `
 
-interface NoProfileProps {
-  did: string | null
+type NoProfileProps = {
+  id: string | null
   setProfile: (profile: BasicProfile) => void
+  support: Support
 }
 
-function NoProfile({ did, setProfile }: NoProfileProps) {
+function NoProfile({ id, setProfile, support }: NoProfileProps) {
+  const edit = canEditProfile(support) ? (
+    <Box flex>
+      <Box alignSelf="end" margin="medium" width="150px">
+        <EditProfileButton did={id} setProfile={setProfile} />
+      </Box>
+    </Box>
+  ) : null
+
   return (
     <Box>
       <Head>
@@ -98,11 +157,7 @@ function NoProfile({ did, setProfile }: NoProfileProps) {
       <Box alignSelf="center" width="large">
         <Box direction="row" flex>
           <Avatar />
-          <Box flex>
-            <Box alignSelf="end" margin="medium" width="150px">
-              <EditProfileButton did={did} setProfile={setProfile} />
-            </Box>
-          </Box>
+          {edit}
         </Box>
         <Name>No profile found</Name>
       </Box>
@@ -110,14 +165,14 @@ function NoProfile({ did, setProfile }: NoProfileProps) {
   )
 }
 
-export default function ProfilePage({ did, loadedProfile }: Props) {
+export default function ProfilePage({ id, loadedProfile, support }: Props) {
   const [profile, setProfile] = useState<BasicProfile | null>(loadedProfile)
   useEffect(() => {
     setProfile(loadedProfile)
   }, [loadedProfile])
 
-  if (did == null || profile == null) {
-    return <NoProfile did={did} setProfile={setProfile} />
+  if (id == null || profile == null || !canEditProfile(support)) {
+    return <NoProfile id={id} setProfile={setProfile} support={support} />
   }
 
   const name = profile.name ?? '(no name)'
@@ -206,7 +261,7 @@ export default function ProfilePage({ did, loadedProfile }: Props) {
           <Avatar url={getImageURL(profile.image, { height: 150, width: 150 })} />
           <Box flex>
             <Box alignSelf="end" width="150px">
-              <EditProfileButton did={did} setProfile={setProfile} />
+              <EditProfileButton did={id} setProfile={setProfile} />
             </Box>
           </Box>
         </Box>

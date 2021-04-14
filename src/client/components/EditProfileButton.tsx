@@ -2,7 +2,6 @@ import type { BasicProfile } from '@ceramicstudio/idx-constants'
 import { Button } from 'grommet'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { loadProfile } from '../../profile'
 import { ACCENT_COLOR, BRAND_COLOR } from '../../theme'
 
 import { useIDXAuth, useIDXEnv, useKnownDIDs, useLogin } from '../hooks'
@@ -30,7 +29,7 @@ export default function EditProfileButton({ did, setProfile }: Props) {
   const [state, setState] = useState<State>({ canEdit: false })
 
   const loadAndOpen = useCallback((id) => {
-    loadProfile(idx, id).then(
+    idx.get('basicProfile', id).then(
       (profile) => {
         setState({ canEdit: true, loadingProfile: false, modalOpen: true, profile: profile ?? {} })
       },
