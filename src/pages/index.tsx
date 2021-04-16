@@ -1,4 +1,4 @@
-import { Box, Button, Heading, TextInput } from 'grommet'
+import { Box, Button, Heading, Spinner, TextInput } from 'grommet'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -40,7 +40,7 @@ export default function Home() {
             <Button
               color="brand"
               disabled={loading || value === ''}
-              label={loading ? '...' : 'Go'}
+              label={loading ? <Spinner /> : 'Go'}
               style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
               type="submit"
             />

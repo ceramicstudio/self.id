@@ -4,7 +4,7 @@ import type { AccountIDParams } from 'caip'
 import { useAtom } from 'jotai'
 import { useCallback, useMemo } from 'react'
 
-import { useEthereum } from '../../multiauth/ethereum/hooks'
+import { useMultiAuth } from '../../multiauth'
 
 import {
   authenticate,
@@ -105,7 +105,7 @@ export function useAccountLinks(): [
 ] {
   const [dids, setDIDs] = useAtom(knownDIDsAtom)
   const [linkingAddress, setLinkingAddress] = useAtom(linkingAddressAtom)
-  const [eth] = useEthereum()
+  const [authState] = useMultiAuth()
   const [auth] = useIDXAuth()
   const env = useIDXEnv()
 
@@ -115,10 +115,19 @@ export function useAccountLinks(): [
 
   const link = useCallback(
     async (address: string) => {
-      if (auth.state === 'CONFIRMED' && eth.status === 'CONNECTED' && linkingAddress == null) {
+      if (
+        auth.state === 'CONFIRMED' &&
+        authState.status === 'CONNECTED' &&
+        linkingAddress == null
+      ) {
         void setLinkingAddress(address)
         try {
-          const newDIDs = await linkAccount(env, eth.provider, auth.id, address)
+          const newDIDs = await linkAccount(
+            env,
+            authState.connected.provider.state.provider,
+            auth.id,
+            address
+          )
           void setDIDs(newDIDs)
           return true
         } catch (err) {
@@ -128,15 +137,15 @@ export function useAccountLinks(): [
       }
       return false
     },
-    [auth, eth, env, linkingAddress, setDIDs, setLinkingAddress]
+    [auth, authState, env, linkingAddress, setDIDs, setLinkingAddress]
   )
 
   return [links, linkingAddress, link]
 }
 
 export function useSwitchAccount() {
-  const [_, setDIDs] = useAtom(knownDIDsAtom)
-  const [eth, connect] = useEthereum()
+  const setDIDs = useAtom(knownDIDsAtom)[1]
+  const connect = useMultiAuth()[1]
   const env = useIDXEnv()
 
   const trySwitch = useCallback(
@@ -149,16 +158,12 @@ export function useSwitchAccount() {
 
   return useCallback(
     async (address: string) => {
-      if (eth.status === 'CONNECTED') {
-        await trySwitch(eth.provider, address)
-      } else {
-        const ethereum = await connect()
-        if (ethereum != null) {
-          await trySwitch(ethereum.provider, address)
-        }
+      const connected = await connect()
+      if (connected != null) {
+        await trySwitch(connected.provider.state.provider, address)
       }
     },
-    [eth, connect, trySwitch]
+    [connect, trySwitch]
   )
 }
 
@@ -169,7 +174,7 @@ export function useCreateAccount(): [
 ] {
   const setDIDs = useAtom(knownDIDsAtom)[1]
   const setKnownDIDsData = useAtom(knownDIDsDataAtom)[1]
-  const [eth, connect] = useEthereum()
+  const connect = useMultiAuth()[1]
   const env = useIDXEnv()
   const [createState, setCreateState] = useAtom(createDIDAtom)
 
@@ -194,16 +199,12 @@ export function useCreateAccount(): [
 
   const create = useCallback(
     async (address: string) => {
-      if (eth.status === 'CONNECTED') {
-        await tryCreate(eth.provider, address)
-      } else {
-        const ethereum = await connect()
-        if (ethereum != null) {
-          await tryCreate(ethereum.provider, address)
-        }
+      const connected = await connect()
+      if (connected != null) {
+        await tryCreate(connected.provider.state.provider, address)
       }
     },
-    [eth, connect, tryCreate]
+    [connect, tryCreate]
   )
 
   return [createState.creating, create, createState.error]

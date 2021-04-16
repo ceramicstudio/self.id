@@ -1,7 +1,7 @@
 import { Avatar, Box, Button, Collapsible, Heading, Text } from 'grommet'
 import { useCallback, useMemo, useState } from 'react'
 
-import { useEthereum } from '../../multiauth/ethereum/hooks'
+import { useMultiAuth } from '../../multiauth'
 
 import { getImageSrc } from '../../image'
 import avatarPlaceholder from '../../images/avatar-placeholder.png'
@@ -79,7 +79,7 @@ type CreateProps = {
 type CreateState = { open: boolean; address?: string }
 
 function CreateNewDID({ didsData }: CreateProps) {
-  const [ethState] = useEthereum()
+  const [authState] = useMultiAuth()
   const [createState, setCreateState] = useState<CreateState>({ open: false })
   const [creating, create] = useCreateAccount()
 
@@ -113,19 +113,20 @@ function CreateNewDID({ didsData }: CreateProps) {
   }, [didsData])
 
   let account = null
-  if (ethState.status === 'CONNECTED') {
+  if (authState.status === 'CONNECTED') {
+    const { address } = authState.connected.accountID
     let action
-    if (accountToDID[ethState.account] != null) {
-      action = <Text>{formatDID(accountToDID[ethState.account])}</Text>
+    if (accountToDID[address] != null) {
+      action = <Text>{formatDID(accountToDID[address])}</Text>
     } else if (creating) {
-      action = createState.address === ethState.account ? <Text>Creating DID...</Text> : null
+      action = createState.address === address ? <Text>Creating DID...</Text> : null
     } else {
-      action = <Button label="Use this address" onClick={() => createAccount(ethState.account)} />
+      action = <Button label="Use this address" onClick={() => createAccount(address)} />
     }
     account = (
-      <Box key={ethState.account} direction="row" pad={{ bottom: 'small' }}>
+      <Box key={address} direction="row" pad={{ bottom: 'small' }}>
         <Box flex justify="center">
-          {ethState.account}
+          {address}
         </Box>
         <Box>{action}</Box>
       </Box>

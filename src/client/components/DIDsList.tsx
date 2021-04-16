@@ -1,7 +1,7 @@
 import { Box, Button, Text } from 'grommet'
 import type { ReactNode } from 'react'
 
-import { useEthereum } from '../../multiauth/ethereum/hooks'
+import { useMultiAuth } from '../../multiauth'
 
 import { useCreateAccount, useIDXAuth, useKnownDIDs } from '../hooks'
 
@@ -30,15 +30,15 @@ function DIDItem({ id, onClick, children }: ItemProps) {
 }
 
 function CreateDIDButton() {
-  const [eth] = useEthereum()
+  const [authState] = useMultiAuth()
   const [creating, create] = useCreateAccount()
 
-  return eth.status === 'CONNECTED' ? (
+  return authState.status === 'CONNECTED' ? (
     <Button
       color="brand"
       disabled={creating}
       label={creating ? 'Creating new DID' : 'Create new DID'}
-      onClick={() => create(eth.account)}
+      onClick={() => create(authState.connected.accountID.address)}
     />
   ) : null
 }

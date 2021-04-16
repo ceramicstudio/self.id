@@ -1,7 +1,7 @@
 import { Button } from 'grommet'
 import type { ReactNode } from 'react'
 
-import { useEthereum } from '../../multiauth/ethereum/hooks'
+import { useMultiAuth } from '../../multiauth'
 
 import { useIDXAuth, useLogin } from '../hooks'
 
@@ -12,7 +12,7 @@ export type Props = {
 }
 
 export default function ConnectedContainer({ children }: Props) {
-  const [ethState] = useEthereum()
+  const [authState] = useMultiAuth()
   const [auth] = useIDXAuth()
   const [login, loginModal] = useLogin()
 
@@ -21,7 +21,7 @@ export default function ConnectedContainer({ children }: Props) {
   }
 
   const button =
-    auth.state === 'LOADING' || ethState.status === 'CONNECTING' ? (
+    auth.state === 'LOADING' || authState.status === 'CONNECTING' ? (
       <Button disabled label="Connecting..." primary style={style} />
     ) : (
       <Button label="Connect" onClick={() => void login()} primary style={style} />

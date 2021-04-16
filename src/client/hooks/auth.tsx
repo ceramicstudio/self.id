@@ -2,9 +2,8 @@ import { Box, Button, Layer, Text } from 'grommet'
 import { useCallback, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 
-import { useEthereum } from '../../multiauth/ethereum/hooks'
-
-// import { deferred } from '../../utils'
+import { useMultiAuth } from '../../multiauth'
+import type { AuthAccount, ConnectionProviders } from '../../multiauth'
 import type { Deferred } from '../../utils'
 
 import { useIDXAuth, useResetIDXEnv } from './idx'
@@ -15,26 +14,29 @@ type LoginSelectAccount = {
 }
 
 export function useLogin(): [(switchAccount?: boolean) => Promise<string | null>, ReactNode] {
-  const [ethereum, connect, disconnect] = useEthereum()
+  const [authState, connect, disconnect] = useMultiAuth()
   const [auth, tryAuth, clearAuth] = useIDXAuth()
   const [select, _setSelect] = useState<LoginSelectAccount | null>(null)
 
   const login = useCallback(
     async (switchAccount?: boolean) => {
-      if (auth.state === 'CONFIRMED' && ethereum.status === 'CONNECTED' && !switchAccount) {
-        return Promise.resolve(auth.id)
+      if (auth.state === 'CONFIRMED' && authState.status === 'CONNECTED' && !switchAccount) {
+        return auth.id
       }
 
-      let eth
-      if (switchAccount) {
-        clearAuth()
-        disconnect()
-        eth = await connect()
-      } else {
-        eth = await (ethereum.status === 'CONNECTING' ? ethereum.promise : connect())
+      let eth: AuthAccount<'ethereum'> | null = null
+      try {
+        if (switchAccount) {
+          clearAuth()
+          eth = await connect({ mode: 'force' })
+        } else {
+          eth = await connect({ mode: 'use' })
+        }
+      } catch (err) {
+        console.warn('Failed to login:', err)
       }
 
-      return eth ? await tryAuth(eth.provider, eth.account) : null
+      return eth ? await tryAuth(eth.provider.state.provider, eth.provider.state.account) : null
 
       // const value = deferred<string | null>()
       // setSelect({ accounts: eth.accounts, value })
@@ -42,7 +44,7 @@ export function useLogin(): [(switchAccount?: boolean) => Promise<string | null>
       // setSelect(null)
       // return selected ? await tryAuth(eth.provider, selected) : null
     },
-    [auth, clearAuth, connect, disconnect, ethereum, tryAuth]
+    [auth, clearAuth, authState, connect, tryAuth]
   )
 
   const onClose = useCallback(() => {
@@ -83,8 +85,8 @@ export function useLogin(): [(switchAccount?: boolean) => Promise<string | null>
 }
 
 export function useLogout() {
-  const [_eth, _connect, disconnect] = useEthereum()
-  const [__auth, _tryAuth, clearAuth] = useIDXAuth()
+  const disconnect = useMultiAuth()[2]
+  const clearAuth = useIDXAuth()[2]
   const resetEnv = useResetIDXEnv()
 
   return useCallback(() => {

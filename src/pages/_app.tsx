@@ -4,7 +4,7 @@ import NextApp, { AppInitialProps } from 'next/app'
 import Head from 'next/head'
 import { createGlobalStyle } from 'styled-components'
 
-import { Provider as MultiauthProvider } from '../multiauth/ethereum/components'
+import { Provider as MultiauthProvider } from '../multiauth/components'
 
 const GlobalStyle = createGlobalStyle`   
   @font-face {
@@ -40,7 +40,7 @@ export default class App extends NextApp<AppInitialProps> {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const { Component, pageProps } = this.props
     return (
-      <MultiauthProvider>
+      <MultiauthProvider theme={theme}>
         <StateProvider>
           <Grommet full theme={theme}>
             <GlobalStyle />

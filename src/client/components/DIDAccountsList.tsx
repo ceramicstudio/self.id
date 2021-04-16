@@ -3,7 +3,7 @@ import { Box, Button, Text } from 'grommet'
 import { useMemo } from 'react'
 import type { ReactNode } from 'react'
 
-import { useEthereum } from '../../multiauth/ethereum/hooks'
+import { useMultiAuth } from '../../multiauth'
 
 import { useAccountLinks, useIDXAuth, useKnownDIDs, useSwitchAccount } from '../hooks'
 
@@ -33,7 +33,7 @@ type CurrentAccountsProps = {
 
 function CurrentDIDAccountsList({ select }: CurrentAccountsProps) {
   const [linkedAccounts, linkingAddress, linkAddress] = useAccountLinks()
-  const [eth] = useEthereum()
+  const [authState] = useMultiAuth()
   const [auth] = useIDXAuth()
   const dids = useKnownDIDs()
 
@@ -64,8 +64,9 @@ function CurrentDIDAccountsList({ select }: CurrentAccountsProps) {
 
   let connectedAccount = null
   const address =
-    eth.status === 'CONNECTED' && !linkedAccounts.find((a) => a.address === eth.account)
-      ? eth.account
+    authState.status === 'CONNECTED' &&
+    !linkedAccounts.find((a) => a.address === authState.connected.accountID.address)
+      ? authState.connected.accountID.address
       : null
   if (address != null) {
     const did = addressDID[address]
@@ -108,11 +109,12 @@ type OtherAccountsProps = {
 function OtherDIDAccountsList({ accounts }: OtherAccountsProps) {
   // TODO: track state of account switch in dedicated atom
   const switchAccount = useSwitchAccount()
-  const [eth] = useEthereum()
+  const [authState] = useMultiAuth()
 
   const connectableAccounts = accounts.map((account) => {
     const button =
-      eth.status === 'CONNECTED' && eth.account === account.address ? (
+      authState.status === 'CONNECTED' &&
+      authState.connected.accountID.address === account.address ? (
         <Button
           color="brand"
           label="Connect"

@@ -1,13 +1,7 @@
 import { atom } from 'jotai'
 
-import type { KnownAccount, KnownAccounts } from './types'
+import { scope } from './constants'
+import type { AuthState } from './types'
 
-export const knownAccountsAtom = atom<KnownAccounts>({})
-
-export const selectedAccountID = atom<string | null>(null)
-
-export const selectedKnownAccount = atom<KnownAccount | null>((get) => {
-  const id = get(selectedAccountID)
-  const account = id ? get(knownAccountsAtom)[id] : null
-  return account ?? null
-})
+export const authStateAtom = atom<AuthState>({ status: 'DISCONNECTED' })
+authStateAtom.scope = scope
