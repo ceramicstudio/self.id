@@ -1,9 +1,9 @@
+import { useMultiAuth } from '@ceramicstudio/multiauth'
+import type { AuthAccount } from '@ceramicstudio/multiauth'
 import { Box, Button, Layer, Text } from 'grommet'
 import { useCallback, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 
-import { useMultiAuth } from '../../multiauth'
-import type { AuthAccount, ConnectionProviders } from '../../multiauth'
 import type { Deferred } from '../../utils'
 
 import { useIDXAuth, useResetIDXEnv } from './idx'
@@ -14,7 +14,7 @@ type LoginSelectAccount = {
 }
 
 export function useLogin(): [(switchAccount?: boolean) => Promise<string | null>, ReactNode] {
-  const [authState, connect, disconnect] = useMultiAuth()
+  const [authState, connect] = useMultiAuth()
   const [auth, tryAuth, clearAuth] = useIDXAuth()
   const [select, _setSelect] = useState<LoginSelectAccount | null>(null)
 
@@ -36,7 +36,9 @@ export function useLogin(): [(switchAccount?: boolean) => Promise<string | null>
         console.warn('Failed to login:', err)
       }
 
-      return eth ? await tryAuth(eth.provider.state.provider, eth.provider.state.account) : null
+      return eth
+        ? await tryAuth(eth.provider.state.provider as any, eth.provider.state.account)
+        : null
 
       // const value = deferred<string | null>()
       // setSelect({ accounts: eth.accounts, value })

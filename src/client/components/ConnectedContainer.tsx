@@ -1,7 +1,6 @@
+import { useMultiAuth } from '@ceramicstudio/multiauth'
 import { Button } from 'grommet'
 import type { ReactNode } from 'react'
-
-import { useMultiAuth } from '../../multiauth'
 
 import { useIDXAuth, useLogin } from '../hooks'
 

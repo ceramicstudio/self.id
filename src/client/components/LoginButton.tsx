@@ -1,6 +1,5 @@
+import { useMultiAuth } from '@ceramicstudio/multiauth'
 import { Button } from 'grommet'
-
-import { useMultiAuth } from '../../multiauth'
 
 import { useIDXAuth, useLogin } from '../hooks'
 

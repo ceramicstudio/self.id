@@ -1,28 +1,27 @@
+import type { EthereumProvider } from '@3id/connect'
 import type { BasicProfile } from '@ceramicstudio/idx-constants'
-import type { EthereumProvider } from '3id-connect'
-import type { AccountIDParams } from 'caip'
+// import { useMultiAuth } from '@ceramicstudio/multiauth'
+// import type { AccountIDParams } from 'caip'
 import { useAtom } from 'jotai'
-import { useCallback, useMemo } from 'react'
-
-import { useMultiAuth } from '../../multiauth'
+import { useCallback } from 'react'
 
 import {
   authenticate,
-  createAccount,
+  // createAccount,
   editProfile,
-  linkAccount,
+  // linkAccount,
   loadKnownDIDsData,
-  switchAccount,
+  // switchAccount,
 } from '../idx'
 import type { KnownDIDsData } from '../idx'
 import {
-  createDIDAtom,
+  // createDIDAtom,
   editProfileAtom,
   idxAuthAtom,
   idxEnvAtom,
   knownDIDsAtom,
   knownDIDsDataAtom,
-  linkingAddressAtom,
+  // linkingAddressAtom,
 } from '../state'
 import type { IDXAuth, EditProfileState } from '../state'
 
@@ -98,117 +97,117 @@ export function useIDXAuth(): [
   return [auth, tryAuthenticate, clearAuth]
 }
 
-export function useAccountLinks(): [
-  Array<AccountIDParams>,
-  string | null,
-  (address: string) => Promise<boolean>
-] {
-  const [dids, setDIDs] = useAtom(knownDIDsAtom)
-  const [linkingAddress, setLinkingAddress] = useAtom(linkingAddressAtom)
-  const [authState] = useMultiAuth()
-  const [auth] = useIDXAuth()
-  const env = useIDXEnv()
+// export function useAccountLinks(): [
+//   Array<AccountIDParams>,
+//   string | null,
+//   (address: string) => Promise<boolean>
+// ] {
+//   const [dids, setDIDs] = useAtom(knownDIDsAtom)
+//   const [linkingAddress, setLinkingAddress] = useAtom(linkingAddressAtom)
+//   const [authState] = useMultiAuth()
+//   const [auth] = useIDXAuth()
+//   const env = useIDXEnv()
 
-  const links = useMemo(() => {
-    return (auth.state === 'CONFIRMED' && dids[auth.id]?.accounts) || []
-  }, [auth, dids])
+//   const links = useMemo(() => {
+//     return (auth.state === 'CONFIRMED' && dids[auth.id]?.accounts) || []
+//   }, [auth, dids])
 
-  const link = useCallback(
-    async (address: string) => {
-      if (
-        auth.state === 'CONFIRMED' &&
-        authState.status === 'CONNECTED' &&
-        linkingAddress == null
-      ) {
-        void setLinkingAddress(address)
-        try {
-          const newDIDs = await linkAccount(
-            env,
-            authState.connected.provider.state.provider,
-            auth.id,
-            address
-          )
-          void setDIDs(newDIDs)
-          return true
-        } catch (err) {
-          console.warn('Failed to link account', err)
-        }
-        void setLinkingAddress(null)
-      }
-      return false
-    },
-    [auth, authState, env, linkingAddress, setDIDs, setLinkingAddress]
-  )
+//   const link = useCallback(
+//     async (address: string) => {
+//       if (
+//         auth.state === 'CONFIRMED' &&
+//         authState.status === 'CONNECTED' &&
+//         linkingAddress == null
+//       ) {
+//         void setLinkingAddress(address)
+//         try {
+//           const newDIDs = await linkAccount(
+//             env,
+//             authState.connected.provider.state.provider as EthereumProvider,
+//             auth.id,
+//             address
+//           )
+//           void setDIDs(newDIDs)
+//           return true
+//         } catch (err) {
+//           console.warn('Failed to link account', err)
+//         }
+//         void setLinkingAddress(null)
+//       }
+//       return false
+//     },
+//     [auth, authState, env, linkingAddress, setDIDs, setLinkingAddress]
+//   )
 
-  return [links, linkingAddress, link]
-}
+//   return [links, linkingAddress, link]
+// }
 
-export function useSwitchAccount() {
-  const setDIDs = useAtom(knownDIDsAtom)[1]
-  const connect = useMultiAuth()[1]
-  const env = useIDXEnv()
+// export function useSwitchAccount() {
+//   const setDIDs = useAtom(knownDIDsAtom)[1]
+//   const connect = useMultiAuth()[1]
+//   const env = useIDXEnv()
 
-  const trySwitch = useCallback(
-    async (provider: EthereumProvider, address: string) => {
-      const newDIDs = await switchAccount(env, provider, address)
-      void setDIDs(newDIDs)
-    },
-    [env, setDIDs]
-  )
+//   const trySwitch = useCallback(
+//     async (provider: EthereumProvider, address: string) => {
+//       const newDIDs = await switchAccount(env, provider, address)
+//       void setDIDs(newDIDs)
+//     },
+//     [env, setDIDs]
+//   )
 
-  return useCallback(
-    async (address: string) => {
-      const connected = await connect()
-      if (connected != null) {
-        await trySwitch(connected.provider.state.provider, address)
-      }
-    },
-    [connect, trySwitch]
-  )
-}
+//   return useCallback(
+//     async (address: string) => {
+//       const connected = await connect()
+//       if (connected != null) {
+//         await trySwitch(connected.provider.state.provider as EthereumProvider, address)
+//       }
+//     },
+//     [connect, trySwitch]
+//   )
+// }
 
-export function useCreateAccount(): [
-  boolean,
-  (address: string) => Promise<void>,
-  Error | undefined
-] {
-  const setDIDs = useAtom(knownDIDsAtom)[1]
-  const setKnownDIDsData = useAtom(knownDIDsDataAtom)[1]
-  const connect = useMultiAuth()[1]
-  const env = useIDXEnv()
-  const [createState, setCreateState] = useAtom(createDIDAtom)
+// export function useCreateAccount(): [
+//   boolean,
+//   (address: string) => Promise<void>,
+//   Error | undefined
+// ] {
+//   const setDIDs = useAtom(knownDIDsAtom)[1]
+//   const setKnownDIDsData = useAtom(knownDIDsDataAtom)[1]
+//   const connect = useMultiAuth()[1]
+//   const env = useIDXEnv()
+//   const [createState, setCreateState] = useAtom(createDIDAtom)
 
-  const tryCreate = useCallback(
-    async (provider: EthereumProvider, address: string) => {
-      if (createState.creating) {
-        return
-      }
-      void setCreateState({ creating: true })
-      try {
-        const newDIDs = await createAccount(env, provider, address)
-        void setDIDs(newDIDs)
-        void loadKnownDIDsData(env, newDIDs).then(setKnownDIDsData)
-        void setCreateState({ creating: false })
-      } catch (error) {
-        console.warn('Error creating DID', error)
-        void setCreateState({ creating: false, error: error as Error })
-      }
-    },
-    [createState.creating, env, setDIDs, setKnownDIDsData, setCreateState]
-  )
+//   const tryCreate = useCallback(
+//     async (provider: EthereumProvider, address: string) => {
+//       if (createState.creating) {
+//         return
+//       }
+//       void setCreateState({ creating: true })
+//       try {
+//         const newDIDs = await createAccount(env, provider, address)
+//         void setDIDs(newDIDs)
+//         void loadKnownDIDsData(env, newDIDs).then(setKnownDIDsData)
+//         void setCreateState({ creating: false })
+//       } catch (error) {
+//         console.warn('Error creating DID', error)
+//         void setCreateState({ creating: false, error: error as Error })
+//       }
+//     },
+//     [createState.creating, env, setDIDs, setKnownDIDsData, setCreateState]
+//   )
 
-  const create = useCallback(
-    async (address: string) => {
-      const connected = await connect()
-      if (connected != null) {
-        await tryCreate(connected.provider.state.provider, address)
-      }
-    },
-    [connect, tryCreate]
-  )
+//   const create = useCallback(
+//     async (address: string) => {
+//       const connected = await connect()
+//       if (connected != null) {
+//         await tryCreate(connected.provider.state.provider as EthereumProvider, address)
+//       }
+//     },
+//     [connect, tryCreate]
+//   )
 
-  return [createState.creating, create, createState.error]
-}
+//   return [createState.creating, create, createState.error]
+// }
 
 export function useEditProfile(): [EditProfileState, (profile: BasicProfile) => Promise<void>] {
   const [editState, setEditState] = useAtom(editProfileAtom)

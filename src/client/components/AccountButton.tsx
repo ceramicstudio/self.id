@@ -105,7 +105,7 @@ export default function AccountButton() {
           <Text size="medium" truncate weight="bold">
             {displayName}
           </Text>
-          <Button
+          {/* <Button
             label="Switch identities"
             onClick={() => router.push('/me/identities')}
             plain
@@ -117,7 +117,7 @@ export default function AccountButton() {
               fontSize: '14px',
               padding: '6px 12px',
             }}
-          />
+          /> */}
         </Box>
         <Box
           background="white"
