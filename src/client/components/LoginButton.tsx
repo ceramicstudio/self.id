@@ -10,12 +10,12 @@ export default function LoginButton() {
   const [auth] = useIDXAuth()
   const [login, loginModal] = useLogin()
 
-  if (auth.state === 'CONFIRMED') {
+  if (auth.state === 'confirmed') {
     return null
   }
 
   const button =
-    auth.state === 'LOADING' || authState.status === 'CONNECTING' ? (
+    auth.state === 'loading' || authState.status === 'connecting' ? (
       <Button disabled label="Connecting..." primary style={style} />
     ) : (
       <Button label="Connect" onClick={() => void login()} primary style={style} />

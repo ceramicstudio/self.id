@@ -51,10 +51,10 @@ export default function EditProfileButton({ did, setProfile }: Props) {
   )
 
   const onOpen = useCallback(() => {
-    if (auth.state === 'CONFIRMED') {
+    if (auth.state === 'confirmed') {
       setState({ canEdit: true, loadingProfile: true, modalOpen: false })
       loadAndOpen(auth.id)
-    } else if (auth.state !== 'LOADING') {
+    } else if (auth.state !== 'loading') {
       setState({ canEdit: true, loadingProfile: true, modalOpen: false })
       login().then(
         (id) => {

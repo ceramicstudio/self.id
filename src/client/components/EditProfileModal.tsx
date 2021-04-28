@@ -135,7 +135,7 @@ function ImageField({
 
   const sources = value[name]
   let content = null
-  if (state === 'UPLOADING') {
+  if (state === 'uploading') {
     content = <Button disabled fill label="Uploading..." />
   } else if (sources != null) {
     content = renderImage({ sources, onClick: disabled ? undefined : trigger })
@@ -160,7 +160,7 @@ export default function EditProfileModal({ onClose, profile }: ModalProps) {
   const [editProfileState, editProfile] = useEditProfile()
   const [value, setValue] = useState<FormValue>(() => profileToForm(profile))
 
-  const isLoading = editProfileState.status === 'EDITING'
+  const isLoading = editProfileState.status === 'editing'
 
   const onSubmit = useCallback(
     (e: FormEvent) => {
@@ -184,9 +184,9 @@ export default function EditProfileModal({ onClose, profile }: ModalProps) {
 
   const alert = isLoading ? (
     <Alert color="brand" text="Saving profile..." />
-  ) : editProfileState.status === 'FAILED' ? (
+  ) : editProfileState.status === 'failed' ? (
     <Alert color="status-error" text="Failed to save profile" />
-  ) : editProfileState.status === 'DONE' ? (
+  ) : editProfileState.status === 'done' ? (
     <Alert color="status-ok" text="Profile successfully saved!" />
   ) : null
 

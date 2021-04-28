@@ -74,7 +74,7 @@ export default function AccountButton() {
   )
 
   const onClickLogin = useCallback(() => {
-    if (auth.state !== 'LOADING') {
+    if (auth.state !== 'loading') {
       void login().then(toProfile)
     }
   }, [auth.state, login, toProfile])
@@ -140,7 +140,7 @@ export default function AccountButton() {
     )
   }
 
-  return auth.state === 'LOADING' ? (
+  return auth.state === 'loading' ? (
     <DisplayAvatar label="Connecting..." />
   ) : (
     <>

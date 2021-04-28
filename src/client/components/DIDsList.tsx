@@ -50,7 +50,7 @@ export default function DIDsList({ select, selected }: Props) {
   const [auth] = useIDXAuth()
   const knownDIDs = useKnownDIDs()
 
-  if (auth.state !== 'CONFIRMED') {
+  if (auth.state !== 'confirmed') {
     return (
       <Box pad={{ bottom: 'small' }}>
         <LoginButton />

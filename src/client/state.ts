@@ -22,15 +22,15 @@ export const knownDIDsAtom = atom(getKnownDIDs(), (_get, set, dids: KnownDIDs) =
 export const knownDIDsDataAtom = atom<KnownDIDsData | null>(null)
 
 export type IDXAuth =
-  | { state: 'UNKNOWN'; id?: undefined }
-  | { state: 'LOCAL'; id: string }
-  | { state: 'LOADING'; id?: string }
-  | { state: 'ERROR'; id?: string; error?: Error }
-  | { state: 'CONFIRMED'; id: string; address: string }
+  | { state: 'unknown'; id?: undefined }
+  | { state: 'local'; id: string }
+  | { state: 'loading'; id?: string }
+  | { state: 'error'; id?: string; error?: Error }
+  | { state: 'confirmed'; id: string; address: string }
 
 function getAuthState(): IDXAuth {
   const id = localStorage.getItem(SELECTED_DID_KEY) || null
-  return id ? { state: 'LOCAL', id } : { state: 'UNKNOWN' }
+  return id ? { state: 'local', id } : { state: 'unknown' }
 }
 
 const idxAuthStateAtom = atom(getAuthState())
@@ -56,5 +56,5 @@ export const linkingAddressAtom = atom<string | null>(null)
 
 export const createDIDAtom = atom<{ creating: boolean; error?: Error }>({ creating: false })
 
-export type EditProfileState = { status: 'PENDING' | 'EDITING' | 'FAILED' | 'DONE'; error?: Error }
-export const editProfileAtom = atom<EditProfileState>({ status: 'PENDING' })
+export type EditProfileState = { status: 'pending' | 'editing' | 'failed' | 'done'; error?: Error }
+export const editProfileAtom = atom<EditProfileState>({ status: 'pending' })

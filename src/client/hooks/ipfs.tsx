@@ -46,7 +46,7 @@ async function uploadImage(file: File, sizes: Array<Dimensions> = []): Promise<I
   }
 }
 
-export type UploadState = 'IDLE' | 'UPLOADING' | 'FAILED' | 'DONE'
+export type UploadState = 'idle' | 'uploading' | 'failed' | 'done'
 
 export type ImageUploadOptions = {
   dimensions?: Array<Dimensions>
@@ -58,7 +58,7 @@ export function useImageUpload(
   options: ImageUploadOptions = {}
 ) {
   const maxSize = options.maxSize ?? UPLOAD_MAX_SIZE
-  const [state, setState] = useState<UploadState>('IDLE')
+  const [state, setState] = useState<UploadState>('idle')
   const sourcesRef = useRef<ImageSources | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -82,18 +82,18 @@ export function useImageUpload(
         return
       }
 
-      setState('UPLOADING')
+      setState('uploading')
 
       uploadImage(file, options.dimensions).then(
         (imageSources) => {
           resetInput()
           sourcesRef.current = imageSources
           onUpload(imageSources)
-          setState('DONE')
+          setState('done')
         },
         (err) => {
           console.warn('Failed to upload image to IPFS', err)
-          setState('FAILED')
+          setState('failed')
         }
       )
     },

@@ -7,11 +7,11 @@ export default function DisplayDID() {
 
   let text
   switch (auth.state) {
-    case 'LOADING':
+    case 'loading':
       text = 'Loading DID...'
       break
-    case 'CONFIRMED':
-    case 'LOCAL':
+    case 'confirmed':
+    case 'local':
       text = auth.id
       break
     default:

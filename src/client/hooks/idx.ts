@@ -67,13 +67,13 @@ export function useIDXAuth(): [
   const tryAuthenticate = useCallback(
     async (provider: EthereumProvider, address: string): Promise<string | null> => {
       const initialAuth = auth
-      void setAuth({ state: 'LOADING', id: auth.id })
+      void setAuth({ state: 'loading', id: auth.id })
 
       try {
         const knownDIDs = await authenticate(env, provider, address)
         if (knownDIDs) {
           void setKnownDIDs(knownDIDs)
-          void setAuth({ state: 'CONFIRMED', id: env.idx.id, address })
+          void setAuth({ state: 'confirmed', id: env.idx.id, address })
           void loadKnownDIDsData(env, knownDIDs).then(setKnownDIDsData)
           return env.idx.id
         } else {
@@ -81,7 +81,7 @@ export function useIDXAuth(): [
           return null
         }
       } catch (err) {
-        void setAuth({ state: 'ERROR', id: auth.id, error: err as Error })
+        void setAuth({ state: 'error', id: auth.id, error: err as Error })
         throw err
       }
     },
@@ -91,7 +91,7 @@ export function useIDXAuth(): [
   const clearAuth = useCallback(() => {
     void resetEnv()
     void setKnownDIDs({})
-    void setAuth({ state: 'UNKNOWN' })
+    void setAuth({ state: 'unknown' })
   }, [resetEnv, setAuth, setKnownDIDs])
 
   return [auth, tryAuthenticate, clearAuth]
@@ -216,20 +216,20 @@ export function useEditProfile(): [EditProfileState, (profile: BasicProfile) => 
 
   const edit = useCallback(
     async (profile: BasicProfile) => {
-      if (editState.status === 'EDITING') {
+      if (editState.status === 'editing') {
         return
       }
       if (knownDIDsData == null) {
         throw new Error('DID data is not available')
       }
 
-      await setEditState({ status: 'EDITING' })
+      await setEditState({ status: 'editing' })
       try {
         const updatedDIDsData = await editProfile(env, knownDIDsData, profile)
         await setKnownDIDsData(updatedDIDsData)
-        await setEditState({ status: 'DONE' })
+        await setEditState({ status: 'done' })
       } catch (error) {
-        await setEditState({ status: 'FAILED', error: error as Error })
+        await setEditState({ status: 'failed', error: error as Error })
       }
     },
     [editState.status, env, knownDIDsData, setEditState, setKnownDIDsData]
