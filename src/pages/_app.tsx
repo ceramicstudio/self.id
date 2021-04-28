@@ -1,8 +1,4 @@
-import {
-  Provider as MultiauthProvider,
-  InjectedConnector,
-  WalletConnectConnector,
-} from '@ceramicstudio/multiauth'
+import { Provider as MultiauthProvider } from '@ceramicstudio/multiauth'
 import { Grommet } from 'grommet'
 import { Provider as StateProvider } from 'jotai'
 import NextApp, { AppInitialProps } from 'next/app'
@@ -36,28 +32,8 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
+import { connectors } from '../auth'
 import { theme } from '../theme'
-
-const connectors: Array<any> = [
-  {
-    key: 'injected',
-    connector: new InjectedConnector({ supportedChainIds: [1, 3, 4, 5, 42] }),
-  },
-]
-if (
-  typeof process.env.NEXT_PUBLIC_WALLETCONNECT_CHAIN_ID === 'string' &&
-  typeof process.env.NEXT_PUBLIC_WALLETCONNECT_RPC_URL === 'string'
-) {
-  connectors.push({
-    key: 'walletConnect',
-    connector: new WalletConnectConnector({
-      rpc: {
-        [process.env.NEXT_PUBLIC_WALLETCONNECT_CHAIN_ID]:
-          process.env.NEXT_PUBLIC_WALLETCONNECT_RPC_URL,
-      },
-    }),
-  })
-}
 
 export default class App extends NextApp<AppInitialProps> {
   render() {

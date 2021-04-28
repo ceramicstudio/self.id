@@ -20,7 +20,7 @@ export function useLogin(): [(switchAccount?: boolean) => Promise<string | null>
 
   const login = useCallback(
     async (switchAccount?: boolean) => {
-      if (auth.state === 'CONFIRMED' && authState.status === 'CONNECTED' && !switchAccount) {
+      if (auth.state === 'CONFIRMED' && authState.status === 'connected' && !switchAccount) {
         return auth.id
       }
 

@@ -58,7 +58,9 @@ export default function EditProfileButton({ did, setProfile }: Props) {
       setState({ canEdit: true, loadingProfile: true, modalOpen: false })
       login().then(
         (id) => {
-          if (id != null) {
+          if (id == null) {
+            setState({ canEdit: true, loadingProfile: false, modalOpen: false })
+          } else {
             loadAndOpen(id)
           }
         },
