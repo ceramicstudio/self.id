@@ -1,4 +1,4 @@
-import { Box, Button, Heading, Spinner, TextInput } from 'grommet'
+import { Box, Button, Heading, Spinner, Text, TextInput } from 'grommet'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -24,16 +24,17 @@ export default function Home() {
       </Head>
       <Navbar />
       <Box alignSelf="center" pad="medium" width="large">
+        <Box align="center">
+          <Text>A profile 100% owned by you</Text>
+          <Heading>Be your self</Heading>
+        </Box>
         <form onSubmit={onSubmit}>
-          <Heading>
-            <label htmlFor="did">Looking for an identity?</label>
-          </Heading>
           <Box direction="row">
             <TextInput
               disabled={loading}
               id="did"
               onChange={(event) => setValue(event.target.value)}
-              placeholder="DID or CAIP-10 account"
+              placeholder="Search by DID or blockchain address"
               style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
               value={value}
             />
@@ -46,6 +47,13 @@ export default function Home() {
             />
           </Box>
         </form>
+        <Box margin="large">
+          <Text>
+            Self.ID is currently using Ceramic's testnet.
+            <br />
+            Profiles creation and edition will only be applied to the testnet, not mainnet.
+          </Text>
+        </Box>
       </Box>
     </Box>
   )

@@ -1,6 +1,7 @@
 import {
   FortmaticConnector,
   InjectedConnector,
+  PortisConnector,
   TorusConnector,
   WalletConnectConnector,
 } from '@ceramicstudio/multiauth'
@@ -32,6 +33,18 @@ if (typeof fortmaticApiKey === 'string' && typeof fortmaticChainId === 'string')
     connector: new FortmaticConnector({
       apiKey: fortmaticApiKey,
       chainId: parseInt(fortmaticChainId, 10),
+    }),
+  })
+}
+
+const portisDappId = process.env.NEXT_PUBLIC_PORTIS_DAPP_ID
+const portisNetworks = process.env.NEXT_PUBLIC_PORTIS_NETWORKS
+if (typeof portisDappId === 'string' && typeof portisNetworks === 'string') {
+  connectors.push({
+    key: 'portis',
+    connector: new PortisConnector({
+      dAppId: portisDappId,
+      networks: portisNetworks.split(',').map((v) => parseInt(v, 10)),
     }),
   })
 }
