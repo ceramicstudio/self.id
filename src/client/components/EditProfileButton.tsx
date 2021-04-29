@@ -2,8 +2,6 @@ import type { BasicProfile } from '@ceramicstudio/idx-constants'
 import { Button } from 'grommet'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { ACCENT_COLOR, BRAND_COLOR } from '../../theme'
-
 import { useIDXAuth, useIDXEnv, useKnownDIDs, useLogin } from '../hooks'
 
 import EditProfileModal from './EditProfileModal'
@@ -80,10 +78,10 @@ export default function EditProfileButton({ did, setProfile }: Props) {
   const button = state.canEdit ? (
     <Button
       primary
-      color={ACCENT_COLOR}
+      color="black"
       label={state.loadingProfile ? 'Loading...' : 'Edit'}
       onClick={onOpen}
-      style={{ border: 0, color: BRAND_COLOR }}
+      style={{ border: 0, color: 'white' }}
     />
   ) : null
   const modal =

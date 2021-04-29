@@ -1,7 +1,6 @@
 import type { ThemeType } from 'grommet'
 
-export const BRAND_COLOR = '#FC1591'
-export const ACCENT_COLOR = 'rgba(252, 21, 145, 0.1)'
+export const BRAND_COLOR = '#FF0022'
 export const PLACEHOLDER_COLOR = '#949494'
 
 export const theme: ThemeType = {
@@ -10,7 +9,6 @@ export const theme: ThemeType = {
       brand: BRAND_COLOR,
       focus: BRAND_COLOR,
       text: '#181817',
-      'accent-1': ACCENT_COLOR,
       'neutral-1': '#757575',
       'neutral-2': '#888888',
       'neutral-3': '#909090',
@@ -35,6 +33,10 @@ export const theme: ThemeType = {
   text: {
     medium: {
       size: '18px',
+    },
+    large: {
+      size: '22px',
+      height: '26px',
     },
   },
 }

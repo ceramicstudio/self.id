@@ -7,28 +7,38 @@ import { createGlobalStyle } from 'styled-components'
 
 const GlobalStyle = createGlobalStyle`   
   @font-face {
-    font-family: 'DM Sans';       
+    font-family: Segment;       
     font-style: normal;
     font-weight: 400;
     font-display: fallback;
-    src: local('DM Sans Regular'),
-      local('DMSans-Regular'),
-      url('/fonts/DMSans-Regular.woff2') format('woff2'),
-      url('/fonts/DMSans-Regular.woff') format('woff');
+    src: local('Segment Regular'),
+      local('Segment-Regular'),
+      url('/fonts/Segment-Regular.woff2') format('woff2'),
+      url('/fonts/Segment-Regular.woff') format('woff');
   }
   @font-face {
-    font-family: 'DM Sans';       
+    font-family: Segment;       
     font-style: normal;
     font-weight: 500;
     font-display: fallback;
-    src: local('DM Sans Medium'),
-      local('DMSans-Medium'),
-      url('/fonts/DMSans-Medium.woff2') format('woff2'),
-      url('/fonts/DMSans-Medium.woff') format('woff');
+    src: local('Segment Medium'),
+      local('Segment-Medium'),
+      url('/fonts/Segment-Medium.woff2') format('woff2'),
+      url('/fonts/Segment-Medium.woff') format('woff');
+  }
+  @font-face {
+    font-family: Segment;       
+    font-style: normal;
+    font-weight: 600;
+    font-display: fallback;
+    src: local('Segment SemiBold'),
+      local('Segment-SemiBold'),
+      url('/fonts/Segment-SemiBold.woff2') format('woff2'),
+      url('/fonts/Segment-SemiBold.woff') format('woff');
   }
 
   body {
-    font-family: 'DM Sans', sans-serif;
+    font-family: Segment, sans-serif;
   }
 `
 
@@ -47,6 +57,7 @@ export default class App extends NextApp<AppInitialProps> {
             <Head>
               <link rel="icon" href="/favicon.ico" />
               <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+              <meta name="fortmatic-site-verification" content="4keQaoARYXbW4snM" />
             </Head>
             <Component {...pageProps} />
           </Grommet>
