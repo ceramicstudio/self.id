@@ -24,6 +24,8 @@ export default function Home() {
   const [focus, setFocus] = useState<boolean>(false)
   const [value, setValue] = useState<string>('')
 
+  const largeScreen = size === 'large'
+
   function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setLoading(true)
@@ -41,7 +43,7 @@ export default function Home() {
       style={{
         display: 'flex',
         minHeight: '100vh',
-        paddingBottom: size === 'large' ? 0 : '420px',
+        paddingBottom: largeScreen ? 0 : '450px',
         flexDirection: 'column',
         backgroundImage: `url(${backgroundImage})`,
         backgroundPosition: 'right bottom',
@@ -89,9 +91,7 @@ export default function Home() {
             </Text>
           </Box>
         </Box>
-        <Box
-          alignSelf={size === 'large' ? 'start' : 'center'}
-          margin={{ left: size === 'large' ? 'large' : 'none' }}>
+        <Box alignSelf="center" margin={{ left: largeScreen ? '-650px' : 'none' }}>
           <Box direction="row">
             <Box direction="row" pad="medium" width="300px">
               <Box flex={{ shrink: 0 }}>
@@ -145,9 +145,9 @@ export default function Home() {
         <Anchor href="https://discord.gg/TPmE2rdNWK">
           <Image alt="Discord" src={footerDiscordIcon} style={{ padding: '6px' }} />
         </Anchor>
-        {/* <Anchor href="#">
+        <Anchor href="https://twitter.com/mySelfID">
           <Image alt="Twitter" src={footerTwitterIcon} style={{ padding: '6px' }} />
-        </Anchor> */}
+        </Anchor>
         {/* <Anchor color="text" href="#" label="About" margin={{ left: 'medium', right: 'small' }} />
         <Anchor
           color="text"
