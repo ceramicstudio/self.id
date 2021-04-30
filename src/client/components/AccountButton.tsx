@@ -5,7 +5,6 @@ import { useCallback, useEffect, useMemo } from 'react'
 import avatarPlaceholder from '../../images/avatar-placeholder.png'
 import linkIcon from '../../images/icons/link.svg'
 import { getImageSrc } from '../../image'
-import { ACCENT_COLOR, BRAND_COLOR } from '../../theme'
 import { formatDID } from '../../utils'
 
 import { useIDXAuth, useDIDsData, useLogin, useLogout } from '../hooks'
@@ -146,10 +145,10 @@ export default function AccountButton() {
     <>
       <Button
         primary
-        color={ACCENT_COLOR}
+        color="black"
         label="Connect"
         onClick={onClickLogin}
-        style={{ border: 0, color: BRAND_COLOR }}
+        style={{ border: 0, color: 'white' }}
       />
       {loginModal}
     </>

@@ -136,11 +136,11 @@ function ImageField({
   const sources = value[name]
   let content = null
   if (state === 'uploading') {
-    content = <Button disabled fill label="Uploading..." />
+    content = <Button color="black" disabled fill label="Uploading..." />
   } else if (sources != null) {
     content = renderImage({ sources, onClick: disabled ? undefined : trigger })
   } else {
-    content = <Button fill label="Select" onClick={trigger} />
+    content = <Button color="black" fill label="Select" onClick={trigger} />
   }
 
   return (
@@ -276,6 +276,7 @@ export default function EditProfileModal({ onClose, profile }: ModalProps) {
         <Box direction="row">
           <Box flex margin="small">
             <Button
+              color="black"
               disabled={isLoading}
               label="Cancel"
               onClick={() => onClose()}
@@ -284,6 +285,7 @@ export default function EditProfileModal({ onClose, profile }: ModalProps) {
           </Box>
           <Box flex margin="small">
             <Button
+              color="black"
               disabled={isLoading}
               type="submit"
               primary
