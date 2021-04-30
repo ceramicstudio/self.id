@@ -75,7 +75,7 @@ export const getServerSideProps: GetServerSideProps<Props, { id: string }> = asy
     const { idx } = await import('../server/idx')
 
     try {
-      const linkedDid = await idx.caip10ToDid(id.toLowerCase())
+      const linkedDid = await idx.caip10ToDid(id)
       if (linkedDid != null) {
         // If there is a linked DID, redirect to the DID URL
         // This is a temporary redirect as the CAIP-10 could get linked to another DID
