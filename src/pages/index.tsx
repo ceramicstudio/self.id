@@ -1,7 +1,7 @@
-import { Anchor, Box, Heading, Image, ResponsiveContext, Spinner, Text, TextInput } from 'grommet'
+import { Anchor, Box, Heading, Image, Spinner, Text, TextInput } from 'grommet'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import type { FormEvent } from 'react'
 
 import backgroundImage from '../images/home-background.jpg'
@@ -16,15 +16,18 @@ import footerTwitterIcon from '../images/icons/social-twitter.svg'
 
 import Navbar from '../components/Navbar'
 import { BRAND_COLOR } from '../theme'
+import { withMediaQuery } from '../components/media-query/with-media-query'
+
+const ResponsiveHeading = withMediaQuery(Heading)
+const ResponsiveText = withMediaQuery(Text)
+const ResponsiveTextInput = withMediaQuery(TextInput)
+const ResponsiveBox = withMediaQuery(Box)
 
 export default function Home() {
   const router = useRouter()
-  const size = useContext(ResponsiveContext)
   const [loading, setLoading] = useState<boolean>(false)
   const [focus, setFocus] = useState<boolean>(false)
   const [value, setValue] = useState<string>('')
-
-  const largeScreen = size === 'large'
 
   function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -39,146 +42,194 @@ export default function Home() {
   )
 
   return (
-    <Box
+    <ResponsiveBox
+      direction={'row'}
+      align={'center'}
       style={{
-        display: 'flex',
-        minHeight: '100vh',
-        paddingBottom: largeScreen ? 0 : '450px',
-        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
         backgroundImage: `url(${backgroundImage})`,
-        backgroundPosition: 'right bottom',
         backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'bottom right',
+      }}
+      mediaQuery={{
+        'padding-bottom': ['60%', '20%', '0px'],
+        'background-size': ['90%', 'inherit', 'inherit'],
       }}>
-      <Head>
-        <title>Self.ID</title>
-      </Head>
-      <Navbar />
-      <Box flex>
-        <Box alignSelf="center" pad="small" width="large">
-          <Box align="center">
-            <Text weight={500}>A profile 100% owned by you</Text>
-            <Heading margin={{ top: '-20px', bottom: '65px' }} size="136px">
-              Be your self
-            </Heading>
-            <form onSubmit={onSubmit}>
-              <Box width="480px">
-                <TextInput
-                  disabled={loading}
-                  icon={inputIcon}
-                  id="did"
-                  onChange={(event) => setValue(event.target.value)}
-                  onBlur={() => setFocus(false)}
-                  onFocus={() => setFocus(true)}
-                  placeholder="Search by DID or blockchain address"
-                  style={{
-                    borderRadius: 30,
-                    borderWidth: 0,
-                    padding: 18,
-                    paddingLeft: 60,
-                    width: 480,
-                    boxShadow: `0 2px 20px ${focus ? BRAND_COLOR : 'rgba(0,0,0,0.5)'}`,
-                  }}
-                  value={value}
-                />
+      <Box
+        style={{
+          display: 'flex',
+          minHeight: '100vh',
+          flexDirection: 'column',
+          maxWidth: '1536px',
+        }}
+        fill={'horizontal'}>
+        <Head>
+          <title>Self.ID</title>
+        </Head>
+        <Navbar />
+        <Box flex>
+          <Box alignSelf="center" pad="small">
+            <Box align="center" margin={{ top: '6%' }}>
+              <ResponsiveText
+                weight={500}
+                mediaQuery={{
+                  'font-size': ['4vw', '2vw', '1.5vw'],
+                }}>
+                A profile 100% owned by you
+              </ResponsiveText>
+              <ResponsiveHeading
+                mediaQuery={{
+                  'margin-top': ['2rem', '2rem', '3rem'],
+                  // 'margin-bottom': ['65px'],
+                  'font-size': ['17vw', '14vw', '13rem'],
+                }}>
+                Be your self
+              </ResponsiveHeading>
+              <form
+                onSubmit={onSubmit}
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                }}>
+                <ResponsiveBox
+                  mediaQuery={{
+                    width: ['100%', '30em'],
+                    padding: ['0.3rem', '0'],
+                    'margin-top': ['0vh', '1vh', '0px'],
+                    'margin-bottom': ['5vh', '2vh', '0px'],
+                  }}>
+                  <ResponsiveTextInput
+                    disabled={loading}
+                    icon={inputIcon}
+                    id="did"
+                    onChange={(event) => setValue(event.target.value)}
+                    onBlur={() => setFocus(false)}
+                    onFocus={() => setFocus(true)}
+                    placeholder="Search by DID or blockchain address"
+                    style={{
+                      borderWidth: 0,
+                      borderRadius: 30,
+                      padding: 18,
+                      paddingLeft: 60,
+                      boxShadow: `0 2px 20px ${focus ? BRAND_COLOR : 'rgba(0,0,0,0.5)'}`,
+                      width: '100%',
+                    }}
+                    value={value}
+                  />
+                </ResponsiveBox>
+              </form>
+            </Box>
+          </Box>
+          <ResponsiveBox
+            alignSelf="center"
+            margin={'medium'}
+            style={{ backgroundColor: 'rgba(255,255,255,0.8)' }}>
+            <Box direction="row">
+              <Box direction="row" pad="medium" width="300px">
+                <Box flex={{ shrink: 0 }}>
+                  <Image alt="profile" src={profileIcon} margin="small" width={27} height={30} />
+                </Box>
+                <Box>
+                  <Text color="brand" size="large" weight={600}>
+                    Create a public profile
+                  </Text>
+                </Box>
               </Box>
-            </form>
-          </Box>
-          <Box margin="large">
-            <Text size="large" weight={600}>
-              Self.ID is currently using Ceramic&apos;s testnet.
-              <br />
-              Profiles creation and edition will only be applied to the testnet, not mainnet.
-            </Text>
-          </Box>
+              <Box direction="row" pad="medium" width="300px">
+                <Box flex={{ shrink: 0 }}>
+                  <Image alt="link" src={linkIcon} margin="small" width={36} height={23} />
+                </Box>
+                <Box>
+                  <Text color="brand" size="large" weight={600}>
+                    Link crypto wallets from many chains
+                  </Text>
+                </Box>
+              </Box>
+            </Box>
+            <Box direction="row">
+              <Box direction="row" pad="medium" width="300px">
+                <Box flex={{ shrink: 0 }}>
+                  <Image alt="verify" src={verifyIcon} margin="small" width={27} height={30} />
+                </Box>
+                <Box>
+                  <Text color="brand" size="large" weight={600}>
+                    Verify your social accounts
+                  </Text>
+                </Box>
+              </Box>
+              <Box direction="row" pad="medium" width="300px">
+                <Box flex={{ shrink: 0 }}>
+                  <Image
+                    alt="metaverse"
+                    src={metaverseIcon}
+                    margin="small"
+                    width={32}
+                    height={32}
+                  />
+                </Box>
+                <Box>
+                  <Text color="brand" size="large" weight={600}>
+                    Use it across the Web3 metaverse
+                  </Text>
+                </Box>
+              </Box>
+            </Box>
+          </ResponsiveBox>
         </Box>
-        <Box alignSelf="center" margin={{ left: largeScreen ? '-650px' : 'none' }}>
-          <Box direction="row">
-            <Box direction="row" pad="medium" width="300px">
-              <Box flex={{ shrink: 0 }}>
-                <Image alt="profile" src={profileIcon} margin="small" width={27} height={30} />
-              </Box>
-              <Box>
-                <Text color="brand" size="large" weight={600}>
-                  Create a public profile
-                </Text>
-              </Box>
-            </Box>
-            <Box direction="row" pad="medium" width="300px">
-              <Box flex={{ shrink: 0 }}>
-                <Image alt="link" src={linkIcon} margin="small" width={36} height={23} />
-              </Box>
-              <Box>
-                <Text color="brand" size="large" weight={600}>
-                  Link crypto wallets from many chains
-                </Text>
-              </Box>
-            </Box>
-          </Box>
-          <Box direction="row">
-            <Box direction="row" pad="medium" width="300px">
-              <Box flex={{ shrink: 0 }}>
-                <Image alt="verify" src={verifyIcon} margin="small" width={27} height={30} />
-              </Box>
-              <Box>
-                <Text color="brand" size="large" weight={600}>
-                  Verify your social accounts
-                </Text>
-              </Box>
-            </Box>
-            <Box direction="row" pad="medium" width="300px">
-              <Box flex={{ shrink: 0 }}>
-                <Image alt="metaverse" src={metaverseIcon} margin="small" width={32} height={32} />
-              </Box>
-              <Box>
-                <Text color="brand" size="large" weight={600}>
-                  Use it across the Web3 metaverse
-                </Text>
-              </Box>
-            </Box>
-          </Box>
-        </Box>
-      </Box>
-      <Box direction="row" pad="medium">
-        <Anchor href="https://github.com/ceramicstudio/self.id">
-          <Image alt="GitHub" src={footerGithubIcon} style={{ padding: '6px' }} />
-        </Anchor>
-        <Anchor href="https://discord.gg/TPmE2rdNWK">
-          <Image alt="Discord" src={footerDiscordIcon} style={{ padding: '6px' }} />
-        </Anchor>
-        <Anchor href="https://twitter.com/mySelfID">
-          <Image alt="Twitter" src={footerTwitterIcon} style={{ padding: '6px' }} />
-        </Anchor>
-        {/* <Anchor color="text" href="#" label="About" margin={{ left: 'medium', right: 'small' }} />
+        <Box direction="row" pad="medium">
+          <Box
+            direction={'row'}
+            style={{
+              backgroundColor: 'rgba(255,255,255,0.8)',
+              fontSize: 0,
+              lineHeight: 0,
+              padding: '0.2rem 0.6rem 0 0.2rem',
+            }}>
+            <Anchor href="https://github.com/ceramicstudio/self.id">
+              <Image alt="GitHub" src={footerGithubIcon} style={{ padding: '6px' }} />
+            </Anchor>
+            <Anchor href="https://discord.gg/TPmE2rdNWK">
+              <Image alt="Discord" src={footerDiscordIcon} style={{ padding: '6px' }} />
+            </Anchor>
+            <Anchor href="https://twitter.com/mySelfID">
+              <Image alt="Twitter" src={footerTwitterIcon} style={{ padding: '6px' }} />
+            </Anchor>
+            {/* <Anchor color="text" href="#" label="About" margin={{ left: 'medium', right: 'small' }} />
         <Anchor
           color="text"
           href="#"
           label="Integration"
           margin={{ left: 'small', right: 'medium' }}
         /> */}
-        <Text margin={{ left: 'medium' }}>
-          Powered by{' '}
-          <Anchor
-            color="text"
-            href="https://github.com/ceramicstudio/3id-connect"
-            label="3ID DID"
-            style={{ textDecoration: 'underline' }}
-          />
-          ,{' '}
-          <Anchor
-            color="text"
-            href="https://www.ceramic.network"
-            label="Ceramic Network"
-            style={{ textDecoration: 'underline' }}
-          />
-          , and{' '}
-          <Anchor
-            color="text"
-            href="https://idx.xyz"
-            label="IDX"
-            style={{ textDecoration: 'underline' }}
-          />
-        </Text>
+            <Text margin={{ left: 'medium' }}>
+              Powered by{' '}
+              <Anchor
+                color="text"
+                href="https://github.com/ceramicstudio/3id-connect"
+                label="3ID DID"
+                style={{ textDecoration: 'underline' }}
+              />
+              ,{' '}
+              <Anchor
+                color="text"
+                href="https://www.ceramic.network"
+                label="Ceramic Network"
+                style={{ textDecoration: 'underline' }}
+              />
+              , and{' '}
+              <Anchor
+                color="text"
+                href="https://idx.xyz"
+                label="IDX"
+                style={{ textDecoration: 'underline' }}
+              />
+            </Text>
+          </Box>
+        </Box>
       </Box>
-    </Box>
+    </ResponsiveBox>
   )
 }

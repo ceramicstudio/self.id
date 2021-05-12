@@ -7,7 +7,7 @@ export const theme: ThemeType = {
   global: {
     colors: {
       brand: BRAND_COLOR,
-      focus: BRAND_COLOR,
+      focus: 'inherit',
       text: '#181817',
       'neutral-1': '#757575',
       'neutral-2': '#888888',
