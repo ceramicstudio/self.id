@@ -11,9 +11,11 @@ const AccountButton = dynamic(() => import('../client/components/AccountButton')
 export default function Navbar() {
   return (
     <Box background="white" direction="row" height="80px" pad={{ horizontal: 'medium' }}>
-      <Box flex={false} margin={{ top: 'medium' }}>
-        <Link href="/">
-          <img src={logo} alt="Self.ID" />
+      <Box flex={false} align={'center'} justify={'center'}>
+        <Link href="/" passHref={true}>
+          <a style={{ marginTop: '0.3rem' }}>
+            <img src={logo} alt="Self.ID" />
+          </a>
         </Link>
       </Box>
       <Box flex="grow" align="end" justify="center">
