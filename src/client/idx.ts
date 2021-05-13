@@ -6,7 +6,7 @@ import type { BasicProfile } from '@ceramicstudio/idx-constants'
 import { AccountID } from 'caip'
 import type { AccountIDParams } from 'caip'
 
-import { CERAMIC_URL } from '../constants'
+import { CERAMIC_URL, CONNECT_URL, CONNECT_MANAGEMENT_URL } from '../constants'
 
 export type IDXEnv = {
   ceramic: Ceramic
@@ -27,7 +27,7 @@ export function createIDXEnv(existing?: IDXEnv): IDXEnv {
   const ceramic = new Ceramic(CERAMIC_URL)
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const idx = new IDX({ ceramic: ceramic as any })
-  const threeId = new ThreeIdConnect() // CONNECT_URL
+  const threeId = new ThreeIdConnect(CONNECT_URL, CONNECT_MANAGEMENT_URL) // CONNECT_URL
   return { ceramic, idx, threeId }
 }
 
