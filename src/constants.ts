@@ -1,5 +1,4 @@
-export const CERAMIC_URL =
-  process.env.NEXT_PUBLIC_CERAMIC_URL ?? 'https://ceramic-private.3boxlabs.com' // 'http://localhost:7007'
+export const CERAMIC_URL = 'https://ceramic-private.3boxlabs.com' // 'http://localhost:7007'
 
 export const CONNECT_URL = 'https://app.3idconnect.org' // 'http://localhost:30001/index.html'
 export const CONNECT_MANAGEMENT_URL = 'https://app.3idconnect.org/management/index.html'
