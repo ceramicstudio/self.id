@@ -7,13 +7,10 @@ import {
 } from '@ceramicstudio/multiauth'
 import type { PartialConnectorConfig } from '@ceramicstudio/multiauth'
 
-const injectedChainIds = process.env.NEXT_PUBLIC_INJECTED_CHAIN_IDS
 export const connectors: Array<PartialConnectorConfig> = [
   {
     key: 'injected',
-    connector: new InjectedConnector({
-      supportedChainIds: injectedChainIds?.split(',').map((v) => parseInt(v, 10)),
-    }),
+    connector: new InjectedConnector({}),
   },
 ]
 
