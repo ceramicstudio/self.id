@@ -1,10 +1,13 @@
 import { EthereumAuthProvider, ThreeIdConnect } from '@3id/connect'
 import type { EthereumProvider } from '@3id/connect'
+import ThreeIdResolver from '@ceramicnetwork/3id-did-resolver'
 import Ceramic from '@ceramicnetwork/http-client'
 import { IDX } from '@ceramicstudio/idx'
 import type { BasicProfile } from '@ceramicstudio/idx-constants'
 import { AccountID } from 'caip'
 import type { AccountIDParams } from 'caip'
+import { DID } from 'dids'
+import KeyDidResolver from 'key-did-resolver'
 
 import { CERAMIC_URL, CONNECT_URL, CONNECT_MANAGEMENT_URL } from '../constants'
 
@@ -24,10 +27,17 @@ export function createIDXEnv(existing?: IDXEnv): IDXEnv {
   if (existing != null) {
     void existing.ceramic.close()
   }
+
   const ceramic = new Ceramic(CERAMIC_URL)
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const idx = new IDX({ ceramic: ceramic as any })
+  const did = new DID({
+    resolver: { ...KeyDidResolver.getResolver(), ...ThreeIdResolver.getResolver(ceramic) },
+  })
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  void ceramic.setDID(did)
+
+  const idx = new IDX({ ceramic })
   const threeId = new ThreeIdConnect(CONNECT_URL, CONNECT_MANAGEMENT_URL) // CONNECT_URL
+
   return { ceramic, idx, threeId }
 }
 
@@ -47,7 +57,8 @@ export async function authenticate(
 ): Promise<KnownDIDs> {
   const authProvider = new EthereumAuthProvider(provider, address)
   await env.threeId.connect(authProvider)
-  await env.ceramic.setDIDProvider(env.threeId.getDidProvider() as any)
+  env.ceramic.did!.setProvider(env.threeId.getDidProvider())
+  await env.ceramic.did!.authenticate()
   // return await loadKnownDIDs(env.threeId)
   return {
     [env.idx.id]: { accounts: [AccountID.parse(env.threeId.accountId as string)] },
@@ -91,7 +102,13 @@ export async function loadKnownDIDsData(
 ): Promise<KnownDIDsData> {
   const dids = Object.keys(knownDIDs)
   const profiles = await Promise.all(
-    dids.map(async (did) => await idx.get<BasicProfile>('basicProfile', did))
+    dids.map(async (did) => {
+      try {
+        await idx.get<BasicProfile>('basicProfile', did)
+      } catch (err) {
+        return null
+      }
+    })
   )
   return dids.reduce((acc, did, i) => {
     acc[did] = { accounts: knownDIDs[did].accounts, profile: profiles[i] ?? null }

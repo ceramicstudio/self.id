@@ -3,6 +3,7 @@ import { Grommet } from 'grommet'
 import { Provider as StateProvider } from 'jotai'
 import NextApp, { AppInitialProps } from 'next/app'
 import Head from 'next/head'
+import { Toaster } from 'react-hot-toast'
 import { createGlobalStyle } from 'styled-components'
 
 const GlobalStyle = createGlobalStyle`   
@@ -60,6 +61,7 @@ export default class App extends NextApp<AppInitialProps> {
               <meta name="fortmatic-site-verification" content="4keQaoARYXbW4snM" />
             </Head>
             <Component {...pageProps} />
+            <Toaster />
           </Grommet>
         </StateProvider>
       </MultiauthProvider>

@@ -62,7 +62,11 @@ export const getServerSideProps: GetServerSideProps<Props, { id: string }> = asy
       // Main case: we expect a DID to be provided
       support = 'supported'
       const { idx } = await import('../server/idx')
-      loadedProfile = await idx.get<BasicProfile>('basicProfile', id)
+      try {
+        loadedProfile = await idx.get<BasicProfile>('basicProfile', id)
+      } catch (err) {
+        console.warn((err as Error).message)
+      }
     } else {
       support = 'unsupported'
     }
@@ -73,7 +77,6 @@ export const getServerSideProps: GetServerSideProps<Props, { id: string }> = asy
     }
   } else if (isCaip10(id)) {
     const { idx } = await import('../server/idx')
-
     try {
       const linkedDid = await idx.caip10ToDid(id)
       if (linkedDid != null) {
