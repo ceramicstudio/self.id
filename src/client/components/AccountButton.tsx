@@ -1,6 +1,6 @@
-import { Avatar, Box, Button, DropButton, Text } from 'grommet'
+import { Avatar, Box, Button, DropButton, Spinner, Text } from 'grommet'
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import avatarPlaceholder from '../../images/avatar-placeholder.png'
 import linkIcon from '../../images/icons/link.svg'
@@ -33,14 +33,24 @@ function DisplayAvatar({ label, src }: DisplayAvatarProps) {
 
 type MenuButtonProps = {
   label: string
+  loading?: boolean
   onClick: () => void
 }
 
-function MenuButton({ label, onClick }: MenuButtonProps) {
+function MenuButton({ label, loading, onClick }: MenuButtonProps) {
   return (
     <Button
       alignSelf="start"
-      icon={<img src={linkIcon} />}
+      icon={
+        loading ? (
+          <Spinner size="xsmall" />
+        ) : (
+          <img
+            src={linkIcon}
+            style={{ marginBottom: '2px', marginTop: '2px', marginRight: '4px' }}
+          />
+        )
+      }
       label={
         <Text color="neutral-2" weight="bold">
           {label}
@@ -58,6 +68,7 @@ export default function AccountButton() {
   const [login, loginModal] = useLogin()
   const logout = useLogout()
   const [knownDIDsData, loadDIDsData] = useDIDsData()
+  const [isLoadingProfile, setLoadingProfile] = useState(false)
 
   useEffect(() => {
     void loadDIDsData()
@@ -66,7 +77,10 @@ export default function AccountButton() {
   const toProfile = useCallback(
     (id: string | null) => {
       if (id != null) {
-        return router.push(`/${id}`)
+        setLoadingProfile(true)
+        return router.push(`/${id}`).then(() => {
+          setLoadingProfile(false)
+        })
       }
     },
     [router]
@@ -123,7 +137,11 @@ export default function AccountButton() {
           gap="small"
           pad="medium"
           round={{ corner: 'bottom', size: 'small' }}>
-          <MenuButton label="Profile" onClick={() => toProfile(auth.id as string)} />
+          <MenuButton
+            label="Profile"
+            loading={isLoadingProfile}
+            onClick={() => toProfile(auth.id as string)}
+          />
           <MenuButton label="Log out" onClick={() => logout()} />
         </Box>
       </Box>

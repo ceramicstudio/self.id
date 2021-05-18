@@ -10,7 +10,7 @@ import type { PartialConnectorConfig } from '@ceramicstudio/multiauth'
 export const connectors: Array<PartialConnectorConfig> = [
   {
     key: 'injected',
-    connector: new InjectedConnector({ supportedChainIds: [1, 3, 4, 5, 42] }),
+    connector: new InjectedConnector({}),
   },
 ]
 

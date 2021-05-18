@@ -1,6 +1,6 @@
 import type { ThemeType } from 'grommet'
 
-export const BRAND_COLOR = '#FF0022'
+export const BRAND_COLOR = '#FC1591'
 export const PLACEHOLDER_COLOR = '#949494'
 
 export const theme: ThemeType = {
