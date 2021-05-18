@@ -8,12 +8,12 @@ type AppURLs = {
 
 const CeramicEnvs: Record<CeramicNetwork, AppURLs> = {
   clay: {
-    ceramic: 'https://ceramic-clay-private.3boxlabs.com',
+    ceramic: 'https://ceramic-private-clay.3boxlabs.com',
     connect: 'https://app-clay.3idconnect.org',
     management: 'https://app-clay.3idconnect.org/management/index.html',
   },
   dev: {
-    ceramic: 'https://ceramic-dev-private.3boxlabs.com',
+    ceramic: 'https://ceramic-private-dev.3boxlabs.com',
     connect: 'https://app-dev.3idconnect.org',
     management: 'https://app-dev.3idconnect.org/management/index.html',
   },
