@@ -1,13 +1,13 @@
 import type { ThemeType } from 'grommet'
 
-export const BRAND_COLOR = '#FF0022'
+export const BRAND_COLOR = '#FC1591'
 export const PLACEHOLDER_COLOR = '#949494'
 
 export const theme: ThemeType = {
   global: {
     colors: {
       brand: BRAND_COLOR,
-      focus: BRAND_COLOR,
+      focus: 'inherit',
       text: '#181817',
       'neutral-1': '#757575',
       'neutral-2': '#888888',

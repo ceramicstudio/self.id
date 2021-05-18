@@ -5,13 +5,21 @@ const withPlugins = require('next-compose-plugins')
 const withImages = require('next-images')
 
 const nextConfig = {
-  reactStrictMode: true,
-  webpack: (config) => {
-    config.node = {
-      fs: 'empty',
-    }
-    return config
+  future: { webpack5: true },
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'Permissions-Policy',
+            value: 'interest-cohort=()',
+          },
+        ],
+      },
+    ]
   },
+  reactStrictMode: true,
 }
 
 module.exports = withPlugins([[withBundleAnalyzer({})], nextConfig, withImages])
