@@ -103,7 +103,7 @@ export async function loadKnownDIDsData(
   const profiles = await Promise.all(
     dids.map(async (did) => {
       try {
-        await idx.get<BasicProfile>('basicProfile', did)
+        return await idx.get<BasicProfile>('basicProfile', did)
       } catch (err) {
         return null
       }

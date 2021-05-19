@@ -1,5 +1,5 @@
 import type { BasicProfile, ImageSources } from '@ceramicstudio/idx-constants'
-import { Avatar, Box, Button, Image, Layer, Paragraph, Text, TextArea, TextInput } from 'grommet'
+import { Avatar, Box, Button, Image, Layer, Text, TextArea, TextInput } from 'grommet'
 import type { TextInputProps } from 'grommet'
 import { useCallback, useState } from 'react'
 import type { FormEvent, ReactNode } from 'react'
@@ -40,21 +40,6 @@ function changeProfile(profile: BasicProfile, { nationality, ...value }: FormVal
   }
 
   return changed
-}
-
-interface AlertProps {
-  color?: string
-  text: string
-}
-
-function Alert({ color, text }: AlertProps) {
-  return (
-    <Box justify="center" border={{ color, size: 'small' }} round={{ size: 'small' }}>
-      <Paragraph alignSelf="center" color={color}>
-        {text}
-      </Paragraph>
-    </Box>
-  )
 }
 
 interface CommonFieldProps {
@@ -182,18 +167,9 @@ export default function EditProfileModal({ onClose, profile }: ModalProps) {
     [editProfile, isLoading, onClose, profile, value]
   )
 
-  const alert = isLoading ? (
-    <Alert color="brand" text="Saving profile..." />
-  ) : editProfileState.status === 'failed' ? (
-    <Alert color="status-error" text="Failed to save profile" />
-  ) : editProfileState.status === 'done' ? (
-    <Alert color="status-ok" text="Profile successfully saved!" />
-  ) : null
-
   return (
     <Layer margin="small" onEsc={() => onClose()}>
       <Box as="form" margin="medium" onSubmit={onSubmit}>
-        {alert}
         <Box overflow="auto">
           <Box flex="grow">
             <ImageField
