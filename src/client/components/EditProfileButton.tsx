@@ -87,7 +87,7 @@ export default function EditProfileButton({ did, setProfile }: Props) {
           : 'Connect to edit'
       }
       onClick={onOpen}
-      style={{ border: 0, color: 'white' }}
+      style={{ border: 0, color: 'white', width: 180 }}
     />
   ) : null
   const modal =
