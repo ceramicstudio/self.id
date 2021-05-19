@@ -7,6 +7,7 @@ import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 
+import Layout from '../components/Layout'
 import Navbar from '../components/Navbar'
 import { getImageSrc } from '../image'
 import type { Dimensions } from '../image'
@@ -104,7 +105,7 @@ export const getServerSideProps: GetServerSideProps<Props, { id: string }> = asy
 }
 
 const Header = styled.div<{ url?: string }>`
-  height: 386px;
+  height: 310px;
   background-color: ${PLACEHOLDER_COLOR};
   ${(props) =>
     props.url &&
@@ -113,6 +114,10 @@ const Header = styled.div<{ url?: string }>`
       background-position: center;
       background-size: cover;
     `}
+
+  @media(min-width: 1536px) {
+    border-radius: 20px;
+  }
 `
 
 const Avatar = styled.div<{ url?: string }>`
@@ -150,13 +155,12 @@ function NoProfile({ id, setProfile, support }: NoProfileProps) {
   ) : null
 
   return (
-    <Box>
+    <Layout>
       <Head>
         <title>No profile found | self.ID</title>
       </Head>
-      <Header>
-        <Navbar />
-      </Header>
+      <Navbar />
+      <Header />
       <Box alignSelf="center" width="large">
         <Box direction="row" flex>
           <Avatar />
@@ -164,7 +168,7 @@ function NoProfile({ id, setProfile, support }: NoProfileProps) {
         </Box>
         <Name>No profile found</Name>
       </Box>
-    </Box>
+    </Layout>
   )
 }
 
@@ -248,7 +252,7 @@ export default function ProfilePage({ id, loadedProfile, support }: Props) {
   )
 
   return (
-    <Box>
+    <Layout>
       <Head>
         <title>{name} | Self.ID</title>
         <meta name="twitter:title" content={socialTitle} />
@@ -256,9 +260,8 @@ export default function ProfilePage({ id, loadedProfile, support }: Props) {
         {metaDescription}
         {metaImage}
       </Head>
-      <Header url={getImageURL(profile.background, { height: 310, width: 2000 })}>
-        <Navbar />
-      </Header>
+      <Navbar />
+      <Header url={getImageURL(profile.background, { height: 310, width: 2000 })} />
       <Box alignSelf="center" width="large" pad="medium">
         <Box direction="row" flex>
           <Avatar url={getImageURL(profile.image, { height: 150, width: 150 })} />
@@ -274,6 +277,6 @@ export default function ProfilePage({ id, loadedProfile, support }: Props) {
         {linksContainer}
         {locationContainer}
       </Box>
-    </Box>
+    </Layout>
   )
 }
