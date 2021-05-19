@@ -11,10 +11,19 @@ import { useIDXAuth, useDIDsData, useLogin, useLogout } from '../hooks'
 
 type DisplayAvatarProps = {
   label: string
+  loading?: boolean
   src?: string
 }
 
-function DisplayAvatar({ label, src }: DisplayAvatarProps) {
+function DisplayAvatar({ label, loading, src }: DisplayAvatarProps) {
+  const avatar = loading ? (
+    <Box pad="xxsmall">
+      <Spinner />
+    </Box>
+  ) : (
+    <Avatar size="32px" src={src ?? avatarPlaceholder} flex={false} />
+  )
+
   return (
     <Box
       border={{ color: 'neutral-5' }}
@@ -23,7 +32,7 @@ function DisplayAvatar({ label, src }: DisplayAvatarProps) {
       pad="xxsmall"
       round="large"
       width="250px">
-      <Avatar size="35px" src={src ?? avatarPlaceholder} flex={false} />
+      {avatar}
       <Text alignSelf="center" size="medium" truncate weight="bold">
         {label}
       </Text>
@@ -152,13 +161,13 @@ export default function AccountButton() {
         dropAlign={{ top: 'bottom', right: 'right' }}
         dropContent={content}
         dropProps={{ plain: true }}>
-        <DisplayAvatar label={displayName} src={avatarSrc} />
+        <DisplayAvatar label={displayName} loading={isLoadingProfile} src={avatarSrc} />
       </DropButton>
     )
   }
 
   return auth.state === 'loading' ? (
-    <DisplayAvatar label="Connecting..." />
+    <DisplayAvatar label="Connecting..." loading />
   ) : (
     <>
       <Button
