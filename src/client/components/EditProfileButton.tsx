@@ -79,7 +79,13 @@ export default function EditProfileButton({ did, setProfile }: Props) {
     <Button
       primary
       color="black"
-      label={state.loadingProfile ? 'Loading...' : 'Edit'}
+      label={
+        state.loadingProfile
+          ? 'Loading...'
+          : auth.state === 'confirmed'
+          ? 'Edit'
+          : 'Connect to edit'
+      }
       onClick={onOpen}
       style={{ border: 0, color: 'white' }}
     />

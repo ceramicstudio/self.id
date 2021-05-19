@@ -4,6 +4,7 @@ import type { BasicProfile } from '@ceramicstudio/idx-constants'
 // import type { AccountIDParams } from 'caip'
 import { useAtom } from 'jotai'
 import { useCallback } from 'react'
+import toast from 'react-hot-toast'
 
 import {
   authenticate,
@@ -209,31 +210,51 @@ export function useIDXAuth(): [
 //   return [createState.creating, create, createState.error]
 // }
 
-export function useEditProfile(): [EditProfileState, (profile: BasicProfile) => Promise<void>] {
+export function useEditProfile(): [
+  EditProfileState,
+  (profile: BasicProfile) => Promise<void>,
+  () => void
+] {
   const [editState, setEditState] = useAtom(editProfileAtom)
   const [knownDIDsData, setKnownDIDsData] = useAtom(knownDIDsDataAtom)
   const env = useIDXEnv()
+
+  const applyEdit = useCallback(
+    async (profile: BasicProfile) => {
+      if (knownDIDsData == null) {
+        throw new Error('DID data is not available')
+      }
+      const updatedDIDsData = await editProfile(env, knownDIDsData, profile)
+      await setKnownDIDsData(updatedDIDsData)
+      await setEditState({ status: 'done' })
+    },
+    [env, knownDIDsData, setEditState, setKnownDIDsData]
+  )
 
   const edit = useCallback(
     async (profile: BasicProfile) => {
       if (editState.status === 'editing') {
         return
       }
-      if (knownDIDsData == null) {
-        throw new Error('DID data is not available')
-      }
 
-      await setEditState({ status: 'editing' })
       try {
-        const updatedDIDsData = await editProfile(env, knownDIDsData, profile)
-        await setKnownDIDsData(updatedDIDsData)
+        await setEditState({ status: 'editing' })
+        await toast.promise(applyEdit(profile), {
+          loading: 'Saving profile...',
+          success: 'Profile successfully saved!',
+          error: 'Failed to save profile',
+        })
         await setEditState({ status: 'done' })
       } catch (error) {
         await setEditState({ status: 'failed', error: error as Error })
       }
     },
-    [editState.status, env, knownDIDsData, setEditState, setKnownDIDsData]
+    [applyEdit, editState.status, setEditState]
   )
 
-  return [editState, edit]
+  const reset = useCallback(() => {
+    void setEditState({ status: 'pending' })
+  }, [setEditState])
+
+  return [editState, edit, reset]
 }

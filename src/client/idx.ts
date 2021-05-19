@@ -27,17 +27,9 @@ export function createIDXEnv(existing?: IDXEnv): IDXEnv {
   if (existing != null) {
     void existing.ceramic.close()
   }
-
   const ceramic = new Ceramic(CERAMIC_URL)
-  const did = new DID({
-    resolver: { ...KeyDidResolver.getResolver(), ...ThreeIdResolver.getResolver(ceramic) },
-  })
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  void ceramic.setDID(did)
-
   const idx = new IDX({ ceramic })
-  const threeId = new ThreeIdConnect(CONNECT_URL, CONNECT_MANAGEMENT_URL) // CONNECT_URL
-
+  const threeId = new ThreeIdConnect(CONNECT_URL, CONNECT_MANAGEMENT_URL)
   return { ceramic, idx, threeId }
 }
 
@@ -57,11 +49,18 @@ export async function authenticate(
 ): Promise<KnownDIDs> {
   const authProvider = new EthereumAuthProvider(provider, address)
   await env.threeId.connect(authProvider)
-  env.ceramic.did!.setProvider(env.threeId.getDidProvider())
-  await env.ceramic.did!.authenticate()
+
+  const did = new DID({
+    provider: env.threeId.getDidProvider(),
+    resolver: { ...KeyDidResolver.getResolver(), ...ThreeIdResolver.getResolver(env.ceramic) },
+  })
+  await did.authenticate()
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  await env.ceramic.setDID(did)
   // return await loadKnownDIDs(env.threeId)
   return {
-    [env.idx.id]: { accounts: [AccountID.parse(env.threeId.accountId as string)] },
+    [did.id]: { accounts: [AccountID.parse(env.threeId.accountId as string)] },
   } as KnownDIDs
 }
 
@@ -104,7 +103,7 @@ export async function loadKnownDIDsData(
   const profiles = await Promise.all(
     dids.map(async (did) => {
       try {
-        await idx.get<BasicProfile>('basicProfile', did)
+        return await idx.get<BasicProfile>('basicProfile', did)
       } catch (err) {
         return null
       }

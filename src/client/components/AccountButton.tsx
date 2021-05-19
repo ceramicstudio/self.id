@@ -23,8 +23,8 @@ function DisplayAvatar({ label, src }: DisplayAvatarProps) {
       pad="xxsmall"
       round="large"
       width="250px">
-      <Avatar size="35px" src={src ?? avatarPlaceholder} />
-      <Text alignSelf="center" size="medium" weight="bold">
+      <Avatar size="35px" src={src ?? avatarPlaceholder} flex={false} />
+      <Text alignSelf="center" size="medium" truncate weight="bold">
         {label}
       </Text>
     </Box>
