@@ -263,7 +263,7 @@ export default function ProfilePage({ id, loadedProfile, support }: Props) {
         <Box direction="row" flex>
           <Avatar url={getImageURL(profile.image, { height: 150, width: 150 })} />
           <Box flex>
-            <Box alignSelf="end" width="150px">
+            <Box alignSelf="end" width="180px">
               <EditProfileButton did={id} setProfile={setProfile} />
             </Box>
           </Box>
