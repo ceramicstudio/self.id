@@ -1,6 +1,7 @@
 import type { ImageMetadata, ImageSources } from '@ceramicstudio/idx-constants'
 import { useCallback, useRef, useState } from 'react'
 import type { ChangeEvent } from 'react'
+import toast from 'react-hot-toast'
 
 import { IPFS_PREFIX } from '../../constants'
 import type { Dimensions } from '../../image'
@@ -78,6 +79,7 @@ export function useImageUpload(
 
       const file = e.target?.files?.[0]
       if (file == null || file.size > maxSize) {
+        toast.error('Selected image exceeds maximum allowed size')
         resetInput()
         return
       }
