@@ -77,6 +77,7 @@ export default function AccountButton() {
   const [login, loginModal] = useLogin()
   const logout = useLogout()
   const [knownDIDsData, loadDIDsData] = useDIDsData()
+  const [isMenuOpen, setMenuOpen] = useState(false)
   const [isLoadingProfile, setLoadingProfile] = useState(false)
 
   useEffect(() => {
@@ -88,6 +89,7 @@ export default function AccountButton() {
       if (id != null) {
         setLoadingProfile(true)
         return router.push(`/${id}`).then(() => {
+          setMenuOpen(false)
           setLoadingProfile(false)
         })
       }
@@ -160,7 +162,14 @@ export default function AccountButton() {
       <DropButton
         dropAlign={{ top: 'bottom', right: 'right' }}
         dropContent={content}
-        dropProps={{ plain: true }}>
+        dropProps={{ plain: true }}
+        onClose={() => {
+          setMenuOpen(false)
+        }}
+        onOpen={() => {
+          setMenuOpen(true)
+        }}
+        open={isMenuOpen}>
         <DisplayAvatar label={displayName} loading={isLoadingProfile} src={avatarSrc} />
       </DropButton>
     )
