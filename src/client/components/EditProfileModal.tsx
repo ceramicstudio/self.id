@@ -4,8 +4,8 @@ import type { TextInputProps } from 'grommet'
 import { useCallback, useState } from 'react'
 import type { FormEvent, ReactNode } from 'react'
 
-import { getImageSrc } from '../../image'
-import type { Dimensions } from '../../image'
+import { getImageSrc } from '../../sdk/images'
+import type { Dimensions } from '../../sdk/images'
 import { useEditProfile, useImageUpload } from '../hooks'
 
 export type FormValue = {

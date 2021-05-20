@@ -1,13 +1,13 @@
 import { useMultiAuth } from '@ceramicstudio/multiauth'
 import { Button } from 'grommet'
 
-import { useIDXAuth, useLogin } from '../hooks'
+import { useEnvState, useLogin } from '../hooks'
 
 const style = { color: 'white', width: 200 }
 
 export default function LoginButton() {
   const [authState] = useMultiAuth()
-  const [auth] = useIDXAuth()
+  const { auth } = useEnvState()
   const [login, loginModal] = useLogin()
 
   if (auth.state === 'confirmed') {

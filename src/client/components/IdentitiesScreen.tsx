@@ -1,14 +1,14 @@
 import { Avatar, Box, Button, Collapsible, Heading, Text } from 'grommet'
 import { useMemo, useState } from 'react'
 
-import { getImageSrc } from '../../image'
+import { getImageSrc } from '../../sdk/images'
 import avatarPlaceholder from '../../images/avatar-placeholder.png'
 import arrowDownIcon from '../../images/icons/arrow-down.svg'
 import arrowUpIcon from '../../images/icons/arrow-up.svg'
 import { formatDID } from '../../utils'
 
-import { useDIDsData, useIDXAuth } from '../hooks'
-import type { KnownDIDData } from '../idx'
+import { useDIDsData, useEnvState } from '../hooks'
+import type { KnownDIDData } from '../env'
 
 import ConnectedContainer from './ConnectedContainer'
 
@@ -152,7 +152,7 @@ function IdentityItem({ data, did, selected }: ItemProps) {
 // }
 
 export default function IdentitiesScreen() {
-  const [auth] = useIDXAuth()
+  const { auth } = useEnvState()
   const [didsData] = useDIDsData()
 
   const items = useMemo(() => {

@@ -4,10 +4,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import avatarPlaceholder from '../../images/avatar-placeholder.png'
 import linkIcon from '../../images/icons/link.svg'
-import { getImageSrc } from '../../image'
+import { getImageSrc } from '../../sdk/images'
 import { formatDID } from '../../utils'
 
-import { useIDXAuth, useDIDsData, useLogin, useLogout } from '../hooks'
+import { useDIDsData, useEnvState, useLogin, useLogout } from '../hooks'
 
 type DisplayAvatarProps = {
   label: string
@@ -73,7 +73,7 @@ function MenuButton({ label, loading, onClick }: MenuButtonProps) {
 
 export default function AccountButton() {
   const router = useRouter()
-  const [auth] = useIDXAuth()
+  const { auth } = useEnvState()
   const [login, loginModal] = useLogin()
   const logout = useLogout()
   const [knownDIDsData, loadDIDsData] = useDIDsData()
@@ -99,7 +99,9 @@ export default function AccountButton() {
 
   const onClickLogin = useCallback(() => {
     if (auth.state !== 'loading') {
-      void login().then(toProfile)
+      void login().then((self) => {
+        return self ? toProfile(self.id) : null
+      })
     }
   }, [auth.state, login, toProfile])
 

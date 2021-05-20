@@ -2,7 +2,7 @@ import { useMultiAuth } from '@ceramicstudio/multiauth'
 import { Button } from 'grommet'
 import type { ReactNode } from 'react'
 
-import { useIDXAuth, useLogin } from '../hooks'
+import { useEnvState, useLogin } from '../hooks'
 
 const style = { color: 'white', width: 200 }
 
@@ -12,7 +12,7 @@ export type Props = {
 
 export default function ConnectedContainer({ children }: Props) {
   const [authState] = useMultiAuth()
-  const [auth] = useIDXAuth()
+  const { auth } = useEnvState()
   const [login, loginModal] = useLogin()
 
   if (auth.state === 'confirmed') {

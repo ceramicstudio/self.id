@@ -1,7 +1,7 @@
 import { Box, Button, Text } from 'grommet'
 import type { ReactNode } from 'react'
 
-import { useIDXAuth, useKnownDIDs } from '../hooks'
+import { useEnvState, useKnownDIDs } from '../hooks'
 
 import AccountsList from './DIDAccountsList'
 import LoginButton from './LoginButton'
@@ -47,7 +47,7 @@ export type Props = {
 }
 
 export default function DIDsList({ select, selected }: Props) {
-  const [auth] = useIDXAuth()
+  const { auth } = useEnvState()
   const knownDIDs = useKnownDIDs()
 
   if (auth.state !== 'confirmed') {

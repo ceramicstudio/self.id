@@ -5,30 +5,36 @@ import { useCallback, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import toast from 'react-hot-toast'
 
+import type { SelfID } from '../../sdk/self'
 import type { Deferred } from '../../utils'
 
-import { useIDXAuth, useResetIDXEnv } from './idx'
+import { useEnv } from './env'
 
 type LoginSelectAccount = {
   accounts: Array<string>
   value: Deferred<string | null>
 }
 
-export function useLogin(): [(switchAccount?: boolean) => Promise<string | null>, ReactNode] {
+export function useLogin(): [(switchAccount?: boolean) => Promise<SelfID | null>, ReactNode] {
   const [authState, connect] = useMultiAuth()
-  const [auth, tryAuth, clearAuth] = useIDXAuth()
+  const [env, tryAuth, resetEnv] = useEnv()
   const [select, _setSelect] = useState<LoginSelectAccount | null>(null)
 
   const login = useCallback(
     async (switchAccount?: boolean) => {
-      if (auth.state === 'confirmed' && authState.status === 'connected' && !switchAccount) {
-        return auth.id
+      if (
+        env.auth.state === 'confirmed' &&
+        authState.status === 'connected' &&
+        !switchAccount &&
+        env.self !== null
+      ) {
+        return env.self
       }
 
       let eth: AuthAccount<'ethereum'> | null = null
       try {
         if (switchAccount) {
-          clearAuth()
+          resetEnv()
           eth = await connect({ mode: 'force' })
         } else {
           eth = await connect({ mode: 'use' })
@@ -42,7 +48,7 @@ export function useLogin(): [(switchAccount?: boolean) => Promise<string | null>
         ? await tryAuth(eth.provider.state.provider as any, eth.provider.state.account)
         : null
     },
-    [auth, clearAuth, authState, connect, tryAuth]
+    [authState, connect, env, resetEnv, tryAuth]
   )
 
   const onClose = useCallback(() => {
@@ -84,12 +90,10 @@ export function useLogin(): [(switchAccount?: boolean) => Promise<string | null>
 
 export function useLogout() {
   const disconnect = useMultiAuth()[2]
-  const clearAuth = useIDXAuth()[2]
-  const resetEnv = useResetIDXEnv()
+  const resetEnv = useEnv()[2]
 
   return useCallback(() => {
-    resetEnv()
-    clearAuth()
     disconnect()
-  }, [clearAuth, disconnect, resetEnv])
+    resetEnv()
+  }, [disconnect, resetEnv])
 }

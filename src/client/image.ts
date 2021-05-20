@@ -1,6 +1,6 @@
 import Pica from 'pica'
 
-import type { Dimensions, SizeMode } from '../image'
+import type { Dimensions, SizeMode } from '../sdk/images'
 
 const pica = new Pica()
 

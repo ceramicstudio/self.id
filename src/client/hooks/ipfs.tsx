@@ -3,10 +3,10 @@ import { useCallback, useRef, useState } from 'react'
 import type { ChangeEvent } from 'react'
 import toast from 'react-hot-toast'
 
-import { IPFS_PREFIX } from '../../constants'
-import type { Dimensions } from '../../image'
+import type { Dimensions } from '../../sdk/images'
+import { IPFS_PREFIX, addFile } from '../../sdk/ipfs'
+
 import { loadImage, resizeImageElement } from '../image'
-import { addFile } from '../ipfs'
 
 const UPLOAD_MAX_SIZE = 2500000
 

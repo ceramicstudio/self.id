@@ -1,9 +1,9 @@
 import { Text } from 'grommet'
 
-import { useIDXAuth } from '../hooks'
+import { useEnvState } from '../hooks'
 
 export default function DisplayDID() {
-  const [auth] = useIDXAuth()
+  const { auth } = useEnvState()
 
   let text
   switch (auth.state) {

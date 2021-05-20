@@ -9,8 +9,8 @@ import styled, { css } from 'styled-components'
 
 import Layout from '../components/Layout'
 import Navbar from '../components/Navbar'
-import { getImageSrc } from '../image'
-import type { Dimensions } from '../image'
+import { getImageSrc } from '../sdk/images'
+import type { Dimensions } from '../sdk/images'
 import avatarPlaceholder from '../images/avatar-placeholder.png'
 import countryIcon from '../images/icons/country.png'
 import linkIcon from '../images/icons/link.svg'
@@ -62,12 +62,8 @@ export const getServerSideProps: GetServerSideProps<Props, { id: string }> = asy
     if (isSupportedDid(id)) {
       // Main case: we expect a DID to be provided
       support = 'supported'
-      const { idx } = await import('../server/idx')
-      try {
-        loadedProfile = await idx.get<BasicProfile>('basicProfile', id)
-      } catch (err) {
-        console.warn((err as Error).message)
-      }
+      const { core } = await import('../server')
+      loadedProfile = await core.getProfile(id)
     } else {
       support = 'unsupported'
     }
@@ -77,9 +73,9 @@ export const getServerSideProps: GetServerSideProps<Props, { id: string }> = asy
       redirect: { destination: `/${id}${ETH_CHAIN_ID}`, permanent: true },
     }
   } else if (isCaip10(id)) {
-    const { idx } = await import('../server/idx')
+    const { core } = await import('../server')
     try {
-      const linkedDid = await idx.caip10ToDid(id)
+      const linkedDid = await core.idx.caip10ToDid(id)
       if (linkedDid != null) {
         // If there is a linked DID, redirect to the DID URL
         // This is a temporary redirect as the CAIP-10 could get linked to another DID

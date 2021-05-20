@@ -1,6 +1,6 @@
 import type { ImageMetadata, ImageSources } from '@ceramicstudio/idx-constants'
 
-import { IPFS_PREFIX, IPFS_URL } from './constants'
+import { IPFS_PREFIX, IPFS_URL } from './ipfs'
 
 export type Dimensions = { height: number; width: number }
 export type SizeMode = 'contain' | 'cover'

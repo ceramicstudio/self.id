@@ -2,7 +2,9 @@ import type { BasicProfile } from '@ceramicstudio/idx-constants'
 import { Button } from 'grommet'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { useIDXAuth, useIDXEnv, useKnownDIDs, useLogin } from '../hooks'
+import type { SelfID } from '../../sdk/self'
+
+import { useEnvState, useKnownDIDs, useLogin } from '../hooks'
 
 import EditProfileModal from './EditProfileModal'
 
@@ -18,18 +20,22 @@ type EditableState =
 type State = { canEdit: false } | ({ canEdit: true } & EditableState)
 
 export default function EditProfileButton({ did, setProfile }: Props) {
-  const [auth] = useIDXAuth()
-  const { idx } = useIDXEnv()
+  const env = useEnvState()
   const knownDIDs = useKnownDIDs()
   const [login, loginModal] = useLogin()
 
   const ownDIDs = useMemo(() => Object.keys(knownDIDs), [knownDIDs])
   const [state, setState] = useState<State>({ canEdit: false })
 
-  const loadAndOpen = useCallback((id) => {
-    idx.get<BasicProfile>('basicProfile', id).then(
+  const loadAndOpen = useCallback((self: SelfID) => {
+    self.getProfile().then(
       (profile) => {
-        setState({ canEdit: true, loadingProfile: false, modalOpen: true, profile: profile ?? {} })
+        setState({
+          canEdit: true,
+          loadingProfile: false,
+          modalOpen: true,
+          profile: profile ?? {},
+        })
       },
       (err) => {
         console.warn('Failed to load profile', err)
@@ -49,23 +55,23 @@ export default function EditProfileButton({ did, setProfile }: Props) {
   )
 
   const onOpen = useCallback(() => {
-    if (auth.state === 'confirmed') {
+    if (env.auth.state === 'confirmed' && env.self !== null) {
       setState({ canEdit: true, loadingProfile: true, modalOpen: false })
-      loadAndOpen(auth.id)
-    } else if (auth.state !== 'loading') {
+      loadAndOpen(env.self)
+    } else if (env.auth.state !== 'loading') {
       setState({ canEdit: true, loadingProfile: true, modalOpen: false })
       login().then(
-        (id) => {
-          if (id == null) {
+        (self) => {
+          if (self == null) {
             setState({ canEdit: true, loadingProfile: false, modalOpen: false })
           } else {
-            loadAndOpen(id)
+            loadAndOpen(self)
           }
         },
         () => console.warn('Failed to authenticate DID')
       )
     }
-  }, [auth, loadAndOpen, login])
+  }, [env, loadAndOpen, login])
 
   useEffect(() => {
     if (did != null && ownDIDs.includes(did)) {
@@ -82,7 +88,7 @@ export default function EditProfileButton({ did, setProfile }: Props) {
       label={
         state.loadingProfile
           ? 'Loading...'
-          : auth.state === 'confirmed'
+          : env.auth.state === 'confirmed'
           ? 'Edit'
           : 'Connect to edit'
       }
