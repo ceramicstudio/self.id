@@ -157,7 +157,7 @@ function NoProfile({ id, setProfile, support }: NoProfileProps) {
   return (
     <Layout>
       <Head>
-        <title>No profile found | self.ID</title>
+        <title>No profile | self.ID</title>
       </Head>
       <Navbar />
       <Header />
@@ -166,7 +166,7 @@ function NoProfile({ id, setProfile, support }: NoProfileProps) {
           <Avatar />
           {edit}
         </Box>
-        <Name>No profile found</Name>
+        <Name>No profile</Name>
       </Box>
     </Layout>
   )
