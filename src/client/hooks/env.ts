@@ -69,7 +69,7 @@ export function useEnv(): [
   )
 
   const resetEnv = useCallback(() => {
-    void setEnv(getInitialEnv())
+    void setEnv(getInitialEnv(false))
     void setKnownDIDs({})
   }, [setEnv, setKnownDIDs])
 

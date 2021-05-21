@@ -37,11 +37,16 @@ export type EnvState = {
   self: SelfID | null
 }
 
-export function getInitialEnv(): EnvState {
+export function getInitialEnv(checkLocal = true): EnvState {
+  const client = new WebClient(CERAMIC_NETWORK)
+  if (!checkLocal) {
+    return { auth: { state: 'unknown' }, client, self: null }
+  }
+
   const id = localStorage.getItem(SELECTED_DID_KEY) || null
   return {
     auth: id ? { state: 'local', id } : { state: 'unknown' },
-    client: new WebClient(CERAMIC_NETWORK),
+    client,
     self: null,
   }
 }

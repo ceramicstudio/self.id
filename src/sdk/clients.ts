@@ -17,9 +17,12 @@ export class WebClient extends Core {
     return this._threeId
   }
 
-  async authenticate(authProvider: EthereumAuthProvider): Promise<DID> {
+  async authenticate(authProvider: EthereumAuthProvider, attachToCeramic = false): Promise<DID> {
     const did = await this.connect(authProvider)
     await did.authenticate()
+    if (attachToCeramic) {
+      this.ceramic.did = did
+    }
     return did
   }
 

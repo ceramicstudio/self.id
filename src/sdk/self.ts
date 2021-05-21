@@ -12,9 +12,7 @@ export class SelfID implements Identifyable {
     authProvider: EthereumAuthProvider
   ): Promise<SelfID> {
     const client = new WebClient(network)
-    const did = await client.authenticate(authProvider)
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    await client.ceramic.setDID(did)
+    const did = await client.authenticate(authProvider, true)
     return new SelfID(client, did)
   }
 
