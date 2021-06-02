@@ -3,8 +3,8 @@ import { useCallback, useRef, useState } from 'react'
 import type { ChangeEvent } from 'react'
 import toast from 'react-hot-toast'
 
-import type { Dimensions } from '../../sdk/images'
-import { IPFS_PREFIX, addFile } from '../../sdk/ipfs'
+import type { Dimensions } from '../../sdk'
+import { IPFS_PREFIX, addFile } from '../../sdk/web'
 
 import { loadImage, resizeImageElement } from '../image'
 

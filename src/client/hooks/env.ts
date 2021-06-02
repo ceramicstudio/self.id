@@ -6,7 +6,7 @@ import { useAtom } from 'jotai'
 import { useCallback } from 'react'
 import toast from 'react-hot-toast'
 
-import type { SelfID } from '../../sdk/self'
+import type { SelfID } from '../../sdk/web'
 
 import { authenticate, editProfile, loadKnownDIDsData } from '../env'
 import type { KnownDIDsData } from '../env'

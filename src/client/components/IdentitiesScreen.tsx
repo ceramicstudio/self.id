@@ -1,7 +1,7 @@
 import { Avatar, Box, Button, Collapsible, Heading, Text } from 'grommet'
 import { useMemo, useState } from 'react'
 
-import { getImageSrc } from '../../sdk/images'
+import { getImageSrc } from '../../sdk'
 import avatarPlaceholder from '../../images/avatar-placeholder.png'
 import arrowDownIcon from '../../images/icons/arrow-down.svg'
 import arrowUpIcon from '../../images/icons/arrow-up.svg'

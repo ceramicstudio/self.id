@@ -2,7 +2,7 @@ import type { BasicProfile } from '@ceramicstudio/idx-constants'
 import { Button } from 'grommet'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import type { SelfID } from '../../sdk/self'
+import type { SelfID } from '../../sdk/web'
 
 import { useEnvState, useKnownDIDs, useLogin } from '../hooks'
 

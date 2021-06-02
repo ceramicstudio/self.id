@@ -1,4 +1,4 @@
-import type { CeramicNetwork } from './sdk/config'
+import type { CeramicNetwork } from './sdk'
 
 export const CERAMIC_NETWORK = (process.env.NEXT_PUBLIC_CERAMIC_NETWORK as CeramicNetwork) ?? 'clay'
 

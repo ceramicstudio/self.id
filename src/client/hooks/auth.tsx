@@ -5,7 +5,7 @@ import { useCallback, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import toast from 'react-hot-toast'
 
-import type { SelfID } from '../../sdk/self'
+import type { SelfID } from '../../sdk/web'
 import type { Deferred } from '../../utils'
 
 import { useEnv } from './env'

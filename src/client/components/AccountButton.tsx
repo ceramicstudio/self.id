@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import avatarPlaceholder from '../../images/avatar-placeholder.png'
 import linkIcon from '../../images/icons/link.svg'
-import { getImageSrc } from '../../sdk/images'
+import { getImageSrc } from '../../sdk'
 import { formatDID } from '../../utils'
 
 import { useDIDsData, useEnvState, useLogin, useLogout } from '../hooks'

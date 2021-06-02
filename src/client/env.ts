@@ -3,8 +3,7 @@ import type { EthereumProvider } from '@3id/connect'
 import type { BasicProfile } from '@ceramicstudio/idx-constants'
 import type { AccountIDParams } from 'caip'
 
-import { WebClient } from '../sdk/clients'
-import { SelfID } from '../sdk/self'
+import { SelfID, WebClient } from '../sdk/web'
 
 export type KnownDID = { accounts: Array<AccountIDParams> }
 export type KnownDIDs = Record<string, KnownDID>

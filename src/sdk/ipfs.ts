@@ -1,6 +1,4 @@
-export const IPFS_API_URL = 'https://ipfs.infura.io:5001/api/v0'
-export const IPFS_URL = 'https://ipfs.infura.io/ipfs/'
-export const IPFS_PREFIX = 'ipfs://'
+import { IPFS_API_URL } from './constants'
 
 export type LinkData = {
   Name: string

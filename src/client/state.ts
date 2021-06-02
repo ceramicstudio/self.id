@@ -1,8 +1,8 @@
 import { atom } from 'jotai'
 
 import { CERAMIC_NETWORK } from '../constants'
-import { WebClient } from '../sdk/clients'
-import type { SelfID } from '../sdk/self'
+import { WebClient } from '../sdk/web'
+import type { SelfID } from '../sdk/web'
 
 import type { KnownDIDs, KnownDIDsData } from './env'
 
