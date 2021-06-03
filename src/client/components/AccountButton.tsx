@@ -1,4 +1,5 @@
 import { Avatar, Box, Button, DropButton, Spinner, Text } from 'grommet'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
@@ -41,14 +42,16 @@ function DisplayAvatar({ label, loading, src }: DisplayAvatarProps) {
 }
 
 type MenuButtonProps = {
+  href?: string
   label: string
   loading?: boolean
-  onClick: () => void
+  onClick?: () => void
 }
 
-function MenuButton({ label, loading, onClick }: MenuButtonProps) {
+function MenuButton({ label, loading, ...props }: MenuButtonProps) {
   return (
     <Button
+      {...props}
       alignSelf="start"
       icon={
         loading ? (
@@ -65,7 +68,6 @@ function MenuButton({ label, loading, onClick }: MenuButtonProps) {
           {label}
         </Text>
       }
-      onClick={onClick}
       plain
     />
   )
@@ -74,7 +76,7 @@ function MenuButton({ label, loading, onClick }: MenuButtonProps) {
 export default function AccountButton() {
   const router = useRouter()
   const { auth } = useEnvState()
-  const [login, loginModal] = useLogin()
+  const login = useLogin()
   const logout = useLogout()
   const [knownDIDsData, loadDIDsData] = useDIDsData()
   const [isMenuOpen, setMenuOpen] = useState(false)
@@ -155,6 +157,9 @@ export default function AccountButton() {
             loading={isLoadingProfile}
             onClick={() => toProfile(auth.id as string)}
           />
+          <Link href="/me/settings" passHref>
+            <MenuButton label="Settings" onClick={() => setMenuOpen(false)} />
+          </Link>
           <MenuButton label="Log out" onClick={() => logout()} />
         </Box>
       </Box>
@@ -180,15 +185,12 @@ export default function AccountButton() {
   return auth.state === 'loading' ? (
     <DisplayAvatar label="Connecting..." loading />
   ) : (
-    <>
-      <Button
-        primary
-        color="black"
-        label="Connect"
-        onClick={onClickLogin}
-        style={{ border: 0, color: 'white' }}
-      />
-      {loginModal}
-    </>
+    <Button
+      primary
+      color="black"
+      label="Connect"
+      onClick={onClickLogin}
+      style={{ border: 0, color: 'white' }}
+    />
   )
 }

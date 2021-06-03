@@ -1,10 +1,10 @@
 import { useMultiAuth } from '@ceramicstudio/multiauth'
-import { Button } from 'grommet'
+import { Button, Text } from 'grommet'
 import type { ReactNode } from 'react'
 
 import { useEnvState, useLogin } from '../hooks'
 
-const style = { color: 'white', width: 200 }
+const style = { color: 'white', marginTop: 10, width: 200 }
 
 export type Props = {
   children: ReactNode
@@ -13,7 +13,7 @@ export type Props = {
 export default function ConnectedContainer({ children }: Props) {
   const [authState] = useMultiAuth()
   const { auth } = useEnvState()
-  const [login, loginModal] = useLogin()
+  const login = useLogin()
 
   if (auth.state === 'confirmed') {
     return <>{children}</>
@@ -28,8 +28,8 @@ export default function ConnectedContainer({ children }: Props) {
 
   return (
     <>
+      <Text weight="bold">Please connect your DID to access the data needed by this page.</Text>
       {button}
-      {loginModal}
     </>
   )
 }

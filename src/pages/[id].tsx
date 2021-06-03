@@ -27,7 +27,7 @@ export function getImageURL(
   return sources ? getImageSrc(sources, dimensions) : undefined
 }
 
-const EditProfileButton = dynamic(() => import('../client/components/EditProfileButton'), {
+const ConnectSettingsButton = dynamic(() => import('../client/components/ConnectSettingsButton'), {
   ssr: false,
 })
 
@@ -137,15 +137,14 @@ const Name = styled.h1`
 
 type NoProfileProps = {
   id: string | null
-  setProfile: (profile: BasicProfile) => void
   support: Support
 }
 
-function NoProfile({ id, setProfile, support }: NoProfileProps) {
+function NoProfile({ id, support }: NoProfileProps) {
   const edit = canEditProfile(support) ? (
     <Box flex>
       <Box alignSelf="end" margin="medium" width="150px">
-        <EditProfileButton did={id} setProfile={setProfile} />
+        <ConnectSettingsButton did={id} />
       </Box>
     </Box>
   ) : null
@@ -175,7 +174,7 @@ export default function ProfilePage({ id, loadedProfile, support }: Props) {
   }, [loadedProfile])
 
   if (id == null || profile == null || !canEditProfile(support)) {
-    return <NoProfile id={id} setProfile={setProfile} support={support} />
+    return <NoProfile id={id} support={support} />
   }
 
   const name = profile.name ?? '(no name)'
@@ -262,7 +261,7 @@ export default function ProfilePage({ id, loadedProfile, support }: Props) {
         <Box direction="row" flex>
           <Avatar url={getImageURL(profile.image, { height: 150, width: 150 })} />
           <Box align="end" flex>
-            <EditProfileButton did={id} setProfile={setProfile} />
+            <ConnectSettingsButton did={id} />
           </Box>
         </Box>
         <Name>
