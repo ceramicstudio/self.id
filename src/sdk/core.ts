@@ -1,7 +1,7 @@
 import ThreeIdResolver from '@ceramicnetwork/3id-did-resolver'
 import Ceramic from '@ceramicnetwork/http-client'
 import { IDX } from '@ceramicstudio/idx'
-import type { BasicProfile } from '@ceramicstudio/idx-constants'
+import type { AlsoKnownAs, BasicProfile } from '@ceramicstudio/idx-constants'
 import { Resolver } from 'did-resolver'
 import KeyDidResolver from 'key-did-resolver'
 
@@ -38,6 +38,15 @@ export class Core {
 
   get resolver(): Resolver {
     return this._resolver
+  }
+
+  async getAlsoKnownAs(id: string): Promise<AlsoKnownAs | null> {
+    try {
+      return await this._idx.get<AlsoKnownAs>('alsoKnownAs', id)
+    } catch (err) {
+      console.warn('Failed to load AKA accounts', id, err)
+      return null
+    }
   }
 
   async getProfile(id: string): Promise<BasicProfile | null> {

@@ -1,4 +1,4 @@
-import { IPFS_API_URL } from './constants'
+import { IPFS_API_URL } from '../constants'
 
 export type LinkData = {
   Name: string
@@ -6,7 +6,7 @@ export type LinkData = {
   Size: number
 }
 
-export async function addFile(blob: Blob, fileName?: string): Promise<string> {
+export async function uploadFile(blob: Blob, fileName?: string): Promise<string> {
   const body = new FormData()
   body.append('path', blob, fileName)
   const res = await fetch(`${IPFS_API_URL}/add`, { method: 'POST', body })

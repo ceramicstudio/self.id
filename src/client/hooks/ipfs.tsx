@@ -1,51 +1,11 @@
-import type { ImageMetadata, ImageSources } from '@ceramicstudio/idx-constants'
 import { useCallback, useRef, useState } from 'react'
 import type { ChangeEvent } from 'react'
 import toast from 'react-hot-toast'
 
-import type { Dimensions } from '../../sdk'
-import { IPFS_PREFIX, addFile } from '../../sdk/web'
-
-import { loadImage, resizeImageElement } from '../image'
+import type { Dimensions, ImageSources } from '../../sdk'
+import { uploadImage } from '../../sdk/web'
 
 const UPLOAD_MAX_SIZE = 2500000
-
-async function addResizedImage(
-  type: string,
-  image: HTMLImageElement,
-  dimensions?: Dimensions
-): Promise<ImageMetadata> {
-  const { blob, height, width } = await resizeImageElement(type, image, dimensions)
-  const hash = await addFile(blob)
-  return {
-    src: IPFS_PREFIX + hash,
-    height,
-    width,
-    mimeType: blob.type,
-    size: blob.size,
-  }
-}
-
-async function uploadImage(file: File, sizes: Array<Dimensions> = []): Promise<ImageSources> {
-  const image = await loadImage(file)
-  const uploadAlternatives = Promise.all(
-    sizes.map(async (dimensions) => await addResizedImage(file.type, image, dimensions))
-  )
-  const [originalHash, alternatives]: [string, Array<ImageMetadata>] = await Promise.all([
-    addFile(file),
-    uploadAlternatives,
-  ])
-  return {
-    alternatives,
-    original: {
-      src: IPFS_PREFIX + originalHash,
-      height: image.height,
-      width: image.width,
-      mimeType: file.type,
-      size: file.size,
-    },
-  }
-}
 
 export type UploadState = 'idle' | 'uploading' | 'failed' | 'done'
 

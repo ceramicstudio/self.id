@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import avatarPlaceholder from '../../images/avatar-placeholder.png'
+import AvatarPlaceholder from '../../components/AvatarPlaceholder'
 import linkIcon from '../../images/icons/link.svg'
 import { getImageSrc } from '../../sdk'
 import { formatDID } from '../../utils'
@@ -11,18 +11,21 @@ import { formatDID } from '../../utils'
 import { useDIDsData, useEnvState, useLogin, useLogout } from '../hooks'
 
 type DisplayAvatarProps = {
+  did?: string
   label: string
   loading?: boolean
-  src?: string
+  src?: string | null
 }
 
-function DisplayAvatar({ label, loading, src }: DisplayAvatarProps) {
+function DisplayAvatar({ did, label, loading, src }: DisplayAvatarProps) {
   const avatar = loading ? (
     <Box pad="xxsmall">
       <Spinner />
     </Box>
+  ) : src ? (
+    <Avatar size="32px" src={src} flex={false} />
   ) : (
-    <Avatar size="32px" src={src ?? avatarPlaceholder} flex={false} />
+    <AvatarPlaceholder did={did} size={32} />
   )
 
   return (
@@ -109,14 +112,12 @@ export default function AccountButton() {
 
   const [displayName, avatarSrc] = useMemo(() => {
     if (auth.id == null) {
-      return ['', avatarPlaceholder]
+      return ['', null]
     }
 
     const profile = knownDIDsData?.[auth.id]?.profile
     const name = profile?.name ?? formatDID(auth.id)
-    const src = profile?.image
-      ? getImageSrc(profile.image, { height: 60, width: 60 })
-      : avatarPlaceholder
+    const src = profile?.image ? getImageSrc(profile.image, { height: 60, width: 60 }) : null
     return [name, src]
   }, [auth.id, knownDIDsData])
 
@@ -129,7 +130,11 @@ export default function AccountButton() {
           gap="small"
           pad="medium"
           round={{ corner: 'top', size: 'small' }}>
-          <Avatar size="60px" src={avatarSrc} />
+          {avatarSrc ? (
+            <Avatar size="60px" src={avatarSrc} />
+          ) : (
+            <AvatarPlaceholder did={auth.id} size={60} />
+          )}
           <Text size="medium" truncate weight="bold">
             {displayName}
           </Text>
@@ -177,13 +182,18 @@ export default function AccountButton() {
           setMenuOpen(true)
         }}
         open={isMenuOpen}>
-        <DisplayAvatar label={displayName} loading={isLoadingProfile} src={avatarSrc} />
+        <DisplayAvatar
+          did={auth.id}
+          label={displayName}
+          loading={isLoadingProfile}
+          src={avatarSrc}
+        />
       </DropButton>
     )
   }
 
   return auth.state === 'loading' ? (
-    <DisplayAvatar label="Connecting..." loading />
+    <DisplayAvatar did={auth.id} label="Connecting..." loading />
   ) : (
     <Button
       primary

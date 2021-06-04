@@ -2,8 +2,8 @@ import { ThreeIdConnect } from '@3id/connect'
 import type { EthereumAuthProvider } from '@3id/connect'
 import { DID } from 'dids'
 
-import type { CeramicNetwork } from './config'
-import { Core } from './core'
+import type { CeramicNetwork } from '../config'
+import { Core } from '../core'
 
 export class WebClient extends Core {
   _threeId: ThreeIdConnect

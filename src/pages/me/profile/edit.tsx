@@ -13,7 +13,7 @@ export default function EditProfilePage() {
   return (
     <Layout>
       <Head>
-        <title>Edit profile | Self.ID</title>
+        <title>My profile | Self.ID</title>
       </Head>
       <Navbar />
       <Box alignSelf="center" margin="large" pad="medium" width="large">

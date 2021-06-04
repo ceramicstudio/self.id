@@ -9,6 +9,7 @@ import styled, { css } from 'styled-components'
 
 import Layout from '../components/Layout'
 import Navbar from '../components/Navbar'
+import AvatarPlaceholder from '../components/AvatarPlaceholder'
 import { getImageSrc } from '../sdk'
 import type { Dimensions } from '../sdk'
 import avatarPlaceholder from '../images/avatar-placeholder.png'
@@ -116,16 +117,22 @@ const Header = styled.div<{ url?: string }>`
   }
 `
 
-const Avatar = styled.div<{ url?: string }>`
+const AvatarContainer = styled.div`
   width: 146px;
   height: 146px;
   background-color: ${PLACEHOLDER_COLOR};
   border: 3px solid white;
   border-radius: 78px;
   margin-top: -78px;
+`
+
+const Avatar = styled.div<{ url: string }>`
+  width: 146px;
+  height: 146px;
+  border-radius: 78px;
   background-size: cover;
   ${(props) => css`
-    background-image: url(${props.url ?? avatarPlaceholder});
+    background-image: url(${props.url});
   `}
 `
 
@@ -158,7 +165,9 @@ function NoProfile({ id, support }: NoProfileProps) {
       <Header />
       <Box alignSelf="center" width="large">
         <Box direction="row" flex>
-          <Avatar />
+          <AvatarContainer>
+            <AvatarPlaceholder did={id} size={146} />
+          </AvatarContainer>
           {edit}
         </Box>
         <Name>No profile</Name>
@@ -246,6 +255,9 @@ export default function ProfilePage({ id, loadedProfile, support }: Props) {
     <meta name="twitter:card" content="summary" />
   )
 
+  const avatarURL = getImageURL(profile.image, { height: 150, width: 150 })
+  const avatar = avatarURL ? <Avatar url={avatarURL} /> : <AvatarPlaceholder did={id} size={146} />
+
   return (
     <Layout>
       <Head>
@@ -259,7 +271,7 @@ export default function ProfilePage({ id, loadedProfile, support }: Props) {
       <Header url={getImageURL(profile.background, { height: 310, width: 2000 })} />
       <Box alignSelf="center" width="large" pad="medium">
         <Box direction="row" flex>
-          <Avatar url={getImageURL(profile.image, { height: 150, width: 150 })} />
+          <AvatarContainer>{avatar}</AvatarContainer>
           <Box align="end" flex>
             <ConnectSettingsButton did={id} />
           </Box>

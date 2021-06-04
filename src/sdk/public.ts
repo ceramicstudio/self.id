@@ -14,6 +14,10 @@ export class PublicID implements Identifyable {
     return this._id
   }
 
+  async getAlsoKnownAs() {
+    return await this._core.getAlsoKnownAs(this._id)
+  }
+
   async getProfile() {
     return await this._core.getProfile(this._id)
   }
