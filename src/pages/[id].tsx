@@ -239,6 +239,7 @@ export default function ProfilePage({ id, loadedProfile, support }: Props) {
 
   const metaImage = profile.image ? (
     <>
+      <meta name="twitter:card" content="summary" />
       <meta name="twitter:image" content={profile.image.original.src} />
       <meta name="twitter:image:alt" content={`Image for ${socialTitle}`} />
       <meta property="og:image" content={profile.image.original.src} />
@@ -261,6 +262,7 @@ export default function ProfilePage({ id, loadedProfile, support }: Props) {
     <Layout>
       <Head>
         <title>{name} | Self.ID</title>
+        <meta name="twitter:site" content="@mySelfID" />
         <meta name="twitter:title" content={socialTitle} />
         <meta property="og:title" content={socialTitle} />
         {metaDescription}
