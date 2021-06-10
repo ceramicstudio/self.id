@@ -20,6 +20,11 @@ const NETWORK_CONFIGS = {
     connect: 'http://localhost:30001/index.html',
     management: 'http://localhost:30001/management/index.html',
   },
+  'local-clay': {
+    ceramic: 'http://localhost:7007',
+    connect: 'https://app-clay.3idconnect.org',
+    management: 'https://app-clay.3idconnect.org/management/index.html',
+  },
   main: {
     ceramic: 'https://ceramic-private.3boxlabs.com',
     connect: 'https://app.3idconnect.org',

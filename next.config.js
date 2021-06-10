@@ -20,6 +20,18 @@ const nextConfig = {
     ]
   },
   reactStrictMode: true,
+  async rewrites() {
+    return [
+      {
+        source: '/me/social-accounts/add-github',
+        destination: '/me/social-accounts',
+      },
+      {
+        source: '/me/social-accounts/add-twitter',
+        destination: '/me/social-accounts',
+      },
+    ]
+  },
 }
 
 module.exports = withPlugins([[withBundleAnalyzer({})], nextConfig, withImages])

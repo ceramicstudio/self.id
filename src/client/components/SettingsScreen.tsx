@@ -28,18 +28,20 @@ export default function SettingsScreen() {
           <Button primary color="black" label="Edit" style={{ border: 0, color: 'white' }} />
         </Link>
       </Box>
-      {/* <Box
+      <Box
         border={{ color: 'neutral-5' }}
         direction="row"
         gap="small"
-        margin={{ top: 'medium' }}
+        margin={{ bottom: 'medium' }}
         pad="medium"
         round="small">
         <Box flex justify="center">
           <Text weight="bold">Social accounts</Text>
         </Box>
-        <Button primary color="black" label="Edit" style={{ border: 0, color: 'white' }} />
-      </Box> */}
+        <Link href="/me/social-accounts" passHref>
+          <Button primary color="black" label="Edit" style={{ border: 0, color: 'white' }} />
+        </Link>
+      </Box>
     </ConnectedContainer>
   )
 }
