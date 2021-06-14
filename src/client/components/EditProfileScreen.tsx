@@ -229,6 +229,7 @@ function EditProfileForm({ profile }: FormProps) {
           disabled={isLoading}
           label="Name"
           name="name"
+          maxLength={150}
           setValue={setValue}
           value={value}
         />
@@ -236,6 +237,7 @@ function EditProfileForm({ profile }: FormProps) {
           <TextArea
             disabled={isLoading}
             id="field-bio"
+            maxLength={420}
             onChange={(event) => {
               setValue({ ...value, description: event.target.value })
             }}
@@ -256,19 +258,22 @@ function EditProfileForm({ profile }: FormProps) {
           disabled={isLoading}
           label="Location"
           name="homeLocation"
+          maxLength={140}
           setValue={setValue}
           value={value}
         />
         <TextField
           disabled={isLoading}
-          label="Country"
+          label="2-letter country code"
           name="residenceCountry"
+          maxLength={2}
           setValue={setValue}
           value={value}
         />
         <TextField
           disabled={isLoading}
           label="URL"
+          maxLength={240}
           name="url"
           placeholder="https://mysite.com"
           setValue={setValue}

@@ -44,7 +44,6 @@ export default function AddTwitterAccountScreen() {
         <Box
           border={{ color: 'neutral-5' }}
           direction="row"
-          gap="small"
           margin={{ bottom: 'medium' }}
           pad="medium"
           round="small">
@@ -67,7 +66,6 @@ export default function AddTwitterAccountScreen() {
         <Box
           border={{ color: 'neutral-5' }}
           direction="row"
-          gap="small"
           margin={{ bottom: 'medium' }}
           pad="medium"
           round="small">

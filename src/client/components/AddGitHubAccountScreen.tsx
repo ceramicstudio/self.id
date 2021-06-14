@@ -12,6 +12,8 @@ import ConnectedContainer from './ConnectedContainer'
 export default function AddGitHubAccountScreen() {
   const { self } = useEnvState()
   const [challengeLoading, setChallengeLoading] = useState<boolean>(false)
+  const [challenge, setChallenge] = useState<string | null>(null)
+  const [verifyLoading, setVerifyLoading] = useState<boolean>(false)
   const router = useRouter()
   const { username } = router.query
 
@@ -24,7 +26,9 @@ export default function AddGitHubAccountScreen() {
     setChallengeLoading(true)
 
     self.getGitHubChallenge(username).then(
-      () => {
+      (challenge) => {
+        console.log('got challenge', challenge)
+        setChallenge(challenge)
         if (copy(self.id)) {
           toast.success('Copied to clipboard!', { id: toastId })
         } else {
@@ -37,7 +41,28 @@ export default function AddGitHubAccountScreen() {
         setChallengeLoading(false)
       }
     )
-  }, [challengeLoading, username, self, setChallengeLoading])
+  }, [challengeLoading, username, self])
+
+  const verify = useCallback(() => {
+    console.log('verify', { self, challenge, username, verifyLoading })
+    if (self == null || challenge == null || typeof username !== 'string' || verifyLoading) {
+      return
+    }
+
+    const toastId = toast.loading('Verifying...')
+    setVerifyLoading(true)
+
+    self.addGitHubAttestation(username, challenge).then(
+      () => {
+        toast.success('Attestation added!', { id: toastId })
+        setVerifyLoading(false)
+      },
+      (err: Error) => {
+        toast.error(`Failed to verify or add attestation: ${err.message}`, { id: toastId })
+        setVerifyLoading(false)
+      }
+    )
+  }, [challenge, self, username, verifyLoading])
 
   return (
     <ConnectedContainer>
@@ -49,7 +74,6 @@ export default function AddGitHubAccountScreen() {
         <Box
           border={{ color: 'neutral-5' }}
           direction="row"
-          gap="small"
           margin={{ bottom: 'medium' }}
           pad="medium"
           round="small">
@@ -70,7 +94,6 @@ export default function AddGitHubAccountScreen() {
         <Box
           border={{ color: 'neutral-5' }}
           direction="row"
-          gap="small"
           margin={{ bottom: 'medium' }}
           pad="medium"
           round="small">
@@ -83,13 +106,17 @@ export default function AddGitHubAccountScreen() {
             </Text>
           </Box>
           <Box>
-            <Button label="Open" />
+            <Button
+              disabled={challenge == null}
+              href="https://gist.github.com/"
+              label="Open"
+              target="_blank"
+            />
           </Box>
         </Box>
         <Box
           border={{ color: 'neutral-5' }}
-          direction="row"
-          gap="small"
+          direction="column"
           margin={{ bottom: 'medium' }}
           pad="medium"
           round="small">
@@ -97,14 +124,12 @@ export default function AddGitHubAccountScreen() {
             Step 3
           </Text>
           <Text color="neutral-2">
-            Paste the verification message in the Gist and save as <Text color="brand">public</Text>
-            .
+            Paste your DID in the Gist and save as <Text color="brand">public</Text>.
           </Text>
         </Box>
         <Box
           border={{ color: 'neutral-5' }}
           direction="row"
-          gap="small"
           margin={{ bottom: 'medium' }}
           pad="medium"
           round="small">
@@ -117,7 +142,7 @@ export default function AddGitHubAccountScreen() {
             </Text>
           </Box>
           <Box>
-            <Button label="Verify" />
+            <Button disabled={challenge == null} label="Verify" onClick={verify} />
           </Box>
         </Box>
       </Box>

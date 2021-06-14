@@ -2,8 +2,10 @@ import type { EthereumAuthProvider } from '@3id/connect'
 import type { AlsoKnownAsAccount, BasicProfile } from '@ceramicstudio/idx-constants'
 import { DID } from 'dids'
 
-import { WebClient } from './clients'
 import type { CeramicNetwork } from '../config'
+import type { Identifyable } from '../types'
+
+import { WebClient } from './clients'
 import {
   IdentityLink,
   createGitHub,
@@ -13,7 +15,6 @@ import {
   findTwitter,
   findTwitterIndex,
 } from './identity-link'
-import type { Identifyable } from '../types'
 
 export class SelfID implements Identifyable {
   static async authenticate(
@@ -78,9 +79,16 @@ export class SelfID implements Identifyable {
     return await this._identityLink.requestGitHub(this._did.id, username)
   }
 
-  async addGitHubAttestation(username: string, jws: string): Promise<string> {
+  async confirmGitHubChallenge(challengeCode: string): Promise<string> {
+    const jws = await this._did.createJWS({ challengeCode })
+    console.log('verified?', await this._did.verifyJWS(jws))
+    // @ts-ignore
+    return await this._identityLink.confirmGitHub(jws)
+  }
+
+  async addGitHubAttestation(username: string, challengeCode: string): Promise<string> {
     const [attestation, accounts] = await Promise.all([
-      this._identityLink.confirmGitHub(jws),
+      this.confirmGitHubChallenge(challengeCode),
       this.getSocialAccounts(),
     ])
     const existing = findGitHub(accounts, username)
@@ -109,9 +117,14 @@ export class SelfID implements Identifyable {
     return await this._identityLink.requestTwitter(this._did.id, username)
   }
 
-  async addTwitterAttestation(username: string, jws: string): Promise<string> {
+  async confirmTwitterChallenge(challengeCode: string): Promise<string> {
+    const jws = await this._did.createJWS({ challengeCode })
+    return await this._identityLink.confirmTwitter(jws)
+  }
+
+  async addTwitterAttestation(username: string, challengeCode: string): Promise<string> {
     const [attestation, accounts] = await Promise.all([
-      this._identityLink.confirmTwitter(jws),
+      this.confirmTwitterChallenge(challengeCode),
       this.getSocialAccounts(),
     ])
     const existing = findTwitter(accounts, username)

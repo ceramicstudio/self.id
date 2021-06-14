@@ -1,4 +1,5 @@
 import type { AlsoKnownAsAccount } from '@ceramicstudio/idx-constants'
+import type { DagJWS } from 'dids'
 
 import { IDENTITYLINK_URL } from '../constants'
 
@@ -53,7 +54,7 @@ export type AttestationResponse = {
 export type ChallengeResponse = {
   status: string
   data: {
-    challenge: string
+    challengeCode: string
   }
 }
 
@@ -64,37 +65,38 @@ export class IdentityLink {
     this._url = url
   }
 
-  async _post<Res = Record<string, any>, Data = Record<string, any>>(
+  async _post<Data = Record<string, any>, Body = Record<string, any>>(
     endpoint: string,
-    data: Data
-  ): Promise<Res> {
+    body: Body
+  ): Promise<Data> {
     const res = await fetch(`${this._url}${endpoint}`, {
       headers: { 'content-type': 'application/json' },
       method: 'POST',
-      body: JSON.stringify(data),
+      body: JSON.stringify(body),
     })
+    const data = (await res.json()) as unknown
     if (res.ok) {
-      return (await res.json()) as Res
+      return data as Data
     }
-    throw new Error('Request failed')
+    throw new Error((data as Record<string, any>).message ?? 'Request failed')
   }
 
   async requestGitHub(did: string, username: string): Promise<string> {
     const res = await this._post<ChallengeResponse>('/api/v0/request-github', { did, username })
-    return res.data.challenge
+    return res.data.challengeCode
   }
 
-  async confirmGitHub(jws: string): Promise<string> {
+  async confirmGitHub(jws: DagJWS): Promise<string> {
     const res = await this._post<AttestationResponse>('/api/v0/confirm-github', { jws })
     return res.data.attestation
   }
 
   async requestTwitter(did: string, username: string): Promise<string> {
     const res = await this._post<ChallengeResponse>('/api/v0/request-twitter', { did, username })
-    return res.data.challenge
+    return res.data.challengeCode
   }
 
-  async confirmTwitter(jws: string): Promise<string> {
+  async confirmTwitter(jws: DagJWS): Promise<string> {
     const res = await this._post<AttestationResponse>('/api/v0/confirm-twitter', { jws })
     return res.data.attestation
   }
