@@ -1,4 +1,4 @@
-import { CERAMIC_NETWORK } from './constants'
+import { APP_NETWORK } from './constants'
 import { Core } from './sdk'
 
-export const core = new Core(CERAMIC_NETWORK)
+export const core = new Core(APP_NETWORK)

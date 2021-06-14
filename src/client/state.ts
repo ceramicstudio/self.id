@@ -1,6 +1,6 @@
 import { atom } from 'jotai'
 
-import { CERAMIC_NETWORK } from '../constants'
+import { APP_NETWORK } from '../constants'
 import { WebClient } from '../sdk/web'
 import type { SelfID } from '../sdk/web'
 
@@ -38,7 +38,7 @@ export type EnvState = {
 }
 
 export function getInitialEnv(checkLocal = true): EnvState {
-  const client = new WebClient(CERAMIC_NETWORK)
+  const client = new WebClient(APP_NETWORK)
   if (!checkLocal) {
     return { auth: { state: 'unknown' }, client, self: null }
   }

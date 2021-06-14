@@ -6,7 +6,7 @@ import { Resolver } from 'did-resolver'
 import KeyDidResolver from 'key-did-resolver'
 
 import { getConfig } from './config'
-import type { CeramicNetwork, ConfigURLs } from './config'
+import type { AppNetwork, ConfigURLs } from './config'
 
 export class Core {
   _ceramic: Ceramic
@@ -14,7 +14,7 @@ export class Core {
   _idx: IDX
   _resolver: Resolver
 
-  constructor(network: CeramicNetwork) {
+  constructor(network: AppNetwork) {
     this._config = Object.freeze(getConfig(network))
     this._ceramic = new Ceramic(this._config.ceramic)
     this._idx = new IDX({ ceramic: this._ceramic })

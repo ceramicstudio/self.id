@@ -1,8 +1,6 @@
 import type { AlsoKnownAsAccount } from '@ceramicstudio/idx-constants'
 import type { DagJWS } from 'dids'
 
-import { IDENTITYLINK_URL } from '../constants'
-
 export const GITHUB_HOST = 'github.com'
 export const TWITTER_HOST = 'twitter.com'
 
@@ -61,7 +59,7 @@ export type ChallengeResponse = {
 export class IdentityLink {
   _url: string
 
-  constructor(url = IDENTITYLINK_URL) {
+  constructor(url: string) {
     this._url = url
   }
 

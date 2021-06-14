@@ -2,7 +2,7 @@ import type { EthereumAuthProvider } from '@3id/connect'
 import type { AlsoKnownAsAccount, BasicProfile } from '@ceramicstudio/idx-constants'
 import { DID } from 'dids'
 
-import type { CeramicNetwork } from '../config'
+import type { AppNetwork } from '../config'
 import type { Identifyable } from '../types'
 
 import { WebClient } from './clients'
@@ -18,7 +18,7 @@ import {
 
 export class SelfID implements Identifyable {
   static async authenticate(
-    network: CeramicNetwork,
+    network: AppNetwork,
     authProvider: EthereumAuthProvider
   ): Promise<SelfID> {
     const client = new WebClient(network)
@@ -36,10 +36,13 @@ export class SelfID implements Identifyable {
         'Input DID must be authenticated, use SelfID.authenticate() instead of new SelfID()'
       )
     }
+    if (client._config.verificationsServer == null) {
+      throw new Error('Missing verifications server URL in config')
+    }
 
     this._client = client
     this._did = did
-    this._identityLink = new IdentityLink()
+    this._identityLink = new IdentityLink(client._config.verificationsServer)
   }
 
   get client(): WebClient {

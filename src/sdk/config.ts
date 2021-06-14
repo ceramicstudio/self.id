@@ -1,40 +1,40 @@
+export type ConnectNetwork = 'local' | 'dev-unstable' | 'testnet-clay' | 'mainnet'
+
+export type AppNetwork = ConnectNetwork | 'local-clay'
+
 export type ConfigURLs = {
   ceramic: string
-  connect: string
-  management: string
+  connectNetwork: ConnectNetwork
+  verificationsServer?: string
 }
 
-const NETWORK_CONFIGS = {
-  clay: {
-    ceramic: 'https://ceramic-private-clay.3boxlabs.com',
-    connect: 'https://app-clay.3idconnect.org',
-    management: 'https://app-clay.3idconnect.org/management/index.html',
-  },
-  dev: {
+const NETWORK_CONFIGS: Record<AppNetwork, ConfigURLs> = {
+  'dev-unstable': {
     ceramic: 'https://ceramic-private-dev.3boxlabs.com',
-    connect: 'https://app-dev.3idconnect.org',
-    management: 'https://app-dev.3idconnect.org/management/index.html',
+    connectNetwork: 'dev-unstable',
   },
   local: {
     ceramic: 'http://localhost:7007',
-    connect: 'http://localhost:30001/index.html',
-    management: 'http://localhost:30001/management/index.html',
+    connectNetwork: 'local',
   },
   'local-clay': {
     ceramic: 'http://localhost:7007',
-    connect: 'https://app-clay.3idconnect.org',
-    management: 'https://app-clay.3idconnect.org/management/index.html',
+    connectNetwork: 'testnet-clay',
+    verificationsServer: 'https://verifications-clay.3boxlabs.com',
   },
-  main: {
+  'testnet-clay': {
+    ceramic: 'https://ceramic-private-clay.3boxlabs.com',
+    connectNetwork: 'testnet-clay',
+    verificationsServer: 'https://verifications-clay.3boxlabs.com',
+  },
+  mainnet: {
     ceramic: 'https://ceramic-private.3boxlabs.com',
-    connect: 'https://app.3idconnect.org',
-    management: 'https://app.3idconnect.org/management/index.html',
+    connectNetwork: 'mainnet',
+    verificationsServer: 'https://verifications.3boxlabs.com',
   },
 }
 
-export type CeramicNetwork = keyof typeof NETWORK_CONFIGS
-
-export function getConfig(network: CeramicNetwork): ConfigURLs {
+export function getConfig(network: AppNetwork): ConfigURLs {
   const exists = NETWORK_CONFIGS[network]
   if (exists == null) {
     throw new Error(`Unsupported Ceramic network: ${network}`)
