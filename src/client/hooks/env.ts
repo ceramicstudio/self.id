@@ -1,6 +1,5 @@
 import type { EthereumProvider } from '@3id/connect'
-import type { BasicProfile } from '@ceramicstudio/idx-constants'
-// import { useMultiAuth } from '@ceramicstudio/multiauth'
+import type { AlsoKnownAsAccount, BasicProfile } from '@ceramicstudio/idx-constants'
 import { AccountID } from 'caip'
 import { useAtom } from 'jotai'
 import { useCallback } from 'react'
@@ -32,7 +31,7 @@ export function useDIDsData(): [KnownDIDsData | null, () => Promise<void>] {
 
   const load = useCallback(async () => {
     const data = await loadKnownDIDsData(env.client, knownDIDs)
-    await setKnownDIDsData(data)
+    setKnownDIDsData(data)
   }, [env.client, knownDIDs, setKnownDIDsData])
 
   return [knownDIDsData, load]
@@ -95,8 +94,8 @@ export function useEditProfile(): [
       }
 
       const updatedDIDsData = await editProfile(env.self, knownDIDsData, profile)
-      await setKnownDIDsData(updatedDIDsData)
-      await setEditState({ status: 'done' })
+      setKnownDIDsData(updatedDIDsData)
+      setEditState({ status: 'done' })
     },
     [env.self, knownDIDsData, setEditState, setKnownDIDsData]
   )
@@ -108,15 +107,15 @@ export function useEditProfile(): [
       }
 
       try {
-        await setEditState({ status: 'editing' })
+        setEditState({ status: 'editing' })
         await toast.promise(applyEdit(profile), {
           loading: 'Saving profile...',
           success: 'Profile successfully saved!',
           error: 'Failed to save profile',
         })
-        await setEditState({ status: 'done' })
+        setEditState({ status: 'done' })
       } catch (error) {
-        await setEditState({ status: 'failed', error: error as Error })
+        setEditState({ status: 'failed', error: error as Error })
       }
     },
     [applyEdit, editState.status, setEditState]
@@ -127,4 +126,34 @@ export function useEditProfile(): [
   }, [setEditState])
 
   return [editState, edit, reset]
+}
+
+export function useSocialAccounts(): [
+  Array<AlsoKnownAsAccount>,
+  (socialAccounts: Array<AlsoKnownAsAccount>) => void
+] {
+  const { auth } = useEnvState()
+  const [knownDIDsData, setKnownDIDsData] = useAtom(knownDIDsDataAtom)
+
+  const accounts = (auth.id && knownDIDsData?.[auth.id]?.socialAccounts) || []
+
+  const setAccounts = useCallback(
+    (socialAccounts: Array<AlsoKnownAsAccount>) => {
+      const { id } = auth
+      if (id == null) {
+        console.warn('No authenticated DID to set accounts')
+      } else {
+        const data = knownDIDsData ?? {}
+        const existing = data[id]
+        if (existing == null) {
+          console.warn('No existing DID data')
+        } else {
+          setKnownDIDsData({ ...data, [id]: { ...existing, socialAccounts } })
+        }
+      }
+    },
+    [auth, knownDIDsData, setKnownDIDsData]
+  )
+
+  return [accounts, setAccounts]
 }

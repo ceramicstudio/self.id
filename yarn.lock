@@ -4681,15 +4681,15 @@ jest-worker@27.0.0-next.5:
     merge-stream "^2.0.0"
     supports-color "^8.0.0"
 
-jotai@^0.16.11:
-  version "0.16.11"
-  resolved "https://registry.yarnpkg.com/jotai/-/jotai-0.16.11.tgz#efeaf0311513cf41d5c82b7009f8381d518cbc41"
-  integrity sha512-EPBeDSBc4FwbFRArRjcI6IsHrVkba771mSOFTN3M4r5rU3ZcZMDFLElZScZVr6w1kgrEXvaMm59VAyEB3QUEbA==
-
 jotai@^0.16.6:
   version "0.16.10"
   resolved "https://registry.yarnpkg.com/jotai/-/jotai-0.16.10.tgz#4993439e837a1d59e960a6136dd9af5915b168e4"
   integrity sha512-qhdniEKKU2MyZjV85NAazpddphdoJsIx6gzsWavcDFkLlIGve3Cma0S6uMa7Q4x2PMQkmFALOE1Qq1hlqX8fWQ==
+
+jotai@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/jotai/-/jotai-1.0.0.tgz#d5e7f7044d89e543a9c7429a9723e11528b2760e"
+  integrity sha512-6hZGy3hqIlBlLSKppTrxDc1Vb7mi3I8eEQOIu7Kj6ceX1PSzjxdsEVC9TjAqaio8gZJEz+2ufNUf4afvbs0RXg==
 
 js-sha3@0.5.7:
   version "0.5.7"

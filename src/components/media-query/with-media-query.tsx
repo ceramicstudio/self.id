@@ -19,7 +19,7 @@ export function withMediaQuery<T>(
   // eslint-disable-next-line react/prop-types,react/display-name
   return ({ mediaQuery, ...props }) => {
     const theme = useContext<ThemeType>(ThemeContext)
-    const grommetBreakpoints = (theme.global!.breakpoints as unknown) as Record<
+    const grommetBreakpoints = theme.global!.breakpoints as unknown as Record<
       string,
       { value: string }
     >

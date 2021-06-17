@@ -3,6 +3,7 @@ import type { AlsoKnownAsAccount, BasicProfile } from '@ceramicstudio/idx-consta
 import { DID } from 'dids'
 
 import type { AppNetwork } from '../config'
+import { GITHUB_HOST, TWITTER_HOST } from '../constants'
 import type { Identifyable } from '../types'
 
 import { WebClient } from './clients'
@@ -84,12 +85,13 @@ export class SelfID implements Identifyable {
 
   async confirmGitHubChallenge(challengeCode: string): Promise<string> {
     const jws = await this._did.createJWS({ challengeCode })
-    console.log('verified?', await this._did.verifyJWS(jws))
-    // @ts-ignore
     return await this._identityLink.confirmGitHub(jws)
   }
 
-  async addGitHubAttestation(username: string, challengeCode: string): Promise<string> {
+  async addGitHubAttestation(
+    username: string,
+    challengeCode: string
+  ): Promise<Array<AlsoKnownAsAccount>> {
     const [attestation, accounts] = await Promise.all([
       this.confirmGitHubChallenge(challengeCode),
       this.getSocialAccounts(),
@@ -102,18 +104,17 @@ export class SelfID implements Identifyable {
       existing.attestations.push({ 'did-jwt-vc': attestation })
     }
     await this.setAlsoKnownAsAccounts(accounts)
-    return attestation
+    return accounts
   }
 
-  async removeGitHubAccount(username: string): Promise<boolean> {
+  async removeGitHubAccount(username: string): Promise<Array<AlsoKnownAsAccount>> {
     const accounts = await this.getSocialAccounts()
     const index = findGitHubIndex(accounts, username)
-    if (index === -1) {
-      return false
+    if (index !== -1) {
+      accounts.splice(index, 1)
+      await this.setAlsoKnownAsAccounts(accounts)
     }
-    accounts.splice(index, 1)
-    await this.setAlsoKnownAsAccounts(accounts)
-    return true
+    return accounts
   }
 
   async getTwitterChallenge(username: string): Promise<string> {
@@ -125,7 +126,10 @@ export class SelfID implements Identifyable {
     return await this._identityLink.confirmTwitter(jws)
   }
 
-  async addTwitterAttestation(username: string, challengeCode: string): Promise<string> {
+  async addTwitterAttestation(
+    username: string,
+    challengeCode: string
+  ): Promise<Array<AlsoKnownAsAccount>> {
     const [attestation, accounts] = await Promise.all([
       this.confirmTwitterChallenge(challengeCode),
       this.getSocialAccounts(),
@@ -138,17 +142,30 @@ export class SelfID implements Identifyable {
       existing.attestations.push({ 'did-jwt-vc': attestation })
     }
     await this.setAlsoKnownAsAccounts(accounts)
-    return attestation
+    return accounts
   }
 
-  async removeTwitterAccount(username: string): Promise<boolean> {
+  async removeTwitterAccount(username: string): Promise<Array<AlsoKnownAsAccount>> {
     const accounts = await this.getSocialAccounts()
     const index = findTwitterIndex(accounts, username)
-    if (index === -1) {
-      return false
+    if (index !== -1) {
+      accounts.splice(index, 1)
+      await this.setAlsoKnownAsAccounts(accounts)
     }
-    accounts.splice(index, 1)
-    await this.setAlsoKnownAsAccounts(accounts)
-    return true
+    return accounts
+  }
+
+  async removeSocialAccount(
+    host: string | undefined,
+    id: string
+  ): Promise<Array<AlsoKnownAsAccount>> {
+    switch (host) {
+      case GITHUB_HOST:
+        return await this.removeGitHubAccount(id)
+      case TWITTER_HOST:
+        return await this.removeTwitterAccount(id)
+      default:
+        throw new Error(`Unsupported host: ${host ?? 'undefined'}`)
+    }
   }
 }

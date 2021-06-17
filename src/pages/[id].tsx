@@ -1,6 +1,6 @@
 import { getLegacy3BoxProfileAsBasicProfile, isCaip10, isDid } from '@ceramicstudio/idx'
-import type { BasicProfile, ImageSources } from '@ceramicstudio/idx-constants'
-import { Anchor, Box, Paragraph, Text } from 'grommet'
+import type { AlsoKnownAsAccount, BasicProfile, ImageSources } from '@ceramicstudio/idx-constants'
+import { Anchor, Box, Image, Paragraph, Text } from 'grommet'
 import type { GetServerSideProps } from 'next'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
@@ -10,11 +10,13 @@ import styled, { css } from 'styled-components'
 import Layout from '../components/Layout'
 import Navbar from '../components/Navbar'
 import AvatarPlaceholder from '../components/AvatarPlaceholder'
-import { getImageSrc } from '../sdk'
+import { GITHUB_HOST, TWITTER_HOST, getImageSrc } from '../sdk'
 import type { Dimensions } from '../sdk'
 import countryIcon from '../images/icons/country.png'
 import linkIcon from '../images/icons/link.svg'
 import locationIcon from '../images/icons/location.png'
+import githubIcon from '../images/icons/social-github.svg'
+import twitterIcon from '../images/icons/social-twitter.svg'
 import { BRAND_COLOR, PLACEHOLDER_COLOR } from '../theme'
 import { isEthereumAddress, isSupportedDid } from '../utils'
 
@@ -31,6 +33,11 @@ const ConnectSettingsButton = dynamic(() => import('../client/components/Connect
   ssr: false,
 })
 
+const ConnectEditSocialAccountsButton = dynamic(
+  () => import('../client/components/ConnectEditSocialAccountsButton'),
+  { ssr: false }
+)
+
 type Support =
   | 'invalid' // not a DID or CAIP-10
   | 'legacy' // legacy 3Box profile loaded from Ethereum address
@@ -44,6 +51,7 @@ function canEditProfile(support: Support): boolean {
 type Props = {
   id: string | null
   loadedProfile: BasicProfile | null
+  socialAccounts: Array<AlsoKnownAsAccount>
   support: Support
 }
 
@@ -56,6 +64,7 @@ export const getServerSideProps: GetServerSideProps<Props, { id: string }> = asy
   }
 
   let loadedProfile = null
+  let socialAccounts: Array<AlsoKnownAsAccount> = []
   let support: Support = 'unsupported'
 
   if (isDid(id)) {
@@ -63,7 +72,9 @@ export const getServerSideProps: GetServerSideProps<Props, { id: string }> = asy
       // Main case: we expect a DID to be provided
       support = 'supported'
       const { core } = await import('../server')
-      loadedProfile = await core.getProfile(id)
+      const [profile, aka] = await Promise.all([core.getProfile(id), core.getAlsoKnownAs(id)])
+      loadedProfile = profile
+      socialAccounts = aka?.accounts ?? []
     } else {
       support = 'unsupported'
     }
@@ -96,7 +107,7 @@ export const getServerSideProps: GetServerSideProps<Props, { id: string }> = asy
   }
 
   return {
-    props: { id, loadedProfile, support },
+    props: { id, loadedProfile, socialAccounts, support },
   }
 }
 
@@ -175,7 +186,7 @@ function NoProfile({ id, support }: NoProfileProps) {
   )
 }
 
-export default function ProfilePage({ id, loadedProfile, support }: Props) {
+export default function ProfilePage({ id, loadedProfile, socialAccounts, support }: Props) {
   const [profile, setProfile] = useState<BasicProfile | null>(loadedProfile)
   useEffect(() => {
     setProfile(loadedProfile)
@@ -258,6 +269,46 @@ export default function ProfilePage({ id, loadedProfile, support }: Props) {
   const avatarURL = getImageURL(profile.image, { height: 150, width: 150 })
   const avatar = avatarURL ? <Avatar url={avatarURL} /> : <AvatarPlaceholder did={id} size={146} />
 
+  let socialContainer = null
+  if (socialAccounts.length) {
+    const socialItems = socialAccounts.map((a) => {
+      const host = a.host ?? ''
+      const image =
+        host === GITHUB_HOST ? (
+          <Image alt="GitHub" src={githubIcon} margin={{ right: 'small' }} />
+        ) : host === TWITTER_HOST ? (
+          <Image alt="Twitter" src={twitterIcon} margin={{ right: 'small' }} />
+        ) : null
+      return (
+        <Box
+          key={host + a.id}
+          border={{ color: 'neutral-5' }}
+          direction="row"
+          margin={{ top: 'small' }}
+          pad="small"
+          round="small">
+          <Anchor href={`${a.protocol}://${host}/${a.id}`}>
+            {image}
+            {a.id}
+          </Anchor>
+        </Box>
+      )
+    })
+    socialContainer = (
+      <Box margin={{ top: 'large' }}>
+        <Box direction="row">
+          <Box flex>
+            <Text size="medium" weight="bold">
+              Social
+            </Text>
+          </Box>
+          <ConnectEditSocialAccountsButton did={id} />
+        </Box>
+        {socialItems}
+      </Box>
+    )
+  }
+
   return (
     <Layout>
       <Head>
@@ -281,9 +332,11 @@ export default function ProfilePage({ id, loadedProfile, support }: Props) {
           {name}
           {profile.emoji ? ` ${profile.emoji}` : null}
         </Name>
+        <Text color="neutral-4">{id}</Text>
         {description}
         {linksContainer}
         {locationContainer}
+        {socialContainer}
       </Box>
     </Layout>
   )

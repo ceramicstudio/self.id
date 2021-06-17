@@ -27,7 +27,6 @@ export default function AddGitHubAccountScreen() {
 
     self.getGitHubChallenge(username).then(
       (challenge) => {
-        console.log('got challenge', challenge)
         setChallenge(challenge)
         if (copy(self.id)) {
           toast.success('Copied to clipboard!', { id: toastId })
@@ -44,7 +43,6 @@ export default function AddGitHubAccountScreen() {
   }, [challengeLoading, username, self])
 
   const verify = useCallback(() => {
-    console.log('verify', { self, challenge, username, verifyLoading })
     if (self == null || challenge == null || typeof username !== 'string' || verifyLoading) {
       return
     }
@@ -56,13 +54,14 @@ export default function AddGitHubAccountScreen() {
       () => {
         toast.success('Attestation added!', { id: toastId })
         setVerifyLoading(false)
+        return router.push('/me/social-accounts')
       },
       (err: Error) => {
         toast.error(`Failed to verify or add attestation: ${err.message}`, { id: toastId })
         setVerifyLoading(false)
       }
     )
-  }, [challenge, self, username, verifyLoading])
+  }, [challenge, router, self, username, verifyLoading])
 
   return (
     <ConnectedContainer>
@@ -87,7 +86,7 @@ export default function AddGitHubAccountScreen() {
             {challengeLoading ? (
               <Button disabled icon={<Spinner />} />
             ) : (
-              <Button label="Copy" onClick={copyMessage} />
+              <Button disabled={verifyLoading} label="Copy" onClick={copyMessage} />
             )}
           </Box>
         </Box>
@@ -142,7 +141,11 @@ export default function AddGitHubAccountScreen() {
             </Text>
           </Box>
           <Box>
-            <Button disabled={challenge == null} label="Verify" onClick={verify} />
+            {verifyLoading ? (
+              <Button disabled icon={<Spinner />} />
+            ) : (
+              <Button disabled={challenge == null} label="Verify" onClick={verify} />
+            )}
           </Box>
         </Box>
       </Box>

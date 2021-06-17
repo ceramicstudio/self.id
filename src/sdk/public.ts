@@ -18,6 +18,11 @@ export class PublicID implements Identifyable {
     return await this._core.getAlsoKnownAs(this._id)
   }
 
+  async getSocialAccounts() {
+    const aka = await this.getAlsoKnownAs()
+    return aka?.accounts ?? []
+  }
+
   async getProfile() {
     return await this._core.getProfile(this._id)
   }

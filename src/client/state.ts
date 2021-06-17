@@ -66,9 +66,5 @@ export const envAtom = atom(
   }
 )
 
-export const linkingAddressAtom = atom<string | null>(null)
-
-export const createDIDAtom = atom<{ creating: boolean; error?: Error }>({ creating: false })
-
 export type EditProfileState = { status: 'pending' | 'editing' | 'failed' | 'done'; error?: Error }
 export const editProfileAtom = atom<EditProfileState>({ status: 'pending' })

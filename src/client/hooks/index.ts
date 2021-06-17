@@ -6,5 +6,6 @@ export {
   useEnvState,
   useKnownDIDs,
   useKnownDIDsData,
+  useSocialAccounts,
 } from './env'
 export { useImageUpload } from './ipfs'

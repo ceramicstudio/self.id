@@ -1,7 +1,7 @@
-import type { AlsoKnownAs, BasicProfile } from '@ceramicstudio/idx-constants'
+import type { AlsoKnownAsAccount, BasicProfile } from '@ceramicstudio/idx-constants'
 
 export type Identifyable = {
   id: string
-  getAlsoKnownAs(): Promise<AlsoKnownAs | null>
   getProfile(): Promise<BasicProfile | null>
+  getSocialAccounts(): Promise<Array<AlsoKnownAsAccount>>
 }

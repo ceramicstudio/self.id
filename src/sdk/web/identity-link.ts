@@ -1,8 +1,7 @@
 import type { AlsoKnownAsAccount } from '@ceramicstudio/idx-constants'
 import type { DagJWS } from 'dids'
 
-export const GITHUB_HOST = 'github.com'
-export const TWITTER_HOST = 'twitter.com'
+import { GITHUB_HOST, TWITTER_HOST } from '../constants'
 
 export function createGitHub(username: string, attestation: string): AlsoKnownAsAccount {
   return {
