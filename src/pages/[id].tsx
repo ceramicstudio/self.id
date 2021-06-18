@@ -1,9 +1,10 @@
 import { getLegacy3BoxProfileAsBasicProfile, isCaip10, isDid } from '@ceramicstudio/idx'
 import type { AlsoKnownAsAccount, BasicProfile, ImageSources } from '@ceramicstudio/idx-constants'
-import { Anchor, Box, Image, Paragraph, Text } from 'grommet'
+import { Anchor, Box, Paragraph, Text } from 'grommet'
 import type { GetServerSideProps } from 'next'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
+import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 
@@ -209,14 +210,14 @@ export default function ProfilePage({ id, loadedProfile, socialAccounts, support
   ) : null
   const linksContainer = link ? (
     <Box direction="row" margin={{ vertical: 'small' }}>
-      <img alt="Link" src={linkIcon} />
+      <Image alt="Link" src={linkIcon} />
       {link}
     </Box>
   ) : null
 
   const location = profile.homeLocation ? (
     <Box direction="row" flex={false} margin={{ left: 'medium' }}>
-      <img alt="Home location" src={locationIcon} />
+      <Image alt="Home location" src={locationIcon} />
       <Text color="neutral-4" margin={{ left: 'small' }}>
         {profile.homeLocation}
       </Text>
@@ -224,7 +225,7 @@ export default function ProfilePage({ id, loadedProfile, socialAccounts, support
   ) : null
   const country = profile.residenceCountry ? (
     <Box direction="row" flex={false} margin={{ left: 'medium' }}>
-      <img alt="Residence country" src={countryIcon} />
+      <Image alt="Residence country" src={countryIcon} />
       <Text color="neutral-4" margin={{ left: 'small' }}>
         {profile.residenceCountry}
       </Text>
@@ -275,9 +276,13 @@ export default function ProfilePage({ id, loadedProfile, socialAccounts, support
       const host = a.host ?? ''
       const image =
         host === GITHUB_HOST ? (
-          <Image alt="GitHub" src={githubIcon} margin={{ right: 'small' }} />
+          <Box margin={{ right: 'small' }} justify="center">
+            <Image alt="GitHub" src={githubIcon} />
+          </Box>
         ) : host === TWITTER_HOST ? (
-          <Image alt="Twitter" src={twitterIcon} margin={{ right: 'small' }} />
+          <Box margin={{ right: 'small' }} justify="center">
+            <Image alt="Twitter" src={twitterIcon} />
+          </Box>
         ) : null
       return (
         <Box
@@ -287,10 +292,8 @@ export default function ProfilePage({ id, loadedProfile, socialAccounts, support
           margin={{ top: 'small' }}
           pad="small"
           round="small">
-          <Anchor href={`${a.protocol}://${host}/${a.id}`}>
-            {image}
-            {a.id}
-          </Anchor>
+          {image}
+          <Anchor href={`${a.protocol}://${host}/${a.id}`}>{a.id}</Anchor>
         </Box>
       )
     })

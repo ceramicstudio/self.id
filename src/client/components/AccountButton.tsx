@@ -1,5 +1,6 @@
 import { Avatar, Box, Button, DropButton, Spinner, Text } from 'grommet'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
@@ -60,10 +61,9 @@ function MenuButton({ label, loading, ...props }: MenuButtonProps) {
         loading ? (
           <Spinner size="xsmall" />
         ) : (
-          <img
-            src={linkIcon}
-            style={{ marginBottom: '2px', marginTop: '2px', marginRight: '4px' }}
-          />
+          <Box style={{ marginBottom: '2px', marginTop: '2px', marginRight: '4px' }}>
+            <Image src={linkIcon} />
+          </Box>
         )
       }
       label={

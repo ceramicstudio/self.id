@@ -1,6 +1,7 @@
 import type { AlsoKnownAsAccount } from '@ceramicstudio/idx-constants'
-import { Anchor, Box, Button, Heading, Image, Spinner, Text, TextInput } from 'grommet'
+import { Anchor, Box, Button, Heading, Spinner, Text, TextInput } from 'grommet'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { FormEvent } from 'react'
@@ -19,7 +20,7 @@ type SocialAccountType = 'github' | 'twitter'
 type SocialAccountsConfig = {
   addLabel: string
   addPrefix: string
-  icon: string
+  icon: typeof githubIcon
   title: string
 }
 
