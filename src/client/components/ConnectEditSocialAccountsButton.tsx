@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 import { useKnownDIDs } from '../hooks'
 
-export interface Props {
+export type Props = {
   did: string | null
 }
 

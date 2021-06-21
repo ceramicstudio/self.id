@@ -124,7 +124,7 @@ function DisplayAccounts({ accounts, removeAccount, removingAccount, type }: Dis
         <Box direction="row">
           <Box flex>
             <Text weight="bold">
-              <Image src={config.icon} /> {config.title}
+              <Image alt="" src={config.icon} /> {config.title}
             </Text>
           </Box>
           <Box>
@@ -236,7 +236,7 @@ function SocialAccountsLoader() {
 export default function SocialAccountsScreen() {
   return (
     <ConnectedContainer>
-      <Link href="/me/settings">
+      <Link href="/me/settings" passHref>
         <Anchor color="neutral-4">Settings</Anchor>
       </Link>
       <Heading margin={{ horizontal: 'none', vertical: 'small' }}>My social accounts</Heading>

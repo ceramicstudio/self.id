@@ -1,3 +1,4 @@
+import copy from 'copy-to-clipboard'
 import { Anchor, Box, Button, Heading, Spinner, Text } from 'grommet'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -11,11 +12,13 @@ import ConnectedContainer from './ConnectedContainer'
 export default function AddTwitterAccountScreen() {
   const { self } = useEnvState()
   const [challengeLoading, setChallengeLoading] = useState<boolean>(false)
+  const [challenge, setChallenge] = useState<string | null>(null)
+  const [verifyLoading, setVerifyLoading] = useState<boolean>(false)
   const router = useRouter()
   const { username } = router.query
+  const did = self?.id as string
 
-  // TODO: review flow to get challenge before tweet
-  const tweetVerification = useCallback(() => {
+  const copyMessage = useCallback(() => {
     if (self == null || typeof username !== 'string' || challengeLoading) {
       return
     }
@@ -24,7 +27,13 @@ export default function AddTwitterAccountScreen() {
     setChallengeLoading(true)
 
     self.getTwitterChallenge(username).then(
-      () => {
+      (challenge) => {
+        setChallenge(challenge)
+        if (copy(self.id)) {
+          toast.success('Copied to clipboard!', { id: toastId })
+        } else {
+          toast.error('Failed to copy to clipboard', { id: toastId })
+        }
         setChallengeLoading(false)
       },
       (err: Error) => {
@@ -32,11 +41,32 @@ export default function AddTwitterAccountScreen() {
         setChallengeLoading(false)
       }
     )
-  }, [challengeLoading, username, self, setChallengeLoading])
+  }, [challengeLoading, username, self])
+
+  const verify = useCallback(() => {
+    if (self == null || challenge == null || typeof username !== 'string' || verifyLoading) {
+      return
+    }
+
+    const toastId = toast.loading('Verifying...')
+    setVerifyLoading(true)
+
+    self.addTwitterAttestation(username, challenge).then(
+      () => {
+        toast.success('Attestation added!', { id: toastId })
+        setVerifyLoading(false)
+        return router.push('/me/social-accounts')
+      },
+      (err: Error) => {
+        toast.error(`Failed to verify or add attestation: ${err.message}`, { id: toastId })
+        setVerifyLoading(false)
+      }
+    )
+  }, [challenge, router, self, username, verifyLoading])
 
   return (
     <ConnectedContainer>
-      <Link href="/me/social-accounts">
+      <Link href="/me/social-accounts" passHref>
         <Anchor color="neutral-4">Social accounts</Anchor>
       </Link>
       <Heading margin={{ horizontal: 'none', vertical: 'small' }}>Verify Twitter account</Heading>
@@ -51,15 +81,13 @@ export default function AddTwitterAccountScreen() {
             <Text margin={{ bottom: 'small' }} weight="bold">
               Step 1
             </Text>
-            <Text color="neutral-2">
-              Tweet a verification from <Text color="brand">@{username as string}</Text>
-            </Text>
+            <Text color="neutral-2">Click this button to copy the verification message.</Text>
           </Box>
           <Box>
             {challengeLoading ? (
               <Button disabled icon={<Spinner />} />
             ) : (
-              <Button label="Tweet" onClick={tweetVerification} />
+              <Button disabled={verifyLoading} label="Copy" onClick={copyMessage} />
             )}
           </Box>
         </Box>
@@ -74,11 +102,38 @@ export default function AddTwitterAccountScreen() {
               Step 2
             </Text>
             <Text color="neutral-2">
+              Tweet a verification from <Text color="brand">@{username as string}</Text>
+            </Text>
+          </Box>
+          <Box>
+            <Button
+              disabled={challenge == null}
+              href={`https://twitter.com/intent/tweet?text=${did}&via=mySelfID`}
+              label="Tweet"
+              target="_blank"
+            />
+          </Box>
+        </Box>
+        <Box
+          border={{ color: 'neutral-5' }}
+          direction="row"
+          margin={{ bottom: 'medium' }}
+          pad="medium"
+          round="small">
+          <Box flex>
+            <Text margin={{ bottom: 'small' }} weight="bold">
+              Step 3
+            </Text>
+            <Text color="neutral-2">
               Return to this page and verify your account by clicking this button.
             </Text>
           </Box>
           <Box>
-            <Button label="Verify" />
+            {verifyLoading ? (
+              <Button disabled icon={<Spinner />} />
+            ) : (
+              <Button disabled={challenge == null} label="Verify" onClick={verify} />
+            )}
           </Box>
         </Box>
       </Box>

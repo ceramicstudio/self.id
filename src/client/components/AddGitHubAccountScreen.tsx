@@ -65,7 +65,7 @@ export default function AddGitHubAccountScreen() {
 
   return (
     <ConnectedContainer>
-      <Link href="/me/social-accounts">
+      <Link href="/me/social-accounts" passHref>
         <Anchor color="neutral-4">Social accounts</Anchor>
       </Link>
       <Heading margin={{ horizontal: 'none', vertical: 'small' }}>Verify GitHub account</Heading>

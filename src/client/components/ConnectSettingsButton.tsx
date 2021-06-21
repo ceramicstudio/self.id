@@ -4,7 +4,7 @@ import { useCallback, useMemo } from 'react'
 
 import { useEnvState, useKnownDIDs, useLogin } from '../hooks'
 
-export interface Props {
+export type Props = {
   did: string | null
 }
 

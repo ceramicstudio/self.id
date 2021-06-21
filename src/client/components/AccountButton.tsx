@@ -62,7 +62,7 @@ function MenuButton({ label, loading, ...props }: MenuButtonProps) {
           <Spinner size="xsmall" />
         ) : (
           <Box style={{ marginBottom: '2px', marginTop: '2px', marginRight: '4px' }}>
-            <Image src={linkIcon} />
+            <Image alt="" src={linkIcon} />
           </Box>
         )
       }
