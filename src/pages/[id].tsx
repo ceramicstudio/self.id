@@ -1,20 +1,23 @@
 import { getLegacy3BoxProfileAsBasicProfile, isCaip10, isDid } from '@ceramicstudio/idx'
-import type { BasicProfile, ImageSources } from '@ceramicstudio/idx-constants'
+import type { AlsoKnownAsAccount, BasicProfile, ImageSources } from '@ceramicstudio/idx-constants'
 import { Anchor, Box, Paragraph, Text } from 'grommet'
 import type { GetServerSideProps } from 'next'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
+import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 
 import Layout from '../components/Layout'
 import Navbar from '../components/Navbar'
-import { getImageSrc } from '../image'
-import type { Dimensions } from '../image'
-import avatarPlaceholder from '../images/avatar-placeholder.png'
+import AvatarPlaceholder from '../components/AvatarPlaceholder'
+import { GITHUB_HOST, TWITTER_HOST, getImageSrc } from '../sdk'
+import type { Dimensions } from '../sdk'
 import countryIcon from '../images/icons/country.png'
 import linkIcon from '../images/icons/link.svg'
 import locationIcon from '../images/icons/location.png'
+import githubIcon from '../images/icons/social-github.svg'
+import twitterIcon from '../images/icons/social-twitter.svg'
 import { BRAND_COLOR, PLACEHOLDER_COLOR } from '../theme'
 import { isEthereumAddress, isSupportedDid } from '../utils'
 
@@ -27,9 +30,14 @@ export function getImageURL(
   return sources ? getImageSrc(sources, dimensions) : undefined
 }
 
-const EditProfileButton = dynamic(() => import('../client/components/EditProfileButton'), {
+const ConnectSettingsButton = dynamic(() => import('../client/components/ConnectSettingsButton'), {
   ssr: false,
 })
+
+const ConnectEditSocialAccountsButton = dynamic(
+  () => import('../client/components/ConnectEditSocialAccountsButton'),
+  { ssr: false }
+)
 
 type Support =
   | 'invalid' // not a DID or CAIP-10
@@ -44,6 +52,7 @@ function canEditProfile(support: Support): boolean {
 type Props = {
   id: string | null
   loadedProfile: BasicProfile | null
+  socialAccounts: Array<AlsoKnownAsAccount>
   support: Support
 }
 
@@ -56,18 +65,17 @@ export const getServerSideProps: GetServerSideProps<Props, { id: string }> = asy
   }
 
   let loadedProfile = null
+  let socialAccounts: Array<AlsoKnownAsAccount> = []
   let support: Support = 'unsupported'
 
   if (isDid(id)) {
     if (isSupportedDid(id)) {
       // Main case: we expect a DID to be provided
       support = 'supported'
-      const { idx } = await import('../server/idx')
-      try {
-        loadedProfile = await idx.get<BasicProfile>('basicProfile', id)
-      } catch (err) {
-        console.warn((err as Error).message)
-      }
+      const { core } = await import('../server')
+      const [profile, aka] = await Promise.all([core.getProfile(id), core.getAlsoKnownAs(id)])
+      loadedProfile = profile
+      socialAccounts = aka?.accounts ?? []
     } else {
       support = 'unsupported'
     }
@@ -77,9 +85,9 @@ export const getServerSideProps: GetServerSideProps<Props, { id: string }> = asy
       redirect: { destination: `/${id}${ETH_CHAIN_ID}`, permanent: true },
     }
   } else if (isCaip10(id)) {
-    const { idx } = await import('../server/idx')
+    const { core } = await import('../server')
     try {
-      const linkedDid = await idx.caip10ToDid(id)
+      const linkedDid = await core.idx.caip10ToDid(id)
       if (linkedDid != null) {
         // If there is a linked DID, redirect to the DID URL
         // This is a temporary redirect as the CAIP-10 could get linked to another DID
@@ -100,7 +108,7 @@ export const getServerSideProps: GetServerSideProps<Props, { id: string }> = asy
   }
 
   return {
-    props: { id, loadedProfile, support },
+    props: { id, loadedProfile, socialAccounts, support },
   }
 }
 
@@ -120,16 +128,22 @@ const Header = styled.div<{ url?: string }>`
   }
 `
 
-const Avatar = styled.div<{ url?: string }>`
+const AvatarContainer = styled.div`
   width: 146px;
   height: 146px;
   background-color: ${PLACEHOLDER_COLOR};
   border: 3px solid white;
   border-radius: 78px;
   margin-top: -78px;
+`
+
+const Avatar = styled.div<{ url: string }>`
+  width: 146px;
+  height: 146px;
+  border-radius: 78px;
   background-size: cover;
   ${(props) => css`
-    background-image: url(${props.url ?? avatarPlaceholder});
+    background-image: url(${props.url});
   `}
 `
 
@@ -141,15 +155,14 @@ const Name = styled.h1`
 
 type NoProfileProps = {
   id: string | null
-  setProfile: (profile: BasicProfile) => void
   support: Support
 }
 
-function NoProfile({ id, setProfile, support }: NoProfileProps) {
+function NoProfile({ id, support }: NoProfileProps) {
   const edit = canEditProfile(support) ? (
     <Box flex>
       <Box alignSelf="end" margin="medium" width="150px">
-        <EditProfileButton did={id} setProfile={setProfile} />
+        <ConnectSettingsButton did={id} />
       </Box>
     </Box>
   ) : null
@@ -163,7 +176,9 @@ function NoProfile({ id, setProfile, support }: NoProfileProps) {
       <Header />
       <Box alignSelf="center" width="large">
         <Box direction="row" flex>
-          <Avatar />
+          <AvatarContainer>
+            <AvatarPlaceholder did={id} size={146} />
+          </AvatarContainer>
           {edit}
         </Box>
         <Name>No profile</Name>
@@ -172,14 +187,14 @@ function NoProfile({ id, setProfile, support }: NoProfileProps) {
   )
 }
 
-export default function ProfilePage({ id, loadedProfile, support }: Props) {
+export default function ProfilePage({ id, loadedProfile, socialAccounts, support }: Props) {
   const [profile, setProfile] = useState<BasicProfile | null>(loadedProfile)
   useEffect(() => {
     setProfile(loadedProfile)
   }, [loadedProfile])
 
   if (id == null || profile == null || !canEditProfile(support)) {
-    return <NoProfile id={id} setProfile={setProfile} support={support} />
+    return <NoProfile id={id} support={support} />
   }
 
   const name = profile.name ?? '(no name)'
@@ -195,14 +210,14 @@ export default function ProfilePage({ id, loadedProfile, support }: Props) {
   ) : null
   const linksContainer = link ? (
     <Box direction="row" margin={{ vertical: 'small' }}>
-      <img alt="Link" src={linkIcon} />
+      <Image alt="Link" src={linkIcon} />
       {link}
     </Box>
   ) : null
 
   const location = profile.homeLocation ? (
     <Box direction="row" flex={false} margin={{ left: 'medium' }}>
-      <img alt="Home location" src={locationIcon} />
+      <Image alt="Home location" src={locationIcon} />
       <Text color="neutral-4" margin={{ left: 'small' }}>
         {profile.homeLocation}
       </Text>
@@ -210,7 +225,7 @@ export default function ProfilePage({ id, loadedProfile, support }: Props) {
   ) : null
   const country = profile.residenceCountry ? (
     <Box direction="row" flex={false} margin={{ left: 'medium' }}>
-      <img alt="Residence country" src={countryIcon} />
+      <Image alt="Residence country" src={countryIcon} />
       <Text color="neutral-4" margin={{ left: 'small' }}>
         {profile.residenceCountry}
       </Text>
@@ -236,6 +251,7 @@ export default function ProfilePage({ id, loadedProfile, support }: Props) {
 
   const metaImage = profile.image ? (
     <>
+      <meta name="twitter:card" content="summary" />
       <meta name="twitter:image" content={profile.image.original.src} />
       <meta name="twitter:image:alt" content={`Image for ${socialTitle}`} />
       <meta property="og:image" content={profile.image.original.src} />
@@ -251,10 +267,56 @@ export default function ProfilePage({ id, loadedProfile, support }: Props) {
     <meta name="twitter:card" content="summary" />
   )
 
+  const avatarURL = getImageURL(profile.image, { height: 150, width: 150 })
+  const avatar = avatarURL ? <Avatar url={avatarURL} /> : <AvatarPlaceholder did={id} size={146} />
+
+  let socialContainer = null
+  if (socialAccounts.length) {
+    const socialItems = socialAccounts.map((a) => {
+      const host = a.host ?? ''
+      const image =
+        host === GITHUB_HOST ? (
+          <Box margin={{ right: 'small' }} justify="center">
+            <Image alt="GitHub" src={githubIcon} />
+          </Box>
+        ) : host === TWITTER_HOST ? (
+          <Box margin={{ right: 'small' }} justify="center">
+            <Image alt="Twitter" src={twitterIcon} />
+          </Box>
+        ) : null
+      return (
+        <Box
+          key={host + a.id}
+          border={{ color: 'neutral-5' }}
+          direction="row"
+          margin={{ top: 'small' }}
+          pad="small"
+          round="small">
+          {image}
+          <Anchor href={`${a.protocol}://${host}/${a.id}`}>{a.id}</Anchor>
+        </Box>
+      )
+    })
+    socialContainer = (
+      <Box margin={{ top: 'large' }}>
+        <Box direction="row">
+          <Box flex>
+            <Text size="medium" weight="bold">
+              Social
+            </Text>
+          </Box>
+          <ConnectEditSocialAccountsButton did={id} />
+        </Box>
+        {socialItems}
+      </Box>
+    )
+  }
+
   return (
     <Layout>
       <Head>
         <title>{name} | Self.ID</title>
+        <meta name="twitter:site" content="@mySelfID" />
         <meta name="twitter:title" content={socialTitle} />
         <meta property="og:title" content={socialTitle} />
         {metaDescription}
@@ -264,18 +326,20 @@ export default function ProfilePage({ id, loadedProfile, support }: Props) {
       <Header url={getImageURL(profile.background, { height: 310, width: 2000 })} />
       <Box alignSelf="center" width="large" pad="medium">
         <Box direction="row" flex>
-          <Avatar url={getImageURL(profile.image, { height: 150, width: 150 })} />
+          <AvatarContainer>{avatar}</AvatarContainer>
           <Box align="end" flex>
-            <EditProfileButton did={id} setProfile={setProfile} />
+            <ConnectSettingsButton did={id} />
           </Box>
         </Box>
         <Name>
           {name}
           {profile.emoji ? ` ${profile.emoji}` : null}
         </Name>
+        <Text color="neutral-4">{id}</Text>
         {description}
         {linksContainer}
         {locationContainer}
+        {socialContainer}
       </Box>
     </Layout>
   )

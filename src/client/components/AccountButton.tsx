@@ -1,27 +1,32 @@
 import { Avatar, Box, Button, DropButton, Spinner, Text } from 'grommet'
+import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import avatarPlaceholder from '../../images/avatar-placeholder.png'
+import AvatarPlaceholder from '../../components/AvatarPlaceholder'
 import linkIcon from '../../images/icons/link.svg'
-import { getImageSrc } from '../../image'
+import { getImageSrc } from '../../sdk'
 import { formatDID } from '../../utils'
 
-import { useIDXAuth, useDIDsData, useLogin, useLogout } from '../hooks'
+import { useDIDsData, useEnvState, useLogin, useLogout } from '../hooks'
 
 type DisplayAvatarProps = {
+  did?: string
   label: string
   loading?: boolean
-  src?: string
+  src?: string | null
 }
 
-function DisplayAvatar({ label, loading, src }: DisplayAvatarProps) {
+function DisplayAvatar({ did, label, loading, src }: DisplayAvatarProps) {
   const avatar = loading ? (
     <Box pad="xxsmall">
       <Spinner />
     </Box>
+  ) : src ? (
+    <Avatar size="32px" src={src} flex={false} />
   ) : (
-    <Avatar size="32px" src={src ?? avatarPlaceholder} flex={false} />
+    <AvatarPlaceholder did={did} size={32} />
   )
 
   return (
@@ -41,23 +46,24 @@ function DisplayAvatar({ label, loading, src }: DisplayAvatarProps) {
 }
 
 type MenuButtonProps = {
+  href?: string
   label: string
   loading?: boolean
-  onClick: () => void
+  onClick?: () => void
 }
 
-function MenuButton({ label, loading, onClick }: MenuButtonProps) {
+function MenuButton({ label, loading, ...props }: MenuButtonProps) {
   return (
     <Button
+      {...props}
       alignSelf="start"
       icon={
         loading ? (
           <Spinner size="xsmall" />
         ) : (
-          <img
-            src={linkIcon}
-            style={{ marginBottom: '2px', marginTop: '2px', marginRight: '4px' }}
-          />
+          <Box style={{ marginBottom: '2px', marginTop: '2px', marginRight: '4px' }}>
+            <Image alt="" src={linkIcon} />
+          </Box>
         )
       }
       label={
@@ -65,7 +71,6 @@ function MenuButton({ label, loading, onClick }: MenuButtonProps) {
           {label}
         </Text>
       }
-      onClick={onClick}
       plain
     />
   )
@@ -73,8 +78,8 @@ function MenuButton({ label, loading, onClick }: MenuButtonProps) {
 
 export default function AccountButton() {
   const router = useRouter()
-  const [auth] = useIDXAuth()
-  const [login, loginModal] = useLogin()
+  const { auth } = useEnvState()
+  const login = useLogin()
   const logout = useLogout()
   const [knownDIDsData, loadDIDsData] = useDIDsData()
   const [isMenuOpen, setMenuOpen] = useState(false)
@@ -99,20 +104,20 @@ export default function AccountButton() {
 
   const onClickLogin = useCallback(() => {
     if (auth.state !== 'loading') {
-      void login().then(toProfile)
+      void login().then((self) => {
+        return self ? toProfile(self.id) : null
+      })
     }
   }, [auth.state, login, toProfile])
 
   const [displayName, avatarSrc] = useMemo(() => {
     if (auth.id == null) {
-      return ['', avatarPlaceholder]
+      return ['', null]
     }
 
     const profile = knownDIDsData?.[auth.id]?.profile
     const name = profile?.name ?? formatDID(auth.id)
-    const src = profile?.image
-      ? getImageSrc(profile.image, { height: 60, width: 60 })
-      : avatarPlaceholder
+    const src = profile?.image ? getImageSrc(profile.image, { height: 60, width: 60 }) : null
     return [name, src]
   }, [auth.id, knownDIDsData])
 
@@ -125,7 +130,11 @@ export default function AccountButton() {
           gap="small"
           pad="medium"
           round={{ corner: 'top', size: 'small' }}>
-          <Avatar size="60px" src={avatarSrc} />
+          {avatarSrc ? (
+            <Avatar size="60px" src={avatarSrc} />
+          ) : (
+            <AvatarPlaceholder did={auth.id} size={60} />
+          )}
           <Text size="medium" truncate weight="bold">
             {displayName}
           </Text>
@@ -153,6 +162,9 @@ export default function AccountButton() {
             loading={isLoadingProfile}
             onClick={() => toProfile(auth.id as string)}
           />
+          <Link href="/me/settings" passHref>
+            <MenuButton label="Settings" onClick={() => setMenuOpen(false)} />
+          </Link>
           <MenuButton label="Log out" onClick={() => logout()} />
         </Box>
       </Box>
@@ -170,23 +182,25 @@ export default function AccountButton() {
           setMenuOpen(true)
         }}
         open={isMenuOpen}>
-        <DisplayAvatar label={displayName} loading={isLoadingProfile} src={avatarSrc} />
+        <DisplayAvatar
+          did={auth.id}
+          label={displayName}
+          loading={isLoadingProfile}
+          src={avatarSrc}
+        />
       </DropButton>
     )
   }
 
   return auth.state === 'loading' ? (
-    <DisplayAvatar label="Connecting..." loading />
+    <DisplayAvatar did={auth.id} label="Connecting..." loading />
   ) : (
-    <>
-      <Button
-        primary
-        color="black"
-        label="Connect"
-        onClick={onClickLogin}
-        style={{ border: 0, color: 'white' }}
-      />
-      {loginModal}
-    </>
+    <Button
+      primary
+      color="black"
+      label="Connect"
+      onClick={onClickLogin}
+      style={{ border: 0, color: 'white' }}
+    />
   )
 }
