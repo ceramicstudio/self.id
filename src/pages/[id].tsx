@@ -210,7 +210,7 @@ export default function ProfilePage({ id, loadedProfile, socialAccounts, support
   ) : null
   const linksContainer = link ? (
     <Box direction="row" margin={{ vertical: 'small' }}>
-      <Image alt="Link" src={linkIcon} />
+      <Image alt="Link" src={linkIcon as StaticImageData} />
       {link}
     </Box>
   ) : null
@@ -277,11 +277,11 @@ export default function ProfilePage({ id, loadedProfile, socialAccounts, support
       const image =
         host === GITHUB_HOST ? (
           <Box margin={{ right: 'small' }} justify="center">
-            <Image alt="GitHub" src={githubIcon} />
+            <Image alt="GitHub" src={githubIcon as StaticImageData} />
           </Box>
         ) : host === TWITTER_HOST ? (
           <Box margin={{ right: 'small' }} justify="center">
-            <Image alt="Twitter" src={twitterIcon} />
+            <Image alt="Twitter" src={twitterIcon as StaticImageData} />
           </Box>
         ) : null
       return (

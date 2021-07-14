@@ -41,7 +41,7 @@ export default function Home() {
     <Spinner />
   ) : (
     <Box margin={{ left: 'small' }}>
-      <Image alt="" src={searchIcon} height={24} width={24} />
+      <Image alt="" src={searchIcon as StaticImageData} height={24} width={24} />
     </Box>
   )
 
@@ -135,7 +135,12 @@ export default function Home() {
             <Box direction="row">
               <Box direction="row" pad="medium" width="300px">
                 <Box flex={false} margin="small">
-                  <Image alt="profile" src={profileIcon} width={27} height={30} />
+                  <Image
+                    alt="profile"
+                    src={profileIcon as StaticImageData}
+                    width={27}
+                    height={30}
+                  />
                 </Box>
                 <Box>
                   <Text color="brand" size="large" weight={600}>
@@ -145,7 +150,7 @@ export default function Home() {
               </Box>
               <Box direction="row" pad="medium" width="300px">
                 <Box flex={false} margin="small">
-                  <Image alt="link" src={linkIcon} width={36} height={23} />
+                  <Image alt="link" src={linkIcon as StaticImageData} width={36} height={23} />
                 </Box>
                 <Box>
                   <Text color="brand" size="large" weight={600}>
@@ -157,7 +162,7 @@ export default function Home() {
             <Box direction="row">
               <Box direction="row" pad="medium" width="300px">
                 <Box flex={false} margin="small">
-                  <Image alt="verify" src={verifyIcon} width={27} height={30} />
+                  <Image alt="verify" src={verifyIcon as StaticImageData} width={27} height={30} />
                 </Box>
                 <Box>
                   <Text color="brand" size="large" weight={600}>
@@ -167,7 +172,12 @@ export default function Home() {
               </Box>
               <Box direction="row" pad="medium" width="300px">
                 <Box flex={false} margin="small">
-                  <Image alt="metaverse" src={metaverseIcon} width={32} height={32} />
+                  <Image
+                    alt="metaverse"
+                    src={metaverseIcon as StaticImageData}
+                    width={32}
+                    height={32}
+                  />
                 </Box>
                 <Box>
                   <Text color="brand" size="large" weight={600}>
@@ -188,13 +198,13 @@ export default function Home() {
               padding: '0.2rem 0.6rem 0 0.2rem',
             }}>
             <Anchor href="https://github.com/ceramicstudio/self.id" style={{ padding: '6px' }}>
-              <Image alt="GitHub" src={footerGithubIcon} />
+              <Image alt="GitHub" src={footerGithubIcon as StaticImageData} />
             </Anchor>
             <Anchor href="https://discord.gg/TPmE2rdNWK" style={{ padding: '6px' }}>
-              <Image alt="Discord" src={footerDiscordIcon} />
+              <Image alt="Discord" src={footerDiscordIcon as StaticImageData} />
             </Anchor>
             <Anchor href="https://twitter.com/mySelfID" style={{ padding: '6px' }}>
-              <Image alt="Twitter" src={footerTwitterIcon} />
+              <Image alt="Twitter" src={footerTwitterIcon as StaticImageData} />
             </Anchor>
             {/* <Anchor color="text" href="#" label="About" margin={{ left: 'medium', right: 'small' }} />
         <Anchor

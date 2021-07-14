@@ -14,7 +14,7 @@ export default function Navbar() {
     <Box background="white" direction="row" height="80px" pad={{ horizontal: 'medium' }}>
       <Box flex={false} align="center" justify="center">
         <Link href="/">
-          <Image src={logo} alt="Self.ID" />
+          <Image src={logo as StaticImageData} alt="Self.ID" />
         </Link>
       </Box>
       <Box flex="grow" align="end" justify="center">
