@@ -4,6 +4,7 @@ import Head from 'next/head'
 
 import Layout from '../../components/Layout'
 import Navbar from '../../components/Navbar'
+import OpenGraphMeta from '../../components/OpenGraphMeta'
 
 const SettingsScreen = dynamic(() => import('../../client/components/SettingsScreen'), {
   ssr: false,
@@ -14,6 +15,7 @@ export default function SettingsPage() {
     <Layout>
       <Head>
         <title>Settings | Self.ID</title>
+        <OpenGraphMeta />
       </Head>
       <Navbar />
       <Box alignSelf="center" margin="large" pad="medium" width="large">

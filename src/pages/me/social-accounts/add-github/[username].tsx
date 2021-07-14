@@ -4,6 +4,7 @@ import Head from 'next/head'
 
 import Layout from '../../../../components/Layout'
 import Navbar from '../../../../components/Navbar'
+import OpenGraphMeta from '../../../../components/OpenGraphMeta'
 
 const AddGitHubAccountScreen = dynamic(
   () => import('../../../../client/components/AddGitHubAccountScreen'),
@@ -15,6 +16,7 @@ export default function AddGitHubAccountPage() {
     <Layout>
       <Head>
         <title>Add GitHub account | Self.ID</title>
+        <OpenGraphMeta />
       </Head>
       <Navbar />
       <Box alignSelf="center" margin="large" pad="medium" width="large">

@@ -9,6 +9,14 @@ import { useEnvState } from '../hooks'
 
 import ConnectedContainer from './ConnectedContainer'
 
+function createTweetLink(did: string): string {
+  const text = encodeURIComponent(
+    `Verifying my Twitter account for my decentralized identity ${did} on @ceramicnetwork via @mySelfID.\n\nView my Self.ID here ↓`
+  )
+  const url = encodeURIComponent(`${document.location.origin}/${did}`)
+  return `https://twitter.com/intent/tweet?text=${text}&url=${url}`
+}
+
 export default function AddTwitterAccountScreen() {
   const { self } = useEnvState()
   const [challengeLoading, setChallengeLoading] = useState<boolean>(false)
@@ -108,7 +116,7 @@ export default function AddTwitterAccountScreen() {
           <Box>
             <Button
               disabled={challenge == null}
-              href={`https://twitter.com/intent/tweet?text=${did}&via=mySelfID`}
+              href={createTweetLink(did)}
               label="Tweet"
               target="_blank"
             />

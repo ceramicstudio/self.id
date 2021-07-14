@@ -4,6 +4,7 @@ import Head from 'next/head'
 
 import Layout from '../../../components/Layout'
 import Navbar from '../../../components/Navbar'
+import OpenGraphMeta from '../../../components/OpenGraphMeta'
 
 const SocialAccountsScreen = dynamic(
   () => import('../../../client/components/SocialAccountsScreen'),
@@ -15,6 +16,7 @@ export default function SocialAccountsPage() {
     <Layout>
       <Head>
         <title>My social accounts | Self.ID</title>
+        <OpenGraphMeta />
       </Head>
       <Navbar />
       <Box alignSelf="center" margin="large" pad="medium" width="large">

@@ -16,6 +16,7 @@ import footerGithubIcon from '../images/icons/social-github.svg'
 import footerTwitterIcon from '../images/icons/social-twitter.svg'
 
 import Navbar from '../components/Navbar'
+import OpenGraphMeta from '../components/OpenGraphMeta'
 import { BRAND_COLOR } from '../theme'
 import { withMediaQuery } from '../components/media-query/with-media-query'
 
@@ -69,6 +70,7 @@ export default function Home() {
         fill="horizontal">
         <Head>
           <title>Self.ID</title>
+          <OpenGraphMeta />
         </Head>
         <Navbar />
         <Box flex>
