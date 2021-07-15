@@ -1,5 +1,6 @@
-import { Anchor, Box, Heading, Image, Spinner, Text, TextInput } from 'grommet'
+import { Anchor, Box, Heading, Spinner, Text, TextInput } from 'grommet'
 import Head from 'next/head'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import type { FormEvent } from 'react'
@@ -15,6 +16,7 @@ import footerGithubIcon from '../images/icons/social-github.svg'
 import footerTwitterIcon from '../images/icons/social-twitter.svg'
 
 import Navbar from '../components/Navbar'
+import OpenGraphMeta from '../components/OpenGraphMeta'
 import { BRAND_COLOR } from '../theme'
 import { withMediaQuery } from '../components/media-query/with-media-query'
 
@@ -38,17 +40,19 @@ export default function Home() {
   const inputIcon = loading ? (
     <Spinner />
   ) : (
-    <Image margin={{ left: 'small' }} src={searchIcon} height={24} width={24} />
+    <Box margin={{ left: 'small' }}>
+      <Image alt="" src={searchIcon as StaticImageData} height={24} width={24} />
+    </Box>
   )
 
   return (
     <ResponsiveBox
-      direction={'row'}
-      align={'center'}
+      direction="row"
+      align="center"
       style={{
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundImage: `url(${backgroundImage})`,
+        backgroundImage: `url(${backgroundImage.src})`,
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'bottom right',
       }}
@@ -63,9 +67,10 @@ export default function Home() {
           flexDirection: 'column',
           maxWidth: '1536px',
         }}
-        fill={'horizontal'}>
+        fill="horizontal">
         <Head>
           <title>Self.ID</title>
+          <OpenGraphMeta />
         </Head>
         <Navbar />
         <Box flex>
@@ -129,8 +134,13 @@ export default function Home() {
             style={{ backgroundColor: 'rgba(255,255,255,0.8)' }}>
             <Box direction="row">
               <Box direction="row" pad="medium" width="300px">
-                <Box flex={{ shrink: 0 }}>
-                  <Image alt="profile" src={profileIcon} margin="small" width={27} height={30} />
+                <Box flex={false} margin="small">
+                  <Image
+                    alt="profile"
+                    src={profileIcon as StaticImageData}
+                    width={27}
+                    height={30}
+                  />
                 </Box>
                 <Box>
                   <Text color="brand" size="large" weight={600}>
@@ -139,8 +149,8 @@ export default function Home() {
                 </Box>
               </Box>
               <Box direction="row" pad="medium" width="300px">
-                <Box flex={{ shrink: 0 }}>
-                  <Image alt="link" src={linkIcon} margin="small" width={36} height={23} />
+                <Box flex={false} margin="small">
+                  <Image alt="link" src={linkIcon as StaticImageData} width={36} height={23} />
                 </Box>
                 <Box>
                   <Text color="brand" size="large" weight={600}>
@@ -151,8 +161,8 @@ export default function Home() {
             </Box>
             <Box direction="row">
               <Box direction="row" pad="medium" width="300px">
-                <Box flex={{ shrink: 0 }}>
-                  <Image alt="verify" src={verifyIcon} margin="small" width={27} height={30} />
+                <Box flex={false} margin="small">
+                  <Image alt="verify" src={verifyIcon as StaticImageData} width={27} height={30} />
                 </Box>
                 <Box>
                   <Text color="brand" size="large" weight={600}>
@@ -161,11 +171,10 @@ export default function Home() {
                 </Box>
               </Box>
               <Box direction="row" pad="medium" width="300px">
-                <Box flex={{ shrink: 0 }}>
+                <Box flex={false} margin="small">
                   <Image
                     alt="metaverse"
-                    src={metaverseIcon}
-                    margin="small"
+                    src={metaverseIcon as StaticImageData}
                     width={32}
                     height={32}
                   />
@@ -188,14 +197,14 @@ export default function Home() {
               lineHeight: 0,
               padding: '0.2rem 0.6rem 0 0.2rem',
             }}>
-            <Anchor href="https://github.com/ceramicstudio/self.id">
-              <Image alt="GitHub" src={footerGithubIcon} style={{ padding: '6px' }} />
+            <Anchor href="https://github.com/ceramicstudio/self.id" style={{ padding: '6px' }}>
+              <Image alt="GitHub" src={footerGithubIcon as StaticImageData} />
             </Anchor>
-            <Anchor href="https://discord.gg/TPmE2rdNWK">
-              <Image alt="Discord" src={footerDiscordIcon} style={{ padding: '6px' }} />
+            <Anchor href="https://discord.gg/TPmE2rdNWK" style={{ padding: '6px' }}>
+              <Image alt="Discord" src={footerDiscordIcon as StaticImageData} />
             </Anchor>
-            <Anchor href="https://twitter.com/mySelfID">
-              <Image alt="Twitter" src={footerTwitterIcon} style={{ padding: '6px' }} />
+            <Anchor href="https://twitter.com/mySelfID" style={{ padding: '6px' }}>
+              <Image alt="Twitter" src={footerTwitterIcon as StaticImageData} />
             </Anchor>
             {/* <Anchor color="text" href="#" label="About" margin={{ left: 'medium', right: 'small' }} />
         <Anchor

@@ -53,6 +53,9 @@ const torusChainId = process.env.NEXT_PUBLIC_TORUS_CHAIN_ID
 if (typeof torusChainId === 'string') {
   connectors.push({
     key: 'torus',
-    connector: new TorusConnector({ chainId: parseInt(torusChainId, 10) }),
+    connector: new TorusConnector({
+      chainId: parseInt(torusChainId, 10),
+      initOptions: { showTorusButton: false },
+    }),
   })
 }

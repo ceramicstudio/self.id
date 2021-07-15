@@ -1,7 +1,10 @@
 import { atom } from 'jotai'
 
-import { createIDXEnv } from './idx'
-import type { KnownDIDs, KnownDIDsData } from './idx'
+import { APP_NETWORK } from '../constants'
+import { WebClient } from '../sdk/web'
+import type { SelfID } from '../sdk/web'
+
+import type { KnownDIDs, KnownDIDsData } from './env'
 
 const KNOWN_DIDS_KEY = 'selfID-knownDIDs-v0'
 const SELECTED_DID_KEY = 'selfID-selectedDID-v0'
@@ -21,40 +24,47 @@ export const knownDIDsAtom = atom(getKnownDIDs(), (_get, set, dids: KnownDIDs) =
 
 export const knownDIDsDataAtom = atom<KnownDIDsData | null>(null)
 
-export type IDXAuth =
+export type AuthState =
   | { state: 'unknown'; id?: undefined }
   | { state: 'local'; id: string }
   | { state: 'loading'; id?: string }
   | { state: 'error'; id?: string; error?: Error }
   | { state: 'confirmed'; id: string; address: string }
 
-function getAuthState(): IDXAuth {
-  const id = localStorage.getItem(SELECTED_DID_KEY) || null
-  return id ? { state: 'local', id } : { state: 'unknown' }
+export type EnvState = {
+  auth: AuthState
+  client: WebClient
+  self: SelfID | null
 }
 
-const idxAuthStateAtom = atom(getAuthState())
+export function getInitialEnv(checkLocal = true): EnvState {
+  const client = new WebClient(APP_NETWORK)
+  if (!checkLocal) {
+    return { auth: { state: 'unknown' }, client, self: null }
+  }
 
-export const idxAuthAtom = atom(
-  (get) => get(idxAuthStateAtom),
-  (_get, set, auth: IDXAuth) => {
-    if (auth.id == null) {
+  const id = localStorage.getItem(SELECTED_DID_KEY) || null
+  return {
+    auth: id ? { state: 'local', id } : { state: 'unknown' },
+    client,
+    self: null,
+  }
+}
+
+const envStateAtom = atom(getInitialEnv())
+
+export const envAtom = atom(
+  (get) => get(envStateAtom),
+  (get, set, update: Partial<EnvState>) => {
+    const env = { ...get(envStateAtom), ...update } as EnvState
+    if (env.auth.id == null) {
       localStorage.removeItem(SELECTED_DID_KEY)
     } else {
-      localStorage.setItem(SELECTED_DID_KEY, auth.id)
+      localStorage.setItem(SELECTED_DID_KEY, env.auth.id)
     }
-    set(idxAuthStateAtom, auth)
+    set(envStateAtom, env)
   }
 )
-
-export const idxEnvAtom = atom(createIDXEnv(), (get, set, _) => {
-  const existing = get(idxEnvAtom)
-  set(idxEnvAtom, createIDXEnv(existing))
-})
-
-export const linkingAddressAtom = atom<string | null>(null)
-
-export const createDIDAtom = atom<{ creating: boolean; error?: Error }>({ creating: false })
 
 export type EditProfileState = { status: 'pending' | 'editing' | 'failed' | 'done'; error?: Error }
 export const editProfileAtom = atom<EditProfileState>({ status: 'pending' })
