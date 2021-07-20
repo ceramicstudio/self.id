@@ -19,7 +19,7 @@ import locationIcon from '../images/icons/location.png'
 import githubIcon from '../images/icons/social-github.svg'
 import twitterIcon from '../images/icons/social-twitter.svg'
 import { BRAND_COLOR, PLACEHOLDER_COLOR } from '../theme'
-import { isEthereumAddress, isSupportedDid } from '../utils'
+import { formatDID, isEthereumAddress, isSupportedDid } from '../utils'
 
 const ETH_CHAIN_ID = `@eip155:1`
 
@@ -239,7 +239,7 @@ export default function ProfilePage({ id, loadedProfile, socialAccounts, support
       </Box>
     ) : null
 
-  const socialTitle = profile.name ? `${profile.name} on Self.ID` : 'Self.ID'
+  const socialTitle = `${profile.name ?? formatDID(id)} on Self.ID`
 
   const metaDescription = profile.description ? (
     <>
@@ -249,25 +249,31 @@ export default function ProfilePage({ id, loadedProfile, socialAccounts, support
     </>
   ) : null
 
-  const metaImage = profile.image ? (
-    <>
-      <meta name="twitter:card" content="summary" />
-      <meta name="twitter:image" content={profile.image.original.src} />
-      <meta name="twitter:image:alt" content={`Image for ${socialTitle}`} />
-      <meta property="og:image" content={profile.image.original.src} />
-    </>
-  ) : profile.background ? (
-    <>
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:image" content={profile.background.original.src} />
-      <meta name="twitter:image:alt" content={`Background image for ${socialTitle}`} />
-      <meta property="og:image" content={profile.background.original.src} />
-    </>
-  ) : (
-    <meta name="twitter:card" content="summary" />
-  )
-
   const avatarURL = getImageURL(profile.image, { height: 150, width: 150 })
+
+  let metaImage = <meta name="twitter:card" content="summary" />
+  if (avatarURL != null) {
+    metaImage = (
+      <>
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:image" content={avatarURL} />
+        <meta name="twitter:image:alt" content={`Image for ${socialTitle}`} />
+        <meta property="og:image" content={avatarURL} />
+      </>
+    )
+  } else if (profile.background != null) {
+    // Twitter uses a 2:1 aspect ratio for large images
+    const backgroundURL = getImageURL(profile.background, { height: 400, width: 800 })
+    metaImage = (
+      <>
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content={backgroundURL} />
+        <meta name="twitter:image:alt" content={`Background image for ${socialTitle}`} />
+        <meta property="og:image" content={backgroundURL} />
+      </>
+    )
+  }
+
   const avatar = avatarURL ? <Avatar url={avatarURL} /> : <AvatarPlaceholder did={id} size={146} />
 
   let socialContainer = null
@@ -335,7 +341,9 @@ export default function ProfilePage({ id, loadedProfile, socialAccounts, support
           {name}
           {profile.emoji ? ` ${profile.emoji}` : null}
         </Name>
-        <Text color="neutral-4">{id}</Text>
+        <Box overflow="auto">
+          <Text color="neutral-4">{id}</Text>
+        </Box>
         {description}
         {linksContainer}
         {locationContainer}
