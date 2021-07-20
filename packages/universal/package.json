@@ -1,0 +1,44 @@
+{
+  "name": "@self.id/universal",
+  "version": "0.1.0",
+  "author": "3Box Labs",
+  "license": "(Apache-2.0 OR MIT)",
+  "homepage": "https://github.com/ceramicstudio/self.id#readme",
+  "keywords": [
+    "self.id",
+    "web3"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ceramicstudio/self.id",
+    "directory": "packages/universal"
+  },
+  "module": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "exports": {
+    "import": "./dist/index.js",
+    "default": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=14"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "lint": "eslint --fix",
+    "prepublish": "yarn build",
+    "prepublishOnly": "package-check"
+  },
+  "dependencies": {
+    "@ceramicnetwork/3id-did-resolver": "^1.2.7",
+    "@ceramicnetwork/http-client": "^1.0.7",
+    "@ceramicstudio/idx": "^0.12.0",
+    "did-resolver": "^3.1.0",
+    "key-did-resolver": "^1.2.0"
+  },
+  "devDependencies": {
+    "@ceramicstudio/idx-constants": "^1.0.0"
+  }
+}
