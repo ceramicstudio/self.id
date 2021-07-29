@@ -1,11 +1,9 @@
-import type { AlsoKnownAsAccount } from '@ceramicstudio/idx-constants'
 import { GITHUB_HOST, TWITTER_HOST } from '@self.id/universal'
+import type { AlsoKnownAsAccount } from '@self.id/universal'
 import type { DagJWS } from 'dids'
 
-export function createGitHub(
-  username: string,
-  attestation: string,
-): AlsoKnownAsAccount {
+/** @internal */
+export function createGitHub(username: string, attestation: string): AlsoKnownAsAccount {
   return {
     protocol: 'https',
     host: GITHUB_HOST,
@@ -14,23 +12,20 @@ export function createGitHub(
   }
 }
 
+/** @internal */
 export function findGitHub(
   accounts: Array<AlsoKnownAsAccount>,
-  username: string,
+  username: string
 ): AlsoKnownAsAccount | undefined {
   return accounts.find((a) => a.host === GITHUB_HOST && a.id === username)
 }
-export function findGitHubIndex(
-  accounts: Array<AlsoKnownAsAccount>,
-  username: string,
-): number {
+/** @internal */
+export function findGitHubIndex(accounts: Array<AlsoKnownAsAccount>, username: string): number {
   return accounts.findIndex((a) => a.host === GITHUB_HOST && a.id === username)
 }
 
-export function createTwitter(
-  username: string,
-  attestation: string,
-): AlsoKnownAsAccount {
+/** @internal */
+export function createTwitter(username: string, attestation: string): AlsoKnownAsAccount {
   return {
     protocol: 'https',
     host: TWITTER_HOST,
@@ -39,16 +34,15 @@ export function createTwitter(
   }
 }
 
+/** @internal */
 export function findTwitter(
   accounts: Array<AlsoKnownAsAccount>,
-  username: string,
+  username: string
 ): AlsoKnownAsAccount | undefined {
   return accounts.find((a) => a.host === TWITTER_HOST && a.id === username)
 }
-export function findTwitterIndex(
-  accounts: Array<AlsoKnownAsAccount>,
-  username: string,
-): number {
+/** @internal */
+export function findTwitterIndex(accounts: Array<AlsoKnownAsAccount>, username: string): number {
   return accounts.findIndex((a) => a.host === TWITTER_HOST && a.id === username)
 }
 
@@ -67,17 +61,18 @@ export type ChallengeResponse = {
 }
 
 export class IdentityLink {
-  _url: string
+  #url: string
 
   constructor(url: string) {
-    this._url = url
+    this.#url = url
   }
 
+  /** @internal */
   async _post<Data = Record<string, any>, Body = Record<string, any>>(
     endpoint: string,
-    body: Body,
+    body: Body
   ): Promise<Data> {
-    const res = await fetch(`${this._url}${endpoint}`, {
+    const res = await fetch(`${this.#url}${endpoint}`, {
       headers: { 'content-type': 'application/json' },
       method: 'POST',
       body: JSON.stringify(body),
@@ -98,10 +93,7 @@ export class IdentityLink {
   }
 
   async confirmGitHub(jws: DagJWS): Promise<string> {
-    const res = await this._post<AttestationResponse>(
-      '/api/v0/confirm-github',
-      { jws },
-    )
+    const res = await this._post<AttestationResponse>('/api/v0/confirm-github', { jws })
     return res.data.attestation
   }
 
@@ -114,10 +106,7 @@ export class IdentityLink {
   }
 
   async confirmTwitter(jws: DagJWS): Promise<string> {
-    const res = await this._post<AttestationResponse>(
-      '/api/v0/confirm-twitter',
-      { jws },
-    )
+    const res = await this._post<AttestationResponse>('/api/v0/confirm-twitter', { jws })
     return res.data.attestation
   }
 }

@@ -30,7 +30,7 @@ export const createMediaQueriesArray = (
 
   // styled-components can handle an array of styles in
   // the style function, so we'll return an array.
-  const queries = sortedBreakpoints.reduce<Array<string>>((arr, item, index) => {
+  const queries = sortedBreakpoints.reduce<Array<string>>((arr, _item, index) => {
     const css = Object.entries(mediaQuery).reduce<string>((acc, [cssProp, cssArray]) => {
       if (cssArray) {
         const element = cssArray[index]

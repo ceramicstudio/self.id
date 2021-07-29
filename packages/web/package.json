@@ -13,11 +13,12 @@
     "url": "https://github.com/ceramicstudio/self.id",
     "directory": "packages/web"
   },
-  "module": "dist/index.js",
+  "main": "dist/cjs.js",
+  "module": "dist/esm.js",
   "typings": "dist/index.d.ts",
   "exports": {
-    "import": "./dist/index.js",
-    "default": "./dist/index.js"
+    "import": "./dist/esm.js",
+    "default": "./dist/cjs.js"
   },
   "files": [
     "dist"
@@ -26,7 +27,7 @@
     "node": ">=14"
   },
   "scripts": {
-    "build": "rollup -c",
+    "build": "del dist && tsc --emitDeclarationOnly --skipLibCheck && rollup -c",
     "lint": "eslint --fix",
     "prepublish": "yarn build",
     "prepublishOnly": "package-check"
@@ -36,8 +37,5 @@
     "@self.id/universal": "^0.1.0",
     "dids": "^2.4.0",
     "pica": "^7.1.0"
-  },
-  "devDependencies": {
-    "@ceramicstudio/idx-constants": "^1.0.0"
   }
 }

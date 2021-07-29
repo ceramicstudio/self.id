@@ -1,5 +1,11 @@
-import { getLegacy3BoxProfileAsBasicProfile, isCaip10, isDid } from '@ceramicstudio/idx'
-import { GITHUB_HOST, TWITTER_HOST, getImageSrc } from '@self.id/universal'
+import { getLegacy3BoxProfileAsBasicProfile } from '@self.id/3box-legacy'
+import {
+  GITHUB_HOST,
+  TWITTER_HOST,
+  getImageSrc,
+  isCAIP10string,
+  isDIDstring,
+} from '@self.id/universal'
 import type { AlsoKnownAsAccount, BasicProfile, Dimensions, ImageSources } from '@self.id/universal'
 import { Anchor, Box, Paragraph, Text } from 'grommet'
 import type { GetServerSideProps } from 'next'
@@ -18,7 +24,7 @@ import locationIcon from '../images/icons/location.png'
 import githubIcon from '../images/icons/social-github.svg'
 import twitterIcon from '../images/icons/social-twitter.svg'
 import { BRAND_COLOR, PLACEHOLDER_COLOR } from '../theme'
-import { isEthereumAddress, isSupportedDid } from '../utils'
+import { isEthereumAddress, isSupportedDID } from '../utils'
 
 const ETH_CHAIN_ID = `@eip155:1`
 
@@ -67,8 +73,8 @@ export const getServerSideProps: GetServerSideProps<Props, { id: string }> = asy
   let socialAccounts: Array<AlsoKnownAsAccount> = []
   let support: Support = 'unsupported'
 
-  if (isDid(id)) {
-    if (isSupportedDid(id)) {
+  if (isDIDstring(id)) {
+    if (isSupportedDID(id)) {
       // Main case: we expect a DID to be provided
       support = 'supported'
       const { core } = await import('../server')
@@ -83,10 +89,10 @@ export const getServerSideProps: GetServerSideProps<Props, { id: string }> = asy
     return {
       redirect: { destination: `/${id}${ETH_CHAIN_ID}`, permanent: true },
     }
-  } else if (isCaip10(id)) {
+  } else if (isCAIP10string(id)) {
     const { core } = await import('../server')
     try {
-      const linkedDid = await core.idx.caip10ToDid(id)
+      const linkedDid = await core.getAccountDID(id)
       if (linkedDid != null) {
         // If there is a linked DID, redirect to the DID URL
         // This is a temporary redirect as the CAIP-10 could get linked to another DID

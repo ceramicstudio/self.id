@@ -1,6 +1,5 @@
-import type { ImageMetadata, ImageSources } from '@ceramicstudio/idx-constants'
 import { IPFS_PREFIX } from '@self.id/universal'
-import type { Dimensions, SizeMode } from '@self.id/universal'
+import type { Dimensions, ImageMetadata, ImageSources, SizeMode } from '@self.id/universal'
 import Pica from 'pica'
 
 import { uploadFile } from './ipfs'

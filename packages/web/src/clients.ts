@@ -5,15 +5,15 @@ import { Core } from '@self.id/universal'
 import { DID } from 'dids'
 
 export class WebClient extends Core {
-  _threeId: ThreeIdConnect
+  #threeId: ThreeIdConnect
 
   constructor(network: AppNetwork) {
     super(network)
-    this._threeId = new ThreeIdConnect(this._config.connectNetwork)
+    this.#threeId = new ThreeIdConnect(this.config.connectNetwork)
   }
 
   get threeId(): ThreeIdConnect {
-    return this._threeId
+    return this.#threeId
   }
 
   async authenticate(authProvider: EthereumAuthProvider, attachToCeramic = false): Promise<DID> {
@@ -26,9 +26,9 @@ export class WebClient extends Core {
   }
 
   async connect(authProvider: EthereumAuthProvider): Promise<DID> {
-    await this._threeId.connect(authProvider)
+    await this.#threeId.connect(authProvider)
     return new DID({
-      provider: this._threeId.getDidProvider(),
+      provider: this.#threeId.getDidProvider(),
       resolver: this.resolver,
     })
   }

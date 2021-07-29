@@ -1,9 +1,9 @@
-# Self.ID Universal APIs
+# Self.ID 3Box legacy APIs
 
 ## Installation
 
 ```sh
-npm install @self.id/universal
+npm install @self.id/3box-legacy
 ```
 
 ## License

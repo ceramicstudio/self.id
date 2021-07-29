@@ -3,7 +3,7 @@ import { Avatar, Box, Button, DropButton, Spinner, Text } from 'grommet'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { forwardRef, useCallback, useEffect, useMemo, useState } from 'react'
 
 import AvatarPlaceholder from '../../components/AvatarPlaceholder'
 import linkIcon from '../../images/icons/link.svg'
@@ -52,10 +52,14 @@ type MenuButtonProps = {
   onClick?: () => void
 }
 
-function MenuButton({ label, loading, ...props }: MenuButtonProps) {
+const MenuButton = forwardRef(function MenuButtonComponent(
+  { label, loading, ...props }: MenuButtonProps,
+  ref
+) {
   return (
     <Button
       {...props}
+      ref={ref}
       alignSelf="start"
       icon={
         loading ? (
@@ -74,7 +78,7 @@ function MenuButton({ label, loading, ...props }: MenuButtonProps) {
       plain
     />
   )
-}
+})
 
 export default function AccountButton() {
   const router = useRouter()
@@ -93,7 +97,7 @@ export default function AccountButton() {
     (id: string | null) => {
       if (id != null) {
         setLoadingProfile(true)
-        return router.push(`/${id}`).then(() => {
+        void router.push(`/${id}`).then(() => {
           setMenuOpen(false)
           setLoadingProfile(false)
         })
@@ -162,7 +166,7 @@ export default function AccountButton() {
             loading={isLoadingProfile}
             onClick={() => toProfile(auth.id as string)}
           />
-          <Link href="/me/settings" passHref>
+          <Link href="/me/settings">
             <MenuButton label="Settings" onClick={() => setMenuOpen(false)} />
           </Link>
           <MenuButton label="Log out" onClick={() => logout()} />
