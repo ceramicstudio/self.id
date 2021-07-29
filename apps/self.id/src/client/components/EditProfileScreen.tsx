@@ -33,11 +33,11 @@ function profileToForm({ nationalities, ...profile }: BasicProfile): FormValue {
 function changeProfile(profile: BasicProfile, { nationality, ...value }: FormValue): BasicProfile {
   const changed = { ...profile, ...value }
 
-  const nationalities = profile.nationalities ?? []
-  if (nationality && !nationalities.includes(nationality)) {
+  const nationalities = profile.nationalities
+  if (nationality && Array.isArray(nationalities) && !nationalities.includes(nationality)) {
     nationalities.unshift(nationality)
   }
-  if (nationalities.length) {
+  if (nationalities?.length) {
     changed.nationalities = nationalities
   }
 

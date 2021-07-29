@@ -1,9 +1,9 @@
-# Web3 Profile DataModel
+# Self.ID Web APIs
 
 ## Installation
 
 ```sh
-npm install -D @datamodels/web3-profile
+npm install @self.id/web
 ```
 
 ## License

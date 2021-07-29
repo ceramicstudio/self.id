@@ -13,6 +13,7 @@
     "url": "https://github.com/ceramicstudio/self.id",
     "directory": "packages/web"
   },
+  "type": "module",
   "module": "dist/index.js",
   "typings": "dist/index.d.ts",
   "exports": {
@@ -36,8 +37,5 @@
     "@self.id/universal": "^0.1.0",
     "dids": "^2.4.0",
     "pica": "^7.1.0"
-  },
-  "devDependencies": {
-    "@ceramicstudio/idx-constants": "^1.0.0"
   }
 }

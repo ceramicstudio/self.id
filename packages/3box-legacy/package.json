@@ -1,0 +1,41 @@
+{
+  "name": "@self.id/3box-legacy",
+  "version": "0.1.0",
+  "author": "3Box Labs",
+  "license": "(Apache-2.0 OR MIT)",
+  "homepage": "https://github.com/ceramicstudio/self.id#readme",
+  "keywords": [
+    "self.id",
+    "web3"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ceramicstudio/self.id",
+    "directory": "packages/3box-legacy"
+  },
+  "type": "module",
+  "module": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "exports": {
+    "import": "./dist/index.js",
+    "default": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=14"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "lint": "eslint --fix",
+    "prepublish": "yarn build",
+    "prepublishOnly": "package-check"
+  },
+  "dependencies": {
+    "cross-fetch": "^3.1.4"
+  },
+  "devDependencies": {
+    "@glazed/types": "^0.1.2"
+  }
+}

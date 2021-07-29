@@ -93,7 +93,7 @@ export default function AccountButton() {
     (id: string | null) => {
       if (id != null) {
         setLoadingProfile(true)
-        return router.push(`/${id}`).then(() => {
+        void router.push(`/${id}`).then(() => {
           setMenuOpen(false)
           setLoadingProfile(false)
         })

@@ -1,29 +1,29 @@
 import type { Core } from './core'
-import type { Identifyable } from './types'
+import type { AlsoKnownAs, AlsoKnownAsAccount, BasicProfile, Identifyable } from './types'
 
 export class PublicID implements Identifyable {
-  _core: Core
-  _id: string
+  #core: Core
+  #id: string
 
   constructor(core: Core, id: string) {
-    this._core = core
-    this._id = id
+    this.#core = core
+    this.#id = id
   }
 
-  get id() {
-    return this._id
+  get id(): string {
+    return this.#id
   }
 
-  async getAlsoKnownAs() {
-    return await this._core.getAlsoKnownAs(this._id)
+  async getAlsoKnownAs(): Promise<AlsoKnownAs | null> {
+    return await this.#core.getAlsoKnownAs(this.#id)
   }
 
-  async getSocialAccounts() {
+  async getSocialAccounts(): Promise<Array<AlsoKnownAsAccount>> {
     const aka = await this.getAlsoKnownAs()
     return aka?.accounts ?? []
   }
 
-  async getProfile() {
-    return await this._core.getProfile(this._id)
+  async getProfile(): Promise<BasicProfile | null> {
+    return await this.#core.getProfile(this.#id)
   }
 }

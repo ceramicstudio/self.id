@@ -1,15 +1,12 @@
-import type { ImageMetadata, ImageSources } from '@ceramicstudio/idx-constants'
-
 import { IPFS_PREFIX, IPFS_URL } from './constants'
-
-export type { ImageMetadata, ImageSources } from '@ceramicstudio/idx-constants'
+import type { ImageMetadata, ImageSources } from './types'
 
 export type Dimensions = { height: number; width: number }
 export type SizeMode = 'contain' | 'cover'
 
 function selectCover(
   options: Array<ImageMetadata>,
-  { height, width }: Dimensions,
+  { height, width }: Dimensions
 ): ImageMetadata | null {
   let selected: ImageMetadata | null = null
   for (const option of options) {
@@ -17,9 +14,7 @@ function selectCover(
       option.height >= height &&
       option.width >= width &&
       (selected === null ||
-        (selected.size != null &&
-          option.size != null &&
-          option.size < selected.size) ||
+        (selected.size != null && option.size != null && option.size < selected.size) ||
         option.height * option.width < selected.height * selected.width)
     ) {
       selected = option
@@ -30,7 +25,7 @@ function selectCover(
 
 function selectContain(
   options: Array<ImageMetadata>,
-  { height, width }: Dimensions,
+  { height, width }: Dimensions
 ): ImageMetadata | null {
   let selected: ImageMetadata | null = null
   for (const option of options) {
@@ -38,9 +33,7 @@ function selectContain(
       option.height <= height &&
       option.width <= width &&
       (selected === null ||
-        (selected.size != null &&
-          option.size != null &&
-          option.size < selected.size) ||
+        (selected.size != null && option.size != null && option.size < selected.size) ||
         option.height * option.width > selected.height * selected.width)
     ) {
       selected = option
@@ -52,7 +45,7 @@ function selectContain(
 export function selectImageSource(
   sources: ImageSources,
   dimensions: Dimensions,
-  mode: SizeMode = 'cover',
+  mode: SizeMode = 'cover'
 ): ImageMetadata {
   let alternative: ImageMetadata | null = null
   if (Array.isArray(sources.alternatives)) {
@@ -71,7 +64,7 @@ export function toImageSrc(image: ImageMetadata): string {
 export function getImageSrc(
   sources: ImageSources,
   dimensions: Dimensions,
-  mode?: SizeMode,
-) {
+  mode?: SizeMode
+): string {
   return toImageSrc(selectImageSource(sources, dimensions, mode))
 }

@@ -20,6 +20,6 @@ export function isEthereumAddress(address: string): boolean {
   return ethAddressRegex.test(address)
 }
 
-export function isSupportedDid(did: string): boolean {
+export function isSupportedDID(did: string): boolean {
   return did.startsWith('did:3') || did.startsWith('did:key')
 }

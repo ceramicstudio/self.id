@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "jsx": "preserve",
+    "lib": ["DOM", "ES2020"],
+    "skipLibCheck": true
+  },
+  "typedocOptions": {
+    "entryPoints": ["./packages/3box-legacy/src/index.ts", "./packages/universal/src/index.ts", "./packages/web/src/index.ts"],
+    "excludeInternal": true,
+    "excludePrivate": true
+  }
+}

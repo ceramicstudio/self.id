@@ -1,10 +1,6 @@
 import type { EthereumAuthProvider } from '@3id/connect'
-import type {
-  AlsoKnownAsAccount,
-  BasicProfile,
-} from '@ceramicstudio/idx-constants'
-import type { AppNetwork, Identifyable } from '@self.id/universal'
 import { GITHUB_HOST, TWITTER_HOST } from '@self.id/universal'
+import type { AlsoKnownAsAccount, AppNetwork, BasicProfile, Identifyable } from '@self.id/universal'
 import { DID } from 'dids'
 
 import { WebClient } from './clients'
@@ -21,44 +17,44 @@ import {
 export class SelfID implements Identifyable {
   static async authenticate(
     network: AppNetwork,
-    authProvider: EthereumAuthProvider,
+    authProvider: EthereumAuthProvider
   ): Promise<SelfID> {
     const client = new WebClient(network)
     const did = await client.authenticate(authProvider, true)
     return new SelfID(client, did)
   }
 
-  _client: WebClient
-  _did: DID
-  _identityLink: IdentityLink
+  #client: WebClient
+  #did: DID
+  #identityLink: IdentityLink
 
   constructor(client: WebClient, did: DID) {
     if (!did.authenticated) {
       throw new Error(
-        'Input DID must be authenticated, use SelfID.authenticate() instead of new SelfID()',
+        'Input DID must be authenticated, use SelfID.authenticate() instead of new SelfID()'
       )
     }
-    if (client._config.verificationsServer == null) {
+    if (client.config.verificationsServer == null) {
       throw new Error('Missing verifications server URL in config')
     }
 
-    this._client = client
-    this._did = did
-    this._identityLink = new IdentityLink(client._config.verificationsServer)
+    this.#client = client
+    this.#did = did
+    this.#identityLink = new IdentityLink(client.config.verificationsServer)
   }
 
   get client(): WebClient {
-    return this._client
+    return this.#client
   }
 
   get id() {
-    return this._did.id
+    return this.#did.id
   }
 
   // Definitions interactions
 
   async getAlsoKnownAs() {
-    return await this._client.getAlsoKnownAs(this._did.id)
+    return await this.#client.getAlsoKnownAs(this.#did.id)
   }
 
   async getSocialAccounts(): Promise<Array<AlsoKnownAsAccount>> {
@@ -66,34 +62,32 @@ export class SelfID implements Identifyable {
     return aka?.accounts ?? []
   }
 
-  async setAlsoKnownAsAccounts(
-    accounts: Array<AlsoKnownAsAccount>,
-  ): Promise<void> {
-    await this._client.idx.set('alsoKnownAs', { accounts })
+  async setAlsoKnownAsAccounts(accounts: Array<AlsoKnownAsAccount>): Promise<void> {
+    await this.#client.dataStore.set('alsoKnownAs', { accounts })
   }
 
   async getProfile() {
-    return await this._client.getProfile(this._did.id)
+    return await this.#client.getProfile(this.#did.id)
   }
 
   async setProfile(profile: BasicProfile): Promise<void> {
-    await this._client.idx.set('basicProfile', profile)
+    await this.#client.dataStore.set('basicProfile', profile)
   }
 
   // Social accounts verifications
 
   async getGitHubChallenge(username: string): Promise<string> {
-    return await this._identityLink.requestGitHub(this._did.id, username)
+    return await this.#identityLink.requestGitHub(this.#did.id, username)
   }
 
   async confirmGitHubChallenge(challengeCode: string): Promise<string> {
-    const jws = await this._did.createJWS({ challengeCode })
-    return await this._identityLink.confirmGitHub(jws)
+    const jws = await this.#did.createJWS({ challengeCode })
+    return await this.#identityLink.confirmGitHub(jws)
   }
 
   async addGitHubAttestation(
     username: string,
-    challengeCode: string,
+    challengeCode: string
   ): Promise<Array<AlsoKnownAsAccount>> {
     const [attestation, accounts] = await Promise.all([
       this.confirmGitHubChallenge(challengeCode),
@@ -110,9 +104,7 @@ export class SelfID implements Identifyable {
     return accounts
   }
 
-  async removeGitHubAccount(
-    username: string,
-  ): Promise<Array<AlsoKnownAsAccount>> {
+  async removeGitHubAccount(username: string): Promise<Array<AlsoKnownAsAccount>> {
     const accounts = await this.getSocialAccounts()
     const index = findGitHubIndex(accounts, username)
     if (index !== -1) {
@@ -123,17 +115,17 @@ export class SelfID implements Identifyable {
   }
 
   async getTwitterChallenge(username: string): Promise<string> {
-    return await this._identityLink.requestTwitter(this._did.id, username)
+    return await this.#identityLink.requestTwitter(this.#did.id, username)
   }
 
   async confirmTwitterChallenge(challengeCode: string): Promise<string> {
-    const jws = await this._did.createJWS({ challengeCode })
-    return await this._identityLink.confirmTwitter(jws)
+    const jws = await this.#did.createJWS({ challengeCode })
+    return await this.#identityLink.confirmTwitter(jws)
   }
 
   async addTwitterAttestation(
     username: string,
-    challengeCode: string,
+    challengeCode: string
   ): Promise<Array<AlsoKnownAsAccount>> {
     const [attestation, accounts] = await Promise.all([
       this.confirmTwitterChallenge(challengeCode),
@@ -150,9 +142,7 @@ export class SelfID implements Identifyable {
     return accounts
   }
 
-  async removeTwitterAccount(
-    username: string,
-  ): Promise<Array<AlsoKnownAsAccount>> {
+  async removeTwitterAccount(username: string): Promise<Array<AlsoKnownAsAccount>> {
     const accounts = await this.getSocialAccounts()
     const index = findTwitterIndex(accounts, username)
     if (index !== -1) {
@@ -164,7 +154,7 @@ export class SelfID implements Identifyable {
 
   async removeSocialAccount(
     host: string | undefined,
-    id: string,
+    id: string
   ): Promise<Array<AlsoKnownAsAccount>> {
     switch (host) {
       case GITHUB_HOST:
