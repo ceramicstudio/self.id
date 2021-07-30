@@ -13,13 +13,6 @@ import type { AppNetwork, ConfigURLs } from './config'
 import type { AlsoKnownAs, BasicProfile } from './types'
 import { isCAIP10string } from './utils'
 
-// import CeramicMod from '@ceramicnetwork/http-client'
-// import KeyDidResolverMod from 'key-did-resolver'
-// import ThreeIdResolverMod from '@ceramicnetwork/3id-did-resolver'
-// const Ceramic = CeramicMod.default
-// const KeyDidResolver = KeyDidResolverMod.default
-// const ThreeIdResolver = ThreeIdResolverMod.default
-
 export class Core {
   #ceramic: Ceramic
   #config: ConfigURLs

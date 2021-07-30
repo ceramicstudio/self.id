@@ -1,5 +1,5 @@
-import { GITHUB_HOST, TWITTER_HOST } from '@self.id/universal'
-import type { AlsoKnownAsAccount } from '@self.id/universal'
+import { GITHUB_HOST, TWITTER_HOST } from '@self.id/core'
+import type { AlsoKnownAsAccount } from '@self.id/core'
 import type { DagJWS } from 'dids'
 
 /** @internal */

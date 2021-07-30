@@ -1,7 +1,8 @@
 import { EthereumAuthProvider } from '@3id/connect'
 import type { EthereumProvider } from '@3id/connect'
-import type { AlsoKnownAsAccount, BasicProfile } from '@self.id/universal'
-import { PublicID, SelfID, WebClient } from '@self.id/web'
+import type { AlsoKnownAsAccount, BasicProfile } from '@self.id/core'
+import { PublicID } from '@self.id/core'
+import { SelfID, WebClient } from '@self.id/web'
 import type { AccountIDParams } from 'caip'
 
 export type DIDData = {

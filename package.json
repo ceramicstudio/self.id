@@ -6,13 +6,11 @@
     "packages/*"
   ],
   "scripts": {
-    "docs": "typedoc --tsconfig tsconfig.docs.json",
     "build": "lerna run build",
     "lint": "lerna run lint",
     "test": "lerna run test --"
   },
   "devDependencies": {
-    "@rollup/plugin-typescript": "^8.2.3",
     "@skypack/package-check": "^0.2.2",
     "@typescript-eslint/eslint-plugin": "^4.28.4",
     "@typescript-eslint/parser": "^4.28.4",

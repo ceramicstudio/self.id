@@ -1,5 +1,4 @@
 import path from 'path'
-import typescript from '@rollup/plugin-typescript'
 import esbuild from 'rollup-plugin-esbuild'
 
 const cwd = path.parse(process.cwd())
@@ -14,7 +13,7 @@ export default [
   {
     external,
     input,
-    output: { file: 'dist/index.min.js', format: 'esm' },
+    output: { file: 'dist/cjs.js', format: 'cjs', sourcemap: true, },
     plugins: [
       esbuild({
         minify: true,
@@ -26,10 +25,13 @@ export default [
   {
     external,
     input,
-    output: {
-      dir: 'dist',
-      sourcemap: true,
-    },
-    plugins: [typescript({ declaration: true, outDir: 'dist' })],
+    output: { file: 'dist/esm.js', format: 'esm', sourcemap: true, },
+    plugins: [
+      esbuild({
+        minify: true,
+        target: 'es2020',
+        tsconfig: path.resolve('./tsconfig.json'),
+      }),
+    ],
   },
 ]

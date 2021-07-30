@@ -1,11 +1,11 @@
 ---
-id: "web_src.EthereumAuthProvider"
+id: "web.EthereumAuthProvider"
 title: "Class: EthereumAuthProvider"
 sidebar_label: "EthereumAuthProvider"
 custom_edit_url: null
 ---
 
-[web/src](../modules/web_src.md).EthereumAuthProvider
+[web](../modules/web.md).EthereumAuthProvider
 
 ## Implements
 

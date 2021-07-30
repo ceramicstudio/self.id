@@ -1,4 +1,4 @@
-import type { AppNetwork } from '@self.id/universal'
+import type { AppNetwork } from '@self.id/core'
 
 export const APP_NETWORK: AppNetwork =
   (process.env.NEXT_PUBLIC_APP_NETWORK as AppNetwork | undefined) ?? ('testnet-clay' as AppNetwork)

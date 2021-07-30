@@ -1,11 +1,11 @@
 ---
-id: "universal_src.ImageSources"
+id: "core.ImageSources"
 title: "Interface: ImageSources"
 sidebar_label: "ImageSources"
 custom_edit_url: null
 ---
 
-[universal/src](../modules/universal_src.md).ImageSources
+[core](../modules/core.md).ImageSources
 
 ## Indexable
 
@@ -15,7 +15,7 @@ custom_edit_url: null
 
 ### alternatives
 
-• `Optional` **alternatives**: [`ImageMetadata`](universal_src.ImageMetadata.md)[]
+• `Optional` **alternatives**: [`ImageMetadata`](core.ImageMetadata.md)[]
 
 #### Defined in
 
@@ -25,7 +25,7 @@ ___
 
 ### original
 
-• **original**: [`ImageMetadata`](universal_src.ImageMetadata.md)
+• **original**: [`ImageMetadata`](core.ImageMetadata.md)
 
 #### Defined in
 

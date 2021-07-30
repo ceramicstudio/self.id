@@ -1,4 +1,5 @@
-import type { AlsoKnownAsAccount, BasicProfile, EthereumProvider, SelfID } from '@self.id/web'
+import type { AlsoKnownAsAccount, BasicProfile } from '@self.id/core'
+import type { EthereumProvider, SelfID } from '@self.id/web'
 import { AccountID } from 'caip'
 import { useAtom } from 'jotai'
 import { useCallback } from 'react'

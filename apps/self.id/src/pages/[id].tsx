@@ -1,12 +1,6 @@
 import { getLegacy3BoxProfileAsBasicProfile } from '@self.id/3box-legacy'
-import {
-  GITHUB_HOST,
-  TWITTER_HOST,
-  getImageSrc,
-  isCAIP10string,
-  isDIDstring,
-} from '@self.id/universal'
-import type { AlsoKnownAsAccount, BasicProfile, Dimensions, ImageSources } from '@self.id/universal'
+import { GITHUB_HOST, TWITTER_HOST, getImageSrc, isCAIP10string, isDIDstring } from '@self.id/core'
+import type { AlsoKnownAsAccount, BasicProfile, Dimensions, ImageSources } from '@self.id/core'
 import { Anchor, Box, Paragraph, Text } from 'grommet'
 import type { GetServerSideProps } from 'next'
 import dynamic from 'next/dynamic'

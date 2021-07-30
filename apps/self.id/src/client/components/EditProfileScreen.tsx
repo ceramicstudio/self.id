@@ -1,5 +1,5 @@
-import { getImageSrc } from '@self.id/web'
-import type { BasicProfile, Dimensions, ImageSources } from '@self.id/web'
+import { getImageSrc } from '@self.id/core'
+import type { BasicProfile, Dimensions, ImageSources } from '@self.id/core'
 import { Anchor, Avatar, Box, Button, Heading, Image, Text, TextArea, TextInput } from 'grommet'
 import type { TextInputProps } from 'grommet'
 import Link from 'next/link'
@@ -326,7 +326,7 @@ function EditProfileLoader() {
 export default function EditProfileScreen() {
   return (
     <ConnectedContainer>
-      <Link href="/me/settings">
+      <Link href="/me/settings" passHref>
         <Anchor color="neutral-4">Settings</Anchor>
       </Link>
       <EditProfileLoader />

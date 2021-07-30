@@ -1,11 +1,11 @@
 ---
-id: "universal_src.ImageMetadata"
+id: "core.ImageMetadata"
 title: "Interface: ImageMetadata"
 sidebar_label: "ImageMetadata"
 custom_edit_url: null
 ---
 
-[universal/src](../modules/universal_src.md).ImageMetadata
+[core](../modules/core.md).ImageMetadata
 
 ## Indexable
 

@@ -1,4 +1,4 @@
-import { IPFS_API_URL } from '@self.id/universal'
+import { IPFS_API_URL } from '@self.id/core'
 
 export type LinkData = {
   Name: string

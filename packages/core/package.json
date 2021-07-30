@@ -1,5 +1,5 @@
 {
-  "name": "@self.id/universal",
+  "name": "@self.id/core",
   "version": "0.1.0",
   "author": "3Box Labs",
   "license": "(Apache-2.0 OR MIT)",
@@ -11,21 +11,23 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/ceramicstudio/self.id",
-    "directory": "packages/universal"
+    "directory": "packages/core"
   },
-  "type": "module",
-  "module": "dist/index.js",
+  "main": "dist/cjs.js",
+  "module": "dist/esm.js",
   "typings": "dist/index.d.ts",
   "exports": {
-    "import": "./dist/index.js",
-    "default": "./dist/index.js"
+    "import": "./dist/esm.js",
+    "default": "./dist/cjs.js"
   },
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "engines": {
     "node": ">=14"
   },
+  "sideEffects": false,
   "scripts": {
     "model": "node ./scripts/publish-model.mjs",
     "build": "rollup -c",

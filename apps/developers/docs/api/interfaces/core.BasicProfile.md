@@ -1,11 +1,11 @@
 ---
-id: "universal_src.BasicProfile"
+id: "core.BasicProfile"
 title: "Interface: BasicProfile"
 sidebar_label: "BasicProfile"
 custom_edit_url: null
 ---
 
-[universal/src](../modules/universal_src.md).BasicProfile
+[core](../modules/core.md).BasicProfile
 
 ## Indexable
 
@@ -25,7 +25,7 @@ ___
 
 ### background
 
-• `Optional` **background**: [`ImageSources`](universal_src.ImageSources.md)
+• `Optional` **background**: [`ImageSources`](core.ImageSources.md)
 
 #### Defined in
 
@@ -85,7 +85,7 @@ ___
 
 ### image
 
-• `Optional` **image**: [`ImageSources`](universal_src.ImageSources.md)
+• `Optional` **image**: [`ImageSources`](core.ImageSources.md)
 
 #### Defined in
 

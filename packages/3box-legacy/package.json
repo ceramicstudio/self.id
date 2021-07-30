@@ -13,21 +13,23 @@
     "url": "https://github.com/ceramicstudio/self.id",
     "directory": "packages/3box-legacy"
   },
-  "type": "module",
-  "module": "dist/index.js",
+  "main": "dist/cjs.js",
+  "module": "dist/esm.js",
   "typings": "dist/index.d.ts",
   "exports": {
-    "import": "./dist/index.js",
-    "default": "./dist/index.js"
+    "import": "./dist/esm.js",
+    "default": "./dist/cjs.js"
   },
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "engines": {
     "node": ">=14"
   },
+  "sideEffects": false,
   "scripts": {
-    "build": "rollup -c",
+    "build": "del dist && tsc --emitDeclarationOnly --skipLibCheck && rollup -c",
     "lint": "eslint --fix",
     "prepublish": "yarn build",
     "prepublishOnly": "package-check"

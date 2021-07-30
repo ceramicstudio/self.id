@@ -1,11 +1,11 @@
 ---
-id: "universal_src.AlsoKnownAsAccount"
+id: "core.AlsoKnownAsAccount"
 title: "Interface: AlsoKnownAsAccount"
 sidebar_label: "AlsoKnownAsAccount"
 custom_edit_url: null
 ---
 
-[universal/src](../modules/universal_src.md).AlsoKnownAsAccount
+[core](../modules/core.md).AlsoKnownAsAccount
 
 ## Indexable
 

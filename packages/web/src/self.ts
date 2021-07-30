@@ -1,6 +1,6 @@
 import type { EthereumAuthProvider } from '@3id/connect'
-import { GITHUB_HOST, TWITTER_HOST } from '@self.id/universal'
-import type { AlsoKnownAsAccount, AppNetwork, BasicProfile, Identifyable } from '@self.id/universal'
+import { GITHUB_HOST, TWITTER_HOST } from '@self.id/core'
+import type { AlsoKnownAsAccount, AppNetwork, BasicProfile, Identifyable } from '@self.id/core'
 import { DID } from 'dids'
 
 import { WebClient } from './clients'

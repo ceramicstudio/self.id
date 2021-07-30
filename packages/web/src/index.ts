@@ -1,6 +1,12 @@
-// Export all modules working in Web browsers
-
-export * from '@self.id/universal'
+/**
+ * Web-only APIs
+ *
+ * ```sh
+ * npm install @self.id/web
+ * ```
+ * 
+ * @module web
+ */
 
 export * from './clients'
 export * from './identity-link'

@@ -6,7 +6,11 @@
     "skipLibCheck": true
   },
   "typedocOptions": {
-    "entryPoints": ["./packages/3box-legacy/src/index.ts", "./packages/universal/src/index.ts", "./packages/web/src/index.ts"],
+    "entryPoints": [
+      "./packages/3box-legacy/src/index.ts",
+      "./packages/core/src/index.ts",
+      "./packages/web/src/index.ts"
+    ],
     "excludeInternal": true,
     "excludePrivate": true
   }

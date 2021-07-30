@@ -8,7 +8,6 @@ import prettier from 'prettier'
 
 const ceramic = new Ceramic.default(process.env.CERAMIC_URL)
 const manager = new ModelManager(ceramic)
-await manager.useDataStoreModel()
 manager.addJSONModel(profileModel)
 manager.addJSONModel(socialAccountsModel)
 
@@ -18,15 +17,12 @@ const modelFile = prettier.format(
 
 import type { BasicProfile } from '@datamodels/self.id-profile'
 import type { AlsoKnownAs } from '@datamodels/self.id-social-accounts'
-import type { Definition, IdentityIndex } from '@glazed/did-datastore-model'
 import type { ModelTypeAliases, PublishedModel } from '@glazed/types'
 
 export type ModelTypes = ModelTypeAliases<
   {
     AlsoKnownAs: AlsoKnownAs
     BasicProfile: BasicProfile
-    DataStoreDefinition: Definition
-    DataStoreIdentityIndex: IdentityIndex
   },
   {
     alsoKnownAs: 'AlsoKnownAs'

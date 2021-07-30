@@ -1,9 +1,9 @@
-# Self.ID Universal APIs
+# Self.ID Core APIs
 
 ## Installation
 
 ```sh
-npm install @self.id/universal
+npm install @self.id/core
 ```
 
 ## License

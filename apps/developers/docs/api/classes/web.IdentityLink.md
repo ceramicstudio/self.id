@@ -1,11 +1,11 @@
 ---
-id: "web_src.IdentityLink"
+id: "web.IdentityLink"
 title: "Class: IdentityLink"
 sidebar_label: "IdentityLink"
 custom_edit_url: null
 ---
 
-[web/src](../modules/web_src.md).IdentityLink
+[web](../modules/web.md).IdentityLink
 
 ## Constructors
 
@@ -21,7 +21,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[self.id/packages/web/src/identity-link.ts:66](https://github.com/ceramicstudio/self.id/blob/ba95ea3/packages/web/src/identity-link.ts#L66)
+[self.id/packages/web/src/identity-link.ts:66](https://github.com/ceramicstudio/self.id/blob/136f9be/packages/web/src/identity-link.ts#L66)
 
 ## Methods
 
@@ -41,7 +41,7 @@ custom_edit_url: null
 
 #### Defined in
 
-[self.id/packages/web/src/identity-link.ts:95](https://github.com/ceramicstudio/self.id/blob/ba95ea3/packages/web/src/identity-link.ts#L95)
+[self.id/packages/web/src/identity-link.ts:95](https://github.com/ceramicstudio/self.id/blob/136f9be/packages/web/src/identity-link.ts#L95)
 
 ___
 
@@ -61,7 +61,7 @@ ___
 
 #### Defined in
 
-[self.id/packages/web/src/identity-link.ts:108](https://github.com/ceramicstudio/self.id/blob/ba95ea3/packages/web/src/identity-link.ts#L108)
+[self.id/packages/web/src/identity-link.ts:108](https://github.com/ceramicstudio/self.id/blob/136f9be/packages/web/src/identity-link.ts#L108)
 
 ___
 
@@ -82,7 +82,7 @@ ___
 
 #### Defined in
 
-[self.id/packages/web/src/identity-link.ts:87](https://github.com/ceramicstudio/self.id/blob/ba95ea3/packages/web/src/identity-link.ts#L87)
+[self.id/packages/web/src/identity-link.ts:87](https://github.com/ceramicstudio/self.id/blob/136f9be/packages/web/src/identity-link.ts#L87)
 
 ___
 
@@ -103,4 +103,4 @@ ___
 
 #### Defined in
 
-[self.id/packages/web/src/identity-link.ts:100](https://github.com/ceramicstudio/self.id/blob/ba95ea3/packages/web/src/identity-link.ts#L100)
+[self.id/packages/web/src/identity-link.ts:100](https://github.com/ceramicstudio/self.id/blob/136f9be/packages/web/src/identity-link.ts#L100)

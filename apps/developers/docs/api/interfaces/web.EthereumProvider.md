@@ -1,11 +1,11 @@
 ---
-id: "web_src.EthereumProvider"
+id: "web.EthereumProvider"
 title: "Interface: EthereumProvider"
 sidebar_label: "EthereumProvider"
 custom_edit_url: null
 ---
 
-[web/src](../modules/web_src.md).EthereumProvider
+[web](../modules/web.md).EthereumProvider
 
 ## Hierarchy
 
@@ -17,7 +17,7 @@ custom_edit_url: null
 
 ### addListener
 
-▸ **addListener**(`eventName`, `listener`): [`EthereumProvider`](web_src.EthereumProvider.md)
+▸ **addListener**(`eventName`, `listener`): [`EthereumProvider`](web.EthereumProvider.md)
 
 Alias for `emitter.on(eventName, listener)`.
 
@@ -32,7 +32,7 @@ Alias for `emitter.on(eventName, listener)`.
 
 #### Returns
 
-[`EthereumProvider`](web_src.EthereumProvider.md)
+[`EthereumProvider`](web.EthereumProvider.md)
 
 #### Inherited from
 
@@ -234,7 +234,7 @@ ___
 
 ### off
 
-▸ **off**(`eventName`, `listener`): [`EthereumProvider`](web_src.EthereumProvider.md)
+▸ **off**(`eventName`, `listener`): [`EthereumProvider`](web.EthereumProvider.md)
 
 Alias for `emitter.removeListener()`.
 
@@ -249,7 +249,7 @@ Alias for `emitter.removeListener()`.
 
 #### Returns
 
-[`EthereumProvider`](web_src.EthereumProvider.md)
+[`EthereumProvider`](web.EthereumProvider.md)
 
 #### Inherited from
 
@@ -263,7 +263,7 @@ ___
 
 ### on
 
-▸ **on**(`event`, `listener`): [`EthereumProvider`](web_src.EthereumProvider.md)
+▸ **on**(`event`, `listener`): [`EthereumProvider`](web.EthereumProvider.md)
 
 #### Parameters
 
@@ -274,7 +274,7 @@ ___
 
 #### Returns
 
-[`EthereumProvider`](web_src.EthereumProvider.md)
+[`EthereumProvider`](web.EthereumProvider.md)
 
 #### Overrides
 
@@ -284,7 +284,7 @@ NodeJS.EventEmitter.on
 
 self.id/node_modules/@3id/connect/dist/types.d.ts:19
 
-▸ **on**(`event`, `listener`): [`EthereumProvider`](web_src.EthereumProvider.md)
+▸ **on**(`event`, `listener`): [`EthereumProvider`](web.EthereumProvider.md)
 
 #### Parameters
 
@@ -295,7 +295,7 @@ self.id/node_modules/@3id/connect/dist/types.d.ts:19
 
 #### Returns
 
-[`EthereumProvider`](web_src.EthereumProvider.md)
+[`EthereumProvider`](web.EthereumProvider.md)
 
 #### Overrides
 
@@ -305,7 +305,7 @@ NodeJS.EventEmitter.on
 
 self.id/node_modules/@3id/connect/dist/types.d.ts:20
 
-▸ **on**(`event`, `listener`): [`EthereumProvider`](web_src.EthereumProvider.md)
+▸ **on**(`event`, `listener`): [`EthereumProvider`](web.EthereumProvider.md)
 
 #### Parameters
 
@@ -316,7 +316,7 @@ self.id/node_modules/@3id/connect/dist/types.d.ts:20
 
 #### Returns
 
-[`EthereumProvider`](web_src.EthereumProvider.md)
+[`EthereumProvider`](web.EthereumProvider.md)
 
 #### Overrides
 
@@ -326,7 +326,7 @@ NodeJS.EventEmitter.on
 
 self.id/node_modules/@3id/connect/dist/types.d.ts:21
 
-▸ **on**(`event`, `listener`): [`EthereumProvider`](web_src.EthereumProvider.md)
+▸ **on**(`event`, `listener`): [`EthereumProvider`](web.EthereumProvider.md)
 
 #### Parameters
 
@@ -337,7 +337,7 @@ self.id/node_modules/@3id/connect/dist/types.d.ts:21
 
 #### Returns
 
-[`EthereumProvider`](web_src.EthereumProvider.md)
+[`EthereumProvider`](web.EthereumProvider.md)
 
 #### Overrides
 
@@ -347,7 +347,7 @@ NodeJS.EventEmitter.on
 
 self.id/node_modules/@3id/connect/dist/types.d.ts:22
 
-▸ **on**(`event`, `listener`): [`EthereumProvider`](web_src.EthereumProvider.md)
+▸ **on**(`event`, `listener`): [`EthereumProvider`](web.EthereumProvider.md)
 
 #### Parameters
 
@@ -358,7 +358,7 @@ self.id/node_modules/@3id/connect/dist/types.d.ts:22
 
 #### Returns
 
-[`EthereumProvider`](web_src.EthereumProvider.md)
+[`EthereumProvider`](web.EthereumProvider.md)
 
 #### Overrides
 
@@ -372,7 +372,7 @@ ___
 
 ### once
 
-▸ **once**(`eventName`, `listener`): [`EthereumProvider`](web_src.EthereumProvider.md)
+▸ **once**(`eventName`, `listener`): [`EthereumProvider`](web.EthereumProvider.md)
 
 Adds a **one-time**`listener` function for the event named `eventName`. The
 next time `eventName` is triggered, this listener is removed and then invoked.
@@ -409,7 +409,7 @@ myEE.emit('foo');
 
 #### Returns
 
-[`EthereumProvider`](web_src.EthereumProvider.md)
+[`EthereumProvider`](web.EthereumProvider.md)
 
 #### Inherited from
 
@@ -423,7 +423,7 @@ ___
 
 ### prependListener
 
-▸ **prependListener**(`eventName`, `listener`): [`EthereumProvider`](web_src.EthereumProvider.md)
+▸ **prependListener**(`eventName`, `listener`): [`EthereumProvider`](web.EthereumProvider.md)
 
 Adds the `listener` function to the _beginning_ of the listeners array for the
 event named `eventName`. No checks are made to see if the `listener` has
@@ -449,7 +449,7 @@ Returns a reference to the `EventEmitter`, so that calls can be chained.
 
 #### Returns
 
-[`EthereumProvider`](web_src.EthereumProvider.md)
+[`EthereumProvider`](web.EthereumProvider.md)
 
 #### Inherited from
 
@@ -463,7 +463,7 @@ ___
 
 ### prependOnceListener
 
-▸ **prependOnceListener**(`eventName`, `listener`): [`EthereumProvider`](web_src.EthereumProvider.md)
+▸ **prependOnceListener**(`eventName`, `listener`): [`EthereumProvider`](web.EthereumProvider.md)
 
 Adds a **one-time**`listener` function for the event named `eventName` to the_beginning_ of the listeners array. The next time `eventName` is triggered, this
 listener is removed, and then invoked.
@@ -487,7 +487,7 @@ Returns a reference to the `EventEmitter`, so that calls can be chained.
 
 #### Returns
 
-[`EthereumProvider`](web_src.EthereumProvider.md)
+[`EthereumProvider`](web.EthereumProvider.md)
 
 #### Inherited from
 
@@ -554,7 +554,7 @@ ___
 
 ### removeAllListeners
 
-▸ **removeAllListeners**(`event?`): [`EthereumProvider`](web_src.EthereumProvider.md)
+▸ **removeAllListeners**(`event?`): [`EthereumProvider`](web.EthereumProvider.md)
 
 Removes all listeners, or those of the specified `eventName`.
 
@@ -574,7 +574,7 @@ Returns a reference to the `EventEmitter`, so that calls can be chained.
 
 #### Returns
 
-[`EthereumProvider`](web_src.EthereumProvider.md)
+[`EthereumProvider`](web.EthereumProvider.md)
 
 #### Inherited from
 
@@ -588,7 +588,7 @@ ___
 
 ### removeListener
 
-▸ **removeListener**(`eventName`, `listener`): [`EthereumProvider`](web_src.EthereumProvider.md)
+▸ **removeListener**(`eventName`, `listener`): [`EthereumProvider`](web.EthereumProvider.md)
 
 Removes the specified `listener` from the listener array for the event named`eventName`.
 
@@ -678,7 +678,7 @@ Returns a reference to the `EventEmitter`, so that calls can be chained.
 
 #### Returns
 
-[`EthereumProvider`](web_src.EthereumProvider.md)
+[`EthereumProvider`](web.EthereumProvider.md)
 
 #### Inherited from
 
@@ -718,7 +718,7 @@ ___
 
 ### setMaxListeners
 
-▸ **setMaxListeners**(`n`): [`EthereumProvider`](web_src.EthereumProvider.md)
+▸ **setMaxListeners**(`n`): [`EthereumProvider`](web.EthereumProvider.md)
 
 By default `EventEmitter`s will print a warning if more than `10` listeners are
 added for a particular event. This is a useful default that helps finding
@@ -737,7 +737,7 @@ Returns a reference to the `EventEmitter`, so that calls can be chained.
 
 #### Returns
 
-[`EthereumProvider`](web_src.EthereumProvider.md)
+[`EthereumProvider`](web.EthereumProvider.md)
 
 #### Inherited from
 

@@ -1,5 +1,6 @@
-import { GITHUB_HOST, TWITTER_HOST } from '@self.id/web'
-import type { AlsoKnownAsAccount, SelfID } from '@self.id/web'
+import { GITHUB_HOST, TWITTER_HOST } from '@self.id/core'
+import type { AlsoKnownAsAccount } from '@self.id/core'
+import type { SelfID } from '@self.id/web'
 import { Anchor, Box, Button, Heading, Spinner, Text, TextInput } from 'grommet'
 import Link from 'next/link'
 import Image from 'next/image'
