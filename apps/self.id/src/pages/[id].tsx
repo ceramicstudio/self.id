@@ -1,6 +1,7 @@
+import type { BasicProfile } from '@datamodels/self.id-profile'
+import type { Account as AlsoKnownAsAccount } from '@datamodels/self.id-social-accounts'
 import { getLegacy3BoxProfileAsBasicProfile } from '@self.id/3box-legacy'
-import { GITHUB_HOST, TWITTER_HOST, getImageSrc, isCAIP10string, isDIDstring } from '@self.id/core'
-import type { AlsoKnownAsAccount, BasicProfile, Dimensions, ImageSources } from '@self.id/core'
+import { isCAIP10string, isDIDstring } from '@self.id/core'
 import { Anchor, Box, Paragraph, Text } from 'grommet'
 import type { GetServerSideProps } from 'next'
 import dynamic from 'next/dynamic'
@@ -12,22 +13,16 @@ import styled, { css } from 'styled-components'
 import Layout from '../components/Layout'
 import Navbar from '../components/Navbar'
 import AvatarPlaceholder from '../components/AvatarPlaceholder'
+import { GITHUB_HOST, TWITTER_HOST } from '../identity-link'
 import countryIcon from '../images/icons/country.png'
 import linkIcon from '../images/icons/link.svg'
 import locationIcon from '../images/icons/location.png'
 import githubIcon from '../images/icons/social-github.svg'
 import twitterIcon from '../images/icons/social-twitter.svg'
 import { BRAND_COLOR, PLACEHOLDER_COLOR } from '../theme'
-import { isEthereumAddress, isSupportedDID } from '../utils'
+import { getImageURL, isEthereumAddress, isSupportedDID } from '../utils'
 
 const ETH_CHAIN_ID = `@eip155:1`
-
-export function getImageURL(
-  sources: ImageSources | undefined,
-  dimensions: Dimensions
-): string | undefined {
-  return sources ? getImageSrc(sources, dimensions) : undefined
-}
 
 const ConnectSettingsButton = dynamic(() => import('../client/components/ConnectSettingsButton'), {
   ssr: false,
@@ -72,7 +67,10 @@ export const getServerSideProps: GetServerSideProps<Props, { id: string }> = asy
       // Main case: we expect a DID to be provided
       support = 'supported'
       const { core } = await import('../server')
-      const [profile, aka] = await Promise.all([core.getProfile(id), core.getAlsoKnownAs(id)])
+      const [profile, aka] = await Promise.all([
+        core.get(id, 'basicProfile'),
+        core.get(id, 'alsoKnownAs'),
+      ])
       loadedProfile = profile
       socialAccounts = aka?.accounts ?? []
     } else {

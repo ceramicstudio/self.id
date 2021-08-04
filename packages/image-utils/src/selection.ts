@@ -1,8 +1,9 @@
-import { IPFS_PREFIX, IPFS_URL } from './constants'
-import type { ImageMetadata, ImageSources } from './types'
+import type { Dimensions, ImageMetadata, ImageSources, SizeMode } from './types'
 
-export type Dimensions = { height: number; width: number }
-export type SizeMode = 'contain' | 'cover'
+const DEFAULT_DIMENSIONS: Dimensions = {
+  height: 512,
+  width: 512,
+}
 
 function selectCover(
   options: Array<ImageMetadata>,
@@ -57,14 +58,23 @@ export function selectImageSource(
   return alternative ?? sources.original
 }
 
-export function toImageSrc(image: ImageMetadata): string {
-  return image.src.replace(IPFS_PREFIX, IPFS_URL)
-}
+export function getDimensions(
+  image: HTMLImageElement,
+  dimensions: Dimensions = DEFAULT_DIMENSIONS,
+  mode: SizeMode = 'cover'
+): Dimensions {
+  let width = image.width
+  let height = image.height
 
-export function getImageSrc(
-  sources: ImageSources,
-  dimensions: Dimensions,
-  mode?: SizeMode
-): string {
-  return toImageSrc(selectImageSource(sources, dimensions, mode))
+  if ((mode === 'contain' && width >= height) || (mode === 'cover' && width <= height)) {
+    if (width >= dimensions.width) {
+      height = Math.round((height * dimensions.width) / width)
+      width = dimensions.width
+    }
+  } else if (height > dimensions.height) {
+    width = Math.round((width * dimensions.height) / height)
+    height = dimensions.height
+  }
+
+  return { width, height }
 }

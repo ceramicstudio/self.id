@@ -1,7 +1,9 @@
 # Reading public data
 
 ```tsx live noInline
-const core = new Core('local-clay')
+// import { Core } from '@self.id/core'
+
+const core = new Core({ network: 'local-clay' })
 
 function ShowProfileName({ did }) {
   const [profile, setProfile] = useState(null)

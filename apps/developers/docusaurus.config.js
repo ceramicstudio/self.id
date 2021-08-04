@@ -114,9 +114,10 @@ module.exports = {
       'docusaurus-plugin-typedoc',
       {
         tsconfig: '../../tsconfig.docs.json',
-        name: 'Self.ID SDK',
+        name: 'Self.ID API',
         out: 'api',
         readme: 'none',
+        sort: ['static-first', 'source-order'],
       },
     ],
     '@self.id/docusaurus-plugin',

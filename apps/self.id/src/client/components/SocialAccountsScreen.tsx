@@ -1,6 +1,4 @@
-import { GITHUB_HOST, TWITTER_HOST } from '@self.id/core'
-import type { AlsoKnownAsAccount } from '@self.id/core'
-import type { SelfID } from '@self.id/web'
+import type { Account as AlsoKnownAsAccount } from '@datamodels/self.id-social-accounts'
 import { Anchor, Box, Button, Heading, Spinner, Text, TextInput } from 'grommet'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -10,8 +8,10 @@ import type { FormEvent } from 'react'
 
 import githubIcon from '../../images/icons/social-github.svg'
 import twitterIcon from '../../images/icons/social-twitter.svg'
+import { GITHUB_HOST, TWITTER_HOST } from '../../identity-link'
 
 import { useEnvState, useSocialAccounts } from '../hooks'
+import type { SelfID } from '../self'
 
 import ConnectedContainer from './ConnectedContainer'
 

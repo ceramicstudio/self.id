@@ -1,46 +1,136 @@
 ---
 id: "web.SelfID"
-title: "Class: SelfID"
+title: "Class: SelfID<ModelTypes, Alias>"
 sidebar_label: "SelfID"
 custom_edit_url: null
 ---
 
 [web](../modules/web.md).SelfID
 
-## Implements
+## Type parameters
 
-- `Identifyable`
+| Name | Type |
+| :------ | :------ |
+| `ModelTypes` | extends `CoreModelTypes``CoreModelTypes` |
+| `Alias` | extends keyof `ModelTypes`[``"definitions"``]keyof `ModelTypes`[``"definitions"``] |
 
-## Constructors
+## Methods
 
-### constructor
+### authenticate
 
-• **new SelfID**(`client`, `did`)
+▸ `Static` **authenticate**<`ModelTypes`\>(`params`): `Promise`<[`SelfID`](web.SelfID.md)<`ModelTypes`, ``"alsoKnownAs"`` \| ``"basicProfile"``\>\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ModelTypes` | extends `ModelTypes``ModelTypes` |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `client` | [`WebClient`](web.WebClient.md) |
-| `did` | `DID` |
+| `params` | [`AuthenticateParams`](../modules/web.md#authenticateparams)<`ModelTypes`\> |
+
+#### Returns
+
+`Promise`<[`SelfID`](web.SelfID.md)<`ModelTypes`, ``"alsoKnownAs"`` \| ``"basicProfile"``\>\>
 
 #### Defined in
 
-[self.id/packages/web/src/self.ts:31](https://github.com/ceramicstudio/self.id/blob/136f9be/packages/web/src/self.ts#L31)
+[self.id/packages/web/src/self.ts:22](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/web/src/self.ts#L22)
+
+___
+
+### get
+
+▸ **get**<`Key`, `ContentType`\>(`key`): `Promise`<``null`` \| `ContentType`\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `Key` | extends `string` \| `number` \| `symbol` |
+| `ContentType` | `DefinitionContentType`<`ModelTypes`, `Key`\> |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `key` | `Key` |
+
+#### Returns
+
+`Promise`<``null`` \| `ContentType`\>
+
+#### Defined in
+
+[self.id/packages/web/src/self.ts:52](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/web/src/self.ts#L52)
+
+___
+
+### set
+
+▸ **set**<`Key`, `ContentType`\>(`key`, `content`): `Promise`<`StreamID`\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `Key` | extends `string` \| `number` \| `symbol` |
+| `ContentType` | `DefinitionContentType`<`ModelTypes`, `Key`\> |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `key` | `Key` |
+| `content` | `ContentType` |
+
+#### Returns
+
+`Promise`<`StreamID`\>
+
+#### Defined in
+
+[self.id/packages/web/src/self.ts:58](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/web/src/self.ts#L58)
+
+## Constructors
+
+### constructor
+
+• **new SelfID**<`ModelTypes`, `Alias`\>(`params`)
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ModelTypes` | extends `ModelTypes``ModelTypes` |
+| `Alias` | extends `string` \| `number` \| `symbol`keyof `ModelTypes`[``"definitions"``] |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `params` | [`SelfIDParams`](../modules/web.md#selfidparams) |
+
+#### Defined in
+
+[self.id/packages/web/src/self.ts:32](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/web/src/self.ts#L32)
 
 ## Accessors
 
 ### client
 
-• `get` **client**(): [`WebClient`](web.WebClient.md)
+• `get` **client**(): [`WebClient`](web.WebClient.md)<`ModelTypes`\>
 
 #### Returns
 
-[`WebClient`](web.WebClient.md)
+[`WebClient`](web.WebClient.md)<`ModelTypes`\>
 
 #### Defined in
 
-[self.id/packages/web/src/self.ts:46](https://github.com/ceramicstudio/self.id/blob/136f9be/packages/web/src/self.ts#L46)
+[self.id/packages/web/src/self.ts:42](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/web/src/self.ts#L42)
 
 ___
 
@@ -54,298 +144,4 @@ ___
 
 #### Defined in
 
-[self.id/packages/web/src/self.ts:50](https://github.com/ceramicstudio/self.id/blob/136f9be/packages/web/src/self.ts#L50)
-
-## Methods
-
-### addGitHubAttestation
-
-▸ **addGitHubAttestation**(`username`, `challengeCode`): `Promise`<[`AlsoKnownAsAccount`](../interfaces/core.AlsoKnownAsAccount.md)[]\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `username` | `string` |
-| `challengeCode` | `string` |
-
-#### Returns
-
-`Promise`<[`AlsoKnownAsAccount`](../interfaces/core.AlsoKnownAsAccount.md)[]\>
-
-#### Defined in
-
-[self.id/packages/web/src/self.ts:88](https://github.com/ceramicstudio/self.id/blob/136f9be/packages/web/src/self.ts#L88)
-
-___
-
-### addTwitterAttestation
-
-▸ **addTwitterAttestation**(`username`, `challengeCode`): `Promise`<[`AlsoKnownAsAccount`](../interfaces/core.AlsoKnownAsAccount.md)[]\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `username` | `string` |
-| `challengeCode` | `string` |
-
-#### Returns
-
-`Promise`<[`AlsoKnownAsAccount`](../interfaces/core.AlsoKnownAsAccount.md)[]\>
-
-#### Defined in
-
-[self.id/packages/web/src/self.ts:126](https://github.com/ceramicstudio/self.id/blob/136f9be/packages/web/src/self.ts#L126)
-
-___
-
-### confirmGitHubChallenge
-
-▸ **confirmGitHubChallenge**(`challengeCode`): `Promise`<`string`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `challengeCode` | `string` |
-
-#### Returns
-
-`Promise`<`string`\>
-
-#### Defined in
-
-[self.id/packages/web/src/self.ts:83](https://github.com/ceramicstudio/self.id/blob/136f9be/packages/web/src/self.ts#L83)
-
-___
-
-### confirmTwitterChallenge
-
-▸ **confirmTwitterChallenge**(`challengeCode`): `Promise`<`string`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `challengeCode` | `string` |
-
-#### Returns
-
-`Promise`<`string`\>
-
-#### Defined in
-
-[self.id/packages/web/src/self.ts:121](https://github.com/ceramicstudio/self.id/blob/136f9be/packages/web/src/self.ts#L121)
-
-___
-
-### getAlsoKnownAs
-
-▸ **getAlsoKnownAs**(): `Promise`<``null`` \| [`AlsoKnownAs`](../interfaces/core.AlsoKnownAs.md)\>
-
-#### Returns
-
-`Promise`<``null`` \| [`AlsoKnownAs`](../interfaces/core.AlsoKnownAs.md)\>
-
-#### Defined in
-
-[self.id/packages/web/src/self.ts:56](https://github.com/ceramicstudio/self.id/blob/136f9be/packages/web/src/self.ts#L56)
-
-___
-
-### getGitHubChallenge
-
-▸ **getGitHubChallenge**(`username`): `Promise`<`string`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `username` | `string` |
-
-#### Returns
-
-`Promise`<`string`\>
-
-#### Defined in
-
-[self.id/packages/web/src/self.ts:79](https://github.com/ceramicstudio/self.id/blob/136f9be/packages/web/src/self.ts#L79)
-
-___
-
-### getProfile
-
-▸ **getProfile**(): `Promise`<``null`` \| [`BasicProfile`](../interfaces/core.BasicProfile.md)\>
-
-#### Returns
-
-`Promise`<``null`` \| [`BasicProfile`](../interfaces/core.BasicProfile.md)\>
-
-#### Implementation of
-
-Identifyable.getProfile
-
-#### Defined in
-
-[self.id/packages/web/src/self.ts:69](https://github.com/ceramicstudio/self.id/blob/136f9be/packages/web/src/self.ts#L69)
-
-___
-
-### getSocialAccounts
-
-▸ **getSocialAccounts**(): `Promise`<[`AlsoKnownAsAccount`](../interfaces/core.AlsoKnownAsAccount.md)[]\>
-
-#### Returns
-
-`Promise`<[`AlsoKnownAsAccount`](../interfaces/core.AlsoKnownAsAccount.md)[]\>
-
-#### Implementation of
-
-Identifyable.getSocialAccounts
-
-#### Defined in
-
-[self.id/packages/web/src/self.ts:60](https://github.com/ceramicstudio/self.id/blob/136f9be/packages/web/src/self.ts#L60)
-
-___
-
-### getTwitterChallenge
-
-▸ **getTwitterChallenge**(`username`): `Promise`<`string`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `username` | `string` |
-
-#### Returns
-
-`Promise`<`string`\>
-
-#### Defined in
-
-[self.id/packages/web/src/self.ts:117](https://github.com/ceramicstudio/self.id/blob/136f9be/packages/web/src/self.ts#L117)
-
-___
-
-### removeGitHubAccount
-
-▸ **removeGitHubAccount**(`username`): `Promise`<[`AlsoKnownAsAccount`](../interfaces/core.AlsoKnownAsAccount.md)[]\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `username` | `string` |
-
-#### Returns
-
-`Promise`<[`AlsoKnownAsAccount`](../interfaces/core.AlsoKnownAsAccount.md)[]\>
-
-#### Defined in
-
-[self.id/packages/web/src/self.ts:107](https://github.com/ceramicstudio/self.id/blob/136f9be/packages/web/src/self.ts#L107)
-
-___
-
-### removeSocialAccount
-
-▸ **removeSocialAccount**(`host`, `id`): `Promise`<[`AlsoKnownAsAccount`](../interfaces/core.AlsoKnownAsAccount.md)[]\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `host` | `undefined` \| `string` |
-| `id` | `string` |
-
-#### Returns
-
-`Promise`<[`AlsoKnownAsAccount`](../interfaces/core.AlsoKnownAsAccount.md)[]\>
-
-#### Defined in
-
-[self.id/packages/web/src/self.ts:155](https://github.com/ceramicstudio/self.id/blob/136f9be/packages/web/src/self.ts#L155)
-
-___
-
-### removeTwitterAccount
-
-▸ **removeTwitterAccount**(`username`): `Promise`<[`AlsoKnownAsAccount`](../interfaces/core.AlsoKnownAsAccount.md)[]\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `username` | `string` |
-
-#### Returns
-
-`Promise`<[`AlsoKnownAsAccount`](../interfaces/core.AlsoKnownAsAccount.md)[]\>
-
-#### Defined in
-
-[self.id/packages/web/src/self.ts:145](https://github.com/ceramicstudio/self.id/blob/136f9be/packages/web/src/self.ts#L145)
-
-___
-
-### setAlsoKnownAsAccounts
-
-▸ **setAlsoKnownAsAccounts**(`accounts`): `Promise`<`void`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `accounts` | [`AlsoKnownAsAccount`](../interfaces/core.AlsoKnownAsAccount.md)[] |
-
-#### Returns
-
-`Promise`<`void`\>
-
-#### Defined in
-
-[self.id/packages/web/src/self.ts:65](https://github.com/ceramicstudio/self.id/blob/136f9be/packages/web/src/self.ts#L65)
-
-___
-
-### setProfile
-
-▸ **setProfile**(`profile`): `Promise`<`void`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `profile` | [`BasicProfile`](../interfaces/core.BasicProfile.md) |
-
-#### Returns
-
-`Promise`<`void`\>
-
-#### Defined in
-
-[self.id/packages/web/src/self.ts:73](https://github.com/ceramicstudio/self.id/blob/136f9be/packages/web/src/self.ts#L73)
-
-___
-
-### authenticate
-
-▸ `Static` **authenticate**(`network`, `authProvider`): `Promise`<[`SelfID`](web.SelfID.md)\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `network` | `AppNetwork` |
-| `authProvider` | [`EthereumAuthProvider`](web.EthereumAuthProvider.md) |
-
-#### Returns
-
-`Promise`<[`SelfID`](web.SelfID.md)\>
-
-#### Defined in
-
-[self.id/packages/web/src/self.ts:18](https://github.com/ceramicstudio/self.id/blob/136f9be/packages/web/src/self.ts#L18)
+[self.id/packages/web/src/self.ts:46](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/web/src/self.ts#L46)

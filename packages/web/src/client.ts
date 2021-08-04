@@ -1,14 +1,14 @@
 import { ThreeIdConnect } from '@3id/connect'
 import type { EthereumAuthProvider } from '@3id/connect'
 import { Core } from '@self.id/core'
-import type { AppNetwork } from '@self.id/core'
+import type { CoreModelTypes, CoreParams } from '@self.id/core'
 import { DID } from 'dids'
 
-export class WebClient extends Core {
+export class WebClient<ModelTypes extends CoreModelTypes = CoreModelTypes> extends Core<ModelTypes> {
   #threeId: ThreeIdConnect
 
-  constructor(network: AppNetwork) {
-    super(network)
+  constructor(params: CoreParams<ModelTypes>) {
+    super(params)
     this.#threeId = new ThreeIdConnect(this.config.connectNetwork)
   }
 

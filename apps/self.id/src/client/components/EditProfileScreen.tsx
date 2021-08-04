@@ -1,10 +1,12 @@
-import { getImageSrc } from '@self.id/core'
-import type { BasicProfile, Dimensions, ImageSources } from '@self.id/core'
+import type { BasicProfile } from '@datamodels/self.id-profile'
+import type { Dimensions, ImageSources } from '@self.id/image-utils'
 import { Anchor, Avatar, Box, Button, Heading, Image, Text, TextArea, TextInput } from 'grommet'
 import type { TextInputProps } from 'grommet'
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
 import type { FormEvent, ReactNode } from 'react'
+
+import { getImageURL } from '../../utils'
 
 import { useEditProfile, useEnvState, useImageUpload } from '../hooks'
 
@@ -203,7 +205,7 @@ function EditProfileForm({ profile }: FormProps) {
           label="Image (max 2.5 MB)"
           name="image"
           renderImage={({ onClick, sources }) => (
-            <Avatar onClick={onClick} src={getImageSrc(sources, { height: 50, width: 50 })} />
+            <Avatar onClick={onClick} src={getImageURL(sources, { height: 50, width: 50 })} />
           )}
           resizeDimensions={[{ width: 150, height: 150 }]}
           setValue={setValue}
@@ -214,7 +216,7 @@ function EditProfileForm({ profile }: FormProps) {
           label="Banner (max 2.5 MB)"
           name="background"
           renderImage={({ onClick, sources }) => {
-            const src = getImageSrc(sources, { width: 300, height: 100 })
+            const src = getImageURL(sources, { width: 300, height: 100 })
             return (
               <Box height="small">
                 <Image alt={src} fit="cover" onClick={onClick} src={src} />

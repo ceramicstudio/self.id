@@ -1,8 +1,10 @@
-import type { Dimensions, ImageSources } from '@self.id/core'
-import { uploadImage } from '@self.id/web'
+import type { Dimensions, ImageSources } from '@self.id/image-utils'
+import { uploadImage } from '@self.id/image-utils'
 import { useCallback, useRef, useState } from 'react'
 import type { ChangeEvent } from 'react'
 import toast from 'react-hot-toast'
+
+import { IPFS_API_URL } from '../../constants'
 
 const UPLOAD_MAX_SIZE = 2500000
 
@@ -45,7 +47,7 @@ export function useImageUpload(
 
       setState('uploading')
 
-      uploadImage(file, options.dimensions).then(
+      uploadImage(IPFS_API_URL, file, options.dimensions).then(
         (imageSources) => {
           resetInput()
           sourcesRef.current = imageSources

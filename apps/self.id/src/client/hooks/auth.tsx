@@ -1,8 +1,9 @@
 import { useMultiAuth } from '@ceramicstudio/multiauth'
 import type { AuthAccount } from '@ceramicstudio/multiauth'
-import type { SelfID } from '@self.id/web'
 import { useCallback } from 'react'
 import toast from 'react-hot-toast'
+
+import type { SelfID } from '../self'
 
 import { useEnv } from './env'
 

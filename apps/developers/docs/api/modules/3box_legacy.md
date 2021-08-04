@@ -14,26 +14,6 @@ npm install @self.id/3box-legacy
 
 ## Functions
 
-### getLegacy3BoxProfileAsBasicProfile
-
-▸ **getLegacy3BoxProfileAsBasicProfile**(`address`): `Promise`<[`BasicProfile`](../interfaces/core.BasicProfile.md) \| ``null``\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `address` | `string` |
-
-#### Returns
-
-`Promise`<[`BasicProfile`](../interfaces/core.BasicProfile.md) \| ``null``\>
-
-#### Defined in
-
-[self.id/packages/3box-legacy/src/index.ts:82](https://github.com/ceramicstudio/self.id/blob/136f9be/packages/3box-legacy/src/index.ts#L82)
-
-___
-
 ### loadLegacy3BoxProfile
 
 ▸ **loadLegacy3BoxProfile**<`T`\>(`address`): `Promise`<`T` \| ``null``\>
@@ -56,13 +36,13 @@ ___
 
 #### Defined in
 
-[self.id/packages/3box-legacy/src/index.ts:14](https://github.com/ceramicstudio/self.id/blob/136f9be/packages/3box-legacy/src/index.ts#L14)
+[self.id/packages/3box-legacy/src/index.ts:14](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/3box-legacy/src/index.ts#L14)
 
 ___
 
 ### transformProfile
 
-▸ `Const` **transformProfile**(`profile`): [`BasicProfile`](../interfaces/core.BasicProfile.md)
+▸ `Const` **transformProfile**(`profile`): `BasicProfile`
 
 #### Parameters
 
@@ -72,8 +52,28 @@ ___
 
 #### Returns
 
-[`BasicProfile`](../interfaces/core.BasicProfile.md)
+`BasicProfile`
 
 #### Defined in
 
-[self.id/packages/3box-legacy/src/index.ts:41](https://github.com/ceramicstudio/self.id/blob/136f9be/packages/3box-legacy/src/index.ts#L41)
+[self.id/packages/3box-legacy/src/index.ts:41](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/3box-legacy/src/index.ts#L41)
+
+___
+
+### getLegacy3BoxProfileAsBasicProfile
+
+▸ **getLegacy3BoxProfileAsBasicProfile**(`address`): `Promise`<`BasicProfile` \| ``null``\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `address` | `string` |
+
+#### Returns
+
+`Promise`<`BasicProfile` \| ``null``\>
+
+#### Defined in
+
+[self.id/packages/3box-legacy/src/index.ts:82](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/3box-legacy/src/index.ts#L82)

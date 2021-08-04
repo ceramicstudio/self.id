@@ -1,4 +1,3 @@
-import { getImageSrc } from '@self.id/core'
 import { Avatar, Box, Button, DropButton, Spinner, Text } from 'grommet'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -8,7 +7,7 @@ import type { ForwardedRef } from 'react'
 
 import AvatarPlaceholder from '../../components/AvatarPlaceholder'
 import linkIcon from '../../images/icons/link.svg'
-import { formatDID } from '../../utils'
+import { formatDID, getImageURL } from '../../utils'
 
 import { useDIDsData, useEnvState, useLogin, useLogout } from '../hooks'
 
@@ -122,7 +121,7 @@ export default function AccountButton() {
 
     const profile = knownDIDsData?.[auth.id]?.profile
     const name = profile?.name ?? formatDID(auth.id)
-    const src = profile?.image ? getImageSrc(profile.image, { height: 60, width: 60 }) : null
+    const src = getImageURL(profile?.image, { height: 60, width: 60 })
     return [name, src]
   }, [auth.id, knownDIDsData])
 

@@ -1,12 +1,4 @@
-export type ConnectNetwork = 'local' | 'dev-unstable' | 'testnet-clay' | 'mainnet'
-
-export type AppNetwork = ConnectNetwork | 'local-clay'
-
-export type ConfigURLs = {
-  ceramic: string
-  connectNetwork: ConnectNetwork
-  verificationsServer?: string
-}
+import type { AppNetwork, ConfigURLs } from './types'
 
 const NETWORK_CONFIGS: Record<AppNetwork, ConfigURLs> = {
   'dev-unstable': {
@@ -20,17 +12,14 @@ const NETWORK_CONFIGS: Record<AppNetwork, ConfigURLs> = {
   'local-clay': {
     ceramic: 'http://localhost:7007',
     connectNetwork: 'testnet-clay',
-    verificationsServer: 'https://verifications-clay.3boxlabs.com',
   },
   'testnet-clay': {
     ceramic: 'https://ceramic-private-clay.3boxlabs.com',
     connectNetwork: 'testnet-clay',
-    verificationsServer: 'https://verifications-clay.3boxlabs.com',
   },
   mainnet: {
     ceramic: 'https://ceramic-private.3boxlabs.com',
     connectNetwork: 'mainnet',
-    verificationsServer: 'https://verifications.3boxlabs.com',
   },
 }
 

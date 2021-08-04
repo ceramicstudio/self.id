@@ -1,15 +1,21 @@
 ---
 id: "web.WebClient"
-title: "Class: WebClient"
+title: "Class: WebClient<ModelTypes>"
 sidebar_label: "WebClient"
 custom_edit_url: null
 ---
 
 [web](../modules/web.md).WebClient
 
+## Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ModelTypes` | extends `CoreModelTypes``CoreModelTypes` |
+
 ## Hierarchy
 
-- `Core`
+- `Core`<`ModelTypes`\>
 
   ↳ **`WebClient`**
 
@@ -17,21 +23,27 @@ custom_edit_url: null
 
 ### constructor
 
-• **new WebClient**(`network`)
+• **new WebClient**<`ModelTypes`\>(`params`)
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ModelTypes` | extends `ModelTypes``ModelTypes` |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `network` | `AppNetwork` |
+| `params` | `CoreParams`<`ModelTypes`\> |
 
 #### Overrides
 
-Core.constructor
+Core&lt;ModelTypes\&gt;.constructor
 
 #### Defined in
 
-[self.id/packages/web/src/clients.ts:10](https://github.com/ceramicstudio/self.id/blob/136f9be/packages/web/src/clients.ts#L10)
+self.id/packages/web/src/client.ts:10
 
 ## Accessors
 
@@ -45,7 +57,7 @@ Core.constructor
 
 #### Defined in
 
-self.id/packages/core/dist/core.d.ts:11
+self.id/packages/core/dist/core.d.ts:14
 
 ___
 
@@ -59,7 +71,7 @@ ___
 
 #### Defined in
 
-self.id/packages/core/dist/core.d.ts:12
+self.id/packages/core/dist/core.d.ts:15
 
 ___
 
@@ -73,21 +85,21 @@ ___
 
 #### Defined in
 
-self.id/packages/core/dist/core.d.ts:13
+self.id/packages/core/dist/core.d.ts:16
 
 ___
 
 ### dataStore
 
-• `get` **dataStore**(): `DIDDataStore`<`ModelTypes`, ``"alsoKnownAs"`` \| ``"basicProfile"``\>
+• `get` **dataStore**(): `DIDDataStore`<`ModelTypes`, keyof `ModelTypes`[``"definitions"``]\>
 
 #### Returns
 
-`DIDDataStore`<`ModelTypes`, ``"alsoKnownAs"`` \| ``"basicProfile"``\>
+`DIDDataStore`<`ModelTypes`, keyof `ModelTypes`[``"definitions"``]\>
 
 #### Defined in
 
-self.id/packages/core/dist/core.d.ts:14
+self.id/packages/core/dist/core.d.ts:17
 
 ___
 
@@ -101,7 +113,7 @@ ___
 
 #### Defined in
 
-self.id/packages/core/dist/core.d.ts:15
+self.id/packages/core/dist/core.d.ts:18
 
 ___
 
@@ -115,50 +127,9 @@ ___
 
 #### Defined in
 
-[self.id/packages/web/src/clients.ts:15](https://github.com/ceramicstudio/self.id/blob/136f9be/packages/web/src/clients.ts#L15)
+self.id/packages/web/src/client.ts:15
 
 ## Methods
-
-### authenticate
-
-▸ **authenticate**(`authProvider`, `attachToCeramic?`): `Promise`<`DID`\>
-
-#### Parameters
-
-| Name | Type | Default value |
-| :------ | :------ | :------ |
-| `authProvider` | [`EthereumAuthProvider`](web.EthereumAuthProvider.md) | `undefined` |
-| `attachToCeramic` | `boolean` | `false` |
-
-#### Returns
-
-`Promise`<`DID`\>
-
-#### Defined in
-
-[self.id/packages/web/src/clients.ts:19](https://github.com/ceramicstudio/self.id/blob/136f9be/packages/web/src/clients.ts#L19)
-
-___
-
-### connect
-
-▸ **connect**(`authProvider`): `Promise`<`DID`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `authProvider` | [`EthereumAuthProvider`](web.EthereumAuthProvider.md) |
-
-#### Returns
-
-`Promise`<`DID`\>
-
-#### Defined in
-
-[self.id/packages/web/src/clients.ts:28](https://github.com/ceramicstudio/self.id/blob/136f9be/packages/web/src/clients.ts#L28)
-
-___
 
 ### getAccountDID
 
@@ -177,54 +148,6 @@ ___
 #### Inherited from
 
 Core.getAccountDID
-
-#### Defined in
-
-self.id/packages/core/dist/core.d.ts:16
-
-___
-
-### getAlsoKnownAs
-
-▸ **getAlsoKnownAs**(`id`): `Promise`<``null`` \| [`AlsoKnownAs`](../interfaces/core.AlsoKnownAs.md)\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `id` | `string` |
-
-#### Returns
-
-`Promise`<``null`` \| [`AlsoKnownAs`](../interfaces/core.AlsoKnownAs.md)\>
-
-#### Inherited from
-
-Core.getAlsoKnownAs
-
-#### Defined in
-
-self.id/packages/core/dist/core.d.ts:18
-
-___
-
-### getProfile
-
-▸ **getProfile**(`id`): `Promise`<``null`` \| [`BasicProfile`](../interfaces/core.BasicProfile.md)\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `id` | `string` |
-
-#### Returns
-
-`Promise`<``null`` \| [`BasicProfile`](../interfaces/core.BasicProfile.md)\>
-
-#### Inherited from
-
-Core.getProfile
 
 #### Defined in
 
@@ -252,4 +175,77 @@ Core.toDID
 
 #### Defined in
 
-self.id/packages/core/dist/core.d.ts:17
+self.id/packages/core/dist/core.d.ts:20
+
+___
+
+### get
+
+▸ **get**<`Key`, `ContentType`\>(`id`, `key`): `Promise`<``null`` \| `ContentType`\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `Key` | extends `string` \| `number` \| `symbol` |
+| `ContentType` | `DefinitionContentType`<`ModelTypes`, `Key`\> |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `id` | `string` |
+| `key` | `Key` |
+
+#### Returns
+
+`Promise`<``null`` \| `ContentType`\>
+
+#### Inherited from
+
+Core.get
+
+#### Defined in
+
+self.id/packages/core/dist/core.d.ts:21
+
+___
+
+### authenticate
+
+▸ **authenticate**(`authProvider`, `attachToCeramic?`): `Promise`<`DID`\>
+
+#### Parameters
+
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `authProvider` | [`EthereumAuthProvider`](web.EthereumAuthProvider.md) | `undefined` |
+| `attachToCeramic` | `boolean` | `false` |
+
+#### Returns
+
+`Promise`<`DID`\>
+
+#### Defined in
+
+self.id/packages/web/src/client.ts:19
+
+___
+
+### connect
+
+▸ **connect**(`authProvider`): `Promise`<`DID`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `authProvider` | [`EthereumAuthProvider`](web.EthereumAuthProvider.md) |
+
+#### Returns
+
+`Promise`<`DID`\>
+
+#### Defined in
+
+self.id/packages/web/src/client.ts:28

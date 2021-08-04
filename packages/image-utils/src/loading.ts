@@ -1,38 +1,10 @@
-import { IPFS_PREFIX } from '@self.id/core'
-import type { Dimensions, ImageMetadata, ImageSources, SizeMode } from '@self.id/core'
 import Pica from 'pica'
 
 import { uploadFile } from './ipfs'
+import { getDimensions } from './selection'
+import type { Dimensions, ImageMetadata, ImageSources, SizedImage, SizeMode } from './types'
 
 const pica = new Pica()
-
-export type SizedImage = Dimensions & { blob: Blob }
-
-const DEFAULT_DIMENSIONS: Dimensions = {
-  height: 512,
-  width: 512,
-}
-
-export function getDimensions(
-  image: HTMLImageElement,
-  dimensions: Dimensions = DEFAULT_DIMENSIONS,
-  mode: SizeMode = 'cover'
-): Dimensions {
-  let width = image.width
-  let height = image.height
-
-  if ((mode === 'contain' && width >= height) || (mode === 'cover' && width <= height)) {
-    if (width >= dimensions.width) {
-      height = Math.round((height * dimensions.width) / width)
-      width = dimensions.width
-    }
-  } else if (height > dimensions.height) {
-    width = Math.round((width * dimensions.height) / height)
-    height = dimensions.height
-  }
-
-  return { width, height }
-}
 
 export async function loadImage(blob: Blob): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
@@ -76,14 +48,15 @@ export async function resizeImageElement(
 }
 
 export async function uploadResizedImage(
+  url: string,
   type: string,
   image: HTMLImageElement,
   dimensions?: Dimensions
 ): Promise<ImageMetadata> {
   const { blob, height, width } = await resizeImageElement(type, image, dimensions)
-  const hash = await uploadFile(blob)
+  const hash = await uploadFile(url, blob)
   return {
-    src: `${IPFS_PREFIX}${hash}`,
+    src: 'ipfs://' + hash,
     height,
     width,
     mimeType: blob.type,
@@ -92,21 +65,22 @@ export async function uploadResizedImage(
 }
 
 export async function uploadImage(
+  url: string,
   file: File,
   sizes: Array<Dimensions> = []
 ): Promise<ImageSources> {
   const image = await loadImage(file)
   const uploadAlternatives = Promise.all(
-    sizes.map(async (dimensions) => await uploadResizedImage(file.type, image, dimensions))
+    sizes.map(async (dimensions) => await uploadResizedImage(url, file.type, image, dimensions))
   )
   const [originalHash, alternatives]: [string, Array<ImageMetadata>] = await Promise.all([
-    uploadFile(file),
+    uploadFile(url, file),
     uploadAlternatives,
   ])
   return {
     alternatives,
     original: {
-      src: IPFS_PREFIX + originalHash,
+      src: 'ipfs://' + originalHash,
       height: image.height,
       width: image.width,
       mimeType: file.type,

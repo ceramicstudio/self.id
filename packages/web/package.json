@@ -37,7 +37,10 @@
   "dependencies": {
     "@3id/connect": "^0.1.6",
     "@self.id/core": "^0.1.0",
-    "dids": "^2.4.0",
-    "pica": "^7.1.0"
+    "dids": "^2.4.0"
+  },
+  "devDependencies": {
+    "@ceramicnetwork/streamid": "^1.0.7",
+    "@glazed/did-datastore": "^0.1.0"
   }
 }

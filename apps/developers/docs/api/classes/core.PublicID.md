@@ -1,32 +1,41 @@
 ---
 id: "core.PublicID"
-title: "Class: PublicID"
+title: "Class: PublicID<ModelTypes, Alias>"
 sidebar_label: "PublicID"
 custom_edit_url: null
 ---
 
 [core](../modules/core.md).PublicID
 
-## Implements
+## Type parameters
 
-- [`Identifyable`](../modules/core.md#identifyable)
+| Name | Type |
+| :------ | :------ |
+| `ModelTypes` | extends [`CoreModelTypes`](../modules/core.md#coremodeltypes)[`CoreModelTypes`](../modules/core.md#coremodeltypes) |
+| `Alias` | extends keyof `ModelTypes`[``"definitions"``]keyof `ModelTypes`[``"definitions"``] |
 
 ## Constructors
 
 ### constructor
 
-• **new PublicID**(`core`, `id`)
+• **new PublicID**<`ModelTypes`, `Alias`\>(`params`)
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ModelTypes` | extends [`CoreModelTypes`](../modules/core.md#coremodeltypes)[`CoreModelTypes`](../modules/core.md#coremodeltypes) |
+| `Alias` | extends `string` \| `number` \| `symbol`keyof `ModelTypes`[``"definitions"``] |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `core` | [`Core`](core.Core.md) |
-| `id` | `string` |
+| `params` | [`PublicIDParams`](../modules/core.md#publicidparams)<`ModelTypes`\> |
 
 #### Defined in
 
-[self.id/packages/core/src/public.ts:8](https://github.com/ceramicstudio/self.id/blob/136f9be/packages/core/src/public.ts#L8)
+[self.id/packages/core/src/public.ts:18](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/core/src/public.ts#L18)
 
 ## Accessors
 
@@ -40,54 +49,31 @@ custom_edit_url: null
 
 #### Defined in
 
-[self.id/packages/core/src/public.ts:13](https://github.com/ceramicstudio/self.id/blob/136f9be/packages/core/src/public.ts#L13)
+[self.id/packages/core/src/public.ts:23](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/core/src/public.ts#L23)
 
 ## Methods
 
-### getAlsoKnownAs
+### get
 
-▸ **getAlsoKnownAs**(): `Promise`<``null`` \| [`AlsoKnownAs`](../interfaces/core.AlsoKnownAs.md)\>
+▸ **get**<`Key`, `ContentType`\>(`key`): `Promise`<``null`` \| `ContentType`\>
 
-#### Returns
+#### Type parameters
 
-`Promise`<``null`` \| [`AlsoKnownAs`](../interfaces/core.AlsoKnownAs.md)\>
+| Name | Type |
+| :------ | :------ |
+| `Key` | extends `string` \| `number` \| `symbol` |
+| `ContentType` | `DefinitionContentType`<`ModelTypes`, `Key`\> |
 
-#### Defined in
+#### Parameters
 
-[self.id/packages/core/src/public.ts:17](https://github.com/ceramicstudio/self.id/blob/136f9be/packages/core/src/public.ts#L17)
-
-___
-
-### getProfile
-
-▸ **getProfile**(): `Promise`<``null`` \| [`BasicProfile`](../interfaces/core.BasicProfile.md)\>
-
-#### Returns
-
-`Promise`<``null`` \| [`BasicProfile`](../interfaces/core.BasicProfile.md)\>
-
-#### Implementation of
-
-Identifyable.getProfile
-
-#### Defined in
-
-[self.id/packages/core/src/public.ts:26](https://github.com/ceramicstudio/self.id/blob/136f9be/packages/core/src/public.ts#L26)
-
-___
-
-### getSocialAccounts
-
-▸ **getSocialAccounts**(): `Promise`<[`AlsoKnownAsAccount`](../interfaces/core.AlsoKnownAsAccount.md)[]\>
+| Name | Type |
+| :------ | :------ |
+| `key` | `Key` |
 
 #### Returns
 
-`Promise`<[`AlsoKnownAsAccount`](../interfaces/core.AlsoKnownAsAccount.md)[]\>
-
-#### Implementation of
-
-Identifyable.getSocialAccounts
+`Promise`<``null`` \| `ContentType`\>
 
 #### Defined in
 
-[self.id/packages/core/src/public.ts:21](https://github.com/ceramicstudio/self.id/blob/136f9be/packages/core/src/public.ts#L21)
+[self.id/packages/core/src/public.ts:27](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/core/src/public.ts#L27)

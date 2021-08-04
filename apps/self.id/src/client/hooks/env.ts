@@ -1,5 +1,6 @@
-import type { AlsoKnownAsAccount, BasicProfile } from '@self.id/core'
-import type { EthereumProvider, SelfID } from '@self.id/web'
+import type { BasicProfile } from '@datamodels/self.id-profile'
+import type { Account as AlsoKnownAsAccount } from '@datamodels/self.id-social-accounts'
+import type { EthereumProvider } from '@self.id/web'
 import { AccountID } from 'caip'
 import { useAtom } from 'jotai'
 import { useCallback } from 'react'
@@ -7,6 +8,7 @@ import toast from 'react-hot-toast'
 
 import { authenticate, editProfile, loadKnownDIDsData } from '../env'
 import type { KnownDIDsData } from '../env'
+import type { SelfID } from '../self'
 import { editProfileAtom, envAtom, getInitialEnv, knownDIDsAtom, knownDIDsDataAtom } from '../state'
 import type { EnvState, EditProfileState } from '../state'
 

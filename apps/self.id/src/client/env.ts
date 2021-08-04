@@ -1,9 +1,12 @@
 import { EthereumAuthProvider } from '@3id/connect'
 import type { EthereumProvider } from '@3id/connect'
-import type { AlsoKnownAsAccount, BasicProfile } from '@self.id/core'
+import type { BasicProfile } from '@datamodels/self.id-profile'
+import type { Account as AlsoKnownAsAccount } from '@datamodels/self.id-social-accounts'
 import { PublicID } from '@self.id/core'
-import { SelfID, WebClient } from '@self.id/web'
+import { WebClient } from '@self.id/web'
 import type { AccountIDParams } from 'caip'
+
+import { SelfID } from './self'
 
 export type DIDData = {
   profile: BasicProfile | null
@@ -22,14 +25,13 @@ export async function authenticate(
   address: string
 ): Promise<SelfID> {
   const authProvider = new EthereumAuthProvider(provider, address)
-  const did = await client.authenticate(authProvider)
-  client.ceramic.did = did
+  const did = await client.authenticate(authProvider, true)
   return new SelfID(client, did)
 }
 
 export async function loadDIDData(id: PublicID): Promise<DIDData> {
-  const [profile, socialAccounts] = await Promise.all([id.getProfile(), id.getSocialAccounts()])
-  return { profile, socialAccounts }
+  const [profile, aka] = await Promise.all([id.get('basicProfile'), id.get('alsoKnownAs')])
+  return { profile, socialAccounts: aka?.accounts ?? [] }
 }
 
 export async function loadKnownDIDsData(
@@ -38,7 +40,7 @@ export async function loadKnownDIDsData(
 ): Promise<KnownDIDsData> {
   const dids = Object.keys(knownDIDs)
   const results = await Promise.all(
-    dids.map(async (id) => await loadDIDData(new PublicID(client, id)))
+    dids.map(async (id) => await loadDIDData(new PublicID({ core: client, id })))
   )
   return dids.reduce((acc, did, i) => {
     acc[did] = { ...results[i], accounts: knownDIDs[did].accounts }

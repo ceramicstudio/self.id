@@ -3,28 +3,41 @@ import Ceramic from '@ceramicnetwork/http-client'
 import { Caip10Link } from '@ceramicnetwork/stream-caip10-link'
 import { DataModel } from '@glazed/datamodel'
 import { DIDDataStore } from '@glazed/did-datastore'
+import type { DefinitionContentType } from '@glazed/did-datastore'
 import { Resolver } from 'did-resolver'
 import KeyDidResolver from 'key-did-resolver'
 
-import { model } from './__generated__/model'
-import type { ModelTypes } from './__generated__/model'
+import { model as coreModel } from './__generated__/model'
 import { getConfig } from './config'
-import type { AppNetwork, ConfigURLs } from './config'
-import type { AlsoKnownAs, BasicProfile } from './types'
+import type { AppNetwork, ConfigURLs, CoreModelTypes } from './types'
 import { isCAIP10string } from './utils'
 
-export class Core {
+export type CoreParams<ModelTypes extends CoreModelTypes = CoreModelTypes> = {
+  network: AppNetwork
+  model?: ModelTypes
+}
+
+export class Core<
+  ModelTypes extends CoreModelTypes = CoreModelTypes,
+  Alias extends keyof ModelTypes['definitions'] = keyof ModelTypes['definitions']
+> {
   #ceramic: Ceramic
   #config: ConfigURLs
   #dataModel: DataModel<ModelTypes>
   #dataStore: DIDDataStore<ModelTypes>
   #resolver: Resolver
 
-  constructor(network: AppNetwork) {
-    this.#config = Object.freeze(getConfig(network))
+  constructor(params: CoreParams<ModelTypes>) {
+    this.#config = Object.freeze(getConfig(params.network))
     this.#ceramic = new Ceramic(this.#config.ceramic)
-    this.#dataModel = new DataModel<ModelTypes>({ autopin: true, ceramic: this.#ceramic, model })
-    this.#dataStore = new DIDDataStore({
+    this.#dataModel = new DataModel<ModelTypes>({
+      autopin: true,
+      ceramic: this.#ceramic,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore model type
+      model: params.model ?? coreModel,
+    })
+    this.#dataStore = new DIDDataStore<ModelTypes>({
       autopin: true,
       ceramic: this.#ceramic,
       model: this.#dataModel,
@@ -67,23 +80,11 @@ export class Core {
     return isCAIP10string(accountOrDID) ? await this.getAccountDID(accountOrDID) : accountOrDID
   }
 
-  async getAlsoKnownAs(id: string): Promise<AlsoKnownAs | null> {
-    try {
-      const did = await this.toDID(id)
-      return await this.#dataStore.get('alsoKnownAs', did)
-    } catch (err) {
-      console.warn('Failed to load AKA accounts', id, err)
-      return null
-    }
-  }
-
-  async getProfile(id: string): Promise<BasicProfile | null> {
-    try {
-      const did = await this.toDID(id)
-      return await this.#dataStore.get('basicProfile', did)
-    } catch (err) {
-      console.warn('Failed to load profile', id, err)
-      return null
-    }
+  async get<Key extends Alias, ContentType = DefinitionContentType<ModelTypes, Key>>(
+    id: string,
+    key: Key
+  ): Promise<ContentType | null> {
+    const did = await this.toDID(id)
+    return await this.#dataStore.get(key, did)
   }
 }

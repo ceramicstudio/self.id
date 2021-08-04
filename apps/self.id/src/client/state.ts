@@ -1,10 +1,10 @@
 import { WebClient } from '@self.id/web'
-import type { SelfID } from '@self.id/web'
 import { atom } from 'jotai'
 
 import { APP_NETWORK } from '../constants'
 
 import type { KnownDIDs, KnownDIDsData } from './env'
+import type { SelfID } from './self'
 
 const KNOWN_DIDS_KEY = 'selfID-knownDIDs-v0'
 const SELECTED_DID_KEY = 'selfID-selectedDID-v0'
@@ -38,7 +38,7 @@ export type EnvState = {
 }
 
 export function getInitialEnv(checkLocal = true): EnvState {
-  const client = new WebClient(APP_NETWORK)
+  const client = new WebClient({ network: APP_NETWORK })
   if (!checkLocal) {
     return { auth: { state: 'unknown' }, client, self: null }
   }

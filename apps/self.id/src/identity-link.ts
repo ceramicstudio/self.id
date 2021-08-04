@@ -1,8 +1,16 @@
-import { GITHUB_HOST, TWITTER_HOST } from '@self.id/core'
-import type { AlsoKnownAsAccount } from '@self.id/core'
+import type { Account as AlsoKnownAsAccount } from '@datamodels/self.id-social-accounts'
 import type { DagJWS } from 'dids'
 
-/** @internal */
+import { APP_NETWORK } from './constants'
+
+export const GITHUB_HOST = 'github.com'
+export const TWITTER_HOST = 'twitter.com'
+
+export const SERVER_URL =
+  APP_NETWORK === 'mainnet'
+    ? 'https://verifications.3boxlabs.com'
+    : 'https://verifications-clay.3boxlabs.com'
+
 export function createGitHub(username: string, attestation: string): AlsoKnownAsAccount {
   return {
     protocol: 'https',
@@ -12,19 +20,16 @@ export function createGitHub(username: string, attestation: string): AlsoKnownAs
   }
 }
 
-/** @internal */
 export function findGitHub(
   accounts: Array<AlsoKnownAsAccount>,
   username: string
 ): AlsoKnownAsAccount | undefined {
   return accounts.find((a) => a.host === GITHUB_HOST && a.id === username)
 }
-/** @internal */
 export function findGitHubIndex(accounts: Array<AlsoKnownAsAccount>, username: string): number {
   return accounts.findIndex((a) => a.host === GITHUB_HOST && a.id === username)
 }
 
-/** @internal */
 export function createTwitter(username: string, attestation: string): AlsoKnownAsAccount {
   return {
     protocol: 'https',
@@ -34,14 +39,12 @@ export function createTwitter(username: string, attestation: string): AlsoKnownA
   }
 }
 
-/** @internal */
 export function findTwitter(
   accounts: Array<AlsoKnownAsAccount>,
   username: string
 ): AlsoKnownAsAccount | undefined {
   return accounts.find((a) => a.host === TWITTER_HOST && a.id === username)
 }
-/** @internal */
 export function findTwitterIndex(accounts: Array<AlsoKnownAsAccount>, username: string): number {
   return accounts.findIndex((a) => a.host === TWITTER_HOST && a.id === username)
 }
@@ -61,18 +64,17 @@ export type ChallengeResponse = {
 }
 
 export class IdentityLink {
-  #url: string
+  _url: string
 
-  constructor(url: string) {
-    this.#url = url
+  constructor(url: string = SERVER_URL) {
+    this._url = url
   }
 
-  /** @internal */
   async _post<Data = Record<string, any>, Body = Record<string, any>>(
     endpoint: string,
     body: Body
   ): Promise<Data> {
-    const res = await fetch(`${this.#url}${endpoint}`, {
+    const res = await fetch(`${this._url}${endpoint}`, {
       headers: { 'content-type': 'application/json' },
       method: 'POST',
       body: JSON.stringify(body),

@@ -1,14 +1,10 @@
-import type { BasicProfile } from '@datamodels/self.id-profile'
-import type { Account } from '@datamodels/self.id-social-accounts'
+export type { ModelTypes as CoreModelTypes } from './__generated__/model'
 
-export type { BasicProfile, ImageMetadata, ImageSources } from '@datamodels/self.id-profile'
-export type {
-  Account as AlsoKnownAsAccount,
-  AlsoKnownAs,
-} from '@datamodels/self.id-social-accounts'
+export type ConnectNetwork = 'local' | 'dev-unstable' | 'testnet-clay' | 'mainnet'
 
-export type Identifyable = {
-  id: string
-  getProfile(): Promise<BasicProfile | null>
-  getSocialAccounts(): Promise<Array<Account>>
+export type AppNetwork = ConnectNetwork | 'local-clay'
+
+export type ConfigURLs = {
+  ceramic: string
+  connectNetwork: ConnectNetwork
 }

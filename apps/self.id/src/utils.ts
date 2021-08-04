@@ -1,3 +1,8 @@
+import { selectImageSource } from '@self.id/image-utils'
+import type { Dimensions, ImageSources } from '@self.id/image-utils'
+
+import { IPFS_URL } from './constants'
+
 export interface Deferred<T> extends Promise<T> {
   resolve: (value?: T | PromiseLike<T>) => void
   reject: (reason?: any) => void
@@ -22,4 +27,15 @@ export function isEthereumAddress(address: string): boolean {
 
 export function isSupportedDID(did: string): boolean {
   return did.startsWith('did:3') || did.startsWith('did:key')
+}
+
+export function getImageURL(
+  sources: ImageSources | undefined,
+  dimensions: Dimensions
+): string | undefined {
+  if (sources == null) {
+    return
+  }
+  const image = selectImageSource(sources, dimensions)
+  return image.src.replace('ipfs://', IPFS_URL)
 }

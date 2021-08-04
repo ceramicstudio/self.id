@@ -1,29 +1,32 @@
-import type { Core } from './core'
-import type { AlsoKnownAs, AlsoKnownAsAccount, BasicProfile, Identifyable } from './types'
+import type { DefinitionContentType } from '@glazed/did-datastore'
 
-export class PublicID implements Identifyable {
-  #core: Core
+import type { ModelTypes as CoreModelTypes } from './__generated__/model'
+import type { Core } from './core'
+
+export type PublicIDParams<ModelTypes extends CoreModelTypes = CoreModelTypes> = {
+  core: Core<ModelTypes>
+  id: string
+}
+
+export class PublicID<
+  ModelTypes extends CoreModelTypes = CoreModelTypes,
+  Alias extends keyof ModelTypes['definitions'] = keyof ModelTypes['definitions']
+> {
+  #core: Core<ModelTypes, Alias>
   #id: string
 
-  constructor(core: Core, id: string) {
-    this.#core = core
-    this.#id = id
+  constructor(params: PublicIDParams<ModelTypes>) {
+    this.#core = params.core
+    this.#id = params.id
   }
 
   get id(): string {
     return this.#id
   }
 
-  async getAlsoKnownAs(): Promise<AlsoKnownAs | null> {
-    return await this.#core.getAlsoKnownAs(this.#id)
-  }
-
-  async getSocialAccounts(): Promise<Array<AlsoKnownAsAccount>> {
-    const aka = await this.getAlsoKnownAs()
-    return aka?.accounts ?? []
-  }
-
-  async getProfile(): Promise<BasicProfile | null> {
-    return await this.#core.getProfile(this.#id)
+  async get<Key extends Alias, ContentType = DefinitionContentType<ModelTypes, Key>>(
+    key: Key
+  ): Promise<ContentType | null> {
+    return await this.#core.get(this.#id, key)
   }
 }
