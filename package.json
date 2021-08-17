@@ -6,6 +6,7 @@
     "packages/*"
   ],
   "scripts": {
+    "docs": "typedoc --tsconfig tsconfig.docs.json",
     "build": "lerna run build",
     "lint": "lerna run lint",
     "test": "lerna run test --"

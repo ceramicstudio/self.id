@@ -17,6 +17,11 @@ export type CoreParams<ModelTypes extends CoreModelTypes = CoreModelTypes> = {
   model?: ModelTypes
 }
 
+/**
+ * ```sh
+ * import { Core } from '@self.id/core'
+ * ```
+ */
 export class Core<
   ModelTypes extends CoreModelTypes = CoreModelTypes,
   Alias extends keyof ModelTypes['definitions'] = keyof ModelTypes['definitions']

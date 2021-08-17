@@ -8,6 +8,11 @@ export type PublicIDParams<ModelTypes extends CoreModelTypes = CoreModelTypes> =
   id: string
 }
 
+/**
+ * ```sh
+ * import { PublicID } from '@self.id/core'
+ * ```
+ */
 export class PublicID<
   ModelTypes extends CoreModelTypes = CoreModelTypes,
   Alias extends keyof ModelTypes['definitions'] = keyof ModelTypes['definitions']

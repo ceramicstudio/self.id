@@ -6,20 +6,28 @@ import type { DID } from 'dids'
 
 import { WebClient } from './client'
 
-export type AuthenticateParams<ModelTypes extends CoreModelTypes = CoreModelTypes> = CoreParams<ModelTypes> & {
-  authProvider: EthereumAuthProvider
-}
+export type AuthenticateParams<ModelTypes extends CoreModelTypes = CoreModelTypes> =
+  CoreParams<ModelTypes> & {
+    authProvider: EthereumAuthProvider
+  }
 
-export type  SelfIDParams = {
+export type SelfIDParams = {
   client: WebClient
   did: DID
 }
 
+/**
+ * ```sh
+ * import { SelfID } from '@self.id/web'
+ * ```
+ */
 export class SelfID<
-ModelTypes extends CoreModelTypes = CoreModelTypes,
-Alias extends keyof ModelTypes['definitions'] = keyof ModelTypes['definitions']
+  ModelTypes extends CoreModelTypes = CoreModelTypes,
+  Alias extends keyof ModelTypes['definitions'] = keyof ModelTypes['definitions']
 > {
-  static async authenticate<ModelTypes extends CoreModelTypes = CoreModelTypes>(params: AuthenticateParams<ModelTypes>): Promise<SelfID> {
+  static async authenticate<ModelTypes extends CoreModelTypes = CoreModelTypes>(
+    params: AuthenticateParams<ModelTypes>
+  ): Promise<SelfID> {
     const { authProvider, ...clientParams } = params
     const client = new WebClient<ModelTypes>(clientParams)
     const did = await client.authenticate(authProvider, true)

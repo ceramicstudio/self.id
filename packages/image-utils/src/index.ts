@@ -1,5 +1,5 @@
 /**
- * Image utils APIs
+ * Image utilities APIs
  *
  * ```sh
  * npm install @self.id/image-utils

@@ -4,7 +4,14 @@ import { Core } from '@self.id/core'
 import type { CoreModelTypes, CoreParams } from '@self.id/core'
 import { DID } from 'dids'
 
-export class WebClient<ModelTypes extends CoreModelTypes = CoreModelTypes> extends Core<ModelTypes> {
+/**
+ * ```sh
+ * import { WebClient } from '@self.id/web'
+ * ```
+ */
+export class WebClient<
+  ModelTypes extends CoreModelTypes = CoreModelTypes
+> extends Core<ModelTypes> {
   #threeId: ThreeIdConnect
 
   constructor(params: CoreParams<ModelTypes>) {
