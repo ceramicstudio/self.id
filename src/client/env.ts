@@ -45,19 +45,3 @@ export async function loadKnownDIDsData(
     return acc
   }, {} as KnownDIDsData)
 }
-
-export async function editProfile(
-  self: SelfID,
-  knownDIDs: KnownDIDsData,
-  profile: BasicProfile
-): Promise<KnownDIDsData> {
-  const id = self.id
-
-  const existing = knownDIDs[id]
-  if (existing == null) {
-    throw new Error(`No associated data for DID ${id}`)
-  }
-
-  await self.setProfile(profile)
-  return { [id]: { ...existing, profile } }
-}
