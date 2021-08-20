@@ -3,7 +3,7 @@ import { atom } from 'jotai'
 
 import { APP_NETWORK } from '../constants'
 
-import type { KnownDIDs, KnownDIDsData } from './env'
+import type { KnownDIDData, KnownDIDs, KnownDIDsData } from './env'
 import type { SelfID } from './self'
 
 const KNOWN_DIDS_KEY = 'selfID-knownDIDs-v0'
@@ -63,6 +63,21 @@ export const envAtom = atom(
       localStorage.setItem(SELECTED_DID_KEY, env.auth.id)
     }
     set(envStateAtom, env)
+  }
+)
+
+export const authDIDDataAtom = atom(
+  (get) => {
+    const didsData = get(knownDIDsDataAtom) ?? {}
+    const { auth } = get(envStateAtom)
+    return (auth.id && didsData[auth.id]) || null
+  },
+  (get, set, update: Partial<KnownDIDData>) => {
+    const didsData = get(knownDIDsDataAtom) ?? {}
+    const { auth } = get(envStateAtom)
+    if (auth.id != null) {
+      set(knownDIDsDataAtom, { ...didsData, [auth.id]: { ...didsData[auth.id], ...update } })
+    }
   }
 )
 

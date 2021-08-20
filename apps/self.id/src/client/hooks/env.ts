@@ -6,10 +6,17 @@ import { useAtom } from 'jotai'
 import { useCallback } from 'react'
 import toast from 'react-hot-toast'
 
-import { authenticate, editProfile, loadKnownDIDsData } from '../env'
+import { authenticate, loadKnownDIDsData } from '../env'
 import type { KnownDIDsData } from '../env'
 import type { SelfID } from '../self'
-import { editProfileAtom, envAtom, getInitialEnv, knownDIDsAtom, knownDIDsDataAtom } from '../state'
+import {
+  authDIDDataAtom,
+  editProfileAtom,
+  envAtom,
+  getInitialEnv,
+  knownDIDsAtom,
+  knownDIDsDataAtom,
+} from '../state'
 import type { EnvState, EditProfileState } from '../state'
 
 export function useKnownDIDs() {
@@ -82,22 +89,22 @@ export function useEditProfile(): [
 ] {
   const env = useEnvState()
   const [editState, setEditState] = useAtom(editProfileAtom)
-  const [knownDIDsData, setKnownDIDsData] = useAtom(knownDIDsDataAtom)
+  const [authDIDData, setAuthDIDData] = useAtom(authDIDDataAtom)
 
   const applyEdit = useCallback(
     async (profile: BasicProfile) => {
-      if (knownDIDsData == null) {
+      if (authDIDData == null) {
         throw new Error('DID data is not available')
       }
       if (env.self === null) {
         throw new Error('Authentication required')
       }
 
-      const updatedDIDsData = await editProfile(env.self, knownDIDsData, profile)
-      setKnownDIDsData(updatedDIDsData)
+      await env.self.setProfile(profile)
+      setAuthDIDData({ profile })
       setEditState({ status: 'done' })
     },
-    [env.self, knownDIDsData, setEditState, setKnownDIDsData]
+    [env.self, authDIDData, setEditState, setAuthDIDData]
   )
 
   const edit = useCallback(
@@ -132,27 +139,14 @@ export function useSocialAccounts(): [
   Array<AlsoKnownAsAccount>,
   (socialAccounts: Array<AlsoKnownAsAccount>) => void
 ] {
-  const { auth } = useEnvState()
-  const [knownDIDsData, setKnownDIDsData] = useAtom(knownDIDsDataAtom)
+  const [authDIDData, setAuthDIDsData] = useAtom(authDIDDataAtom)
 
-  const accounts = (auth.id && knownDIDsData?.[auth.id]?.socialAccounts) || []
-
+  const accounts = authDIDData?.socialAccounts ?? []
   const setAccounts = useCallback(
     (socialAccounts: Array<AlsoKnownAsAccount>) => {
-      const { id } = auth
-      if (id == null) {
-        console.warn('No authenticated DID to set accounts')
-      } else {
-        const data = knownDIDsData ?? {}
-        const existing = data[id]
-        if (existing == null) {
-          console.warn('No existing DID data')
-        } else {
-          setKnownDIDsData({ ...data, [id]: { ...existing, socialAccounts } })
-        }
-      }
+      setAuthDIDsData({ socialAccounts })
     },
-    [auth, knownDIDsData, setKnownDIDsData]
+    [setAuthDIDsData]
   )
 
   return [accounts, setAccounts]
