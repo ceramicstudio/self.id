@@ -48,7 +48,6 @@ import { theme } from '../theme'
 
 export default class App extends NextApp<AppInitialProps> {
   render() {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const { Component, pageProps } = this.props
     return (
       <MultiauthProvider providers={[{ key: 'ethereum', connectors }]} theme={theme}>
