@@ -16,5 +16,8 @@
   "main": "index.js",
   "engines": {
     "node": ">=14"
+  },
+  "devDependencies": {
+    "stream-browserify": "^3.0.0"
   }
 }

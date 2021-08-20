@@ -1,5 +1,5 @@
-import type { BasicProfile } from '@datamodels/self.id-profile'
-import type { Account as AlsoKnownAsAccount } from '@datamodels/self.id-social-accounts'
+import type { Account as AlsoKnownAsAccount } from '@datamodels/identity-accounts-web'
+import type { BasicProfile } from '@datamodels/identity-profile-basic'
 import { getLegacy3BoxProfileAsBasicProfile } from '@self.id/3box-legacy'
 import { isCAIP10string, isDIDstring } from '@self.id/core'
 import { Anchor, Box, Paragraph, Text } from 'grommet'

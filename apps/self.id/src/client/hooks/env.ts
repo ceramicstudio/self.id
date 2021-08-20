@@ -1,5 +1,5 @@
-import type { BasicProfile } from '@datamodels/self.id-profile'
-import type { Account as AlsoKnownAsAccount } from '@datamodels/self.id-social-accounts'
+import type { Account as AlsoKnownAsAccount } from '@datamodels/identity-accounts-web'
+import type { BasicProfile } from '@datamodels/identity-profile-basic'
 import type { EthereumProvider } from '@self.id/web'
 import { AccountID } from 'caip'
 import { useAtom } from 'jotai'

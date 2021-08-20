@@ -10,8 +10,16 @@ module.exports = function () {
           site.globals.TextDecoder = TextDecoder
           site.globals.TextEncoder = TextEncoder
         }
+        return {}
+      } else {
+        return {
+          resolve: {
+            fallback: {
+              stream: require.resolve('stream-browserify'),
+            },
+          },
+        }
       }
-      return {}
     },
   }
 }

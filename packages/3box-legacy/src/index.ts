@@ -1,14 +1,14 @@
 /**
  * 3Box legacy utilities
- * 
+ *
  * ```sh
  * npm install @self.id/3box-legacy
  * ```
- * 
+ *
  * @module 3box-legacy
  */
 
-import type { BasicProfile } from '@datamodels/self.id-profile'
+import type { BasicProfile } from '@datamodels/identity-profile-basic'
 import fetch from 'cross-fetch'
 
 export async function loadLegacy3BoxProfile<T = Record<string, any>>(

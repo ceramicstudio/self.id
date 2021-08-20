@@ -1,4 +1,4 @@
-import type { Account as AlsoKnownAsAccount } from '@datamodels/self.id-social-accounts'
+import type { Account as AlsoKnownAsAccount } from '@datamodels/identity-accounts-web'
 import type { DagJWS } from 'dids'
 
 import { APP_NETWORK } from './constants'

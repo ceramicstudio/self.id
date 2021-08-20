@@ -1,4 +1,4 @@
-export type { ImageMetadata, ImageSources } from '@datamodels/self.id-profile'
+export type { ImageMetadata, ImageSources } from '@datamodels/identity-profile-basic'
 
 export type Dimensions = { height: number; width: number }
 

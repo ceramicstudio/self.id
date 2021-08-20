@@ -13,12 +13,13 @@
     "url": "https://github.com/ceramicstudio/self.id",
     "directory": "packages/image-utils"
   },
-  "main": "dist/cjs.js",
-  "module": "dist/esm.js",
+  "main": "dist/lib.cjs",
+  "module": "dist/lib.mjs",
   "typings": "dist/index.d.ts",
   "exports": {
-    "import": "./dist/esm.js",
-    "default": "./dist/cjs.js"
+    "import": "./dist/lib.mjs",
+    "require": "./dist/lib.cjs",
+    "default": "./dist/lib.cjs"
   },
   "files": [
     "dist",
@@ -29,12 +30,15 @@
   },
   "sideEffects": false,
   "scripts": {
-    "build": "del dist && tsc --emitDeclarationOnly --skipLibCheck && rollup -c",
+    "build": "del dist && tsc --emitDeclarationOnly --skipLibCheck && rollup -c ../../rollup.config.js",
     "lint": "eslint --fix",
-    "prepublish": "yarn build",
+    "prepare": "yarn build",
     "prepublishOnly": "package-check"
   },
   "dependencies": {
     "pica": "^7.1.0"
+  },
+  "devDependencies": {
+    "@datamodels/identity-profile-basic": "^0.1.2"
   }
 }

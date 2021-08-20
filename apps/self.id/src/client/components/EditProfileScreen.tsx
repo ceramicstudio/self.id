@@ -1,4 +1,4 @@
-import type { BasicProfile } from '@datamodels/self.id-profile'
+import type { BasicProfile } from '@datamodels/identity-profile-basic'
 import type { Dimensions, ImageSources } from '@self.id/image-utils'
 import { Anchor, Avatar, Box, Button, Heading, Image, Text, TextArea, TextInput } from 'grommet'
 import type { TextInputProps } from 'grommet'
