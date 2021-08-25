@@ -7,6 +7,10 @@ custom_edit_url: null
 
 [web](../modules/web.md).WebClient
 
+```sh
+import { WebClient } from '@self.id/web'
+```
+
 ## Type parameters
 
 | Name | Type |
@@ -35,43 +39,21 @@ custom_edit_url: null
 
 | Name | Type |
 | :------ | :------ |
-| `params` | `CoreParams`<`ModelTypes`\> |
+| `params` | [`WebClientParams`](../modules/web.md#webclientparams)<`ModelTypes`\> |
 
 #### Overrides
 
 Core&lt;ModelTypes\&gt;.constructor
 
-#### Defined in
-
-self.id/packages/web/src/client.ts:10
-
 ## Accessors
 
 ### ceramic
 
-• `get` **ceramic**(): `default`
+• `get` **ceramic**(): `CeramicClient`
 
 #### Returns
 
-`default`
-
-#### Defined in
-
-self.id/packages/core/dist/core.d.ts:14
-
-___
-
-### config
-
-• `get` **config**(): `ConfigURLs`
-
-#### Returns
-
-`ConfigURLs`
-
-#### Defined in
-
-self.id/packages/core/dist/core.d.ts:15
+`CeramicClient`
 
 ___
 
@@ -83,10 +65,6 @@ ___
 
 `DataModel`<`ModelTypes`, `ModelTypesToAliases`<`ModelTypes`\>\>
 
-#### Defined in
-
-self.id/packages/core/dist/core.d.ts:16
-
 ___
 
 ### dataStore
@@ -96,10 +74,6 @@ ___
 #### Returns
 
 `DIDDataStore`<`ModelTypes`, keyof `ModelTypes`[``"definitions"``]\>
-
-#### Defined in
-
-self.id/packages/core/dist/core.d.ts:17
 
 ___
 
@@ -111,10 +85,6 @@ ___
 
 `Resolver`
 
-#### Defined in
-
-self.id/packages/core/dist/core.d.ts:18
-
 ___
 
 ### threeId
@@ -124,10 +94,6 @@ ___
 #### Returns
 
 `ThreeIdConnect`
-
-#### Defined in
-
-self.id/packages/web/src/client.ts:15
 
 ## Methods
 
@@ -149,10 +115,6 @@ self.id/packages/web/src/client.ts:15
 
 Core.getAccountDID
 
-#### Defined in
-
-self.id/packages/core/dist/core.d.ts:19
-
 ___
 
 ### toDID
@@ -173,15 +135,11 @@ ___
 
 Core.toDID
 
-#### Defined in
-
-self.id/packages/core/dist/core.d.ts:20
-
 ___
 
 ### get
 
-▸ **get**<`Key`, `ContentType`\>(`id`, `key`): `Promise`<``null`` \| `ContentType`\>
+▸ **get**<`Key`, `ContentType`\>(`key`, `id`): `Promise`<``null`` \| `ContentType`\>
 
 #### Type parameters
 
@@ -194,8 +152,8 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `id` | `string` |
 | `key` | `Key` |
+| `id` | `string` |
 
 #### Returns
 
@@ -204,10 +162,6 @@ ___
 #### Inherited from
 
 Core.get
-
-#### Defined in
-
-self.id/packages/core/dist/core.d.ts:21
 
 ___
 
@@ -219,16 +173,12 @@ ___
 
 | Name | Type | Default value |
 | :------ | :------ | :------ |
-| `authProvider` | [`EthereumAuthProvider`](web.EthereumAuthProvider.md) | `undefined` |
+| `authProvider` | `EthereumAuthProvider` | `undefined` |
 | `attachToCeramic` | `boolean` | `false` |
 
 #### Returns
 
 `Promise`<`DID`\>
-
-#### Defined in
-
-self.id/packages/web/src/client.ts:19
 
 ___
 
@@ -240,12 +190,8 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `authProvider` | [`EthereumAuthProvider`](web.EthereumAuthProvider.md) |
+| `authProvider` | `EthereumAuthProvider` |
 
 #### Returns
 
 `Promise`<`DID`\>
-
-#### Defined in
-
-self.id/packages/web/src/client.ts:28

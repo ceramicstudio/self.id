@@ -7,6 +7,10 @@ custom_edit_url: null
 
 [web](../modules/web.md).SelfID
 
+```sh
+import { SelfID } from '@self.id/web'
+```
+
 ## Type parameters
 
 | Name | Type |
@@ -18,7 +22,7 @@ custom_edit_url: null
 
 ### authenticate
 
-▸ `Static` **authenticate**<`ModelTypes`\>(`params`): `Promise`<[`SelfID`](web.SelfID.md)<`ModelTypes`, ``"alsoKnownAs"`` \| ``"basicProfile"``\>\>
+▸ `Static` **authenticate**<`ModelTypes`\>(`params`): `Promise`<[`SelfID`](web.SelfID.md)<`ModelTypes`, ``"alsoKnownAs"`` \| ``"basicProfile"`` \| ``"cryptoAccounts"``\>\>
 
 #### Type parameters
 
@@ -34,11 +38,7 @@ custom_edit_url: null
 
 #### Returns
 
-`Promise`<[`SelfID`](web.SelfID.md)<`ModelTypes`, ``"alsoKnownAs"`` \| ``"basicProfile"``\>\>
-
-#### Defined in
-
-[self.id/packages/web/src/self.ts:22](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/web/src/self.ts#L22)
+`Promise`<[`SelfID`](web.SelfID.md)<`ModelTypes`, ``"alsoKnownAs"`` \| ``"basicProfile"`` \| ``"cryptoAccounts"``\>\>
 
 ___
 
@@ -62,10 +62,6 @@ ___
 #### Returns
 
 `Promise`<``null`` \| `ContentType`\>
-
-#### Defined in
-
-[self.id/packages/web/src/self.ts:52](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/web/src/self.ts#L52)
 
 ___
 
@@ -91,10 +87,6 @@ ___
 
 `Promise`<`StreamID`\>
 
-#### Defined in
-
-[self.id/packages/web/src/self.ts:58](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/web/src/self.ts#L58)
-
 ## Constructors
 
 ### constructor
@@ -114,10 +106,6 @@ ___
 | :------ | :------ |
 | `params` | [`SelfIDParams`](../modules/web.md#selfidparams) |
 
-#### Defined in
-
-[self.id/packages/web/src/self.ts:32](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/web/src/self.ts#L32)
-
 ## Accessors
 
 ### client
@@ -128,10 +116,6 @@ ___
 
 [`WebClient`](web.WebClient.md)<`ModelTypes`\>
 
-#### Defined in
-
-[self.id/packages/web/src/self.ts:42](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/web/src/self.ts#L42)
-
 ___
 
 ### id
@@ -141,7 +125,3 @@ ___
 #### Returns
 
 `string`
-
-#### Defined in
-
-[self.id/packages/web/src/self.ts:46](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/web/src/self.ts#L46)

@@ -103,7 +103,7 @@ ___
 
 ### authenticate
 
-▸ `Static` **authenticate**<`ModelTypes`\>(`params`): `Promise`<[`SelfID`](web.SelfID.md)<`ModelTypes`, ``"alsoKnownAs"`` \| ``"basicProfile"``\>\>
+▸ `Static` **authenticate**<`ModelTypes`\>(`params`): `Promise`<[`SelfID`](web.SelfID.md)<`ModelTypes`, ``"alsoKnownAs"`` \| ``"basicProfile"`` \| ``"cryptoAccounts"``\>\>
 
 #### Type parameters
 
@@ -119,4 +119,4 @@ ___
 
 #### Returns
 
-`Promise`<[`SelfID`](web.SelfID.md)<`ModelTypes`, ``"alsoKnownAs"`` \| ``"basicProfile"``\>\>
+`Promise`<[`SelfID`](web.SelfID.md)<`ModelTypes`, ``"alsoKnownAs"`` \| ``"basicProfile"`` \| ``"cryptoAccounts"``\>\>

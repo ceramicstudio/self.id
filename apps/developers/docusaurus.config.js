@@ -31,12 +31,12 @@ module.exports = {
           position: 'left',
           label: 'Docs',
         },
-        {
-          type: 'doc',
-          docId: 'api/index',
-          position: 'left',
-          label: 'API',
-        },
+        // {
+        //   type: 'doc',
+        //   docId: 'api/index',
+        //   position: 'left',
+        //   label: 'API',
+        // },
         {
           href: 'https://github.com/ceramicstudio/self.id',
           label: 'GitHub',

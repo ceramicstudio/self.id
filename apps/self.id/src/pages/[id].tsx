@@ -1,7 +1,7 @@
 import type { Account as AlsoKnownAsAccount } from '@datamodels/identity-accounts-web'
 import type { BasicProfile } from '@datamodels/identity-profile-basic'
 import { getLegacy3BoxProfileAsBasicProfile } from '@self.id/3box-legacy'
-import { isCAIP10string, isDIDstring } from '@self.id/core'
+import { PublicID, isCAIP10string, isDIDstring } from '@self.id/core'
 import { Anchor, Box, Paragraph, Text } from 'grommet'
 import type { GetServerSideProps } from 'next'
 import dynamic from 'next/dynamic'
@@ -67,9 +67,10 @@ export const getServerSideProps: GetServerSideProps<Props, { id: string }> = asy
       // Main case: we expect a DID to be provided
       support = 'supported'
       const { core } = await import('../server')
+      const publicID = new PublicID({ core, id })
       const [profile, aka] = await Promise.all([
-        core.get(id, 'basicProfile'),
-        core.get(id, 'alsoKnownAs'),
+        publicID.get('basicProfile'),
+        publicID.get('alsoKnownAs'),
       ])
       loadedProfile = profile
       socialAccounts = aka?.accounts ?? []

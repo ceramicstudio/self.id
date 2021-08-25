@@ -1,7 +1,7 @@
 import { WebClient } from '@self.id/web'
 import { atom } from 'jotai'
 
-import { APP_NETWORK } from '../constants'
+import { CERAMIC_URL, CONNECT_NETWORK } from '../constants'
 
 import type { KnownDIDData, KnownDIDs, KnownDIDsData } from './env'
 import type { SelfID } from './self'
@@ -38,7 +38,7 @@ export type EnvState = {
 }
 
 export function getInitialEnv(checkLocal = true): EnvState {
-  const client = new WebClient({ network: APP_NETWORK })
+  const client = new WebClient({ ceramic: CERAMIC_URL, connectNetwork: CONNECT_NETWORK as any })
   if (!checkLocal) {
     return { auth: { state: 'unknown' }, client, self: null }
   }

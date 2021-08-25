@@ -13,28 +13,9 @@ npm install @self.id/core
 
 ## Type aliases
 
-### AppNetwork
+### CeramicNetwork
 
-Ƭ **AppNetwork**: [`ConnectNetwork`](core.md#connectnetwork) \| ``"local-clay"``
-
-___
-
-### ConfigURLs
-
-Ƭ **ConfigURLs**: `Object`
-
-#### Type declaration
-
-| Name | Type |
-| :------ | :------ |
-| `ceramic` | `string` |
-| `connectNetwork` | [`ConnectNetwork`](core.md#connectnetwork) |
-
-___
-
-### ConnectNetwork
-
-Ƭ **ConnectNetwork**: ``"local"`` \| ``"dev-unstable"`` \| ``"testnet-clay"`` \| ``"mainnet"``
+Ƭ **CeramicNetwork**: ``"local"`` \| ``"mainnet-gateway"`` \| ``"testnet-clay"`` \| ``"testnet-clay-gateway"``
 
 ___
 
@@ -58,8 +39,8 @@ ___
 
 | Name | Type |
 | :------ | :------ |
+| `ceramic` | [`CeramicNetwork`](core.md#ceramicnetwork) \| `string` |
 | `model?` | `ModelTypes` |
-| `network` | [`AppNetwork`](core.md#appnetwork) |
 
 ___
 
@@ -80,23 +61,13 @@ ___
 | `core` | [`Core`](../classes/core.Core.md)<`ModelTypes`\> |
 | `id` | `string` |
 
+## Variables
+
+### CERAMIC\_URLS
+
+• `Const` **CERAMIC\_URLS**: `Record`<[`CeramicNetwork`](core.md#ceramicnetwork), `string`\>
+
 ## Functions
-
-### getConfig
-
-▸ **getConfig**(`network`): [`ConfigURLs`](core.md#configurls)
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `network` | [`AppNetwork`](core.md#appnetwork) |
-
-#### Returns
-
-[`ConfigURLs`](core.md#configurls)
-
-___
 
 ### isCAIP10string
 
@@ -107,22 +78,6 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `account` | `string` |
-
-#### Returns
-
-`boolean`
-
-___
-
-### isDIDstring
-
-▸ **isDIDstring**(`did`): `boolean`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `did` | `string` |
 
 #### Returns
 

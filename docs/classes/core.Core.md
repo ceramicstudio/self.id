@@ -36,21 +36,11 @@ import { Core } from '@self.id/core'
 
 ### ceramic
 
-• `get` **ceramic**(): `default`
+• `get` **ceramic**(): `CeramicClient`
 
 #### Returns
 
-`default`
-
-___
-
-### config
-
-• `get` **config**(): [`ConfigURLs`](../modules/core.md#configurls)
-
-#### Returns
-
-[`ConfigURLs`](../modules/core.md#configurls)
+`CeramicClient`
 
 ___
 
@@ -86,7 +76,7 @@ ___
 
 ### get
 
-▸ **get**<`Key`, `ContentType`\>(`id`, `key`): `Promise`<``null`` \| `ContentType`\>
+▸ **get**<`Key`, `ContentType`\>(`key`, `id`): `Promise`<``null`` \| `ContentType`\>
 
 #### Type parameters
 
@@ -99,8 +89,8 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `id` | `string` |
 | `key` | `Key` |
+| `id` | `string` |
 
 #### Returns
 

@@ -7,6 +7,10 @@ custom_edit_url: null
 
 [core](../modules/core.md).Core
 
+```sh
+import { Core } from '@self.id/core'
+```
+
 ## Type parameters
 
 | Name | Type |
@@ -33,37 +37,15 @@ custom_edit_url: null
 | :------ | :------ |
 | `params` | [`CoreParams`](../modules/core.md#coreparams)<`ModelTypes`\> |
 
-#### Defined in
-
-[self.id/packages/core/src/core.ts:30](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/core/src/core.ts#L30)
-
 ## Accessors
 
 ### ceramic
 
-• `get` **ceramic**(): `default`
+• `get` **ceramic**(): `CeramicClient`
 
 #### Returns
 
-`default`
-
-#### Defined in
-
-[self.id/packages/core/src/core.ts:51](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/core/src/core.ts#L51)
-
-___
-
-### config
-
-• `get` **config**(): [`ConfigURLs`](../modules/core.md#configurls)
-
-#### Returns
-
-[`ConfigURLs`](../modules/core.md#configurls)
-
-#### Defined in
-
-[self.id/packages/core/src/core.ts:55](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/core/src/core.ts#L55)
+`CeramicClient`
 
 ___
 
@@ -75,10 +57,6 @@ ___
 
 `DataModel`<`ModelTypes`, `ModelTypesToAliases`<`ModelTypes`\>\>
 
-#### Defined in
-
-[self.id/packages/core/src/core.ts:59](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/core/src/core.ts#L59)
-
 ___
 
 ### dataStore
@@ -89,10 +67,6 @@ ___
 
 `DIDDataStore`<`ModelTypes`, keyof `ModelTypes`[``"definitions"``]\>
 
-#### Defined in
-
-[self.id/packages/core/src/core.ts:63](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/core/src/core.ts#L63)
-
 ___
 
 ### resolver
@@ -102,10 +76,6 @@ ___
 #### Returns
 
 `Resolver`
-
-#### Defined in
-
-[self.id/packages/core/src/core.ts:67](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/core/src/core.ts#L67)
 
 ## Methods
 
@@ -123,10 +93,6 @@ ___
 
 `Promise`<`string`\>
 
-#### Defined in
-
-[self.id/packages/core/src/core.ts:71](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/core/src/core.ts#L71)
-
 ___
 
 ### toDID
@@ -143,15 +109,11 @@ ___
 
 `Promise`<`string`\>
 
-#### Defined in
-
-[self.id/packages/core/src/core.ts:79](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/core/src/core.ts#L79)
-
 ___
 
 ### get
 
-▸ **get**<`Key`, `ContentType`\>(`id`, `key`): `Promise`<``null`` \| `ContentType`\>
+▸ **get**<`Key`, `ContentType`\>(`key`, `id`): `Promise`<``null`` \| `ContentType`\>
 
 #### Type parameters
 
@@ -164,13 +126,9 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `id` | `string` |
 | `key` | `Key` |
+| `id` | `string` |
 
 #### Returns
 
 `Promise`<``null`` \| `ContentType`\>
-
-#### Defined in
-
-[self.id/packages/core/src/core.ts:83](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/core/src/core.ts#L83)

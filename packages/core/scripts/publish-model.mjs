@@ -1,5 +1,5 @@
 import { writeFile } from 'node:fs/promises'
-import Ceramic from '@ceramicnetwork/http-client'
+import { CeramicClient } from '@ceramicnetwork/http-client'
 import { model as cryptoAccountsModel } from '@datamodels/identity-accounts-crypto'
 import { model as webAccountsModel } from '@datamodels/identity-accounts-web'
 import { model as profileModel } from '@datamodels/identity-profile-basic'
@@ -7,7 +7,7 @@ import { ModelManager } from '@glazed/devtools'
 import prettierConfig from 'eslint-config-3box/prettier.config.js'
 import prettier from 'prettier'
 
-const ceramic = new Ceramic.default(process.env.CERAMIC_URL)
+const ceramic = new CeramicClient(process.env.CERAMIC_URL)
 const manager = new ModelManager(ceramic)
 manager.addJSONModel(cryptoAccountsModel)
 manager.addJSONModel(webAccountsModel)

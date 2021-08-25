@@ -7,6 +7,10 @@ custom_edit_url: null
 
 [core](../modules/core.md).PublicID
 
+```sh
+import { PublicID } from '@self.id/core'
+```
+
 ## Type parameters
 
 | Name | Type |
@@ -33,10 +37,6 @@ custom_edit_url: null
 | :------ | :------ |
 | `params` | [`PublicIDParams`](../modules/core.md#publicidparams)<`ModelTypes`\> |
 
-#### Defined in
-
-[self.id/packages/core/src/public.ts:18](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/core/src/public.ts#L18)
-
 ## Accessors
 
 ### id
@@ -46,10 +46,6 @@ custom_edit_url: null
 #### Returns
 
 `string`
-
-#### Defined in
-
-[self.id/packages/core/src/public.ts:23](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/core/src/public.ts#L23)
 
 ## Methods
 
@@ -73,7 +69,3 @@ custom_edit_url: null
 #### Returns
 
 `Promise`<``null`` \| `ContentType`\>
-
-#### Defined in
-
-[self.id/packages/core/src/public.ts:27](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/core/src/public.ts#L27)

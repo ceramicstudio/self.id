@@ -12,5 +12,5 @@ module.exports = {
       items: ['guides/public-data'],
     },
   ],
-  API: require('./typedoc-sidebar.js'),
+  // API: require('./typedoc-sidebar.js'),
 }

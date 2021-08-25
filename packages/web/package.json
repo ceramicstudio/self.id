@@ -42,6 +42,6 @@
   },
   "devDependencies": {
     "@ceramicnetwork/streamid": "^1.0.7",
-    "@glazed/did-datastore": "^0.1.0"
+    "@glazed/did-datastore": "^0.1.1"
   }
 }

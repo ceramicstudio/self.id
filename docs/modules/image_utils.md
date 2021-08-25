@@ -6,11 +6,6 @@ Image utilities APIs
 npm install @self.id/image-utils
 ```
 
-## Interfaces
-
-- [ImageMetadata](../interfaces/image_utils.ImageMetadata.md)
-- [ImageSources](../interfaces/image_utils.ImageSources.md)
-
 ## Type aliases
 
 ### Dimensions
@@ -107,19 +102,19 @@ ___
 
 ### selectImageSource
 
-▸ **selectImageSource**(`sources`, `dimensions`, `mode?`): [`ImageMetadata`](../interfaces/image_utils.ImageMetadata.md)
+▸ **selectImageSource**(`sources`, `dimensions`, `mode?`): `ImageMetadata`
 
 #### Parameters
 
 | Name | Type | Default value |
 | :------ | :------ | :------ |
-| `sources` | [`ImageSources`](../interfaces/image_utils.ImageSources.md) | `undefined` |
+| `sources` | `ImageSources` | `undefined` |
 | `dimensions` | [`Dimensions`](image_utils.md#dimensions) | `undefined` |
 | `mode` | [`SizeMode`](image_utils.md#sizemode) | `'cover'` |
 
 #### Returns
 
-[`ImageMetadata`](../interfaces/image_utils.ImageMetadata.md)
+`ImageMetadata`
 
 ___
 
@@ -143,7 +138,7 @@ ___
 
 ### uploadImage
 
-▸ **uploadImage**(`url`, `file`, `sizes?`): `Promise`<[`ImageSources`](../interfaces/image_utils.ImageSources.md)\>
+▸ **uploadImage**(`url`, `file`, `sizes?`): `Promise`<`ImageSources`\>
 
 #### Parameters
 
@@ -155,13 +150,13 @@ ___
 
 #### Returns
 
-`Promise`<[`ImageSources`](../interfaces/image_utils.ImageSources.md)\>
+`Promise`<`ImageSources`\>
 
 ___
 
 ### uploadResizedImage
 
-▸ **uploadResizedImage**(`url`, `type`, `image`, `dimensions?`): `Promise`<[`ImageMetadata`](../interfaces/image_utils.ImageMetadata.md)\>
+▸ **uploadResizedImage**(`url`, `type`, `image`, `dimensions?`): `Promise`<`ImageMetadata`\>
 
 #### Parameters
 
@@ -174,4 +169,4 @@ ___
 
 #### Returns
 
-`Promise`<[`ImageMetadata`](../interfaces/image_utils.ImageMetadata.md)\>
+`Promise`<`ImageMetadata`\>

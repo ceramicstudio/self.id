@@ -1,7 +1,5 @@
-import type { EthereumAuthProvider } from '@3id/connect'
 import type { Account as AlsoKnownAsAccount } from '@datamodels/identity-accounts-web'
 import type { BasicProfile } from '@datamodels/identity-profile-basic'
-import type { AppNetwork } from '@self.id/core'
 import { WebClient } from '@self.id/web'
 import { DID } from 'dids'
 
@@ -18,15 +16,6 @@ import {
 } from '../identity-link'
 
 export class SelfID {
-  static async authenticate(
-    network: AppNetwork,
-    authProvider: EthereumAuthProvider
-  ): Promise<SelfID> {
-    const client = new WebClient({ network })
-    const did = await client.authenticate(authProvider, true)
-    return new SelfID(client, did)
-  }
-
   _client: WebClient
   _did: DID
   _identityLink: IdentityLink

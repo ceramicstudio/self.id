@@ -1,8 +1,11 @@
 import { ThreeIdConnect } from '@3id/connect'
 import type { EthereumAuthProvider } from '@3id/connect'
 import { Core } from '@self.id/core'
-import type { CoreModelTypes, CoreParams } from '@self.id/core'
+import type { CeramicNetwork, CoreModelTypes, CoreParams } from '@self.id/core'
 import { DID } from 'dids'
+
+export type WebClientParams<ModelTypes extends CoreModelTypes = CoreModelTypes> =
+  CoreParams<ModelTypes> & { connectNetwork?: CeramicNetwork }
 
 /**
  * ```sh
@@ -14,9 +17,9 @@ export class WebClient<
 > extends Core<ModelTypes> {
   #threeId: ThreeIdConnect
 
-  constructor(params: CoreParams<ModelTypes>) {
+  constructor(params: WebClientParams<ModelTypes>) {
     super(params)
-    this.#threeId = new ThreeIdConnect(this.config.connectNetwork)
+    this.#threeId = new ThreeIdConnect(params.connectNetwork ?? params.ceramic)
   }
 
   get threeId(): ThreeIdConnect {

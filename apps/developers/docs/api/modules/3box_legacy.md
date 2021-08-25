@@ -34,10 +34,6 @@ npm install @self.id/3box-legacy
 
 `Promise`<`T` \| ``null``\>
 
-#### Defined in
-
-[self.id/packages/3box-legacy/src/index.ts:14](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/3box-legacy/src/index.ts#L14)
-
 ___
 
 ### transformProfile
@@ -54,10 +50,6 @@ ___
 
 `BasicProfile`
 
-#### Defined in
-
-[self.id/packages/3box-legacy/src/index.ts:41](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/3box-legacy/src/index.ts#L41)
-
 ___
 
 ### getLegacy3BoxProfileAsBasicProfile
@@ -73,7 +65,3 @@ ___
 #### Returns
 
 `Promise`<`BasicProfile` \| ``null``\>
-
-#### Defined in
-
-[self.id/packages/3box-legacy/src/index.ts:82](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/3box-legacy/src/index.ts#L82)

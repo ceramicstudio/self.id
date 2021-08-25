@@ -12,21 +12,16 @@ Web-only APIs
 npm install @self.id/web
 ```
 
-## Interfaces
-
-- [EthereumProvider](../interfaces/web.EthereumProvider.md)
-
 ## Classes
 
-- [EthereumAuthProvider](../classes/web.EthereumAuthProvider.md)
 - [WebClient](../classes/web.WebClient.md)
 - [SelfID](../classes/web.SelfID.md)
 
 ## Type aliases
 
-### AuthenticateParams
+### WebClientParams
 
-Ƭ **AuthenticateParams**<`ModelTypes`\>: `CoreParams`<`ModelTypes`\> & { `authProvider`: [`EthereumAuthProvider`](../classes/web.EthereumAuthProvider.md)  }
+Ƭ **WebClientParams**<`ModelTypes`\>: `CoreParams`<`ModelTypes`\> & { `connectNetwork?`: `CeramicNetwork`  }
 
 #### Type parameters
 
@@ -34,9 +29,17 @@ npm install @self.id/web
 | :------ | :------ |
 | `ModelTypes` | extends `CoreModelTypes``CoreModelTypes` |
 
-#### Defined in
+___
 
-[self.id/packages/web/src/self.ts:9](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/web/src/self.ts#L9)
+### AuthenticateParams
+
+Ƭ **AuthenticateParams**<`ModelTypes`\>: [`WebClientParams`](web.md#webclientparams)<`ModelTypes`\> & { `authProvider`: `EthereumAuthProvider`  }
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ModelTypes` | extends `CoreModelTypes``CoreModelTypes` |
 
 ___
 
@@ -50,7 +53,3 @@ ___
 | :------ | :------ |
 | `client` | [`WebClient`](../classes/web.WebClient.md) |
 | `did` | `DID` |
-
-#### Defined in
-
-[self.id/packages/web/src/self.ts:13](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/web/src/self.ts#L13)

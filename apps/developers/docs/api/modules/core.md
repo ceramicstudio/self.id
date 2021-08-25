@@ -17,75 +17,11 @@ npm install @self.id/core
 - [Core](../classes/core.Core.md)
 - [PublicID](../classes/core.PublicID.md)
 
-## Functions
-
-### isDIDstring
-
-▸ **isDIDstring**(`did`): `boolean`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `did` | `string` |
-
-#### Returns
-
-`boolean`
-
-#### Defined in
-
-js-idx/packages/did-datastore/dist/utils.d.ts:1
-
-___
-
-### getConfig
-
-▸ **getConfig**(`network`): [`ConfigURLs`](core.md#configurls)
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `network` | [`AppNetwork`](core.md#appnetwork) |
-
-#### Returns
-
-[`ConfigURLs`](core.md#configurls)
-
-#### Defined in
-
-[self.id/packages/core/src/config.ts:26](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/core/src/config.ts#L26)
-
-___
-
-### isCAIP10string
-
-▸ **isCAIP10string**(`account`): `boolean`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `account` | `string` |
-
-#### Returns
-
-`boolean`
-
-#### Defined in
-
-[self.id/packages/core/src/utils.ts:5](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/core/src/utils.ts#L5)
-
 ## Type aliases
 
 ### CoreModelTypes
 
 Ƭ **CoreModelTypes**: `ModelTypeAliases`<`Object`, `Object`\>
-
-#### Defined in
-
-[self.id/packages/core/src/__generated__/model.ts:7](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/core/src/__generated__/model.ts#L7)
 
 ___
 
@@ -103,12 +39,8 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `network` | [`AppNetwork`](core.md#appnetwork) |
+| `ceramic` | [`CeramicNetwork`](core.md#ceramicnetwork) \| `string` |
 | `model?` | `ModelTypes` |
-
-#### Defined in
-
-[self.id/packages/core/src/core.ts:15](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/core/src/core.ts#L15)
 
 ___
 
@@ -129,43 +61,30 @@ ___
 | `core` | [`Core`](../classes/core.Core.md)<`ModelTypes`\> |
 | `id` | `string` |
 
-#### Defined in
-
-[self.id/packages/core/src/public.ts:6](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/core/src/public.ts#L6)
-
 ___
 
-### ConnectNetwork
+### CeramicNetwork
 
-Ƭ **ConnectNetwork**: ``"local"`` \| ``"dev-unstable"`` \| ``"testnet-clay"`` \| ``"mainnet"``
+Ƭ **CeramicNetwork**: ``"local"`` \| ``"mainnet-gateway"`` \| ``"testnet-clay"`` \| ``"testnet-clay-gateway"``
 
-#### Defined in
+## Variables
 
-[self.id/packages/core/src/types.ts:3](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/core/src/types.ts#L3)
+### CERAMIC\_URLS
 
-___
+• `Const` **CERAMIC\_URLS**: `Record`<[`CeramicNetwork`](core.md#ceramicnetwork), `string`\>
 
-### AppNetwork
+## Functions
 
-Ƭ **AppNetwork**: [`ConnectNetwork`](core.md#connectnetwork) \| ``"local-clay"``
+### isCAIP10string
 
-#### Defined in
+▸ **isCAIP10string**(`account`): `boolean`
 
-[self.id/packages/core/src/types.ts:5](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/core/src/types.ts#L5)
-
-___
-
-### ConfigURLs
-
-Ƭ **ConfigURLs**: `Object`
-
-#### Type declaration
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `ceramic` | `string` |
-| `connectNetwork` | [`ConnectNetwork`](core.md#connectnetwork) |
+| `account` | `string` |
 
-#### Defined in
+#### Returns
 
-[self.id/packages/core/src/types.ts:7](https://github.com/ceramicstudio/self.id/blob/356cc44/packages/core/src/types.ts#L7)
+`boolean`

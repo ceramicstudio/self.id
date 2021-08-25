@@ -15,7 +15,7 @@ npm install @self.id/web
 
 ### AuthenticateParams
 
-Ƭ **AuthenticateParams**<`ModelTypes`\>: `CoreParams`<`ModelTypes`\> & { `authProvider`: `EthereumAuthProvider`  }
+Ƭ **AuthenticateParams**<`ModelTypes`\>: [`WebClientParams`](web.md#webclientparams)<`ModelTypes`\> & { `authProvider`: `EthereumAuthProvider`  }
 
 #### Type parameters
 
@@ -35,3 +35,15 @@ ___
 | :------ | :------ |
 | `client` | [`WebClient`](../classes/web.WebClient.md) |
 | `did` | `DID` |
+
+___
+
+### WebClientParams
+
+Ƭ **WebClientParams**<`ModelTypes`\>: `CoreParams`<`ModelTypes`\> & { `connectNetwork?`: `CeramicNetwork`  }
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ModelTypes` | extends `CoreModelTypes``CoreModelTypes` |

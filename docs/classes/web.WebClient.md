@@ -34,7 +34,7 @@ import { WebClient } from '@self.id/web'
 
 | Name | Type |
 | :------ | :------ |
-| `params` | `CoreParams`<`ModelTypes`\> |
+| `params` | [`WebClientParams`](../modules/web.md#webclientparams)<`ModelTypes`\> |
 
 #### Overrides
 
@@ -44,21 +44,11 @@ Core&lt;ModelTypes\&gt;.constructor
 
 ### ceramic
 
-• `get` **ceramic**(): `default`
+• `get` **ceramic**(): `CeramicClient`
 
 #### Returns
 
-`default`
-
-___
-
-### config
-
-• `get` **config**(): `ConfigURLs`
-
-#### Returns
-
-`ConfigURLs`
+`CeramicClient`
 
 ___
 
@@ -137,7 +127,7 @@ ___
 
 ### get
 
-▸ **get**<`Key`, `ContentType`\>(`id`, `key`): `Promise`<``null`` \| `ContentType`\>
+▸ **get**<`Key`, `ContentType`\>(`key`, `id`): `Promise`<``null`` \| `ContentType`\>
 
 #### Type parameters
 
@@ -150,8 +140,8 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `id` | `string` |
 | `key` | `Key` |
+| `id` | `string` |
 
 #### Returns
 

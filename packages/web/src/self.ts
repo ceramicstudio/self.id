@@ -1,15 +1,14 @@
 import type { EthereumAuthProvider } from '@3id/connect'
 import type { StreamID } from '@ceramicnetwork/streamid'
 import type { DefinitionContentType } from '@glazed/did-datastore'
-import type { CoreModelTypes, CoreParams } from '@self.id/core'
+import type { CoreModelTypes } from '@self.id/core'
 import type { DID } from 'dids'
 
 import { WebClient } from './client'
+import type { WebClientParams } from './client'
 
 export type AuthenticateParams<ModelTypes extends CoreModelTypes = CoreModelTypes> =
-  CoreParams<ModelTypes> & {
-    authProvider: EthereumAuthProvider
-  }
+  WebClientParams<ModelTypes> & { authProvider: EthereumAuthProvider }
 
 export type SelfIDParams = {
   client: WebClient

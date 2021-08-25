@@ -12,7 +12,7 @@ function ShowProfileName({ did }) {
   useEffect(() => {
     setLoading(true)
     core
-      .getProfile(did)
+      .get('basicProfile', did)
       .then(setProfile)
       .finally(() => {
         setLoading(false)

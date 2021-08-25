@@ -6,16 +6,11 @@ sidebar_position: 0
 custom_edit_url: null
 ---
 
-Image utils APIs
+Image utilities APIs
 
 ```sh
 npm install @self.id/image-utils
 ```
-
-## Interfaces
-
-- [ImageSources](../interfaces/image_utils.ImageSources.md)
-- [ImageMetadata](../interfaces/image_utils.ImageMetadata.md)
 
 ## Type aliases
 
@@ -31,10 +26,6 @@ npm install @self.id/image-utils
 | `Hash` | `string` |
 | `Size` | `number` |
 
-#### Defined in
-
-self.id/packages/image-utils/src/ipfs.ts:1
-
 ___
 
 ### Dimensions
@@ -48,29 +39,17 @@ ___
 | `height` | `number` |
 | `width` | `number` |
 
-#### Defined in
-
-self.id/packages/image-utils/src/types.ts:3
-
 ___
 
 ### SizedImage
 
 Ƭ **SizedImage**: [`Dimensions`](image_utils.md#dimensions) & { `blob`: `Blob`  }
 
-#### Defined in
-
-self.id/packages/image-utils/src/types.ts:5
-
 ___
 
 ### SizeMode
 
 Ƭ **SizeMode**: ``"contain"`` \| ``"cover"``
-
-#### Defined in
-
-self.id/packages/image-utils/src/types.ts:7
 
 ## Functions
 
@@ -90,10 +69,6 @@ self.id/packages/image-utils/src/types.ts:7
 
 `Promise`<`string`\>
 
-#### Defined in
-
-self.id/packages/image-utils/src/ipfs.ts:7
-
 ___
 
 ### loadImage
@@ -109,10 +84,6 @@ ___
 #### Returns
 
 `Promise`<`HTMLImageElement`\>
-
-#### Defined in
-
-self.id/packages/image-utils/src/loading.ts:9
 
 ___
 
@@ -133,15 +104,11 @@ ___
 
 `Promise`<[`SizedImage`](image_utils.md#sizedimage)\>
 
-#### Defined in
-
-self.id/packages/image-utils/src/loading.ts:34
-
 ___
 
 ### uploadResizedImage
 
-▸ **uploadResizedImage**(`url`, `type`, `image`, `dimensions?`): `Promise`<[`ImageMetadata`](../interfaces/image_utils.ImageMetadata.md)\>
+▸ **uploadResizedImage**(`url`, `type`, `image`, `dimensions?`): `Promise`<`ImageMetadata`\>
 
 #### Parameters
 
@@ -154,17 +121,13 @@ ___
 
 #### Returns
 
-`Promise`<[`ImageMetadata`](../interfaces/image_utils.ImageMetadata.md)\>
-
-#### Defined in
-
-self.id/packages/image-utils/src/loading.ts:50
+`Promise`<`ImageMetadata`\>
 
 ___
 
 ### uploadImage
 
-▸ **uploadImage**(`url`, `file`, `sizes?`): `Promise`<[`ImageSources`](../interfaces/image_utils.ImageSources.md)\>
+▸ **uploadImage**(`url`, `file`, `sizes?`): `Promise`<`ImageSources`\>
 
 #### Parameters
 
@@ -176,33 +139,25 @@ ___
 
 #### Returns
 
-`Promise`<[`ImageSources`](../interfaces/image_utils.ImageSources.md)\>
-
-#### Defined in
-
-self.id/packages/image-utils/src/loading.ts:67
+`Promise`<`ImageSources`\>
 
 ___
 
 ### selectImageSource
 
-▸ **selectImageSource**(`sources`, `dimensions`, `mode?`): [`ImageMetadata`](../interfaces/image_utils.ImageMetadata.md)
+▸ **selectImageSource**(`sources`, `dimensions`, `mode?`): `ImageMetadata`
 
 #### Parameters
 
 | Name | Type | Default value |
 | :------ | :------ | :------ |
-| `sources` | [`ImageSources`](../interfaces/image_utils.ImageSources.md) | `undefined` |
+| `sources` | `ImageSources` | `undefined` |
 | `dimensions` | [`Dimensions`](image_utils.md#dimensions) | `undefined` |
 | `mode` | [`SizeMode`](image_utils.md#sizemode) | `'cover'` |
 
 #### Returns
 
-[`ImageMetadata`](../interfaces/image_utils.ImageMetadata.md)
-
-#### Defined in
-
-self.id/packages/image-utils/src/selection.ts:46
+`ImageMetadata`
 
 ___
 
@@ -221,7 +176,3 @@ ___
 #### Returns
 
 [`Dimensions`](image_utils.md#dimensions)
-
-#### Defined in
-
-self.id/packages/image-utils/src/selection.ts:61

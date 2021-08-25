@@ -1,19 +1,25 @@
-import ThreeIdResolver from '@ceramicnetwork/3id-did-resolver'
-import Ceramic from '@ceramicnetwork/http-client'
+import { getResolver as get3IDResolver } from '@ceramicnetwork/3id-did-resolver'
+import { CeramicClient } from '@ceramicnetwork/http-client'
 import { Caip10Link } from '@ceramicnetwork/stream-caip10-link'
 import { DataModel } from '@glazed/datamodel'
 import { DIDDataStore } from '@glazed/did-datastore'
 import type { DefinitionContentType } from '@glazed/did-datastore'
 import { Resolver } from 'did-resolver'
-import KeyDidResolver from 'key-did-resolver'
+import { getResolver as getKeyResolver } from 'key-did-resolver'
 
 import { model as coreModel } from './__generated__/model'
-import { getConfig } from './config'
-import type { AppNetwork, ConfigURLs, CoreModelTypes } from './types'
+import type { CeramicNetwork, CoreModelTypes } from './types'
 import { isCAIP10string } from './utils'
 
+export const CERAMIC_URLS: Record<CeramicNetwork, string> = {
+  local: 'http://localhost:7007',
+  'mainnet-gateway': 'https://gateway.ceramic.network',
+  'testnet-clay': 'https://ceramic-clay.3boxlabs.com',
+  'testnet-clay-gateway': 'https://gateway-clay.ceramic.network',
+}
+
 export type CoreParams<ModelTypes extends CoreModelTypes = CoreModelTypes> = {
-  network: AppNetwork
+  ceramic: CeramicNetwork | string
   model?: ModelTypes
 }
 
@@ -26,15 +32,14 @@ export class Core<
   ModelTypes extends CoreModelTypes = CoreModelTypes,
   Alias extends keyof ModelTypes['definitions'] = keyof ModelTypes['definitions']
 > {
-  #ceramic: Ceramic
-  #config: ConfigURLs
+  #ceramic: CeramicClient
   #dataModel: DataModel<ModelTypes>
   #dataStore: DIDDataStore<ModelTypes>
   #resolver: Resolver
 
   constructor(params: CoreParams<ModelTypes>) {
-    this.#config = Object.freeze(getConfig(params.network))
-    this.#ceramic = new Ceramic(this.#config.ceramic)
+    const ceramicURL = CERAMIC_URLS[params.ceramic as CeramicNetwork] ?? params.ceramic
+    this.#ceramic = new CeramicClient(ceramicURL)
     this.#dataModel = new DataModel<ModelTypes>({
       autopin: true,
       ceramic: this.#ceramic,
@@ -48,17 +53,13 @@ export class Core<
       model: this.#dataModel,
     })
     this.#resolver = new Resolver({
-      ...KeyDidResolver.getResolver(),
-      ...ThreeIdResolver.getResolver(this.#ceramic),
+      ...getKeyResolver(),
+      ...get3IDResolver(this.#ceramic),
     })
   }
 
-  get ceramic(): Ceramic {
+  get ceramic(): CeramicClient {
     return this.#ceramic
-  }
-
-  get config(): ConfigURLs {
-    return this.#config
   }
 
   get dataModel(): DataModel<ModelTypes> {
@@ -86,8 +87,8 @@ export class Core<
   }
 
   async get<Key extends Alias, ContentType = DefinitionContentType<ModelTypes, Key>>(
-    id: string,
-    key: Key
+    key: Key,
+    id: string
   ): Promise<ContentType | null> {
     const did = await this.toDID(id)
     return await this.#dataStore.get(key, did)

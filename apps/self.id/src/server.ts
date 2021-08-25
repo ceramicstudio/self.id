@@ -1,5 +1,5 @@
 import { Core } from '@self.id/core'
 
-import { APP_NETWORK } from './constants'
+import { CERAMIC_URL } from './constants'
 
-export const core = new Core({ network: APP_NETWORK })
+export const core = new Core({ ceramic: CERAMIC_URL })
