@@ -32,6 +32,7 @@
   "scripts": {
     "build": "del dist && tsc --emitDeclarationOnly --skipLibCheck && rollup -c ../../rollup.config.js",
     "lint": "eslint --fix",
+    "test": "jest",
     "prepare": "yarn build",
     "prepublishOnly": "package-check"
   },
@@ -41,5 +42,8 @@
   "devDependencies": {
     "@datamodels/identity-profile-basic": "^0.1.2",
     "@glazed/types": "^0.1.2"
+  },
+  "jest": {
+    "preset": "ts-jest"
   }
 }

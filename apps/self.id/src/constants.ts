@@ -1,4 +1,4 @@
-type ConnectNetwork = 'dev-unstable' | 'local' | 'mainnet' | 'testnet-clay'
+import type { ConnectNetwork } from '@self.id/web'
 
 export type AppNetwork = ConnectNetwork | 'local-clay'
 
@@ -11,10 +11,6 @@ const NETWORK_CONFIGS: Record<AppNetwork, NetworkConfig> = {
   'dev-unstable': {
     ceramicURL: 'https://ceramic-private-dev.3boxlabs.com',
     connectNetwork: 'dev-unstable',
-  },
-  local: {
-    ceramicURL: 'http://localhost:7007',
-    connectNetwork: 'local',
   },
   'local-clay': {
     ceramicURL: 'http://localhost:7007',

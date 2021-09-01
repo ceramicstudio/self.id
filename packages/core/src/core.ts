@@ -4,6 +4,7 @@ import { Caip10Link } from '@ceramicnetwork/stream-caip10-link'
 import { DataModel } from '@glazed/datamodel'
 import { DIDDataStore } from '@glazed/did-datastore'
 import type { DefinitionContentType } from '@glazed/did-datastore'
+import type { ModelTypesToAliases } from '@glazed/types'
 import { Resolver } from 'did-resolver'
 import { getResolver as getKeyResolver } from 'key-did-resolver'
 
@@ -20,7 +21,7 @@ export const CERAMIC_URLS: Record<CeramicNetwork, string> = {
 
 export type CoreParams<ModelTypes extends CoreModelTypes = CoreModelTypes> = {
   ceramic: CeramicNetwork | string
-  model?: ModelTypes
+  model?: ModelTypesToAliases<ModelTypes>
 }
 
 /**
@@ -43,19 +44,14 @@ export class Core<
     this.#dataModel = new DataModel<ModelTypes>({
       autopin: true,
       ceramic: this.#ceramic,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore model type
-      model: params.model ?? coreModel,
+      model: params.model ?? (coreModel as ModelTypesToAliases<ModelTypes>),
     })
     this.#dataStore = new DIDDataStore<ModelTypes>({
       autopin: true,
       ceramic: this.#ceramic,
       model: this.#dataModel,
     })
-    this.#resolver = new Resolver({
-      ...getKeyResolver(),
-      ...get3IDResolver(this.#ceramic),
-    })
+    this.#resolver = new Resolver({ ...getKeyResolver(), ...get3IDResolver(this.#ceramic) })
   }
 
   get ceramic(): CeramicClient {

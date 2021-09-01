@@ -32,6 +32,6 @@ export class PublicID<
   async get<Key extends Alias, ContentType = DefinitionContentType<ModelTypes, Key>>(
     key: Key
   ): Promise<ContentType | null> {
-    return await this.#core.get(key, this.#id)
+    return await this.#core.dataStore.get(key, this.#id)
   }
 }

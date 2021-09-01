@@ -1,11 +1,13 @@
 import { ThreeIdConnect } from '@3id/connect'
 import type { EthereumAuthProvider } from '@3id/connect'
 import { Core } from '@self.id/core'
-import type { CeramicNetwork, CoreModelTypes, CoreParams } from '@self.id/core'
+import type { CoreModelTypes, CoreParams } from '@self.id/core'
 import { DID } from 'dids'
 
+export type ConnectNetwork = 'dev-unstable' | 'mainnet' | 'testnet-clay'
+
 export type WebClientParams<ModelTypes extends CoreModelTypes = CoreModelTypes> =
-  CoreParams<ModelTypes> & { connectNetwork?: CeramicNetwork }
+  CoreParams<ModelTypes> & { connectNetwork?: ConnectNetwork }
 
 /**
  * ```sh

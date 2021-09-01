@@ -54,10 +54,10 @@ module.exports = {
               label: 'Getting Started',
               to: '/docs/intro',
             },
-            {
-              label: 'API',
-              to: '/docs/api/index',
-            },
+            // {
+            //   label: 'API',
+            //   to: '/docs/api/index',
+            // },
           ],
         },
         {
@@ -110,16 +110,16 @@ module.exports = {
     ],
   ],
   plugins: [
-    [
-      'docusaurus-plugin-typedoc',
-      {
-        tsconfig: '../../tsconfig.docs.json',
-        name: 'Self.ID API',
-        out: 'api',
-        readme: 'none',
-        sort: ['static-first', 'source-order'],
-      },
-    ],
+    // [
+    //   'docusaurus-plugin-typedoc',
+    //   {
+    //     tsconfig: '../../tsconfig.docs.json',
+    //     name: 'Self.ID API',
+    //     out: 'api',
+    //     readme: 'none',
+    //     sort: ['static-first', 'source-order'],
+    //   },
+    // ],
     '@self.id/docusaurus-plugin',
   ],
   themes: ['@docusaurus/theme-live-codeblock'],
