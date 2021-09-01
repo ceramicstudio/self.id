@@ -9,7 +9,7 @@
     "docs": "typedoc --tsconfig tsconfig.docs.json",
     "build": "lerna run build",
     "lint": "lerna run lint --parallel",
-    "test": "lerna run test --"
+    "test": "jest"
   },
   "devDependencies": {
     "@skypack/package-check": "^0.2.2",
@@ -29,5 +29,11 @@
     "typedoc": "^0.21.9",
     "typedoc-plugin-markdown": "^3.10.4",
     "typescript": "^4.4.2"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "projects": [
+      "<rootDir>/packages/*"
+    ]
   }
 }

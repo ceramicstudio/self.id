@@ -2,7 +2,7 @@
 
 import crossFetch from 'cross-fetch'
 
-import { loadLegacy3BoxProfile, getLegacy3BoxProfileAsBasicProfile } from '..'
+import { loadLegacy3BoxProfile, getLegacy3BoxProfileAsBasicProfile } from '../src'
 
 jest.mock('cross-fetch')
 const fetch = crossFetch as jest.Mock

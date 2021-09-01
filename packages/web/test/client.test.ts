@@ -1,7 +1,7 @@
 import { EthereumAuthProvider, ThreeIdConnect } from '@3id/connect'
 import { DID } from 'dids'
 
-import { WebClient } from '..'
+import { WebClient } from '../src'
 
 const Connect = ThreeIdConnect as jest.Mock<ThreeIdConnect>
 const ID = DID as jest.Mock<DID>

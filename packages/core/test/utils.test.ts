@@ -1,4 +1,4 @@
-import { isCAIP10string } from '..'
+import { isCAIP10string } from '../src'
 
 describe('isCAIP10string()', () => {
   test('returns false if input is not a valid CAIP-10 account', () => {

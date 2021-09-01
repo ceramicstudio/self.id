@@ -1,6 +1,6 @@
 import { DIDDataStore } from '@glazed/did-datastore'
 
-import { Core, PublicID } from '..'
+import { Core, PublicID } from '../src'
 
 jest.mock('@glazed/did-datastore')
 

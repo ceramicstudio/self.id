@@ -1,7 +1,7 @@
 import { DIDDataStore } from '@glazed/did-datastore'
 import { DID } from 'dids'
 
-import { SelfID, WebClient } from '..'
+import { SelfID, WebClient } from '../src'
 
 const DataStore = DIDDataStore as jest.Mock<DIDDataStore>
 const ID = DID as jest.Mock<DID>

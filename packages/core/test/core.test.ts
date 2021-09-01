@@ -5,8 +5,8 @@ import { DIDDataStore } from '@glazed/did-datastore'
 import type { ModelTypesToAliases } from '@glazed/types'
 import { Resolver } from 'did-resolver'
 
-import { CERAMIC_URLS, Core } from '..'
-import type { CoreModelTypes } from '..'
+import { CERAMIC_URLS, Core } from '../src'
+import type { CoreModelTypes } from '../src'
 
 jest.mock('@ceramicnetwork/http-client')
 jest.mock('@ceramicnetwork/stream-caip10-link')
