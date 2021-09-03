@@ -1,5 +1,9 @@
 # Self.ID Core APIs
 
+Read public records in Node and browsers environments
+
+## [Documentation](https://developers.ceramic.network/tools/self-id/overview/)
+
 ## Installation
 
 ```sh

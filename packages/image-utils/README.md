@@ -1,5 +1,9 @@
 # Self.ID Image utils APIs
 
+Image utilities for Self.ID profiles
+
+## [Documentation](https://developers.ceramic.network/tools/self-id/overview/)
+
 ## Installation
 
 ```sh
