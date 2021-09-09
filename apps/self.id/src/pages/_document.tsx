@@ -10,7 +10,9 @@ export default class Document extends NextDocument {
       ctx.renderPage = () => {
         return originalRenderPage({
           enhanceApp: (App) => {
-            return (props) => sheet.collectStyles(<App {...props} />)
+            return function EnhancedApp(props) {
+              return sheet.collectStyles(<App {...props} />)
+            }
           },
         })
       }

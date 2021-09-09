@@ -1,5 +1,5 @@
 {
-  "name": "self.id",
+  "name": "self.id-repository",
   "private": true,
   "workspaces": [
     "apps/*",
@@ -14,15 +14,15 @@
   "devDependencies": {
     "@skypack/package-check": "^0.2.2",
     "@types/jest": "^27.0.1",
-    "@typescript-eslint/eslint-plugin": "^4.30.0",
-    "@typescript-eslint/parser": "^4.30.0",
+    "@typescript-eslint/eslint-plugin": "^4.31.0",
+    "@typescript-eslint/parser": "^4.31.0",
     "del-cli": "^4.0.0",
     "esbuild": "^0.12.25",
     "eslint": "^7.31.0",
     "eslint-config-3box": "^0.2.0",
-    "jest": "^27.1.0",
+    "jest": "^27.1.1",
     "lerna": "^4.0.0",
-    "prettier": "^2.3.0",
+    "prettier": "^2.4.0",
     "rollup": "^2.56.3",
     "rollup-plugin-esbuild": "^4.5.0",
     "ts-jest": "^27.0.5",
