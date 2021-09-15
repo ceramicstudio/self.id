@@ -8,6 +8,7 @@
   "scripts": {
     "docs": "typedoc --tsconfig tsconfig.docs.json",
     "build": "lerna run build",
+    "prepare": "lerna run prepare",
     "lint": "lerna run lint --parallel",
     "test": "jest"
   },
