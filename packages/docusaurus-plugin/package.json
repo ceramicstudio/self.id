@@ -1,0 +1,23 @@
+{
+  "name": "@self.id/docusaurus-plugin",
+  "version": "0.1.0",
+  "author": "3Box Labs",
+  "license": "(Apache-2.0 OR MIT)",
+  "homepage": "https://github.com/ceramicstudio/self.id#readme",
+  "keywords": [
+    "self.id",
+    "web3"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ceramicstudio/self.id",
+    "directory": "packages/docusaurus-plugin"
+  },
+  "main": "index.js",
+  "engines": {
+    "node": ">=14"
+  },
+  "devDependencies": {
+    "stream-browserify": "^3.0.0"
+  }
+}
