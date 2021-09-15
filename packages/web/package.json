@@ -37,7 +37,7 @@
     "prepublishOnly": "package-check"
   },
   "dependencies": {
-    "@3id/connect": "^0.2.0",
+    "@3id/connect": "^0.2.2",
     "@self.id/core": "^0.1.0",
     "dids": "^2.4.0"
   },

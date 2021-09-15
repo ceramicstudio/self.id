@@ -40,7 +40,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `ceramic` | [`CeramicNetwork`](core.md#ceramicnetwork) \| `string` |
-| `model?` | `ModelTypes` |
+| `model?` | `ModelTypesToAliases`<`ModelTypes`\> |
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 ### CERAMIC\_URLS
 
-• `Const` **CERAMIC\_URLS**: `Record`<[`CeramicNetwork`](core.md#ceramicnetwork), `string`\>
+• **CERAMIC\_URLS**: `Record`<[`CeramicNetwork`](core.md#ceramicnetwork), `string`\>
 
 ## Functions
 

@@ -25,6 +25,12 @@ npm install @self.id/web
 
 ___
 
+### ConnectNetwork
+
+Ƭ **ConnectNetwork**: ``"dev-unstable"`` \| ``"mainnet"`` \| ``"testnet-clay"``
+
+___
+
 ### SelfIDParams
 
 Ƭ **SelfIDParams**: `Object`
@@ -40,7 +46,7 @@ ___
 
 ### WebClientParams
 
-Ƭ **WebClientParams**<`ModelTypes`\>: `CoreParams`<`ModelTypes`\> & { `connectNetwork?`: `CeramicNetwork`  }
+Ƭ **WebClientParams**<`ModelTypes`\>: `CoreParams`<`ModelTypes`\> & { `connectNetwork?`: [`ConnectNetwork`](web.md#connectnetwork)  }
 
 #### Type parameters
 
