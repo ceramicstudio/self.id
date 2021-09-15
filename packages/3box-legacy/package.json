@@ -1,0 +1,49 @@
+{
+  "name": "@self.id/3box-legacy",
+  "version": "0.1.0",
+  "author": "3Box Labs",
+  "license": "(Apache-2.0 OR MIT)",
+  "homepage": "https://github.com/ceramicstudio/self.id#readme",
+  "keywords": [
+    "self.id",
+    "web3"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ceramicstudio/self.id",
+    "directory": "packages/3box-legacy"
+  },
+  "main": "dist/lib.cjs",
+  "module": "dist/lib.mjs",
+  "typings": "dist/index.d.ts",
+  "exports": {
+    "import": "./dist/lib.mjs",
+    "require": "./dist/lib.cjs",
+    "default": "./dist/lib.cjs"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "engines": {
+    "node": ">=14"
+  },
+  "sideEffects": false,
+  "scripts": {
+    "build": "del dist && tsc --emitDeclarationOnly --skipLibCheck && rollup -c ../../rollup.config.js",
+    "lint": "eslint --fix",
+    "test": "jest",
+    "prepare": "yarn build",
+    "prepublishOnly": "package-check"
+  },
+  "dependencies": {
+    "cross-fetch": "^3.1.4"
+  },
+  "devDependencies": {
+    "@datamodels/identity-profile-basic": "^0.1.2",
+    "@glazed/types": "^0.1.2"
+  },
+  "jest": {
+    "preset": "ts-jest"
+  }
+}
