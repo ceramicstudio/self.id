@@ -12,7 +12,7 @@ const input = 'src/index.ts'
 
 const plugins = [
   esbuild({
-    minify: false,
+    minify: true,
     target: 'es2020',
     tsconfig: path.join(cwd, 'tsconfig.json'),
   }),
