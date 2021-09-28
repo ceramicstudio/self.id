@@ -1,25 +1,16 @@
 # Reading public data
 
 ```tsx live noInline
-// import { Core } from '@self.id/core'
-
-const core = new Core({ network: 'local-clay' })
+// import { usePublicRecord } from '@self.id/framework'
 
 function ShowProfileName({ did }) {
-  const [profile, setProfile] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const profileRecord = usePublicRecord('basicProfile', did)
 
-  useEffect(() => {
-    setLoading(true)
-    core
-      .get('basicProfile', did)
-      .then(setProfile)
-      .finally(() => {
-        setLoading(false)
-      })
-  }, [did])
-
-  const text = loading ? 'Loading...' : profile ? `Hello ${profile.name}` : 'Could not load profile'
+  const text = profileRecord.isLoading
+    ? 'Loading...'
+    : profileRecord.content
+    ? `Hello ${profileRecord.content.name || 'stranger'}`
+    : 'No profile to load'
   return <p>{text}</p>
 }
 

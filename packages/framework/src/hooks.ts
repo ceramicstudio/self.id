@@ -7,13 +7,13 @@ import { useAtomValue, useUpdateAtom } from 'jotai/utils'
 import { useCallback } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 
-import { scope, authenticationAtom, clientConfigAtom, coreAtom, viewerIDAtom } from './state'
+import { stateScope, authenticationAtom, clientConfigAtom, coreAtom, viewerIDAtom } from './state'
 import type { AuthenticationState } from './types'
-import { cancellable } from './utils'
-import { authenticateSelfID } from './web/client'
+import { abortable } from './utils'
+import { authenticateSelfID } from './web'
 
 export function useCore<ModelTypes extends CoreModelTypes = CoreModelTypes>(): Core<ModelTypes> {
-  return useAtomValue(coreAtom, scope)
+  return useAtomValue(coreAtom, stateScope)
 }
 
 export type ViewerID<ModelTypes extends CoreModelTypes> = PublicID<ModelTypes> | SelfID<ModelTypes>
@@ -21,16 +21,17 @@ export type ViewerID<ModelTypes extends CoreModelTypes> = PublicID<ModelTypes> |
 export function useViewerID<
   ModelTypes extends CoreModelTypes = CoreModelTypes
 >(): ViewerID<ModelTypes> | null {
-  return useAtomValue(viewerIDAtom, scope)
+  return useAtomValue(viewerIDAtom, stateScope)
 }
 
 export function useAuthentication(): [
   AuthenticationState,
-  (provider: EthereumAuthProvider) => Promise<SelfID | null>
+  (provider: EthereumAuthProvider) => Promise<SelfID | null>,
+  () => void
 ] {
-  const config = useAtomValue(clientConfigAtom, scope)
-  const [auth, setAuth] = useAtom(authenticationAtom, scope)
-  const setViewerID = useUpdateAtom(viewerIDAtom, scope)
+  const config = useAtomValue(clientConfigAtom, stateScope)
+  const [auth, setAuth] = useAtom(authenticationAtom, stateScope)
+  const setViewerID = useUpdateAtom(viewerIDAtom, stateScope)
 
   const authenticate = useCallback(
     async (provider: EthereumAuthProvider): Promise<SelfID | null> => {
@@ -39,68 +40,67 @@ export function useAuthentication(): [
       }
 
       if (auth.status === 'authenticating') {
-        auth.promise.cancel()
+        auth.promise.abort()
       }
       try {
-        const promise = cancellable(
+        const promise = abortable(
           authenticateSelfID({ ...config, authProvider: provider }).then((selfID) => {
-            if (promise.cancelled) {
-              setAuth({ status: 'pending' })
+            if (promise.signal.aborted) {
+              void setAuth({ status: 'pending' })
               return null
             }
-            setViewerID(selfID)
+            void setViewerID(selfID)
             return selfID
           })
         )
-        setAuth({ status: 'authenticating', provider, promise })
+        void setAuth({ status: 'authenticating', provider, promise })
         return await promise
       } catch (err) {
-        setAuth({ status: 'error', error: err as Error })
+        void setAuth({ status: 'error', error: err as Error })
         return null
       }
     },
     [auth, setAuth, setViewerID]
   )
 
-  return [auth, authenticate]
+  const reset = useCallback(() => {
+    void setViewerID(null)
+  }, [setViewerID])
+
+  return [auth, authenticate, reset]
 }
 
-export type ViewerRecord<Value> =
+export type ViewerRecord<ContentType> =
   | { isLoadable: false } // No viewerID
-  | ({ isLoadable: true; isLoading: boolean; value?: Value } & (
+  | ({ isLoadable: true; isLoading: boolean; content?: ContentType } & (
       | { isMutable: false } // Read-only (PublicID)
-      | { isMutable: true; isMutating: boolean; set(value: Value): Promise<void> } // Read/write (SelfID)
+      | { isMutable: true; isMutating: boolean; set(content: ContentType): Promise<void> } // Read/write (SelfID)
     ))
 
 export function useViewerRecord<
   ModelTypes extends CoreModelTypes = CoreModelTypes,
   Alias extends keyof ModelTypes['definitions'] = keyof ModelTypes['definitions'],
-  Value = DefinitionContentType<ModelTypes, Alias>
->(alias: Alias): ViewerRecord<Value | null> {
+  ContentType = DefinitionContentType<ModelTypes, Alias>
+>(alias: Alias): ViewerRecord<ContentType | null> {
   const viewerID = useViewerID<ModelTypes>()
   const key = [viewerID?.id, alias]
 
   const queryClient = useQueryClient()
-  const { data, isLoading } = useQuery<Value | null>(
+  const { data, isLoading } = useQuery<ContentType | null>(
     key,
-    async (): Promise<Value | null> => (viewerID ? await viewerID.get(alias) : null)
+    async (): Promise<ContentType | null> => (viewerID ? await viewerID.get(alias) : null)
   )
   const mutation = useMutation(
-    async (value: Value) => {
+    async (content: ContentType) => {
       if (viewerID == null || viewerID instanceof PublicID) {
         throw new Error('Cannot mutate record')
       }
-      await viewerID.set(alias, value)
+      await viewerID.set(alias, content)
+      return content
     },
     {
-      onMutate: async (value: Value) => {
-        await queryClient.cancelQueries(key)
-        const previousValue = queryClient.getQueryData<Value | null>(key)
-        queryClient.setQueryData(key, value)
-        return { previousValue }
-      },
-      onError: (_err, _variables, context) => {
-        queryClient.setQueryData<Value | null>(key, context?.previousValue ?? null)
+      onSuccess: (content) => {
+        queryClient.setQueryData(key, content)
       },
     }
   )
@@ -109,16 +109,31 @@ export function useViewerRecord<
     return { isLoadable: false }
   }
   if (viewerID instanceof PublicID) {
-    return { isLoadable: true, isLoading, value: data, isMutable: false }
+    return { content: data, isLoadable: true, isLoading, isMutable: false }
   }
   return {
+    content: data,
     isLoadable: true,
     isLoading,
-    value: data,
     isMutable: true,
     isMutating: mutation.isLoading,
-    set: async (value: Value) => {
-      await mutation.mutateAsync(value)
+    set: async (content: ContentType) => {
+      await mutation.mutateAsync(content)
     },
   }
+}
+
+export type PublicRecord<ContentType> = { isLoading: boolean; content?: ContentType }
+
+export function usePublicRecord<
+  ModelTypes extends CoreModelTypes = CoreModelTypes,
+  Alias extends keyof ModelTypes['definitions'] = keyof ModelTypes['definitions'],
+  ContentType = DefinitionContentType<ModelTypes, Alias>
+>(alias: Alias, id: string): PublicRecord<ContentType | null> {
+  const core = useCore<ModelTypes>()
+  const { data, isLoading } = useQuery<ContentType | null>(
+    [id, alias],
+    async () => (await core.get(alias, id)) as unknown as ContentType | null
+  )
+  return { content: data, isLoading }
 }

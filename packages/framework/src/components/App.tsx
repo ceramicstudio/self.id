@@ -1,15 +1,18 @@
 import type { AppProps as NextAppProps } from 'next/app'
 import React from 'react'
 
-import { RootProvider } from './RootProvider'
-import type { RootProviderConfig } from './RootProvider'
+import { Provider } from './Provider'
+import type { ProviderConfig, StateConfig } from './Provider'
 
-export type AppProps = NextAppProps & RootProviderConfig
+export type AppProps = NextAppProps & ProviderConfig
 
 export function App({ Component, pageProps, ...config }: AppProps): JSX.Element {
+  // State can be injected by page props rather than config
+  const state = ((pageProps as Record<string, unknown>).state as StateConfig) ?? config.state
+
   return (
-    <RootProvider {...config}>
+    <Provider {...config} state={state}>
       <Component {...pageProps} />
-    </RootProvider>
+    </Provider>
   )
 }
