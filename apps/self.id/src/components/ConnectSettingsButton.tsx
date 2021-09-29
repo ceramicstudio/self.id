@@ -1,8 +1,9 @@
+import { useAuthentication, useViewerID } from '@self.id/framework'
 import { Button } from 'grommet'
 import { useRouter } from 'next/router'
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 
-import { useEnvState, useKnownDIDs, useLogin } from '../hooks'
+import { useLogin } from '../hooks'
 
 export type Props = {
   did: string | null
@@ -10,18 +11,14 @@ export type Props = {
 
 export default function ConnectSettingsButton({ did }: Props) {
   const router = useRouter()
-  const env = useEnvState()
-  const knownDIDs = useKnownDIDs()
+  const [authState] = useAuthentication()
+  const viewerID = useViewerID()
   const login = useLogin()
 
-  const isOwnDID = useMemo(() => {
-    return did != null && Object.keys(knownDIDs).includes(did)
-  }, [did, knownDIDs])
-
   const onOpen = useCallback(() => {
-    if (env.auth.state === 'confirmed') {
+    if (authState.status === 'authenticated') {
       void router.push('/me/settings')
-    } else if (env.auth.state !== 'loading') {
+    } else if (authState.status !== 'authenticating') {
       login().then(
         (self) => {
           if (self != null) {
@@ -31,13 +28,13 @@ export default function ConnectSettingsButton({ did }: Props) {
         () => console.warn('Failed to authenticate DID')
       )
     }
-  }, [env, login, router])
+  }, [authState.status, login, router])
 
-  return isOwnDID ? (
+  return did != null && viewerID?.id === did ? (
     <Button
       primary
       color="black"
-      label={env.auth.state === 'confirmed' ? 'Edit' : 'Connect to edit'}
+      label={authState.status === 'authenticated' ? 'Edit' : 'Connect to edit'}
       onClick={onOpen}
       style={{ border: 0, color: 'white', width: 180 }}
     />

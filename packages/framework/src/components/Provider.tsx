@@ -12,7 +12,7 @@ import { theme } from '../theme'
 
 export type StateConfig = {
   hydrate?: DehydratedState
-  viewerID?: string
+  viewerID?: string | null
 }
 
 export type ProviderConfig = {

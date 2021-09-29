@@ -3,17 +3,15 @@ import { Anchor, Box, Button, Heading, Spinner, Text, TextInput } from 'grommet'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import type { FormEvent } from 'react'
 
+import { useRemoveSocialAccount, useViewerSocialAccounts } from '../../hooks'
+import { GITHUB_HOST, TWITTER_HOST } from '../../identity-link'
 import githubIcon from '../../images/icons/social-github.svg'
 import twitterIcon from '../../images/icons/social-twitter.svg'
-import { GITHUB_HOST, TWITTER_HOST } from '../../identity-link'
 
-import { useEnvState, useSocialAccounts } from '../hooks'
-import type { SelfID } from '../self'
-
-import ConnectedContainer from './ConnectedContainer'
+import ConnectedContainer from '../ConnectedContainer'
 
 type SocialAccountType = 'github' | 'twitter'
 
@@ -145,32 +143,10 @@ function DisplayAccounts({ accounts, removeAccount, removingAccount, type }: Dis
 
 type ListProps = {
   accounts: Array<AlsoKnownAsAccount>
-  self: SelfID
-  setAccounts: (accounts: Array<AlsoKnownAsAccount>) => void
 }
 
-function SocialAccountsList({ accounts, self, setAccounts }: ListProps) {
-  const [removingAccount, setRemovingAccount] = useState<AlsoKnownAsAccount | null>(null)
-
-  const removeAccount = useCallback(
-    (account: AlsoKnownAsAccount) => {
-      if (self == null || removingAccount != null) {
-        return
-      }
-      setRemovingAccount(account)
-      self.removeSocialAccount(account.host, account.id).then(
-        (accounts) => {
-          setAccounts(accounts)
-          setRemovingAccount(null)
-        },
-        (err) => {
-          console.warn('Failed to remove social account', account, err)
-          setRemovingAccount(null)
-        }
-      )
-    },
-    [removingAccount, self, setRemovingAccount, setAccounts]
-  )
+function SocialAccountsList({ accounts }: ListProps) {
+  const [removingAccount, removeAccount] = useRemoveSocialAccount()
 
   const accountsByType = useMemo((): AccountsRecord => {
     const github = []
@@ -198,39 +174,16 @@ function SocialAccountsList({ accounts, self, setAccounts }: ListProps) {
   return <Box margin={{ top: 'medium' }}>{list}</Box>
 }
 
-type LoaderState = { status: 'loading' } | { status: 'loaded' } | { status: 'error'; error: Error }
-
 function SocialAccountsLoader() {
-  const { self } = useEnvState()
-  const [socialAccounts, setSocialAccounts] = useSocialAccounts()
-  const [state, setState] = useState<LoaderState>({ status: 'loading' })
+  const accountsRecord = useViewerSocialAccounts()
 
-  useEffect(() => {
-    self?.getSocialAccounts().then(
-      (accounts) => {
-        setSocialAccounts(accounts)
-        setState({ status: 'loaded' })
-      },
-      (error: Error) => {
-        setState({ status: 'error', error })
-      }
-    )
-  }, [self, setSocialAccounts])
-
-  if (self == null) {
-    return <Text>Loading...</Text>
-  }
-
-  switch (state.status) {
-    case 'loading':
-      return <Text>Loading social accounts...</Text>
-    case 'error':
-      return <Text>Failed to load social accounts: {state.error.message}</Text>
-    case 'loaded':
-      return (
-        <SocialAccountsList accounts={socialAccounts} self={self} setAccounts={setSocialAccounts} />
-      )
-  }
+  return accountsRecord.isLoading ? (
+    <Text>Loading social accounts...</Text>
+  ) : accountsRecord.isError ? (
+    <Text>Failed to load social accounts</Text>
+  ) : (
+    <SocialAccountsList accounts={accountsRecord.content?.accounts ?? []} />
+  )
 }
 
 export default function SocialAccountsScreen() {

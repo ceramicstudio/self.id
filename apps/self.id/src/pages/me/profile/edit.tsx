@@ -1,4 +1,5 @@
 import { Box } from 'grommet'
+import type { GetServerSideProps } from 'next'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
 
@@ -6,9 +7,14 @@ import Layout from '../../../components/Layout'
 import Navbar from '../../../components/Navbar'
 import OpenGraphMeta from '../../../components/OpenGraphMeta'
 
-const EditProfileScreen = dynamic(() => import('../../../client/components/EditProfileScreen'), {
+const EditProfileScreen = dynamic(() => import('../../../components/client/EditProfileScreen'), {
   ssr: false,
 })
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { getStateConfig } = await import('../../../server')
+  return { props: { state: await getStateConfig(ctx) } }
+}
 
 export default function EditProfilePage() {
   return (

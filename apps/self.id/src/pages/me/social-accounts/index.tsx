@@ -1,4 +1,5 @@
 import { Box } from 'grommet'
+import type { GetServerSideProps } from 'next'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
 
@@ -7,9 +8,14 @@ import Navbar from '../../../components/Navbar'
 import OpenGraphMeta from '../../../components/OpenGraphMeta'
 
 const SocialAccountsScreen = dynamic(
-  () => import('../../../client/components/SocialAccountsScreen'),
+  () => import('../../../components/client/SocialAccountsScreen'),
   { ssr: false }
 )
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { getStateConfig } = await import('../../../server')
+  return { props: { state: await getStateConfig(ctx) } }
+}
 
 export default function SocialAccountsPage() {
   return (

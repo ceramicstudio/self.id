@@ -1,18 +1,23 @@
+import { useViewerID } from '@self.id/framework'
 import { Anchor, Box, Button, Heading, Text } from 'grommet'
 import Link from 'next/link'
 
-import { useEnvState } from '../hooks'
+import ConnectedContainer from '../ConnectedContainer'
 
-import ConnectedContainer from './ConnectedContainer'
+function DIDLink() {
+  const viewerID = useViewerID()
+
+  return viewerID ? (
+    <Link href={`/${viewerID.id}`} passHref>
+      <Anchor color="neutral-4">{viewerID.id}</Anchor>
+    </Link>
+  ) : null
+}
 
 export default function SettingsScreen() {
-  const { self } = useEnvState()
-
   return (
     <ConnectedContainer>
-      <Link href={`/${self?.id as string}`} passHref>
-        <Anchor color="neutral-4">{self?.id}</Anchor>
-      </Link>
+      <DIDLink />
       <Heading margin={{ horizontal: 'none', vertical: 'small' }}>Settings</Heading>
       <Box margin={{ top: 'medium' }}>
         <Box

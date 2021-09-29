@@ -71,9 +71,24 @@ export function useAuthentication(): [
 }
 
 export type ViewerRecord<ContentType> =
-  | { isLoadable: false } // No viewerID
-  | ({ isLoadable: true; isLoading: boolean; content?: ContentType } & (
-      | { isMutable: false } // Read-only (PublicID)
+  | {
+      isLoadable: false
+      isLoading: false
+      content?: never
+      isError: false
+      error?: never
+      isMutable: false
+      isMutating: false
+      set?: never
+    } // No viewerID
+  | ({
+      isLoadable: true
+      isLoading: boolean
+      content?: ContentType
+      isError: boolean
+      error?: unknown
+    } & (
+      | { isMutable: false; isMutating: false } // Read-only (PublicID)
       | { isMutable: true; isMutating: boolean; set(content: ContentType): Promise<void> } // Read/write (SelfID)
     ))
 
@@ -86,7 +101,7 @@ export function useViewerRecord<
   const key = [viewerID?.id, alias]
 
   const queryClient = useQueryClient()
-  const { data, isLoading } = useQuery<ContentType | null>(
+  const { data, isLoading, isError, error } = useQuery<ContentType | null>(
     key,
     async (): Promise<ContentType | null> => (viewerID ? await viewerID.get(alias) : null)
   )
@@ -106,15 +121,31 @@ export function useViewerRecord<
   )
 
   if (viewerID == null) {
-    return { isLoadable: false }
+    return {
+      isLoadable: false,
+      isLoading: false,
+      isError: false,
+      isMutable: false,
+      isMutating: false,
+    }
   }
   if (viewerID instanceof PublicID) {
-    return { content: data, isLoadable: true, isLoading, isMutable: false }
+    return {
+      content: data,
+      isLoadable: true,
+      isLoading,
+      isError,
+      error,
+      isMutable: false,
+      isMutating: false,
+    }
   }
   return {
     content: data,
     isLoadable: true,
     isLoading,
+    isError,
+    error,
     isMutable: true,
     isMutating: mutation.isLoading,
     set: async (content: ContentType) => {
@@ -123,7 +154,12 @@ export function useViewerRecord<
   }
 }
 
-export type PublicRecord<ContentType> = { isLoading: boolean; content?: ContentType }
+export type PublicRecord<ContentType> = {
+  isLoading: boolean
+  content?: ContentType
+  isError: boolean
+  error?: unknown
+}
 
 export function usePublicRecord<
   ModelTypes extends CoreModelTypes = CoreModelTypes,
@@ -131,9 +167,9 @@ export function usePublicRecord<
   ContentType = DefinitionContentType<ModelTypes, Alias>
 >(alias: Alias, id: string): PublicRecord<ContentType | null> {
   const core = useCore<ModelTypes>()
-  const { data, isLoading } = useQuery<ContentType | null>(
+  const { data, isLoading, isError, error } = useQuery<ContentType | null>(
     [id, alias],
     async () => (await core.get(alias, id)) as unknown as ContentType | null
   )
-  return { content: data, isLoading }
+  return { content: data, isLoading, isError, error }
 }

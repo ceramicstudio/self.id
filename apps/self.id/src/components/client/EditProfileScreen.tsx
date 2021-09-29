@@ -3,14 +3,13 @@ import type { Dimensions, ImageSources } from '@self.id/image-utils'
 import { Anchor, Avatar, Box, Button, Heading, Image, Text, TextArea, TextInput } from 'grommet'
 import type { TextInputProps } from 'grommet'
 import Link from 'next/link'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import type { FormEvent, ReactNode } from 'react'
 
+import { useEditProfile, useImageUpload, useViewerProfile } from '../../hooks'
 import { getImageURL } from '../../utils'
 
-import { useEditProfile, useEnvState, useImageUpload } from '../hooks'
-
-import ConnectedContainer from './ConnectedContainer'
+import ConnectedContainer from '../ConnectedContainer'
 
 export type FormValue = {
   name?: string
@@ -145,10 +144,8 @@ interface FormProps {
 }
 
 function EditProfileForm({ profile }: FormProps) {
-  const [editProfileState, editProfile] = useEditProfile()
+  const [isLoading, editProfile] = useEditProfile()
   const [value, setValue] = useState<FormValue>(() => profileToForm(profile))
-
-  const isLoading = editProfileState.status === 'editing'
 
   const onReset = useCallback(
     (e: FormEvent) => {
@@ -285,44 +282,22 @@ function EditProfileForm({ profile }: FormProps) {
   )
 }
 
-type LoaderState =
-  | { status: 'loading' }
-  | { status: 'loaded'; profile: BasicProfile }
-  | { status: 'error'; error: Error }
-
 function EditProfileLoader() {
-  const { self } = useEnvState()
-  const [state, setState] = useState<LoaderState>({ status: 'loading' })
+  const profileRecord = useViewerProfile()
 
-  useEffect(() => {
-    self?.getProfile().then(
-      (profile) => {
-        setState({ status: 'loaded', profile: profile ?? {} })
-      },
-      (error: Error) => {
-        setState({ status: 'error', error })
-      }
-    )
-  }, [self])
-
-  switch (state.status) {
-    case 'loading':
-      return (
-        <>
-          <Heading margin={{ horizontal: 'none', vertical: 'small' }}>My profile</Heading>
-          <Text>Loading profile...</Text>
-        </>
-      )
-    case 'error':
-      return (
-        <>
-          <Heading margin={{ horizontal: 'none', vertical: 'small' }}>My profile</Heading>
-          <Text>Failed to load profile: {state.error.message}</Text>
-        </>
-      )
-    case 'loaded':
-      return <EditProfileForm profile={state.profile} />
-  }
+  return profileRecord.isLoading ? (
+    <>
+      <Heading margin={{ horizontal: 'none', vertical: 'small' }}>My profile</Heading>
+      <Text>Loading profile...</Text>
+    </>
+  ) : profileRecord.isError ? (
+    <>
+      <Heading margin={{ horizontal: 'none', vertical: 'small' }}>My profile</Heading>
+      <Text>Failed to load profile</Text>
+    </>
+  ) : (
+    <EditProfileForm profile={profileRecord.content ?? {}} />
+  )
 }
 
 export default function EditProfileScreen() {

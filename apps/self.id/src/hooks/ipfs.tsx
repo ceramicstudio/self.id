@@ -4,7 +4,7 @@ import { useCallback, useRef, useState } from 'react'
 import type { ChangeEvent } from 'react'
 import toast from 'react-hot-toast'
 
-import { IPFS_API_URL } from '../../constants'
+import { IPFS_API_URL } from '../constants'
 
 const UPLOAD_MAX_SIZE = 2500000
 

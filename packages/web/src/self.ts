@@ -50,6 +50,10 @@ export class SelfID<
     return this.#client
   }
 
+  get did(): DID {
+    return this.#did
+  }
+
   get id(): string {
     return this.#did.id
   }

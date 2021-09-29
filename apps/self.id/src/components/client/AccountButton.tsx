@@ -1,15 +1,16 @@
+import { useAuthentication, useViewerID, useViewerRecord } from '@self.id/framework'
 import { Avatar, Box, Button, DropButton, Spinner, Text } from 'grommet'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { forwardRef, useCallback, useEffect, useMemo, useState } from 'react'
+import { forwardRef, useCallback, useMemo, useState } from 'react'
 import type { ForwardedRef } from 'react'
 
-import AvatarPlaceholder from '../../components/AvatarPlaceholder'
+import { useLogin, useLogout, useViewerProfile } from '../../hooks'
 import linkIcon from '../../images/icons/link.svg'
 import { formatDID, getImageURL } from '../../utils'
 
-import { useDIDsData, useEnvState, useLogin, useLogout } from '../hooks'
+import AvatarPlaceholder from '../AvatarPlaceholder'
 
 type DisplayAvatarProps = {
   did?: string
@@ -82,16 +83,13 @@ const MenuButton = forwardRef(function MenuButtonComponent(
 
 export default function AccountButton() {
   const router = useRouter()
-  const { auth } = useEnvState()
+  const [authState] = useAuthentication()
+  const viewerID = useViewerID()
+  const profileRecord = useViewerProfile()
   const login = useLogin()
   const logout = useLogout()
-  const [knownDIDsData, loadDIDsData] = useDIDsData()
   const [isMenuOpen, setMenuOpen] = useState(false)
   const [isLoadingProfile, setLoadingProfile] = useState(false)
-
-  useEffect(() => {
-    void loadDIDsData()
-  }, [])
 
   const toProfile = useCallback(
     (id: string | null) => {
@@ -107,25 +105,24 @@ export default function AccountButton() {
   )
 
   const onClickLogin = useCallback(() => {
-    if (auth.state !== 'loading') {
+    if (authState.status !== 'authenticating') {
       void login().then((self) => {
         return self ? toProfile(self.id) : null
       })
     }
-  }, [auth.state, login, toProfile])
+  }, [authState.status, login, toProfile])
 
   const [displayName, avatarSrc] = useMemo(() => {
-    if (auth.id == null) {
+    if (viewerID == null) {
       return ['', null]
     }
 
-    const profile = knownDIDsData?.[auth.id]?.profile
-    const name = profile?.name ?? formatDID(auth.id)
-    const src = getImageURL(profile?.image, { height: 60, width: 60 })
+    const name = profileRecord.content?.name ?? formatDID(viewerID.id)
+    const src = getImageURL(profileRecord.content?.image, { height: 60, width: 60 })
     return [name, src]
-  }, [auth.id, knownDIDsData])
+  }, [viewerID, profileRecord.content])
 
-  if (auth.id != null) {
+  if (viewerID != null) {
     const content = (
       <Box border={{ color: 'neutral-5' }} margin={{ top: '30px' }} round={{ size: 'small' }}>
         <Box
@@ -137,24 +134,11 @@ export default function AccountButton() {
           {avatarSrc ? (
             <Avatar size="60px" src={avatarSrc} />
           ) : (
-            <AvatarPlaceholder did={auth.id} size={60} />
+            <AvatarPlaceholder did={viewerID.id} size={60} />
           )}
           <Text size="medium" truncate weight="bold">
             {displayName}
           </Text>
-          {/* <Button
-            label="Switch identities"
-            onClick={() => router.push('/me/identities')}
-            plain
-            size="small"
-            style={{
-              backgroundColor: 'white',
-              border: '1px solid #A8A8A8',
-              borderRadius: 30,
-              fontSize: '14px',
-              padding: '6px 12px',
-            }}
-          /> */}
         </Box>
         <Box
           background="white"
@@ -164,7 +148,7 @@ export default function AccountButton() {
           <MenuButton
             label="Profile"
             loading={isLoadingProfile}
-            onClick={() => toProfile(auth.id as string)}
+            onClick={() => toProfile(viewerID.id)}
           />
           <Link href="/me/settings">
             <MenuButton label="Settings" onClick={() => setMenuOpen(false)} />
@@ -187,7 +171,7 @@ export default function AccountButton() {
         }}
         open={isMenuOpen}>
         <DisplayAvatar
-          did={auth.id}
+          did={viewerID.id}
           label={displayName}
           loading={isLoadingProfile}
           src={avatarSrc}
@@ -196,8 +180,8 @@ export default function AccountButton() {
     )
   }
 
-  return auth.state === 'loading' ? (
-    <DisplayAvatar did={auth.id} label="Connecting..." loading />
+  return authState.status === 'authenticating' ? (
+    <DisplayAvatar label="Connecting..." loading />
   ) : (
     <Button
       primary
