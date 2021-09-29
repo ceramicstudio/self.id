@@ -1,5 +1,4 @@
 import { Box } from 'grommet'
-import type { GetServerSideProps } from 'next'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
 
@@ -10,11 +9,6 @@ import OpenGraphMeta from '../../components/OpenGraphMeta'
 const SettingsScreen = dynamic(() => import('../../components/client/SettingsScreen'), {
   ssr: false,
 })
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { getStateConfig } = await import('../../server')
-  return { props: { state: await getStateConfig(ctx) } }
-}
 
 export default function SettingsPage() {
   return (

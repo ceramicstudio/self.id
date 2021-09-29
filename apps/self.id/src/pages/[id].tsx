@@ -1,7 +1,7 @@
 import type { BasicProfile } from '@datamodels/identity-profile-basic'
 import { isCAIP10string, isDIDstring } from '@self.id/core'
 import { useViewerID } from '@self.id/framework'
-import type { StateConfig } from '@self.id/framework'
+import type { RequestState } from '@self.id/framework'
 import { Anchor, Box, Paragraph, Text } from 'grommet'
 import type { GetServerSideProps } from 'next'
 import Head from 'next/head'
@@ -39,7 +39,7 @@ function canEditProfile(support: Support): boolean {
 type Props = {
   fallbackProfile: BasicProfile | null
   id: string
-  state: StateConfig
+  state: RequestState
   support: Support
 }
 

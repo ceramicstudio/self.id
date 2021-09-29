@@ -52,32 +52,34 @@ export function findTwitterIndex(accounts: Array<AlsoKnownAsAccount>, username: 
 export function removeGitHubAccount(
   accounts: Array<AlsoKnownAsAccount>,
   username: string
-): boolean {
+): Array<AlsoKnownAsAccount> {
   const index = findGitHubIndex(accounts, username)
   if (index !== -1) {
-    accounts.splice(index, 1)
-    return true
+    const cloned = [...accounts]
+    cloned.splice(index, 1)
+    return cloned
   }
-  return false
+  return accounts
 }
 
 export function removeTwitterAccount(
   accounts: Array<AlsoKnownAsAccount>,
   username: string
-): boolean {
+): Array<AlsoKnownAsAccount> {
   const index = findTwitterIndex(accounts, username)
   if (index !== -1) {
-    accounts.splice(index, 1)
-    return true
+    const cloned = [...accounts]
+    cloned.splice(index, 1)
+    return cloned
   }
-  return false
+  return accounts
 }
 
 export function removeSocialAccount(
   accounts: Array<AlsoKnownAsAccount>,
   host: string | undefined,
   id: string
-): boolean {
+): Array<AlsoKnownAsAccount> {
   switch (host) {
     case GITHUB_HOST:
       return removeGitHubAccount(accounts, id)

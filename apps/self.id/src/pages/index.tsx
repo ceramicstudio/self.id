@@ -1,4 +1,5 @@
 import { Anchor, Box, Heading, Spinner, Text, TextInput } from 'grommet'
+import type { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
@@ -24,6 +25,11 @@ const ResponsiveHeading = withMediaQuery(Heading)
 const ResponsiveText = withMediaQuery(Text)
 const ResponsiveTextInput = withMediaQuery(TextInput)
 const ResponsiveBox = withMediaQuery(Box)
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { getRequestState } = await import('../server')
+  return { props: { state: await getRequestState(ctx) } }
+}
 
 export default function Home() {
   const router = useRouter()

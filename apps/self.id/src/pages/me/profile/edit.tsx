@@ -12,8 +12,8 @@ const EditProfileScreen = dynamic(() => import('../../../components/client/EditP
 })
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { getStateConfig } = await import('../../../server')
-  return { props: { state: await getStateConfig(ctx) } }
+  const { getRequestState } = await import('../../../server')
+  return { props: { state: await getRequestState(ctx) } }
 }
 
 export default function EditProfilePage() {

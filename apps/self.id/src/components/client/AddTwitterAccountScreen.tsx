@@ -31,8 +31,8 @@ function AddTwitterAccount({ selfID }: Props) {
   const { username } = router.query
   const did = selfID.id
 
-  const copyMessage = useCallback(() => {
-    if (self == null || typeof username !== 'string' || challengeLoading) {
+  const loadChallenge = useCallback(() => {
+    if (typeof username !== 'string' || challengeLoading) {
       return
     }
 
@@ -85,13 +85,13 @@ function AddTwitterAccount({ selfID }: Props) {
           <Text margin={{ bottom: 'small' }} weight="bold">
             Step 1
           </Text>
-          <Text color="neutral-2">Click this button to copy the verification message.</Text>
+          <Text color="neutral-2">Click this button to load the attestation challenge.</Text>
         </Box>
         <Box>
           {challengeLoading ? (
             <Button disabled icon={<Spinner />} />
           ) : (
-            <Button disabled={verifyLoading} label="Copy" onClick={copyMessage} />
+            <Button disabled={verifyLoading} label="Load" onClick={loadChallenge} />
           )}
         </Box>
       </Box>

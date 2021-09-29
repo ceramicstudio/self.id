@@ -1,6 +1,6 @@
 import { Core } from '@self.id/core'
 import { RequestClient, getRequestViewerID } from '@self.id/framework'
-import { StateConfig } from '@self.id/framework'
+import { RequestState } from '@self.id/framework'
 import type { GetServerSidePropsContext } from 'next'
 
 import { CERAMIC_URL } from './constants'
@@ -15,7 +15,7 @@ export function getViewerID(ctx: GetServerSidePropsContext): string | null {
   return getRequestViewerID(ctx.req)
 }
 
-export async function getStateConfig(ctx: GetServerSidePropsContext): Promise<StateConfig> {
+export async function getRequestState(ctx: GetServerSidePropsContext): Promise<RequestState> {
   const requestClient = createRequestClient()
   const viewerID = getViewerID(ctx)
   if (viewerID != null) {

@@ -1,5 +1,4 @@
 import { Box } from 'grommet'
-import type { GetServerSideProps } from 'next'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
 
@@ -11,11 +10,6 @@ const AddGitHubAccountScreen = dynamic(
   () => import('../../../../components/client/AddGitHubAccountScreen'),
   { ssr: false }
 )
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { getStateConfig } = await import('../../../../server')
-  return { props: { state: await getStateConfig(ctx) } }
-}
 
 export default function AddGitHubAccountPage() {
   return (

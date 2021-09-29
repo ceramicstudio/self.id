@@ -10,7 +10,15 @@ import type { DehydratedState } from 'react-query'
 import { DEFAULT_CLIENT_CONFIG, clientConfigAtom, requestViewerIDAtom, stateScope } from '../state'
 import { theme } from '../theme'
 
-export type StateConfig = {
+const QUERY_CLIENT_OPTIONS = {
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+}
+
+export type RequestState = {
   hydrate?: DehydratedState
   viewerID?: string | null
 }
@@ -18,14 +26,14 @@ export type StateConfig = {
 export type ProviderConfig = {
   client?: WebClientParams
   ui?: GrommetExtendedProps
-  state?: StateConfig
+  state?: RequestState
 }
 
 export type ProviderProps = ProviderConfig & { children: ReactNode }
 
 export function Provider({ children, client, state, ui }: ProviderProps): JSX.Element {
   const uiProps = ui ?? {}
-  const [queryClient] = useState(() => new QueryClient())
+  const [queryClient] = useState(() => new QueryClient(QUERY_CLIENT_OPTIONS))
 
   return (
     <Grommet theme={theme} {...uiProps}>

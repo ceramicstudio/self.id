@@ -70,10 +70,10 @@ export function useRemoveSocialAccount(): [
       }
 
       setRemovingAccount(account)
-      const accounts = accountsRecord.content?.accounts ?? []
+      const currentAccounts = accountsRecord.content?.accounts ?? []
       try {
-        const removed = removeSocialAccount(accounts, account.host, account.id)
-        if (removed) {
+        const accounts = removeSocialAccount(currentAccounts, account.host, account.id)
+        if (accounts !== currentAccounts) {
           await accountsRecord.set({ accounts })
         }
       } catch (err) {
