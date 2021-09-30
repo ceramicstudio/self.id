@@ -87,6 +87,30 @@ ___
 
 ___
 
+### merge
+
+▸ **merge**<`Key`, `ContentType`\>(`key`, `content`): `Promise`<`StreamID`\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `Key` | extends `string` \| `number` \| `symbol` |
+| `ContentType` | `DefinitionContentType`<`ModelTypes`, `Key`\> |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `key` | `Key` |
+| `content` | `ContentType` |
+
+#### Returns
+
+`Promise`<`StreamID`\>
+
+___
+
 ### set
 
 ▸ **set**<`Key`, `ContentType`\>(`key`, `content`): `Promise`<`StreamID`\>

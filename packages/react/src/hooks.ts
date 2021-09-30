@@ -78,6 +78,7 @@ export function useAuthentication(): [
 
 export type ViewerRecord<ContentType> =
   | {
+      // No viewerID -> not loadable
       isLoadable: false
       isLoading: false
       content?: never
@@ -86,8 +87,10 @@ export type ViewerRecord<ContentType> =
       isMutable: false
       isMutating: false
       set?: never
-    } // No viewerID
+      merge?: never
+    }
   | ({
+      // With viewerID -> loadable
       isLoadable: true
       isLoading: boolean
       content?: ContentType
@@ -95,7 +98,13 @@ export type ViewerRecord<ContentType> =
       error?: unknown
     } & (
       | { isMutable: false; isMutating: false } // Read-only (PublicID)
-      | { isMutable: true; isMutating: boolean; set(content: ContentType): Promise<void> } // Read/write (SelfID)
+      | {
+          // Read/write (SelfID)
+          isMutable: true
+          isMutating: boolean
+          set(content: ContentType): Promise<void>
+          merge(content: ContentType): Promise<void>
+        }
     ))
 
 export function useViewerRecord<
@@ -111,20 +120,29 @@ export function useViewerRecord<
     key,
     async (): Promise<ContentType | null> => (viewerID ? await viewerID.get(alias) : null)
   )
-  const mutation = useMutation(
-    async (content: ContentType) => {
-      if (viewerID == null || viewerID instanceof PublicID) {
-        throw new Error('Cannot mutate record')
-      }
-      await viewerID.set(alias, content)
-      return content
+
+  const mutationOptions = {
+    onSuccess: (content: ContentType) => {
+      queryClient.setQueryData(key, content)
     },
-    {
-      onSuccess: (content) => {
-        queryClient.setQueryData(key, content)
-      },
+  }
+
+  const setMutation = useMutation(async (content: ContentType) => {
+    if (viewerID == null || viewerID instanceof PublicID) {
+      throw new Error('Cannot mutate record')
     }
-  )
+    await viewerID.set(alias, content)
+    return content
+  }, mutationOptions)
+
+  const mergeMutation = useMutation(async (content: ContentType) => {
+    if (viewerID == null || viewerID instanceof PublicID) {
+      throw new Error('Cannot mutate record')
+    }
+    const newContent = { ...(data ?? {}), ...content }
+    await viewerID.set(alias, newContent)
+    return newContent
+  }, mutationOptions)
 
   if (viewerID == null) {
     return {
@@ -153,9 +171,12 @@ export function useViewerRecord<
     isError,
     error,
     isMutable: true,
-    isMutating: mutation.isLoading,
+    isMutating: setMutation.isLoading || mergeMutation.isLoading,
     set: async (content: ContentType) => {
-      await mutation.mutateAsync(content)
+      await setMutation.mutateAsync(content)
+    },
+    merge: async (content: ContentType) => {
+      await mergeMutation.mutateAsync(content)
     },
   }
 }

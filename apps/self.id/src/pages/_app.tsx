@@ -5,6 +5,10 @@ import Head from 'next/head'
 import { Toaster } from 'react-hot-toast'
 import { createGlobalStyle } from 'styled-components'
 
+import { connectors } from '../auth'
+import { CERAMIC_URL, CONNECT_NETWORK } from '../constants'
+import { theme } from '../theme'
+
 const GlobalStyle = createGlobalStyle`   
   @font-face {
     font-family: Segment;       
@@ -42,15 +46,15 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
-import { connectors } from '../auth'
-import { theme } from '../theme'
-
 export default function App({ Component, pageProps }: AppProps): JSX.Element {
   const { state, ...props } = pageProps
 
   return (
     <MultiauthProvider providers={[{ key: 'ethereum', connectors }]} theme={theme}>
-      <FrameworkProvider state={state} ui={{ full: true, theme }}>
+      <FrameworkProvider
+        client={{ ceramic: CERAMIC_URL, connectNetwork: CONNECT_NETWORK }}
+        state={state}
+        ui={{ full: true, theme }}>
         <GlobalStyle />
         <Head>
           <link rel="icon" href="/favicon.ico" />
