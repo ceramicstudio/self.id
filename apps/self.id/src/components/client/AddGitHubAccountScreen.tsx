@@ -1,5 +1,5 @@
 import { useAuthentication } from '@self.id/framework'
-import type { SelfID } from '@self.id/web'
+import type { SelfID } from '@self.id/framework'
 import copy from 'copy-to-clipboard'
 import { Box, Button, Heading, Spinner, Text } from 'grommet'
 import { useRouter } from 'next/router'

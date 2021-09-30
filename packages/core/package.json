@@ -44,7 +44,7 @@
     "@glazed/datamodel": "^0.1.2",
     "@glazed/did-datastore": "^0.1.4",
     "caip": "^0.9.2",
-    "did-resolver": "^3.1.1",
+    "did-resolver": "^3.1.2",
     "key-did-resolver": "^1.4.0"
   },
   "devDependencies": {

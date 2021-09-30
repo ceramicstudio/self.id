@@ -1,4 +1,4 @@
-import { useAuthentication, useViewerID, useViewerRecord } from '@self.id/framework'
+import { useAuthentication, useViewerID } from '@self.id/framework'
 import { Avatar, Box, Button, DropButton, Spinner, Text } from 'grommet'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -60,7 +60,7 @@ const MenuButton = forwardRef(function MenuButtonComponent(
   return (
     <Button
       {...props}
-      ref={ref}
+      ref={ref as any}
       alignSelf="start"
       icon={
         loading ? (

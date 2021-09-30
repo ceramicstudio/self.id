@@ -1,8 +1,7 @@
 import { useMultiAuth } from '@ceramicstudio/multiauth'
 import type { AuthAccount } from '@ceramicstudio/multiauth'
-import { useAuthentication } from '@self.id/framework'
-import { EthereumAuthProvider } from '@self.id/web'
-import type { SelfID } from '@self.id/web'
+import { EthereumAuthProvider, useAuthentication } from '@self.id/framework'
+import type { SelfID } from '@self.id/framework'
 import { useCallback } from 'react'
 import toast from 'react-hot-toast'
 

@@ -1,5 +1,4 @@
-import { Core } from '@self.id/core'
-import { RequestClient, getRequestViewerID } from '@self.id/framework'
+import { Core, RequestClient, getRequestViewerID } from '@self.id/framework'
 import { RequestState } from '@self.id/framework'
 import type { GetServerSidePropsContext } from 'next'
 

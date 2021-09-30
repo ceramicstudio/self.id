@@ -1,5 +1,6 @@
 import { useMultiAuth } from '@ceramicstudio/multiauth'
-import { useAuthentication } from '@self.id/framework'
+import { AuthenticatedContainer } from '@self.id/framework'
+import type { AuthenticationState } from '@self.id/framework'
 import { Button, Text } from 'grommet'
 import type { ReactNode } from 'react'
 
@@ -7,21 +8,16 @@ import { useLogin } from '../hooks'
 
 const style = { color: 'white', marginTop: 10, width: 200 }
 
-export type Props = {
-  children: ReactNode
+type ConnectPromptProps = {
+  authState: AuthenticationState
 }
 
-export default function ConnectedContainer({ children }: Props) {
-  const [didAuthState] = useAuthentication()
-  const [walletAuthState] = useMultiAuth()
+function ConnectPrompt({ authState }: ConnectPromptProps): JSX.Element {
   const login = useLogin()
-
-  if (didAuthState.status === 'authenticated') {
-    return <>{children}</>
-  }
+  const [walletAuthState] = useMultiAuth()
 
   const button =
-    didAuthState.status === 'authenticating' || walletAuthState.status === 'connecting' ? (
+    authState.status === 'authenticating' || walletAuthState.status === 'connecting' ? (
       <Button disabled label="Connecting..." primary style={style} />
     ) : (
       <Button label="Connect" onClick={() => void login()} primary style={style} />
@@ -32,5 +28,17 @@ export default function ConnectedContainer({ children }: Props) {
       <Text weight="bold">Please connect your DID to access the data needed by this page.</Text>
       {button}
     </>
+  )
+}
+
+export type Props = {
+  children: ReactNode
+}
+
+export default function ConnectedContainer({ children }: Props): JSX.Element {
+  return (
+    <AuthenticatedContainer renderFallback={(authState) => <ConnectPrompt authState={authState} />}>
+      {children}
+    </AuthenticatedContainer>
   )
 }

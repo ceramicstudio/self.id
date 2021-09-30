@@ -27,6 +27,7 @@ export class RequestClient<
   }
 }
 
+/** @internal */
 export function getRequestCookie(
   req: IncomingMessage,
   name: string,

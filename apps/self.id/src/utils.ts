@@ -1,5 +1,5 @@
-import { selectImageSource } from '@self.id/image-utils'
-import type { Dimensions, ImageSources } from '@self.id/image-utils'
+import { selectImageSource } from '@self.id/framework'
+import type { Dimensions, ImageSources } from '@self.id/framework'
 
 import { IPFS_URL } from './constants'
 

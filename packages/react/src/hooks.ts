@@ -1,7 +1,7 @@
 import type { DefinitionContentType } from '@glazed/did-datastore'
 import { PublicID } from '@self.id/core'
 import type { Core, CoreModelTypes } from '@self.id/core'
-import type { EthereumAuthProvider, SelfID } from '@self.id/web'
+import type { AuthenticateParams, EthereumAuthProvider, SelfID } from '@self.id/web'
 import { useAtom } from 'jotai'
 import { useAtomValue, useUpdateAtom } from 'jotai/utils'
 import { useCallback } from 'react'
@@ -10,7 +10,13 @@ import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { stateScope, authenticationAtom, clientConfigAtom, coreAtom, viewerIDAtom } from './state'
 import type { AuthenticationState } from './types'
 import { abortable } from './utils'
-import { authenticateSelfID } from './web'
+
+async function authenticateSelfID<ModelTypes extends CoreModelTypes = CoreModelTypes>(
+  params: AuthenticateParams<ModelTypes>
+): Promise<SelfID<ModelTypes>> {
+  const { SelfID } = await import('@self.id/web')
+  return await SelfID.authenticate<ModelTypes>(params)
+}
 
 export function useCore<ModelTypes extends CoreModelTypes = CoreModelTypes>(): Core<ModelTypes> {
   return useAtomValue(coreAtom, stateScope)

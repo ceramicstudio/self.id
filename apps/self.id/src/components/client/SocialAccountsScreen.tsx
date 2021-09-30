@@ -1,4 +1,4 @@
-import type { Account as AlsoKnownAsAccount } from '@datamodels/identity-accounts-web'
+import type { AlsoKnownAsAccount } from '@self.id/framework'
 import { Anchor, Box, Button, Heading, Spinner, Text, TextInput } from 'grommet'
 import Link from 'next/link'
 import Image from 'next/image'

@@ -1,7 +1,10 @@
-import type { Account as AlsoKnownAsAccount, AlsoKnownAs } from '@datamodels/identity-accounts-web'
-import type { BasicProfile } from '@datamodels/identity-profile-basic'
 import { useViewerRecord } from '@self.id/framework'
-import type { ViewerRecord } from '@self.id/framework'
+import type {
+  AlsoKnownAsAccount,
+  AlsoKnownAs,
+  BasicProfile,
+  ViewerRecord,
+} from '@self.id/framework'
 import type { DID } from 'dids'
 import { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'

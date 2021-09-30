@@ -11,8 +11,10 @@ import {
 import { CookieStorage } from './storage'
 import type { AuthenticationState } from './types'
 
+/** @internal */
 export const stateScope = Symbol()
 
+/** @internal */
 export const DEFAULT_CLIENT_CONFIG = {
   ceramic: DEFAULT_CERAMIC_NETWORK,
   connectNetwork: DEFAULT_CONNECT_NETWORK,
@@ -20,8 +22,10 @@ export const DEFAULT_CLIENT_CONFIG = {
 
 // Clients state
 
+/** @internal */
 export const clientConfigAtom = atom<WebClientParams>(DEFAULT_CLIENT_CONFIG)
 
+/** @internal */
 export const coreAtom = atom<Core>((get) => {
   const { ceramic } = get(clientConfigAtom)
   return new Core({ ceramic })
@@ -29,19 +33,29 @@ export const coreAtom = atom<Core>((get) => {
 
 // Viewer lifecycle
 
+/** @internal */
 export const authenticationAtom = atom<AuthenticationState>({ status: 'pending' })
 
-// Viewer ID can be injected by server
+/**
+ * Viewer ID can be injected by server
+ *
+ * @internal */
 export const requestViewerIDAtom = atom<string | null>(null)
 
-// Store known viewer ID locally
+/**
+ * Store known viewer ID locally
+ *
+ * @internal */
 export const localViewerIDAtom = atomWithStorage<string | null>(
   VIEWER_ID_STORAGE_KEY,
   null,
   CookieStorage
 )
 
-// High-level viewer access
+/**
+ * High-level viewer access
+ *
+ * @internal */
 export const viewerIDAtom = atom(
   (get) => {
     const auth = get(authenticationAtom)

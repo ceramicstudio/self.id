@@ -1,5 +1,5 @@
 import { useAuthentication } from '@self.id/framework'
-import type { SelfID } from '@self.id/web'
+import type { SelfID } from '@self.id/framework'
 import { Box, Button, Heading, Spinner, Text } from 'grommet'
 import { useRouter } from 'next/router'
 import { useCallback, useState } from 'react'

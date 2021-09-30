@@ -44,6 +44,16 @@ import { SelfID } from '@self.id/web'
 
 ___
 
+### did
+
+• `get` **did**(): `DID`
+
+#### Returns
+
+`DID`
+
+___
+
 ### id
 
 • `get` **id**(): `string`

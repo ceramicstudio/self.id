@@ -1,16 +1,20 @@
 import { getCookieValue } from './utils'
 
+/** @internal */
 export const canUseBrowserCookie = typeof document !== 'undefined' && 'cookie' in document
 
+/** @internal */
 export function getBrowserCookie(name: string, fallback?: string): string | undefined {
   return canUseBrowserCookie ? getCookieValue(document.cookie, name, fallback) : fallback
 }
 
+/** @internal */
 export type SetCookieOptions = {
   maxAge?: number
   path?: string
 }
 
+/** @internal */
 export function setBrowserCookie(
   name: string,
   value: string,
@@ -26,6 +30,7 @@ export function setBrowserCookie(
   return true
 }
 
+/** @internal */
 export function deleteBrowserCookie(name: string): boolean {
   if (!canUseBrowserCookie) {
     return false
@@ -35,7 +40,11 @@ export function deleteBrowserCookie(name: string): boolean {
   return true
 }
 
-// Implements Jotai's Storage interface
+/**
+ * Implements Jotai's Storage interface
+ *
+ * @internal
+ * */
 export const CookieStorage = {
   getItem: (key: string): string | null => getBrowserCookie(key) ?? null,
   setItem: (key: string, value: string | null): void => {

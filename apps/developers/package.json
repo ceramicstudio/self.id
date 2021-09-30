@@ -18,8 +18,8 @@
     "@docusaurus/preset-classic": "2.0.0-beta.6",
     "@docusaurus/theme-live-codeblock": "^2.0.0-beta.6",
     "@mdx-js/react": "^1.6.21",
-    "@self.id/core": "^0.1.0",
     "@self.id/docusaurus-plugin": "^0.1.0",
+    "@self.id/framework": "^0.1.0",
     "@svgr/webpack": "^5.5.0",
     "clsx": "^1.1.1",
     "file-loader": "^6.2.0",
@@ -43,7 +43,7 @@
   "devDependencies": {
     "@docusaurus/module-type-aliases": "^2.0.0-beta.6",
     "@tsconfig/docusaurus": "^1.0.4",
-    "@types/react": "^17.0.24",
+    "@types/react": "^17.0.25",
     "@types/react-helmet": "^6.1.2",
     "@types/react-router-dom": "^5.3.0",
     "docusaurus-plugin-typedoc": "^0.16.3",

@@ -1,5 +1,5 @@
-import type { Dimensions, ImageSources } from '@self.id/image-utils'
-import { uploadImage } from '@self.id/image-utils'
+import type { Dimensions, ImageSources } from '@self.id/framework'
+import { uploadImage } from '@self.id/framework'
 import { useCallback, useRef, useState } from 'react'
 import type { ChangeEvent } from 'react'
 import toast from 'react-hot-toast'

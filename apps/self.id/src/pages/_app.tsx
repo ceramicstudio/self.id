@@ -1,6 +1,5 @@
 import { Provider as MultiauthProvider } from '@ceramicstudio/multiauth'
 import { Provider as FrameworkProvider } from '@self.id/framework'
-import { Provider as StateProvider } from 'jotai'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { Toaster } from 'react-hot-toast'
@@ -47,20 +46,20 @@ import { connectors } from '../auth'
 import { theme } from '../theme'
 
 export default function App({ Component, pageProps }: AppProps): JSX.Element {
+  const { state, ...props } = pageProps
+
   return (
     <MultiauthProvider providers={[{ key: 'ethereum', connectors }]} theme={theme}>
-      <StateProvider>
-        <FrameworkProvider state={pageProps.state} ui={{ full: true, theme }}>
-          <GlobalStyle />
-          <Head>
-            <link rel="icon" href="/favicon.ico" />
-            <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-            <meta name="fortmatic-site-verification" content="4keQaoARYXbW4snM" />
-          </Head>
-          <Component {...pageProps} />
-          <Toaster />
-        </FrameworkProvider>
-      </StateProvider>
+      <FrameworkProvider state={state} ui={{ full: true, theme }}>
+        <GlobalStyle />
+        <Head>
+          <link rel="icon" href="/favicon.ico" />
+          <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+          <meta name="fortmatic-site-verification" content="4keQaoARYXbW4snM" />
+        </Head>
+        <Component {...props} />
+        <Toaster />
+      </FrameworkProvider>
     </MultiauthProvider>
   )
 }
