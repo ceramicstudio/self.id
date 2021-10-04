@@ -3,19 +3,15 @@ import { Provider as StateProvider } from 'jotai'
 import React, { useState } from 'react'
 import type { ReactNode } from 'react'
 import { Hydrate, QueryClient, QueryClientProvider } from 'react-query'
-import type { DehydratedState, QueryObserverOptions } from 'react-query'
+import type { QueryObserverOptions } from 'react-query'
 
 import { DEFAULT_CLIENT_CONFIG, clientConfigAtom, requestViewerIDAtom, stateScope } from '../state'
+import type { RequestState } from '../types'
 
 /** @internal */
 const DEFAULT_QUERY_OPTIONS: QueryObserverOptions = {
   staleTime: Infinity,
   refetchOnWindowFocus: false,
-}
-
-export type RequestState = {
-  hydrate?: DehydratedState
-  viewerID?: string | null
 }
 
 export type ProviderConfig = {

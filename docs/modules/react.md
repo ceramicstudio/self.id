@@ -72,6 +72,18 @@ ___
 
 ___
 
+### RequestClientParams
+
+Ƭ **RequestClientParams**<`ModelTypes`\>: `CoreParams`<`ModelTypes`\> & { `cookie?`: `string`  }
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ModelTypes` | extends `CoreModelTypes``CoreModelTypes` |
+
+___
+
 ### RequestState
 
 Ƭ **RequestState**: `Object`
@@ -141,15 +153,15 @@ ___
 
 ___
 
-### getRequestViewerID
+### getCookieViewerID
 
-▸ **getRequestViewerID**(`req`): `string` \| ``null``
+▸ **getCookieViewerID**(`cookie?`): `string` \| ``null``
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `req` | `IncomingMessage` |
+| `cookie?` | `string` |
 
 #### Returns
 

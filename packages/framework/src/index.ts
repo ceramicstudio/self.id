@@ -19,8 +19,7 @@ export type { Dimensions, ImageSources } from '@self.id/image-utils'
 export {
   AuthenticatedContainer,
   RequestClient,
-  getRequestCookie,
-  getRequestViewerID,
+  getCookieViewerID,
   useAuthentication,
   useCore,
   usePublicRecord,
@@ -30,6 +29,7 @@ export {
 export type {
   AuthenticatedContainerProps,
   AuthenticationState,
+  RequestClientParams,
   RequestState,
   PublicRecord,
   ViewerRecord,

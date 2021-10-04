@@ -19,7 +19,7 @@
 
 ### constructor
 
-• **new RequestClient**<`ModelTypes`, `Alias`\>(`params`)
+• **new RequestClient**<`ModelTypes`, `Alias`\>(`__namedParameters`)
 
 #### Type parameters
 
@@ -32,7 +32,7 @@
 
 | Name | Type |
 | :------ | :------ |
-| `params` | `CoreParams`<`ModelTypes`\> |
+| `__namedParameters` | [`RequestClientParams`](../modules/react.md#requestclientparams)<`ModelTypes`\> |
 
 #### Overrides
 
@@ -77,6 +77,16 @@ ___
 #### Returns
 
 `Resolver`
+
+___
+
+### viewerID
+
+• `get` **viewerID**(): ``null`` \| `string`
+
+#### Returns
+
+``null`` \| `string`
 
 ## Methods
 
@@ -130,17 +140,17 @@ ___
 
 ### getState
 
-▸ **getState**(): `DehydratedState`
+▸ **getState**(): [`RequestState`](../modules/react.md#requeststate)
 
 #### Returns
 
-`DehydratedState`
+[`RequestState`](../modules/react.md#requeststate)
 
 ___
 
 ### prefetch
 
-▸ **prefetch**<`Key`\>(`key`, `id`): `Promise`<`void`\>
+▸ **prefetch**<`Key`\>(`key`, `id?`): `Promise`<`boolean`\>
 
 #### Type parameters
 
@@ -153,11 +163,11 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `key` | `Key` |
-| `id` | `string` |
+| `id` | ``null`` \| `string` |
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`<`boolean`\>
 
 ___
 

@@ -49,8 +49,8 @@ export const getServerSideProps: GetServerSideProps<Props, { id: string }> = asy
     }
   }
 
-  const { createRequestClient, getViewerID } = await import('../server')
-  const requestClient = createRequestClient()
+  const { createRequestClient } = await import('../server')
+  const requestClient = createRequestClient(ctx)
   const prefetch: Array<Promise<unknown>> = []
 
   let fallbackProfile: BasicProfile | null = null
@@ -94,14 +94,13 @@ export const getServerSideProps: GetServerSideProps<Props, { id: string }> = asy
     }
   }
 
-  const viewerID = getViewerID(ctx)
-  if (viewerID != null) {
-    prefetch.push(requestClient.prefetch('basicProfile', viewerID))
+  if (requestClient.viewerID != null) {
+    prefetch.push(requestClient.prefetch('basicProfile', requestClient.viewerID))
   }
   await Promise.all(prefetch)
 
   return {
-    props: { id, fallbackProfile, state: { viewerID, hydrate: requestClient.getState() }, support },
+    props: { id, fallbackProfile, state: requestClient.getState(), support },
   }
 }
 

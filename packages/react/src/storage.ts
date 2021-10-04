@@ -31,12 +31,11 @@ export function setBrowserCookie(
 }
 
 /** @internal */
-export function deleteBrowserCookie(name: string): boolean {
+export function deleteBrowserCookie(name: string, path = '/'): boolean {
   if (!canUseBrowserCookie) {
     return false
   }
-
-  document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT`
+  document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=${path}; SameSite=Strict`
   return true
 }
 
