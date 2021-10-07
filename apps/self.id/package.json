@@ -10,9 +10,9 @@
     "start": "next start"
   },
   "dependencies": {
-    "@ceramicstudio/multiauth": "^0.2.3",
     "@self.id/3box-legacy": "^0.1.0",
     "@self.id/framework": "^0.1.0",
+    "@self.id/multiauth": "^0.1.0",
     "boring-avatars": "^1.5.8",
     "copy-to-clipboard": "^3.3.1",
     "grommet": "^2.18.0",

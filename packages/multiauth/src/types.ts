@@ -25,9 +25,10 @@ export type ProviderType<Key extends ProviderKey> = ProviderTypes[Key]
 
 export type ConnectorKey = 'fortmatic' | 'injected' | 'portis' | 'torus' | 'walletConnect'
 
-export type ConnectorConfigDefaults = DisplayDefaults & {
-  getProvider<K extends ProviderKey>(key: K): Promise<ProviderType<K>>
-  isSupported<K extends ProviderKey>(key: K): boolean
+export type ConnectorConfigDefaults<Params = unknown> = DisplayDefaults & {
+  getProvider<K extends ProviderKey, Params>(key: K, params?: Params): Promise<ProviderType<K>>
+  supportsProvider<K extends ProviderKey>(key: K): boolean
+  params?: Params
 }
 
 export type PartialConnectorConfig<Key extends ConnectorKey = ConnectorKey> =

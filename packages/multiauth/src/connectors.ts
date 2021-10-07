@@ -21,20 +21,25 @@ export const connectorsDefaults: Record<string, ConnectorConfigDefaults> = {
     getProvider() {
       return Promise.reject(new Error('Not implemented'))
     },
-    isSupported() {
+    supportsProvider() {
       return false
     },
   },
   injected: {
     label: 'MetaMask',
     logo: new URL('../assets/metamask.png', import.meta.url).href,
-    getProvider() {
-      return window.ethereum == null
+    getProvider(key) {
+      console.log('injected connector getProvider()', key)
+      if (key !== 'ethereum') {
+        return Promise.reject(new Error(`Unsupported provider: ${key}`))
+      }
+
+      return typeof window === 'undefined' || window.ethereum == null
         ? Promise.reject(new Error('No injected provider'))
         : Promise.resolve(window.ethereum)
     },
-    isSupported() {
-      return window.ethereum != null
+    supportsProvider(key) {
+      return key === 'ethereum' && typeof window !== 'undefined' && window.ethereum != null
     },
   },
   portis: {
@@ -43,7 +48,7 @@ export const connectorsDefaults: Record<string, ConnectorConfigDefaults> = {
     getProvider() {
       return Promise.reject(new Error('Not implemented'))
     },
-    isSupported() {
+    supportsProvider() {
       return false
     },
   },
@@ -53,7 +58,7 @@ export const connectorsDefaults: Record<string, ConnectorConfigDefaults> = {
     getProvider() {
       return Promise.reject(new Error('Not implemented'))
     },
-    isSupported() {
+    supportsProvider() {
       return false
     },
   },
@@ -63,7 +68,7 @@ export const connectorsDefaults: Record<string, ConnectorConfigDefaults> = {
     getProvider() {
       return Promise.reject(new Error('Not implemented'))
     },
-    isSupported() {
+    supportsProvider() {
       return false
     },
   },
@@ -95,7 +100,7 @@ export function getConnectorsConfig(
   const configs = []
   for (const connector of connectors) {
     const config = getConnectorConfig(connector)
-    if (provider == null || config.isSupported(provider)) {
+    if (provider == null || config.supportsProvider(provider)) {
       configs.push(config)
     }
   }

@@ -1,4 +1,4 @@
-import { useAuthentication, useViewerID } from '@self.id/framework'
+import { useConnection, useViewerID } from '@self.id/framework'
 import { Button } from 'grommet'
 import { useRouter } from 'next/router'
 import { useCallback } from 'react'
@@ -11,14 +11,14 @@ export type Props = {
 
 export default function ConnectSettingsButton({ did }: Props) {
   const router = useRouter()
-  const [authState] = useAuthentication()
+  const [connection] = useConnection()
   const viewerID = useViewerID()
   const login = useLogin()
 
   const onOpen = useCallback(() => {
-    if (authState.status === 'authenticated') {
+    if (connection.status === 'connected') {
       void router.push('/me/settings')
-    } else if (authState.status !== 'authenticating') {
+    } else if (connection.status !== 'connecting') {
       login().then(
         (self) => {
           if (self != null) {
@@ -28,13 +28,13 @@ export default function ConnectSettingsButton({ did }: Props) {
         () => console.warn('Failed to authenticate DID')
       )
     }
-  }, [authState.status, login, router])
+  }, [connection.status, login, router])
 
   return did != null && viewerID?.id === did ? (
     <Button
       primary
       color="black"
-      label={authState.status === 'authenticated' ? 'Edit' : 'Connect to edit'}
+      label={connection.status === 'connected' ? 'Edit' : 'Connect to edit'}
       onClick={onOpen}
       style={{ border: 0, color: 'white', width: 180 }}
     />

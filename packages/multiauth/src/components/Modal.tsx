@@ -1,8 +1,7 @@
 import { AccountID } from 'caip'
 import { Box, Button, Heading, Layer, Text } from 'grommet'
 import React from 'react'
-import type { ReactElement } from 'react'
-import styled from 'styled-components'
+import type { ReactElement, ReactNode } from 'react'
 
 import { useAuthState } from '../hooks'
 import type {
@@ -16,34 +15,38 @@ import { deferred } from '../utils'
 
 import { ProviderOption } from './ProviderOption'
 
-const ProvidersGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-`
+type ProviderGridProps = {
+  children: ReactNode
+}
 
-const closeIconSrc = new URL('../assets/icon-close.svg', import.meta.url).href
+function ProvidersGrid({ children }: ProviderGridProps) {
+  return <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)' }}>{children}</div>
+}
 
-export type ModalOptions = {
+const defaultCloseIconSrc = new URL('../assets/icon-close.svg', import.meta.url).href
+
+export type ModalConfig = {
+  closeIcon?: string | ReactElement
+  selectedIcon?: string | ReactElement
   text?: string
   title?: string
 }
 
-export type ModalProps = ModalOptions & {
+export type ModalProps = ModalConfig & {
   providers: Array<ProviderConfig>
 }
 
-export function Modal({ providers, text, title }: ModalProps): ReactElement | null {
+export function Modal({
+  closeIcon,
+  selectedIcon,
+  providers,
+  text,
+  title,
+}: ModalProps): ReactElement | null {
   const [authState, setAuthState] = useAuthState()
 
-  const onCloseModal = () => {
-    if (authState.status === 'authenticating') {
-      if (authState.method == null) {
-        authState.promise.resolve(null)
-        setAuthState({ status: 'idle' })
-      } else {
-        setAuthState({ ...authState, modal: false })
-      }
-    }
+  if (authState.status !== 'authenticating' || !authState.modal) {
+    return null
   }
 
   const ethereumConfig = providers.find((p) => p.key === 'ethereum')
@@ -71,7 +74,7 @@ export function Modal({ providers, text, title }: ModalProps): ReactElement | nu
       }
 
       connector
-        .getProvider(key)
+        .getProvider(key, connector.params)
         .then((provider) => ethereumConfig.getState(provider))
         .then(
           (state) => {
@@ -114,11 +117,32 @@ export function Modal({ providers, text, title }: ModalProps): ReactElement | nu
         }
         logo={method.connector.logo}
         onClick={onClick}
+        selectedIcon={selectedIcon}
       />
     )
   })
 
-  return authState.status === 'authenticating' && authState.modal ? (
+  const closeIconElement =
+    typeof closeIcon === 'string' ? (
+      <img alt="x" src={closeIcon} />
+    ) : closeIcon == null ? (
+      <img alt="x" src={defaultCloseIconSrc} />
+    ) : (
+      closeIcon
+    )
+
+  const onCloseModal = () => {
+    if (authState.status === 'authenticating') {
+      if (authState.method == null) {
+        authState.promise.resolve(null)
+        setAuthState({ status: 'idle' })
+      } else {
+        setAuthState({ ...authState, modal: false })
+      }
+    }
+  }
+
+  return (
     <Layer onEsc={onCloseModal} onClickOutside={onCloseModal}>
       <Box flex="grow" pad="small" width="large">
         <Box direction="row">
@@ -129,7 +153,7 @@ export function Modal({ providers, text, title }: ModalProps): ReactElement | nu
           </Box>
           <Box>
             <Button
-              icon={<img alt="x" src={closeIconSrc} />}
+              icon={closeIconElement}
               onClick={onCloseModal}
               plain
               style={{ padding: '10px' }}
@@ -150,6 +174,7 @@ export function Modal({ providers, text, title }: ModalProps): ReactElement | nu
                   // Only option, no effect
                 }}
                 selected
+                selectedIcon={selectedIcon}
               />
             </ProvidersGrid>
             <Heading level={4} margin={{ vertical: 'small' }}>
@@ -160,5 +185,5 @@ export function Modal({ providers, text, title }: ModalProps): ReactElement | nu
         </Box>
       </Box>
     </Layer>
-  ) : null
+  )
 }

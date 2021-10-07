@@ -13,7 +13,7 @@ import { toChainID } from './utils'
 /** @internal */
 export async function getEthereumAccount(provider: EthereumProvider): Promise<string | null> {
   try {
-    const accounts = await provider.request<Array<string>>({ method: 'eth_accounts' })
+    const accounts = await provider.request<Array<string>>({ method: 'eth_requestAccounts' })
     return accounts[0] ?? null
   } catch (err) {
     return null

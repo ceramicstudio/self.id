@@ -1,11 +1,14 @@
-import { Provider as MultiauthProvider } from '@ceramicstudio/multiauth'
-import { Provider as FrameworkProvider } from '@self.id/framework'
+import { Provider } from '@self.id/framework'
+import closeIcon from '@self.id/multiauth/assets/icon-close.svg'
+import selectedIcon from '@self.id/multiauth/assets/icon-selected.svg'
+import ethereumLogo from '@self.id/multiauth/assets/ethereum.png'
+import metamaskLogo from '@self.id/multiauth/assets/metamask.png'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { Toaster } from 'react-hot-toast'
 import { createGlobalStyle } from 'styled-components'
 
-import { connectors } from '../auth'
+// import { connectors } from '../auth'
 import { CERAMIC_URL, CONNECT_NETWORK } from '../constants'
 import { theme } from '../theme'
 
@@ -50,20 +53,28 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
   const { state, ...props } = pageProps
 
   return (
-    <MultiauthProvider providers={[{ key: 'ethereum', connectors }]} theme={theme}>
-      <FrameworkProvider
-        client={{ ceramic: CERAMIC_URL, connectNetwork: CONNECT_NETWORK }}
-        state={state}
-        ui={{ full: true, theme }}>
-        <GlobalStyle />
-        <Head>
-          <link rel="icon" href="/favicon.ico" />
-          <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-          <meta name="fortmatic-site-verification" content="4keQaoARYXbW4snM" />
-        </Head>
-        <Component {...props} />
-        <Toaster />
-      </FrameworkProvider>
-    </MultiauthProvider>
+    <Provider
+      auth={{
+        modal: { closeIcon: closeIcon.src, selectedIcon: selectedIcon.src },
+        providers: [
+          {
+            key: 'ethereum',
+            logo: ethereumLogo.src,
+            connectors: [{ key: 'injected', logo: metamaskLogo.src }],
+          },
+        ],
+      }}
+      client={{ ceramic: CERAMIC_URL, connectNetwork: CONNECT_NETWORK }}
+      state={state}
+      ui={{ full: true, theme }}>
+      <GlobalStyle />
+      <Head>
+        <link rel="icon" href="/favicon.ico" />
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <meta name="fortmatic-site-verification" content="4keQaoARYXbW4snM" />
+      </Head>
+      <Component {...props} />
+      <Toaster />
+    </Provider>
   )
 }

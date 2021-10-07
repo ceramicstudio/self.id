@@ -3,15 +3,15 @@ import type { DehydratedState } from 'react-query'
 
 import type { Abortable } from './utils'
 
-export type AuthenticationState =
-  | { status: 'pending' }
+export type ViewerConnectionState =
+  | { status: 'idle' }
   | {
-      status: 'authenticating'
+      status: 'connecting'
       provider: EthereumAuthProvider
       promise: Abortable<SelfID | null>
     }
-  | { status: 'authenticated'; selfID: SelfID }
-  | { status: 'error'; error: Error }
+  | { status: 'connected'; selfID: SelfID }
+  | { status: 'failed'; error: Error }
 
 export type RequestState = {
   hydrate?: DehydratedState

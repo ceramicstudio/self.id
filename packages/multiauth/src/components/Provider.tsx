@@ -7,12 +7,15 @@ import { stateScope } from '../state'
 import type { PartialProviderConfig } from '../types'
 
 import { Modal } from './Modal'
-import type { ModalOptions } from './Modal'
+import type { ModalConfig } from './Modal'
 
-export type ProviderProps = {
-  children: ReactNode
-  modal?: ModalOptions
+export type ProviderConfig = {
+  modal?: ModalConfig
   providers?: Array<PartialProviderConfig>
+}
+
+export type ProviderProps = ProviderConfig & {
+  children: ReactNode
 }
 
 export function Provider({ children, modal, providers }: ProviderProps): ReactElement {

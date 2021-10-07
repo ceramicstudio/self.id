@@ -8,8 +8,8 @@
  * @module react
  */
 
-export * from './components/AuthenticatedContainer'
 export * from './components/Provider'
+export * from './components/ViewerConnectedContainer'
 export * from './constants'
 export * from './hooks'
 export * from './server'

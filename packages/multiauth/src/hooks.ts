@@ -10,19 +10,19 @@ export function useAuthState(): [AuthState, (state: AuthState) => void] {
   return useAtom(authStateAtom, stateScope)
 }
 
-export type ConnectMode =
-  | 'force' // Disconnect current account and show modal
+export type AuthenticateMode =
+  | 'force' // Reset current account and show modal
   | 'select' // Show selection modal
-  | 'use' // Re-use current account if already connected
+  | 'use' // Re-use current account if already authenticated
 
-export type ConnectOptions = {
-  mode?: ConnectMode
-  showConnecting?: boolean // Show modal when in connecting state
+export type AuthenticateOptions = {
+  mode?: AuthenticateMode
+  showModal?: boolean // Show modal when in authentication state
 }
 
 export function useMultiAuth(): [
   AuthState,
-  (options?: ConnectOptions) => Promise<AuthAccount | null>,
+  (options?: AuthenticateOptions) => Promise<AuthAccount | null>,
   () => void
 ] {
   const [authState, setAuthState] = useAuthState()
@@ -40,7 +40,7 @@ export function useMultiAuth(): [
   }, [setAuthState])
 
   const connect = useCallback(
-    async ({ mode = 'use', showConnecting }: ConnectOptions = {}) => {
+    async ({ mode = 'use', showModal }: AuthenticateOptions = {}) => {
       switch (mode) {
         case 'force':
           internalDisconnect()
@@ -58,7 +58,7 @@ export function useMultiAuth(): [
             case 'authenticated':
               return authState.auth
             case 'authenticating':
-              if (showConnecting && !authState.modal) {
+              if (showModal && !authState.modal) {
                 setAuthState({ ...authState, modal: true })
               }
               return await authState.promise
@@ -72,7 +72,7 @@ export function useMultiAuth(): [
 
   const disconnect = useCallback(() => {
     internalDisconnect()
-    void setAuthState({ status: 'idle' })
+    setAuthState({ status: 'idle' })
   }, [internalDisconnect, setAuthState])
 
   return [authState, connect, disconnect]

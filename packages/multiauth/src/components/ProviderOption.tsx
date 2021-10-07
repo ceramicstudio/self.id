@@ -1,43 +1,63 @@
 import { Box, Spinner, Text } from 'grommet'
 import React from 'react'
-import type { ReactElement } from 'react'
-import styled, { css } from 'styled-components'
+import type { ReactElement, ReactNode } from 'react'
 
-const selectedIconSrc = new URL('../assets/icon-selected.svg', import.meta.url).href
+const defaultSelectedIconSrc = new URL('../assets/icon-selected.svg', import.meta.url).href
 
 function noop() {
   // Do nothing
 }
 
-type LogoImageProps = { src: string }
+type LogoImageProps = { children: ReactNode; src: string }
 
-const LogoImage = styled.div<LogoImageProps>`
-  position: relative;
-  display: inline-block;
-  width: 70px;
-  height: 70px;
-  margin-bottom: 10px;
-  border-radius: 10px;
-  background-size: cover;
-  ${({ src }: LogoImageProps) => css`
-    background-image: url(${src});
-  `}
-`
+function LogoImage({ children, src }: LogoImageProps) {
+  return (
+    <div
+      style={{
+        position: 'relative',
+        display: 'inline-block',
+        width: '70px',
+        height: '70px',
+        marginBottom: '10px',
+        borderRadius: '10px',
+        backgroundSize: 'cover',
+        backgroundImage: `url(${src})`,
+      }}>
+      {children}
+    </div>
+  )
+}
 
-const SpinnerContainer = styled.div`
-  display: inline-block;
-  margin: 11px;
-  width: 70px;
-  height: 70px;
-`
+type ChildrenProps = { children: ReactNode }
 
-const SelectedImage = styled.span`
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  margin-bottom: -15px;
-  margin-right: -15px;
-`
+function SpinnerContainer({ children }: ChildrenProps) {
+  return (
+    <div
+      style={{
+        display: 'inline-block',
+        margin: '11px',
+        width: '70px',
+        height: '70px',
+      }}>
+      {children}
+    </div>
+  )
+}
+
+function SelectedImage({ children }: ChildrenProps) {
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        bottom: 0,
+        right: 0,
+        marginBottom: '-15px',
+        marginRight: '-15px',
+      }}>
+      {children}
+    </div>
+  )
+}
 
 export type ProviderDisplay = {
   label: string
@@ -49,6 +69,7 @@ export type ProviderOptionProps = ProviderDisplay & {
   loading?: boolean
   onClick: () => void
   selected?: boolean
+  selectedIcon?: string | ReactElement
 }
 
 export function ProviderOption({
@@ -58,12 +79,18 @@ export function ProviderOption({
   logo,
   onClick,
   selected,
+  selectedIcon,
 }: ProviderOptionProps): ReactElement {
-  const selectedIcon = selected ? (
-    <SelectedImage>
-      <img alt="✓" src={selectedIconSrc} />
-    </SelectedImage>
-  ) : null
+  let displaySelected = null
+  if (selected) {
+    const icon =
+      selectedIcon == null || typeof selectedIcon === 'string' ? (
+        <img alt="✓" src={selectedIcon ?? defaultSelectedIconSrc} />
+      ) : (
+        selectedIcon
+      )
+    displaySelected = <SelectedImage>{icon} </SelectedImage>
+  }
 
   return (
     <Box
@@ -78,7 +105,7 @@ export function ProviderOption({
             <Spinner size="medium" />
           </SpinnerContainer>
         ) : null}
-        {selectedIcon}
+        {displaySelected}
       </LogoImage>
       <Text>{label}</Text>
     </Box>
