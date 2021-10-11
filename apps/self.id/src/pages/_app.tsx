@@ -1,16 +1,14 @@
 import { Provider } from '@self.id/framework'
 import closeIcon from '@self.id/multiauth/assets/icon-close.svg'
 import selectedIcon from '@self.id/multiauth/assets/icon-selected.svg'
-import ethereumLogo from '@self.id/multiauth/assets/ethereum.png'
-import metamaskLogo from '@self.id/multiauth/assets/metamask.png'
+
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { Toaster } from 'react-hot-toast'
 import { createGlobalStyle } from 'styled-components'
 
-// import { connectors } from '../auth'
+import { providers } from '../auth'
 import { CERAMIC_URL, CONNECT_NETWORK } from '../constants'
-import { theme } from '../theme'
 
 const GlobalStyle = createGlobalStyle`   
   @font-face {
@@ -56,17 +54,11 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
     <Provider
       auth={{
         modal: { closeIcon: closeIcon.src, selectedIcon: selectedIcon.src },
-        providers: [
-          {
-            key: 'ethereum',
-            logo: ethereumLogo.src,
-            connectors: [{ key: 'injected', logo: metamaskLogo.src }],
-          },
-        ],
+        providers,
       }}
       client={{ ceramic: CERAMIC_URL, connectNetwork: CONNECT_NETWORK }}
       state={state}
-      ui={{ full: true, theme }}>
+      ui={{ full: true }}>
       <GlobalStyle />
       <Head>
         <link rel="icon" href="/favicon.ico" />

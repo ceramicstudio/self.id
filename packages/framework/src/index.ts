@@ -24,6 +24,8 @@ export {
   useViewerRecord,
 } from '@self.id/react'
 export type { RequestClientParams, RequestState, PublicRecord, ViewerRecord } from '@self.id/react'
+export { AvatarPlaceholder, colors, theme } from '@self.id/ui'
+export type { AvatarPlaceholderProps, Colors, ColorType, ThemeType } from '@self.id/ui'
 export { EthereumAuthProvider, SelfID } from '@self.id/web'
 export type { ConnectNetwork, EthereumProvider } from '@self.id/web'
 

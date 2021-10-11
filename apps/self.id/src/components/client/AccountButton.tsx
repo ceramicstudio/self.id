@@ -1,4 +1,4 @@
-import { useConnection, useViewerID } from '@self.id/framework'
+import { AvatarPlaceholder, useConnection, useViewerID } from '@self.id/framework'
 import { Avatar, Box, Button, DropButton, Spinner, Text } from 'grommet'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -9,8 +9,6 @@ import type { ForwardedRef } from 'react'
 import { useLogin, useLogout, useViewerProfile } from '../../hooks'
 import linkIcon from '../../images/icons/link.svg'
 import { formatDID, getImageURL } from '../../utils'
-
-import AvatarPlaceholder from '../AvatarPlaceholder'
 
 type DisplayAvatarProps = {
   did?: string

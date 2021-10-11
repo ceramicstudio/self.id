@@ -1,18 +1,14 @@
-import { ConnectButton, DisplayState, Provider as MultiAuthProvider } from '@self.id/multiauth'
-import { Provider as UIProvider } from '@self.id/ui'
+import { Provider } from '@self.id/framework'
 import React from 'react'
+
+import ConnectButton from './ConnectButton'
 
 export default function App() {
   return (
-    <UIProvider>
-      <MultiAuthProvider>
-        <p>
-          <DisplayState />
-        </p>
-        <p>
-          <ConnectButton />
-        </p>
-      </MultiAuthProvider>
-    </UIProvider>
+    <Provider auth={{ providers: [{ key: 'ethereum', connectors: [{ key: 'injected' }] }] }}>
+      <p>
+        <ConnectButton />
+      </p>
+    </Provider>
   )
 }

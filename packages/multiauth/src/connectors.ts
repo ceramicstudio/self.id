@@ -1,77 +1,24 @@
+import { fortmatic } from './connectors/fortmatic'
+import { injected } from './connectors/injected'
+import { portis } from './connectors/portis'
+import { torus } from './connectors/torus'
+import { walletConnect } from './connectors/walletConnect'
+
 import type {
   ConnectorConfig,
   ConnectorConfigDefaults,
   ConnectorKey,
-  EthereumProvider,
   PartialConnectorConfig,
   ProviderKey,
 } from './types'
 
-declare global {
-  interface Window {
-    ethereum?: EthereumProvider
-  }
-}
-
 /** @internal */
 export const connectorsDefaults: Record<string, ConnectorConfigDefaults> = {
-  fortmatic: {
-    label: 'Fortmatic',
-    logo: new URL('../assets/fortmatic.png', import.meta.url).href,
-    getProvider() {
-      return Promise.reject(new Error('Not implemented'))
-    },
-    supportsProvider() {
-      return false
-    },
-  },
-  injected: {
-    label: 'MetaMask',
-    logo: new URL('../assets/metamask.png', import.meta.url).href,
-    getProvider(key) {
-      console.log('injected connector getProvider()', key)
-      if (key !== 'ethereum') {
-        return Promise.reject(new Error(`Unsupported provider: ${key}`))
-      }
-
-      return typeof window === 'undefined' || window.ethereum == null
-        ? Promise.reject(new Error('No injected provider'))
-        : Promise.resolve(window.ethereum)
-    },
-    supportsProvider(key) {
-      return key === 'ethereum' && typeof window !== 'undefined' && window.ethereum != null
-    },
-  },
-  portis: {
-    label: 'Portis',
-    logo: new URL('../assets/portis.png', import.meta.url).href,
-    getProvider() {
-      return Promise.reject(new Error('Not implemented'))
-    },
-    supportsProvider() {
-      return false
-    },
-  },
-  torus: {
-    label: 'Torus',
-    logo: new URL('../assets/torus.png', import.meta.url).href,
-    getProvider() {
-      return Promise.reject(new Error('Not implemented'))
-    },
-    supportsProvider() {
-      return false
-    },
-  },
-  walletConnect: {
-    label: 'WalletConnect',
-    logo: new URL('../assets/walletconnect.png', import.meta.url).href,
-    getProvider() {
-      return Promise.reject(new Error('Not implemented'))
-    },
-    supportsProvider() {
-      return false
-    },
-  },
+  fortmatic,
+  injected,
+  portis,
+  torus,
+  walletConnect,
 }
 
 /** @internal */
@@ -100,7 +47,7 @@ export function getConnectorsConfig(
   const configs = []
   for (const connector of connectors) {
     const config = getConnectorConfig(connector)
-    if (provider == null || config.supportsProvider(provider)) {
+    if (provider == null || config.supportsProvider(provider, config.params)) {
       configs.push(config)
     }
   }
