@@ -3,7 +3,7 @@ import fortmaticLogo from '@self.id/multiauth/assets/fortmatic.png'
 import metamaskLogo from '@self.id/multiauth/assets/metamask.png'
 import portisLogo from '@self.id/multiauth/assets/portis.png'
 import torusLogo from '@self.id/multiauth/assets/torus.png'
-import walletConnectLogo from '@self.id/multiauth/assets/walletConnect.png'
+import walletConnectLogo from '@self.id/multiauth/assets/walletconnect.png'
 import type { PartialConnectorConfig, PartialProviderConfig } from '@self.id/multiauth'
 
 const ethereumConnectors: Array<PartialConnectorConfig> = [
