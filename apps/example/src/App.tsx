@@ -5,10 +5,8 @@ import ConnectButton from './ConnectButton'
 
 export default function App() {
   return (
-    <Provider auth={{ providers: [{ key: 'ethereum', connectors: [{ key: 'injected' }] }] }}>
-      <p>
-        <ConnectButton />
-      </p>
+    <Provider>
+      <ConnectButton />
     </Provider>
   )
 }

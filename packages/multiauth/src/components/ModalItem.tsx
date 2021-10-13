@@ -64,7 +64,7 @@ export type ProviderDisplay = {
   logo: string
 }
 
-export type ProviderOptionProps = ProviderDisplay & {
+export type ModalItemProps = ProviderDisplay & {
   disabled?: boolean
   loading?: boolean
   onClick: () => void
@@ -72,7 +72,7 @@ export type ProviderOptionProps = ProviderDisplay & {
   selectedIcon?: string | ReactElement
 }
 
-export function ProviderOption({
+export function ModalItem({
   disabled,
   label,
   loading,
@@ -80,7 +80,7 @@ export function ProviderOption({
   onClick,
   selected,
   selectedIcon,
-}: ProviderOptionProps): ReactElement {
+}: ModalItemProps): ReactElement {
   let displaySelected = null
   if (selected) {
     const icon =

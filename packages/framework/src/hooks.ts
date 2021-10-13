@@ -1,11 +1,12 @@
 import { useMultiAuth } from '@self.id/multiauth'
-import type { AuthAccount } from '@self.id/multiauth'
+import type { AuthAccount, EIP1193Provider, NetworkProvider } from '@self.id/multiauth'
 import { useViewerConnection } from '@self.id/react'
 import { EthereumAuthProvider } from '@self.id/web'
 import type { SelfID } from '@self.id/web'
 import { useCallback, useMemo } from 'react'
 
 import type { ConnectionState } from './types'
+import { wrapEIP1193asWeb3Provider } from './utils'
 
 export type ConnectOptions = {
   switchAccount?: boolean
@@ -34,7 +35,7 @@ export function useConnection(): [
     }
     // Fallback to disconnected, could be authenticated but not connected/connecting
     return { status: 'disconnected' }
-  }, [authState, viewerConnection])
+  }, [authState.status, viewerConnection.status])
 
   const disconnect = useCallback(() => {
     resetAuthentication()
@@ -47,7 +48,7 @@ export function useConnection(): [
         return state.selfID
       }
 
-      let auth: AuthAccount<'ethereum'> | null = null
+      let auth: AuthAccount<NetworkProvider<'ethereum'>> | null = null
       try {
         if (switchAccount) {
           disconnect()
@@ -63,7 +64,13 @@ export function useConnection(): [
         return null
       }
 
-      const authProvider = new EthereumAuthProvider(auth.state.provider, auth.state.account)
+      // EthereumAuthProvider expects the provider to implement the legacy Web3Provider APIs
+      // We need to wrap the necessary APIs here to proxy the expected behavior
+      const provider =
+        auth.state.providerKey === 'eip1193'
+          ? wrapEIP1193asWeb3Provider(auth.state.provider as EIP1193Provider)
+          : auth.state.provider
+      const authProvider = new EthereumAuthProvider(provider, auth.state.account)
       return await connectViewer(authProvider)
     },
     [state, connectViewer, disconnect]

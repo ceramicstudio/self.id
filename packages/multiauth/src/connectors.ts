@@ -9,7 +9,7 @@ import type {
   ConnectorConfigDefaults,
   ConnectorKey,
   PartialConnectorConfig,
-  ProviderKey,
+  NetworkKey,
 } from './types'
 
 /** @internal */
@@ -23,31 +23,36 @@ export const connectorsDefaults: Record<string, ConnectorConfigDefaults> = {
 
 /** @internal */
 export function getDefaultConnectorConfig<Key extends ConnectorKey>(
-  key: Key
-): ConnectorConfig<Key> {
+  network: NetworkKey,
+  key: Key,
+  params?: unknown
+): ConnectorConfig | null {
   const config = connectorsDefaults[key]
   if (config == null) {
     throw new Error(`No default config for connector: ${key}`)
   }
-  return { ...config, key }
+
+  const providerKey = config.getNetworkProvider(network, params)
+  return providerKey ? { ...config, key, providerKey } : null
 }
 
 export function getConnectorConfig<Key extends ConnectorKey>(
+  network: NetworkKey,
   connector: PartialConnectorConfig<Key>
 ): ConnectorConfig<Key> {
-  return typeof connector === 'string'
-    ? getDefaultConnectorConfig(connector)
-    : { ...getDefaultConnectorConfig(connector.key), ...connector }
+  const config = typeof connector === 'string' ? { key: connector } : connector
+  const defaults = getDefaultConnectorConfig(network, config.key, config.params)
+  return defaults ? { ...defaults, ...config } : (config as ConnectorConfig<Key>)
 }
 
 export function getConnectorsConfig(
-  connectors: Array<PartialConnectorConfig>,
-  provider?: ProviderKey
+  network: NetworkKey,
+  connectors: Array<PartialConnectorConfig>
 ): Array<ConnectorConfig> {
   const configs = []
   for (const connector of connectors) {
-    const config = getConnectorConfig(connector)
-    if (provider == null || config.supportsProvider(provider, config.params)) {
+    const config = getConnectorConfig(network, connector)
+    if (config.providerKey != null) {
       configs.push(config)
     }
   }

@@ -1,5 +1,6 @@
 import type { AccountID, ChainID, ChainIDParams } from 'caip'
 
+import type { ProviderKey, ProviderType, ProviderTypes } from './providers/types'
 import type { Deferred } from './utils'
 
 export type DisplayDefaults = {
@@ -7,27 +8,22 @@ export type DisplayDefaults = {
   logo: string
 }
 
-export type RequestArguments = {
-  method: string
-  params?: Array<unknown> | Record<string, any>
-}
-export interface EthereumProvider extends NodeJS.EventEmitter {
-  request<Result = unknown>(req: RequestArguments): Promise<Result>
+export type Networks = {
+  ethereum: 'eip1193' | 'web3'
 }
 
-export type ProviderTypes = {
-  ethereum: EthereumProvider
-}
+export type NetworkKey = keyof Networks
 
-export type ProviderKey = keyof ProviderTypes
-
-export type ProviderType<Key extends ProviderKey> = ProviderTypes[Key]
+export type NetworkProvider<Key extends NetworkKey> = Networks[Key]
 
 export type ConnectorKey = 'fortmatic' | 'injected' | 'portis' | 'torus' | 'walletConnect'
 
 export type ConnectorConfigDefaults = DisplayDefaults & {
-  getProvider<K extends ProviderKey>(key: K, params?: unknown): Promise<ProviderType<K>>
-  supportsProvider<K extends ProviderKey>(key: K, params?: unknown): boolean
+  getNetworkProvider<Key extends NetworkKey>(
+    network: Key,
+    params?: unknown
+  ): NetworkProvider<Key> | null
+  getProvider<Key extends ProviderKey>(key: Key, params?: unknown): Promise<ProviderTypes[Key]>
   params?: unknown
 }
 
@@ -37,75 +33,75 @@ export type PartialConnectorConfig<Key extends ConnectorKey = ConnectorKey> =
 
 export type ConnectorConfig<Key extends ConnectorKey = ConnectorKey> = ConnectorConfigDefaults & {
   key: Key
+  providerKey: ProviderKey
 }
 
-export type GetProviderState<
-  Key extends ProviderKey = ProviderKey,
-  Provider = ProviderType<Key>
-> = (provider: Provider, params?: ProviderStateParams) => Promise<ProviderState<Provider>>
+export type GetNetworkState<Key extends ProviderKey = ProviderKey> = (
+  providerKey: Key,
+  provider: ProviderType<Key>,
+  params?: NetworkStateParams
+) => Promise<NetworkState<Key>>
 
-export type ProviderConfigDefaults = DisplayDefaults & {
+export type NetworkConfigDefaults = DisplayDefaults & {
   connectors: Array<ConnectorKey>
-  getState: GetProviderState<ProviderKey>
+  getState: GetNetworkState<ProviderKey>
 }
 
-export type PartialProviderConfig<Key extends ProviderKey = ProviderKey> =
+export type PartialNetworkConfig<Key extends NetworkKey = NetworkKey> =
   | Key
   | (Partial<DisplayDefaults> & { key: Key; connectors?: Array<PartialConnectorConfig> })
 
-export type ProviderConfig<Key extends ProviderKey = ProviderKey> = DisplayDefaults & {
+export type NetworkConfig<Key extends NetworkKey = NetworkKey> = DisplayDefaults & {
   key: Key
   connectors: Array<ConnectorConfig>
-  getState: GetProviderState<Key>
+  getState: GetNetworkState<NetworkProvider<Key>>
 }
 
 export type Config = {
-  providers: Array<ProviderConfig>
+  networks: Array<NetworkConfig>
 }
 
 export type PartialConfig = {
-  providers?: Array<PartialProviderConfig>
+  networks?: Array<PartialNetworkConfig>
 }
 
-export type ProviderStateParams = {
+export type NetworkStateParams = {
   account?: string
   chainID?: ChainID | ChainIDParams | string | number
 }
 
-export type ProviderState<Provider = EthereumProvider> = {
+export type NetworkState<Key extends ProviderKey> = {
   account: string | null
   chainID: ChainID
-  provider: Provider
+  providerKey: Key
+  provider: ProviderType<Key>
 }
 
-export type AuthenticatedState<Provider = EthereumProvider> = ProviderState<Provider> & {
+export type AuthenticatedState<Key extends ProviderKey = ProviderKey> = NetworkState<Key> & {
   account: string
 }
 
-export type AuthMethod<
-  Key extends ProviderKey = ProviderKey,
-  Connector extends ConnectorKey = ConnectorKey
-> = {
+export type AuthMethod<Key extends NetworkKey = NetworkKey> = {
   key: Key
-  connector: ConnectorConfig<Connector>
+  connector: ConnectorConfig
 }
 
 export type AuthAccount<Key extends ProviderKey = ProviderKey> = {
   accountID: AccountID
-  method: AuthMethod<Key>
-  state: AuthenticatedState<ProviderType<Key>>
+  method: AuthMethod
+  state: AuthenticatedState<Key>
 }
 
 export type AuthState<
-  Key extends ProviderKey = ProviderKey,
-  Connector extends ConnectorKey = ConnectorKey
+  Key extends NetworkKey = NetworkKey,
+  Provider extends NetworkProvider<Key> = NetworkProvider<Key>
 > =
   | { status: 'idle' }
   | {
       status: 'authenticating'
-      promise: Deferred<AuthAccount<Key> | null>
+      promise: Deferred<AuthAccount<Provider> | null>
       modal: boolean
-      method?: AuthMethod<Key, Connector>
+      method?: AuthMethod<Key>
     }
-  | { status: 'authenticated'; auth: AuthAccount<Key> }
+  | { status: 'authenticated'; auth: AuthAccount<Provider> }
   | { status: 'failed'; error?: Error }

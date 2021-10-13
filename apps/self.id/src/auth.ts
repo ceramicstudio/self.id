@@ -4,11 +4,10 @@ import metamaskLogo from '@self.id/multiauth/assets/metamask.png'
 import portisLogo from '@self.id/multiauth/assets/portis.png'
 import torusLogo from '@self.id/multiauth/assets/torus.png'
 import walletConnectLogo from '@self.id/multiauth/assets/walletconnect.png'
-import type { PartialConnectorConfig, PartialProviderConfig } from '@self.id/multiauth'
+import type { PartialConnectorConfig, PartialNetworkConfig } from '@self.id/multiauth'
 
 const ethereumConnectors: Array<PartialConnectorConfig> = [
   { key: 'injected', logo: metamaskLogo.src },
-  { key: 'torus', logo: torusLogo.src },
 ]
 
 const walletConnectChainId = process.env.NEXT_PUBLIC_WALLETCONNECT_CHAIN_ID
@@ -48,7 +47,18 @@ if (typeof portisDappId === 'string' && typeof portisNetwork === 'string') {
   })
 }
 
-export const providers: Array<PartialProviderConfig> = [
+const torusNetworkHost = process.env.NEXT_PUBLIC_TORUS_NETWORK_HOST
+if (typeof torusNetworkHost === 'string') {
+  ethereumConnectors.push({
+    key: 'torus',
+    logo: torusLogo.src,
+    params: {
+      network: { host: torusNetworkHost },
+    },
+  })
+}
+
+export const networks: Array<PartialNetworkConfig> = [
   {
     key: 'ethereum',
     logo: ethereumLogo.src,

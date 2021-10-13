@@ -68,6 +68,8 @@ export const viewerIDAtom = atom(
     return id == null ? null : new PublicID({ core: get(coreAtom), id })
   },
   (get, set, selfID: SelfID | null) => {
+    // Always discard viewer ID from request when it is set() by client to support expected get() logic above
+    void set(requestViewerIDAtom, null)
     if (selfID == null) {
       const connection = get(connectionAtom)
       if (connection.status === 'connecting') {

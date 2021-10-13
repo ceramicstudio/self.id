@@ -4,22 +4,16 @@ import React from 'react'
 import type { ReactElement, ReactNode } from 'react'
 
 import { useAuthState } from '../hooks'
-import type {
-  AuthAccount,
-  AuthenticatedState,
-  AuthMethod,
-  EthereumProvider,
-  ProviderConfig,
-} from '../types'
+import type { AuthAccount, AuthenticatedState, AuthMethod, NetworkConfig } from '../types'
 import { deferred } from '../utils'
 
-import { ProviderOption } from './ProviderOption'
+import { ModalItem } from './ModalItem'
 
-type ProviderGridProps = {
+type ModalGridProps = {
   children: ReactNode
 }
 
-function ProvidersGrid({ children }: ProviderGridProps) {
+function ModalGrid({ children }: ModalGridProps) {
   return <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)' }}>{children}</div>
 }
 
@@ -33,13 +27,13 @@ export type ModalConfig = {
 }
 
 export type ModalProps = ModalConfig & {
-  providers: Array<ProviderConfig>
+  networks: Array<NetworkConfig>
 }
 
 export function Modal({
   closeIcon,
+  networks,
   selectedIcon,
-  providers,
   text,
   title,
 }: ModalProps): ReactElement | null {
@@ -49,13 +43,14 @@ export function Modal({
     return null
   }
 
-  const ethereumConfig = providers.find((p) => p.key === 'ethereum')
+  const ethereumConfig = networks.find((p) => p.key === 'ethereum')
   if (ethereumConfig == null) {
     console.warn('Ethereum provider missing in config')
     return null
   }
 
   const ethereumWallets = ethereumConfig.connectors.map((connector) => {
+    type Provider = typeof connector.providerKey
     const key = 'ethereum'
     const method: AuthMethod = { key, connector }
 
@@ -67,15 +62,15 @@ export function Modal({
       } else {
         setAuthState({
           status: 'authenticating',
-          promise: deferred<AuthAccount<'ethereum'> | null>(),
+          promise: deferred<AuthAccount<Provider> | null>(),
           method,
           modal: true,
         })
       }
 
       connector
-        .getProvider(key, connector.params)
-        .then((provider) => ethereumConfig.getState(provider))
+        .getProvider(connector.providerKey, connector.params)
+        .then((provider) => ethereumConfig.getState(connector.providerKey, provider))
         .then(
           (state) => {
             if (state.account == null) {
@@ -85,10 +80,10 @@ export function Modal({
               setAuthState({ status: 'idle' })
             } else {
               const accountID = new AccountID({ address: state.account, chainId: state.chainID })
-              const auth: AuthAccount<'ethereum'> = {
+              const auth: AuthAccount<Provider> = {
                 accountID,
                 method,
-                state: state as AuthenticatedState<EthereumProvider>,
+                state: state as AuthenticatedState<Provider>,
               }
 
               if (authState.status === 'authenticating') {
@@ -107,7 +102,7 @@ export function Modal({
     }
 
     return (
-      <ProviderOption
+      <ModalItem
         disabled={authState.status === 'authenticating' && authState.method != null}
         key={method.connector.key}
         label={method.connector.label}
@@ -166,8 +161,8 @@ export function Modal({
             <Heading level={4} margin={{ vertical: 'small' }}>
               1. Choose network
             </Heading>
-            <ProvidersGrid>
-              <ProviderOption
+            <ModalGrid>
+              <ModalItem
                 label={ethereumConfig.label}
                 logo={ethereumConfig.logo}
                 onClick={() => {
@@ -176,11 +171,11 @@ export function Modal({
                 selected
                 selectedIcon={selectedIcon}
               />
-            </ProvidersGrid>
+            </ModalGrid>
             <Heading level={4} margin={{ vertical: 'small' }}>
               2. Choose wallet
             </Heading>
-            <ProvidersGrid>{ethereumWallets}</ProvidersGrid>
+            <ModalGrid>{ethereumWallets}</ModalGrid>
           </Box>
         </Box>
       </Box>

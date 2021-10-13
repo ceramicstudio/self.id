@@ -7,7 +7,7 @@ import Head from 'next/head'
 import { Toaster } from 'react-hot-toast'
 import { createGlobalStyle } from 'styled-components'
 
-import { providers } from '../auth'
+import { networks } from '../auth'
 import { CERAMIC_URL, CONNECT_NETWORK } from '../constants'
 
 const GlobalStyle = createGlobalStyle`   
@@ -54,7 +54,7 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
     <Provider
       auth={{
         modal: { closeIcon: closeIcon.src, selectedIcon: selectedIcon.src },
-        providers,
+        networks,
       }}
       client={{ ceramic: CERAMIC_URL, connectNetwork: CONNECT_NETWORK }}
       state={state}

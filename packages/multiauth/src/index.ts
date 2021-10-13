@@ -16,5 +16,6 @@ export type {
 } from './components/Provider'
 export * from './connectors'
 export * from './hooks'
-export * from './providers'
+export * from './networks'
+export * from './providers/types'
 export * from './types'

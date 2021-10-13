@@ -1,4 +1,6 @@
-import type { ConnectorConfigDefaults, EthereumProvider } from '../types'
+import type { ProviderType } from '../providers/types'
+
+import type { ConnectorConfigDefaults } from '../types'
 
 export type PortisParams = {
   dAppId: string
@@ -9,8 +11,13 @@ export type PortisParams = {
 export const portis: ConnectorConfigDefaults = {
   label: 'Portis',
   logo: new URL('../assets/portis.png', import.meta.url).href,
+  getNetworkProvider(key, params?: PortisParams) {
+    return key === 'ethereum' && params != null && params.dAppId != null && params.network != null
+      ? 'eip1193'
+      : null
+  },
   async getProvider(key, params?: PortisParams) {
-    if (key !== 'ethereum') {
+    if (key !== 'eip1193') {
       throw new Error(`Unsupported provider: ${key}`)
     }
     if (params?.dAppId == null) {
@@ -22,9 +29,6 @@ export const portis: ConnectorConfigDefaults = {
 
     const { default: Portis } = await import('@portis/web3')
     const portis = new Portis(params.dAppId, params.network)
-    return portis.provider as EthereumProvider
-  },
-  supportsProvider(key, params?: PortisParams) {
-    return key === 'ethereum' && params != null && params.dAppId != null && params.network != null
+    return portis.provider as ProviderType<typeof key>
   },
 }
