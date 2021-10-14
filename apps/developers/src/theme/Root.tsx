@@ -1,3 +1,4 @@
+import { Provider } from '@self.id/framework'
 import React from 'react'
 import type { ReactNode } from 'react'
 
@@ -6,5 +7,9 @@ type Props = {
 }
 
 export default function Root({ children }: Props) {
-  return <>{children}</>
+  return (
+    <Provider ui={{ full: true, style: { display: 'flex', flexDirection: 'column' } }}>
+      {children}
+    </Provider>
+  )
 }

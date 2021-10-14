@@ -7,7 +7,7 @@ import Navbar from '../../../../components/Navbar'
 import OpenGraphMeta from '../../../../components/OpenGraphMeta'
 
 const AddTwitterAccountScreen = dynamic(
-  () => import('../../../../client/components/AddTwitterAccountScreen'),
+  () => import('../../../../components/client/AddTwitterAccountScreen'),
   { ssr: false }
 )
 

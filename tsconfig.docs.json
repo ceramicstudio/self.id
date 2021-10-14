@@ -9,6 +9,7 @@
     "./packages/3box-legacy/src",
     "./packages/core/src",
     "./packages/image-utils/src",
+    "./packages/react/src",
     "./packages/web/src"
   ],
   "typedocOptions": {
@@ -19,8 +20,10 @@
       "./packages/3box-legacy/src/index.ts",
       "./packages/core/src/index.ts",
       "./packages/image-utils/src/index.ts",
+      "./packages/react/src/index.ts",
       "./packages/web/src/index.ts"
     ],
+    "githubPages": false,
     "disableSources": true,
     "excludeExternals": true,
     "excludeInternal": true,

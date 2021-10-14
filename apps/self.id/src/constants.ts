@@ -1,4 +1,4 @@
-import type { ConnectNetwork } from '@self.id/web'
+import type { ConnectNetwork } from '@self.id/framework'
 
 export type AppNetwork = ConnectNetwork | 'local-clay'
 
@@ -30,7 +30,7 @@ export const APP_NETWORK: AppNetwork =
   (process.env.NEXT_PUBLIC_APP_NETWORK as AppNetwork | undefined) ?? ('testnet-clay' as AppNetwork)
 
 export const CERAMIC_URL = NETWORK_CONFIGS[APP_NETWORK].ceramicURL
-export const CONNECT_NETWORK =  NETWORK_CONFIGS[APP_NETWORK].connectNetwork
+export const CONNECT_NETWORK = NETWORK_CONFIGS[APP_NETWORK].connectNetwork
 
 export const PROFILE_URL = 'https://ipfs.3box.io/profile'
 

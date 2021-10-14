@@ -7,7 +7,7 @@ import type { ForwardedRef, MouseEventHandler } from 'react'
 
 import logo from '../images/logo.svg'
 
-const AccountButton = dynamic(() => import('../client/components/AccountButton'), {
+const AccountButton = dynamic(() => import('./client/AccountButton'), {
   ssr: false,
 })
 

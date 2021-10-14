@@ -1,10 +1,13 @@
 import { Provider as MultiauthProvider } from '@ceramicstudio/multiauth'
-import { Grommet } from 'grommet'
-import { Provider as StateProvider } from 'jotai'
-import NextApp, { AppInitialProps } from 'next/app'
+import { Provider as FrameworkProvider } from '@self.id/framework'
+import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { Toaster } from 'react-hot-toast'
 import { createGlobalStyle } from 'styled-components'
+
+import { connectors } from '../auth'
+import { CERAMIC_URL, CONNECT_NETWORK } from '../constants'
+import { theme } from '../theme'
 
 const GlobalStyle = createGlobalStyle`   
   @font-face {
@@ -43,27 +46,24 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
-import { connectors } from '../auth'
-import { theme } from '../theme'
+export default function App({ Component, pageProps }: AppProps): JSX.Element {
+  const { state, ...props } = pageProps
 
-export default class App extends NextApp<AppInitialProps> {
-  render() {
-    const { Component, pageProps } = this.props
-    return (
-      <MultiauthProvider providers={[{ key: 'ethereum', connectors }]} theme={theme}>
-        <StateProvider>
-          <Grommet full theme={theme}>
-            <GlobalStyle />
-            <Head>
-              <link rel="icon" href="/favicon.ico" />
-              <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-              <meta name="fortmatic-site-verification" content="4keQaoARYXbW4snM" />
-            </Head>
-            <Component {...pageProps} />
-            <Toaster />
-          </Grommet>
-        </StateProvider>
-      </MultiauthProvider>
-    )
-  }
+  return (
+    <MultiauthProvider providers={[{ key: 'ethereum', connectors }]} theme={theme}>
+      <FrameworkProvider
+        client={{ ceramic: CERAMIC_URL, connectNetwork: CONNECT_NETWORK }}
+        state={state}
+        ui={{ full: true, theme }}>
+        <GlobalStyle />
+        <Head>
+          <link rel="icon" href="/favicon.ico" />
+          <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+          <meta name="fortmatic-site-verification" content="4keQaoARYXbW4snM" />
+        </Head>
+        <Component {...props} />
+        <Toaster />
+      </FrameworkProvider>
+    </MultiauthProvider>
+  )
 }

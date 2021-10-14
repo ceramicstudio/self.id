@@ -50,6 +50,10 @@ export class SelfID<
     return this.#client
   }
 
+  get did(): DID {
+    return this.#did
+  }
+
   get id(): string {
     return this.#did.id
   }
@@ -67,5 +71,12 @@ export class SelfID<
     content: ContentType
   ): Promise<StreamID> {
     return await this.#client.dataStore.set(key as any, content)
+  }
+
+  async merge<Key extends Alias, ContentType = DefinitionContentType<ModelTypes, Key>>(
+    key: Key,
+    content: ContentType
+  ): Promise<StreamID> {
+    return await this.#client.dataStore.merge(key as any, content)
   }
 }

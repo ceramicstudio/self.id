@@ -44,6 +44,16 @@ import { SelfID } from '@self.id/web'
 
 ___
 
+### did
+
+• `get` **did**(): `DID`
+
+#### Returns
+
+`DID`
+
+___
+
 ### id
 
 • `get` **id**(): `string`
@@ -74,6 +84,30 @@ ___
 #### Returns
 
 `Promise`<``null`` \| `ContentType`\>
+
+___
+
+### merge
+
+▸ **merge**<`Key`, `ContentType`\>(`key`, `content`): `Promise`<`StreamID`\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `Key` | extends `string` \| `number` \| `symbol` |
+| `ContentType` | `DefinitionContentType`<`ModelTypes`, `Key`\> |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `key` | `Key` |
+| `content` | `ContentType` |
+
+#### Returns
+
+`Promise`<`StreamID`\>
 
 ___
 
