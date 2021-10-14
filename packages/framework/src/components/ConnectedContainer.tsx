@@ -9,15 +9,12 @@ export type ConnectedContainerProps = {
   renderFallback: (connectionState: ConnectionState) => JSX.Element | null
 }
 
-export function ConnectedContainer({
-  children,
-  renderFallback,
-}: ConnectedContainerProps): JSX.Element | null {
+export function ConnectedContainer(props: ConnectedContainerProps): JSX.Element | null {
   const [connection] = useConnection()
 
   return connection.status === 'connected' ? (
-    <>{children}</>
-  ) : renderFallback ? (
-    renderFallback(connection)
+    <>{props.children}</>
+  ) : props.renderFallback ? (
+    props.renderFallback(connection)
   ) : null
 }

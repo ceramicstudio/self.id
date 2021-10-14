@@ -10,6 +10,8 @@ export type WebClientParams<ModelTypes extends CoreModelTypes = CoreModelTypes> 
   CoreParams<ModelTypes> & { connectNetwork?: ConnectNetwork }
 
 /**
+ * Extends {@linkcode core.Core}
+ *
  * ```sh
  * import { WebClient } from '@self.id/web'
  * ```

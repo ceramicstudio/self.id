@@ -1,5 +1,5 @@
 /**
- * Multiauth
+ * Multiauth APIs
  *
  * ```sh
  * npm install @self.id/multiauth

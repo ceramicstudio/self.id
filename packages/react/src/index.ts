@@ -1,5 +1,5 @@
 /**
- * React
+ * React APIs
  *
  * ```sh
  * npm install @self.id/react

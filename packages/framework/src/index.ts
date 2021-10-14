@@ -1,9 +1,21 @@
 /**
- * Framework
+ * Framework APIs
  *
  * ```sh
  * npm install @self.id/framework
  * ```
+ *
+ * ## Re-exported classes
+ *
+ * - {@linkcode core.Core}
+ * - {@linkcode core.PublicID}
+ * - {@linkcode react.RequestClient}
+ * - {@linkcode web.SelfID}
+ * - `web.EthereumAuthProvider`
+ *
+ * ## Re-exported components
+ *
+ * - {@linkcode ui.AvatarPlaceholder}
  *
  * @module framework
  */
@@ -12,21 +24,26 @@
 export type { Account as AlsoKnownAsAccount, AlsoKnownAs } from '@datamodels/identity-accounts-web'
 export type { BasicProfile } from '@datamodels/identity-profile-basic'
 
-// SDK re-exports
-export { Core, PublicID, isCAIP10string, isDIDstring } from '@self.id/core'
+// SDK re-exports ignored from docs to avoid duplications (links added above)
+/** @ignore */
+export { Core, PublicID } from '@self.id/core'
+/** @ignore */
+export { RequestClient } from '@self.id/react'
+/** @ignore */
+export { AvatarPlaceholder } from '@self.id/ui'
+/** @ignore */
+export type { AvatarPlaceholderProps } from '@self.id/ui'
+/** @ignore */
+export { EthereumAuthProvider, SelfID } from '@self.id/web'
+
+// Documented SDK re-exports
+export { isCAIP10string, isDIDstring } from '@self.id/core'
 export { selectImageSource, uploadImage } from '@self.id/image-utils'
 export type { Dimensions, ImageSources } from '@self.id/image-utils'
-export {
-  RequestClient,
-  useCore,
-  usePublicRecord,
-  useViewerID,
-  useViewerRecord,
-} from '@self.id/react'
+export { useCore, usePublicRecord, useViewerID, useViewerRecord } from '@self.id/react'
 export type { RequestClientParams, RequestState, PublicRecord, ViewerRecord } from '@self.id/react'
-export { AvatarPlaceholder, colors, theme } from '@self.id/ui'
-export type { AvatarPlaceholderProps, Colors, ColorType, ThemeType } from '@self.id/ui'
-export { EthereumAuthProvider, SelfID } from '@self.id/web'
+export { colors, theme } from '@self.id/ui'
+export type { Colors, ColorType, ThemeType } from '@self.id/ui'
 export type { ConnectNetwork, EthereumProvider } from '@self.id/web'
 
 // Local exports

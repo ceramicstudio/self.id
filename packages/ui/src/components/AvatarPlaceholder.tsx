@@ -11,6 +11,6 @@ export type AvatarPlaceholderProps = {
   size: number | string
 }
 
-export function AvatarPlaceholder({ did, size }: AvatarPlaceholderProps): JSX.Element {
-  return <Avatar name={did ?? 'self.id'} size={size} variant="marble" colors={COLORS} />
+export function AvatarPlaceholder(props: AvatarPlaceholderProps): JSX.Element {
+  return <Avatar name={props.did ?? 'self.id'} size={props.size} variant="marble" colors={COLORS} />
 }

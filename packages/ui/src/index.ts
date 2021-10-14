@@ -1,5 +1,5 @@
 /**
- * UI
+ * UI theme and React components
  *
  * ```sh
  * npm install @self.id/ui

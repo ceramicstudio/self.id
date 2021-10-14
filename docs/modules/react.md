@@ -1,6 +1,6 @@
 # Module: react
 
-React
+React APIs
 
 ```sh
 npm install @self.id/react
@@ -11,25 +11,6 @@ npm install @self.id/react
 - [RequestClient](../classes/react.RequestClient.md)
 
 ## Type aliases
-
-### AuthenticatedContainerProps
-
-Ƭ **AuthenticatedContainerProps**: `Object`
-
-#### Type declaration
-
-| Name | Type |
-| :------ | :------ |
-| `children` | `ReactNode` |
-| `renderFallback` | (`authState`: [`AuthenticationState`](react.md#authenticationstate)) => ``null`` \| `Element` |
-
-___
-
-### AuthenticationState
-
-Ƭ **AuthenticationState**: { `status`: ``"pending"``  } \| { `promise`: `Abortable`<`SelfID` \| ``null``\> ; `provider`: `EthereumAuthProvider` ; `status`: ``"authenticating"``  } \| { `selfID`: `SelfID` ; `status`: ``"authenticated"``  } \| { `error`: `Error` ; `status`: ``"error"``  }
-
-___
 
 ### ProviderConfig
 
@@ -97,6 +78,25 @@ ___
 
 ___
 
+### ViewerConnectedContainerProps
+
+Ƭ **ViewerConnectedContainerProps**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `children` | `ReactNode` |
+| `renderFallback` | (`connectionState`: [`ViewerConnectionState`](react.md#viewerconnectionstate)) => ``null`` \| `Element` |
+
+___
+
+### ViewerConnectionState
+
+Ƭ **ViewerConnectionState**: { `status`: ``"idle"``  } \| { `promise`: `Abortable`<`SelfID` \| ``null``\> ; `provider`: `EthereumAuthProvider` ; `status`: ``"connecting"``  } \| { `selfID`: `SelfID` ; `status`: ``"connected"``  } \| { `error`: `Error` ; `status`: ``"failed"``  }
+
+___
+
 ### ViewerID
 
 Ƭ **ViewerID**<`ModelTypes`\>: `PublicID`<`ModelTypes`\> \| `SelfID`<`ModelTypes`\>
@@ -121,35 +121,35 @@ ___
 
 ## Functions
 
-### AuthenticatedContainer
-
-▸ **AuthenticatedContainer**(`__namedParameters`): `JSX.Element` \| ``null``
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `__namedParameters` | [`AuthenticatedContainerProps`](react.md#authenticatedcontainerprops) |
-
-#### Returns
-
-`JSX.Element` \| ``null``
-
-___
-
 ### Provider
 
-▸ **Provider**(`__namedParameters`): `JSX.Element`
+▸ **Provider**(`props`): `JSX.Element`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `__namedParameters` | [`ProviderProps`](react.md#providerprops) |
+| `props` | [`ProviderProps`](react.md#providerprops) |
 
 #### Returns
 
 `JSX.Element`
+
+___
+
+### ViewerConnectedContainer
+
+▸ **ViewerConnectedContainer**(`props`): `JSX.Element` \| ``null``
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `props` | [`ViewerConnectedContainerProps`](react.md#viewerconnectedcontainerprops) |
+
+#### Returns
+
+`JSX.Element` \| ``null``
 
 ___
 
@@ -166,16 +166,6 @@ ___
 #### Returns
 
 `string` \| ``null``
-
-___
-
-### useAuthentication
-
-▸ **useAuthentication**(): [[`AuthenticationState`](react.md#authenticationstate), (`provider`: `EthereumAuthProvider`) => `Promise`<`SelfID` \| ``null``\>, () => `void`]
-
-#### Returns
-
-[[`AuthenticationState`](react.md#authenticationstate), (`provider`: `EthereumAuthProvider`) => `Promise`<`SelfID` \| ``null``\>, () => `void`]
 
 ___
 
@@ -217,6 +207,16 @@ ___
 #### Returns
 
 [`PublicRecord`](react.md#publicrecord)<`ContentType` \| ``null``\>
+
+___
+
+### useViewerConnection
+
+▸ **useViewerConnection**(): [[`ViewerConnectionState`](react.md#viewerconnectionstate), (`provider`: `EthereumAuthProvider`) => `Promise`<`SelfID` \| ``null``\>, () => `void`]
+
+#### Returns
+
+[[`ViewerConnectionState`](react.md#viewerconnectionstate), (`provider`: `EthereumAuthProvider`) => `Promise`<`SelfID` \| ``null``\>, () => `void`]
 
 ___
 

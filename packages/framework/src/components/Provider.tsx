@@ -11,13 +11,14 @@ export type ProviderProps = ReactProviderProps & {
   ui?: UIProviderProps
 }
 
-export function Provider({ auth, children, ui, ...props }: ProviderProps): JSX.Element {
+export function Provider(props: ProviderProps): JSX.Element {
+  const { auth, children, ui, ...reactProps } = props
   const authProps = auth ?? {}
   const uiProps = ui ?? {}
 
   return (
     <UIProvider {...uiProps}>
-      <ReactProvider {...props}>
+      <ReactProvider {...reactProps}>
         <MultiAuthProvider {...authProps}>{children}</MultiAuthProvider>
       </ReactProvider>
     </UIProvider>

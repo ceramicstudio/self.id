@@ -18,13 +18,13 @@ export type ProviderProps = ProviderConfig & {
   children: ReactNode
 }
 
-export function Provider({ children, modal, networks }: ProviderProps): ReactElement {
-  const [networksConfig] = useState(() => getNetworksConfig(networks ?? ['ethereum']))
+export function Provider(props: ProviderProps): ReactElement {
+  const [networksConfig] = useState(() => getNetworksConfig(props.networks ?? ['ethereum']))
 
   return (
     <JotaiProvider scope={stateScope}>
-      {children}
-      <Modal {...(modal ?? {})} networks={networksConfig} />
+      {props.children}
+      <Modal {...(props.modal ?? {})} networks={networksConfig} />
     </JotaiProvider>
   )
 }
