@@ -20,6 +20,7 @@ function LogoImage({ children, src }: LogoImageProps) {
         height: '70px',
         marginBottom: '10px',
         borderRadius: '10px',
+        backgroundColor: '#949494',
         backgroundSize: 'cover',
         backgroundImage: `url(${src})`,
       }}>
@@ -89,7 +90,7 @@ export function ModalItem({
       ) : (
         selectedIcon
       )
-    displaySelected = <SelectedImage>{icon} </SelectedImage>
+    displaySelected = <SelectedImage>{icon}</SelectedImage>
   }
 
   return (

@@ -13,11 +13,11 @@ export const portis: ConnectorConfigDefaults = {
   logo: new URL('../assets/portis.png', import.meta.url).href,
   getNetworkProvider(key, params?: PortisParams) {
     return key === 'ethereum' && params != null && params.dAppId != null && params.network != null
-      ? 'eip1193'
+      ? 'web3'
       : null
   },
   async getProvider(key, params?: PortisParams) {
-    if (key !== 'eip1193') {
+    if (key !== 'web3') {
       throw new Error(`Unsupported provider: ${key}`)
     }
     if (params?.dAppId == null) {
