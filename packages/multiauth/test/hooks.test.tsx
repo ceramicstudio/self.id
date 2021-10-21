@@ -14,21 +14,19 @@ type ChildrenProps = { children: ReactNode }
 describe('hooks', () => {
   const wrapper = ({ children }: ChildrenProps) => <Provider>{children}</Provider>
 
-  describe('useMultiAuth()', () => {
-    test('connection flow', () => {
-      const { result } = renderHook(() => useMultiAuth(), { wrapper })
-      expect(result.current[0]).toEqual({ status: 'idle' })
+  test('useMultiAuth() connection flow', () => {
+    const { result } = renderHook(() => useMultiAuth(), { wrapper })
+    expect(result.current[0]).toEqual({ status: 'idle' })
 
-      act(() => {
-        void result.current[1]()
-      })
+    act(() => {
+      void result.current[1]()
+    })
 
-      expect(result.current[0]).toEqual({
-        status: 'authenticating',
-        modal: true,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        promise: expect.any(Promise),
-      })
+    expect(result.current[0]).toEqual({
+      status: 'authenticating',
+      modal: true,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      promise: expect.any(Promise),
     })
   })
 })
