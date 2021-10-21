@@ -30,7 +30,7 @@ export class WebClient<
     return this.#threeId
   }
 
-  async authenticate(authProvider: EthereumAuthProvider, attachToCeramic = false): Promise<DID> {
+  async authenticate(authProvider: EthereumAuthProvider, attachToCeramic = true): Promise<DID> {
     const did = await this.connect(authProvider)
     await did.authenticate()
     if (attachToCeramic) {

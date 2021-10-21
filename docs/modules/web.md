@@ -40,7 +40,6 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `client` | [`WebClient`](../classes/web.WebClient.md) |
-| `did` | `DID` |
 
 ___
 

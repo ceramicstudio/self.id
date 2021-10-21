@@ -103,7 +103,7 @@ ___
 | Name | Type | Default value |
 | :------ | :------ | :------ |
 | `authProvider` | `EthereumAuthProvider` | `undefined` |
-| `attachToCeramic` | `boolean` | `false` |
+| `attachToCeramic` | `boolean` | `true` |
 
 #### Returns
 
