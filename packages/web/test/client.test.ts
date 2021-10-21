@@ -63,14 +63,14 @@ describe('WebClient', () => {
 
       expect(did).toBe(DIDInstance)
       expect(authenticate).toBeCalled()
-      expect(client.ceramic.did).toBeUndefined()
+      expect(client.ceramic.did).toBe(did)
     })
 
-    test('optionally attaches the DID to the Ceramic instance', async () => {
+    test('does not attach the DID to the Ceramic instance', async () => {
       const client = new WebClient({ ceramic: 'local' })
       const authProvider = new EthereumAuthProvider({}, '0x123456')
-      const did = await client.authenticate(authProvider, true)
-      expect(client.ceramic.did).toBe(did)
+      await client.authenticate(authProvider, false)
+      expect(client.ceramic.did).toBeUndefined()
     })
   })
 })

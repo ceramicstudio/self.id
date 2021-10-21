@@ -12,7 +12,6 @@ export type AuthenticateParams<ModelTypes extends CoreModelTypes = CoreModelType
 
 export type SelfIDParams = {
   client: WebClient
-  did: DID
 }
 
 /**
@@ -29,21 +28,19 @@ export class SelfID<
   ): Promise<SelfID> {
     const { authProvider, ...clientParams } = params
     const client = new WebClient<ModelTypes>(clientParams)
-    const did = await client.authenticate(authProvider, true)
-    return new SelfID({ client, did })
+    await client.authenticate(authProvider, true)
+    return new SelfID({ client })
   }
 
   #client: WebClient
-  #did: DID
 
   constructor(params: SelfIDParams) {
-    if (!params.did.authenticated) {
+    if (!params.client.ceramic.did?.authenticated) {
       throw new Error(
         'Input DID must be authenticated, use SelfID.authenticate() instead of new SelfID()'
       )
     }
     this.#client = params.client
-    this.#did = params.did
   }
 
   get client(): WebClient {
@@ -51,11 +48,15 @@ export class SelfID<
   }
 
   get did(): DID {
-    return this.#did
+    const did = this.#client.ceramic.did
+    if (did == null || !did.authenticated) {
+      throw new Error('Expected authenticated DID instance to be attached to Ceramic')
+    }
+    return did
   }
 
   get id(): string {
-    return this.#did.id
+    return this.did.id
   }
 
   // Definitions interactions
@@ -63,7 +64,7 @@ export class SelfID<
   async get<Key extends Alias, ContentType = DefinitionContentType<ModelTypes, Key>>(
     key: Key
   ): Promise<ContentType | null> {
-    return await this.#client.dataStore.get(key as any, this.#did.id)
+    return await this.#client.dataStore.get(key as any, this.did.id)
   }
 
   async set<Key extends Alias, ContentType = DefinitionContentType<ModelTypes, Key>>(
