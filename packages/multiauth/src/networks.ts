@@ -21,7 +21,7 @@ export const networksDefaults: Record<NetworkKey, NetworkConfigDefaults> = {
 export function getDefaultNetworkConfig<Key extends NetworkKey>(key: Key): NetworkConfig<Key> {
   const config = networksDefaults[key]
   if (config == null) {
-    throw new Error(`No default config for provider: ${key}`)
+    throw new Error(`No default config for network: ${key}`)
   }
 
   const connectors = getConnectorsConfig(key, config.connectors)
