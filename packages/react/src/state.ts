@@ -9,7 +9,7 @@ import {
   VIEWER_ID_STORAGE_KEY,
 } from './constants'
 import { CookieStorage } from './storage'
-import type { AuthenticationState } from './types'
+import type { ViewerConnectionState } from './types'
 
 /** @internal */
 export const stateScope = Symbol()
@@ -34,7 +34,7 @@ export const coreAtom = atom<Core>((get) => {
 // Viewer lifecycle
 
 /** @internal */
-export const authenticationAtom = atom<AuthenticationState>({ status: 'pending' })
+export const connectionAtom = atom<ViewerConnectionState>({ status: 'idle' })
 
 /**
  * Viewer ID can be injected by server
@@ -58,9 +58,9 @@ export const localViewerIDAtom = atomWithStorage<string | null>(
  * @internal */
 export const viewerIDAtom = atom(
   (get) => {
-    const auth = get(authenticationAtom)
-    if (auth.status === 'authenticated') {
-      return auth.selfID
+    const connection = get(connectionAtom)
+    if (connection.status === 'connected') {
+      return connection.selfID
     }
 
     // Get viewer ID from injected request or local storage
@@ -68,16 +68,18 @@ export const viewerIDAtom = atom(
     return id == null ? null : new PublicID({ core: get(coreAtom), id })
   },
   (get, set, selfID: SelfID | null) => {
+    // Always discard viewer ID from request when it is set() by client to support expected get() logic above
+    void set(requestViewerIDAtom, null)
     if (selfID == null) {
-      const auth = get(authenticationAtom)
-      if (auth.status === 'authenticating') {
-        auth.promise.abort()
+      const connection = get(connectionAtom)
+      if (connection.status === 'connecting') {
+        connection.promise.abort()
       }
       void set(localViewerIDAtom, null)
-      void set(authenticationAtom, { status: 'pending' })
+      void set(connectionAtom, { status: 'idle' })
     } else {
       void set(localViewerIDAtom, selfID.id)
-      void set(authenticationAtom, { status: 'authenticated', selfID })
+      void set(connectionAtom, { status: 'connected', selfID })
     }
   }
 )

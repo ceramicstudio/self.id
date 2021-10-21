@@ -1,3 +1,4 @@
+import { colors } from '@self.id/framework'
 import { Anchor, Box, Heading, Spinner, Text, TextInput } from 'grommet'
 import type { GetServerSideProps } from 'next'
 import Head from 'next/head'
@@ -18,7 +19,6 @@ import footerTwitterIcon from '../images/icons/social-twitter.svg'
 
 import Navbar from '../components/Navbar'
 import OpenGraphMeta from '../components/OpenGraphMeta'
-import { BRAND_COLOR } from '../theme'
 import { withMediaQuery } from '../components/media-query/with-media-query'
 
 const ResponsiveHeading = withMediaQuery(Heading)
@@ -125,7 +125,7 @@ export default function Home() {
                       borderRadius: 30,
                       padding: 18,
                       paddingLeft: 60,
-                      boxShadow: `0 2px 20px ${focus ? BRAND_COLOR : 'rgba(0,0,0,0.5)'}`,
+                      boxShadow: `0 2px 20px ${focus ? colors.brand : 'rgba(0,0,0,0.5)'}`,
                       width: '100%',
                     }}
                     value={value}

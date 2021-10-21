@@ -7,8 +7,8 @@ import { useAtomValue, useUpdateAtom } from 'jotai/utils'
 import { useCallback } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 
-import { stateScope, authenticationAtom, clientConfigAtom, coreAtom, viewerIDAtom } from './state'
-import type { AuthenticationState } from './types'
+import { stateScope, connectionAtom, clientConfigAtom, coreAtom, viewerIDAtom } from './state'
+import type { ViewerConnectionState } from './types'
 import { abortable } from './utils'
 
 async function authenticateSelfID<ModelTypes extends CoreModelTypes = CoreModelTypes>(
@@ -30,50 +30,50 @@ export function useViewerID<
   return useAtomValue(viewerIDAtom, stateScope)
 }
 
-export function useAuthentication(): [
-  AuthenticationState,
+export function useViewerConnection(): [
+  ViewerConnectionState,
   (provider: EthereumAuthProvider) => Promise<SelfID | null>,
   () => void
 ] {
   const config = useAtomValue(clientConfigAtom, stateScope)
-  const [auth, setAuth] = useAtom(authenticationAtom, stateScope)
+  const [connection, setConnection] = useAtom(connectionAtom, stateScope)
   const setViewerID = useUpdateAtom(viewerIDAtom, stateScope)
 
-  const authenticate = useCallback(
+  const connect = useCallback(
     async (provider: EthereumAuthProvider): Promise<SelfID | null> => {
-      if (auth.status === 'authenticating' && auth.provider === provider) {
-        return await auth.promise
+      if (connection.status === 'connecting' && connection.provider === provider) {
+        return await connection.promise
       }
 
-      if (auth.status === 'authenticating') {
-        auth.promise.abort()
+      if (connection.status === 'connecting') {
+        connection.promise.abort()
       }
       try {
         const promise = abortable(
           authenticateSelfID({ ...config, authProvider: provider }).then((selfID) => {
             if (promise.signal.aborted) {
-              void setAuth({ status: 'pending' })
+              void setConnection({ status: 'idle' })
               return null
             }
             void setViewerID(selfID)
             return selfID
           })
         )
-        void setAuth({ status: 'authenticating', provider, promise })
+        void setConnection({ status: 'connecting', provider, promise })
         return await promise
       } catch (err) {
-        void setAuth({ status: 'error', error: err as Error })
+        void setConnection({ status: 'failed', error: err as Error })
         return null
       }
     },
-    [auth, setAuth, setViewerID]
+    [connection, setConnection, setViewerID]
   )
 
   const reset = useCallback(() => {
     void setViewerID(null)
   }, [setViewerID])
 
-  return [auth, authenticate, reset]
+  return [connection, connect, reset]
 }
 
 export type ViewerRecord<ContentType> =

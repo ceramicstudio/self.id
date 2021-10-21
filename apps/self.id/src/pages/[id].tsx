@@ -1,4 +1,10 @@
-import { isCAIP10string, isDIDstring, useViewerID } from '@self.id/framework'
+import {
+  AvatarPlaceholder,
+  colors,
+  isCAIP10string,
+  isDIDstring,
+  useViewerID,
+} from '@self.id/framework'
 import type { BasicProfile, RequestState } from '@self.id/framework'
 import { Anchor, Box, Paragraph, Text } from 'grommet'
 import type { GetServerSideProps } from 'next'
@@ -7,7 +13,6 @@ import Link from 'next/link'
 import Image from 'next/image'
 import styled, { css } from 'styled-components'
 
-import AvatarPlaceholder from '../components/AvatarPlaceholder'
 import Layout from '../components/Layout'
 import Navbar from '../components/Navbar'
 import { useProfile, useSocialAccounts } from '../hooks'
@@ -17,7 +22,6 @@ import linkIcon from '../images/icons/link.svg'
 import locationIcon from '../images/icons/location.png'
 import githubIcon from '../images/icons/social-github.svg'
 import twitterIcon from '../images/icons/social-twitter.svg'
-import { BRAND_COLOR, PLACEHOLDER_COLOR } from '../theme'
 import { formatDID, getImageURL, isEthereumAddress, isSupportedDID } from '../utils'
 
 import ConnectSettingsButton from '../components/ConnectSettingsButton'
@@ -106,7 +110,7 @@ export const getServerSideProps: GetServerSideProps<Props, { id: string }> = asy
 
 const Header = styled.div<{ url?: string }>`
   height: 310px;
-  background-color: ${PLACEHOLDER_COLOR};
+  background-color: ${colors.placeholder};
   ${(props) =>
     props.url &&
     css`
@@ -123,7 +127,7 @@ const Header = styled.div<{ url?: string }>`
 const AvatarContainer = styled.div`
   width: 146px;
   height: 146px;
-  background-color: ${PLACEHOLDER_COLOR};
+  background-color: ${colors.placeholder};
   border: 3px solid white;
   border-radius: 78px;
   margin-top: -78px;
@@ -140,7 +144,7 @@ const Avatar = styled.div<{ url: string }>`
 `
 
 const Name = styled.h1`
-  color: ${BRAND_COLOR};
+  color: ${colors.brand};
   font-size: 28px;
   font-weight: 500;
 `

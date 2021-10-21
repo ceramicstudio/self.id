@@ -1,4 +1,4 @@
-import { useAuthentication, useViewerID } from '@self.id/framework'
+import { AvatarPlaceholder, useConnection, useViewerID } from '@self.id/framework'
 import { Avatar, Box, Button, DropButton, Spinner, Text } from 'grommet'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -9,8 +9,6 @@ import type { ForwardedRef } from 'react'
 import { useLogin, useLogout, useViewerProfile } from '../../hooks'
 import linkIcon from '../../images/icons/link.svg'
 import { formatDID, getImageURL } from '../../utils'
-
-import AvatarPlaceholder from '../AvatarPlaceholder'
 
 type DisplayAvatarProps = {
   did?: string
@@ -83,7 +81,7 @@ const MenuButton = forwardRef(function MenuButtonComponent(
 
 export default function AccountButton() {
   const router = useRouter()
-  const [authState] = useAuthentication()
+  const [connection] = useConnection()
   const viewerID = useViewerID()
   const profileRecord = useViewerProfile()
   const login = useLogin()
@@ -94,23 +92,29 @@ export default function AccountButton() {
   const toProfile = useCallback(
     (id: string | null) => {
       if (id != null) {
-        setLoadingProfile(true)
-        void router.push(`/${id}`).then(() => {
+        if (router.route === '/[id]' && router.query.id === id) {
+          // Already on wanted profile page
           setMenuOpen(false)
-          setLoadingProfile(false)
-        })
+        } else {
+          // Navigate to profile page
+          setLoadingProfile(true)
+          void router.push(`/${id}`).then(() => {
+            setMenuOpen(false)
+            setLoadingProfile(false)
+          })
+        }
       }
     },
     [router]
   )
 
   const onClickLogin = useCallback(() => {
-    if (authState.status !== 'authenticating') {
+    if (connection.status !== 'connecting') {
       void login().then((self) => {
         return self ? toProfile(self.id) : null
       })
     }
-  }, [authState.status, login, toProfile])
+  }, [connection.status, login, toProfile])
 
   const [displayName, avatarSrc] = useMemo(() => {
     if (viewerID == null) {
@@ -180,7 +184,7 @@ export default function AccountButton() {
     )
   }
 
-  return authState.status === 'authenticating' ? (
+  return connection.status === 'connecting' ? (
     <DisplayAvatar label="Connecting..." loading />
   ) : (
     <Button

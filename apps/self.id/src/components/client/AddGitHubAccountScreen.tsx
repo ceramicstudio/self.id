@@ -1,4 +1,4 @@
-import { useAuthentication } from '@self.id/framework'
+import { useConnection } from '@self.id/framework'
 import type { SelfID } from '@self.id/framework'
 import copy from 'copy-to-clipboard'
 import { Box, Button, Heading, Spinner, Text } from 'grommet'
@@ -154,12 +154,12 @@ function AddGitHubAccount({ selfID }: Props) {
 }
 
 export default function AddGitHubAccountScreen() {
-  const [authState] = useAuthentication()
+  const [connection] = useConnection()
 
   return (
     <AddSocialAccountContainer>
       <Heading margin={{ horizontal: 'none', vertical: 'small' }}>Verify GitHub account</Heading>
-      {authState.status === 'authenticated' ? <AddGitHubAccount selfID={authState.selfID} /> : null}
+      {connection.status === 'connected' ? <AddGitHubAccount selfID={connection.selfID} /> : null}
     </AddSocialAccountContainer>
   )
 }

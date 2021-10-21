@@ -1,26 +1,24 @@
 # Authentication
 
 ```tsx live noInline
-// import { EthereumAuthProvider, useAuthentication } from '@self.id/framework'
+// import { useConnection } from '@self.id/framework'
 
 function ConnectButton() {
-  const [authState, authenticate, reset] = useAuthentication()
+  const [connection, connect, disconnect] = useConnection()
 
-  const onClick = useCallback(async () => {
-    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
-    const provider = new EthereumAuthProvider(window.ethereum, accounts[0])
-    await authenticate(provider)
-  }, [authenticate])
-
-  return authState.status === 'authenticated' ? (
+  return connection.status === 'connected' ? (
     <button
       onClick={() => {
-        reset()
+        disconnect()
       }}>
-      Disconnect ({authState.selfID.id})
+      Disconnect ({connection.selfID.id})
     </button>
   ) : 'ethereum' in window ? (
-    <button disabled={authState.status === 'authenticating'} onClick={onClick}>
+    <button
+      disabled={connection.status === 'connecting'}
+      onClick={() => {
+        connect()
+      }}>
       Connect
     </button>
   ) : (

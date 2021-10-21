@@ -1,13 +1,14 @@
-import { Provider as MultiauthProvider } from '@ceramicstudio/multiauth'
-import { Provider as FrameworkProvider } from '@self.id/framework'
+import { Provider } from '@self.id/framework'
+import closeIcon from '@self.id/multiauth/assets/icon-close.svg'
+import selectedIcon from '@self.id/multiauth/assets/icon-selected.svg'
+
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { Toaster } from 'react-hot-toast'
 import { createGlobalStyle } from 'styled-components'
 
-import { connectors } from '../auth'
+import { networks } from '../auth'
 import { CERAMIC_URL, CONNECT_NETWORK } from '../constants'
-import { theme } from '../theme'
 
 const GlobalStyle = createGlobalStyle`   
   @font-face {
@@ -50,20 +51,22 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
   const { state, ...props } = pageProps
 
   return (
-    <MultiauthProvider providers={[{ key: 'ethereum', connectors }]} theme={theme}>
-      <FrameworkProvider
-        client={{ ceramic: CERAMIC_URL, connectNetwork: CONNECT_NETWORK }}
-        state={state}
-        ui={{ full: true, theme }}>
-        <GlobalStyle />
-        <Head>
-          <link rel="icon" href="/favicon.ico" />
-          <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-          <meta name="fortmatic-site-verification" content="4keQaoARYXbW4snM" />
-        </Head>
-        <Component {...props} />
-        <Toaster />
-      </FrameworkProvider>
-    </MultiauthProvider>
+    <Provider
+      auth={{
+        modal: { closeIcon: closeIcon.src, selectedIcon: selectedIcon.src },
+        networks,
+      }}
+      client={{ ceramic: CERAMIC_URL, connectNetwork: CONNECT_NETWORK }}
+      state={state}
+      ui={{ full: true }}>
+      <GlobalStyle />
+      <Head>
+        <link rel="icon" href="/favicon.ico" />
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <meta name="fortmatic-site-verification" content="4keQaoARYXbW4snM" />
+      </Head>
+      <Component {...props} />
+      <Toaster />
+    </Provider>
   )
 }

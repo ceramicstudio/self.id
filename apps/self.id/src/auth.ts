@@ -1,61 +1,67 @@
-import {
-  FortmaticConnector,
-  InjectedConnector,
-  PortisConnector,
-  TorusConnector,
-  WalletConnectConnector,
-} from '@ceramicstudio/multiauth'
-import type { PartialConnectorConfig } from '@ceramicstudio/multiauth'
+import ethereumLogo from '@self.id/multiauth/assets/ethereum.png'
+import fortmaticLogo from '@self.id/multiauth/assets/fortmatic.png'
+import metamaskLogo from '@self.id/multiauth/assets/metamask.png'
+import portisLogo from '@self.id/multiauth/assets/portis.png'
+import torusLogo from '@self.id/multiauth/assets/torus.png'
+import walletConnectLogo from '@self.id/multiauth/assets/walletconnect.png'
+import type { PartialConnectorConfig, PartialNetworkConfig } from '@self.id/multiauth'
 
-export const connectors: Array<PartialConnectorConfig> = [
-  {
-    key: 'injected',
-    connector: new InjectedConnector({}),
-  },
+const ethereumConnectors: Array<PartialConnectorConfig> = [
+  { key: 'injected', logo: metamaskLogo.src },
 ]
 
 const walletConnectChainId = process.env.NEXT_PUBLIC_WALLETCONNECT_CHAIN_ID
 const walletConnectRpcUrl = process.env.NEXT_PUBLIC_WALLETCONNECT_RPC_URL
 if (typeof walletConnectChainId === 'string' && typeof walletConnectRpcUrl === 'string') {
-  connectors.push({
+  ethereumConnectors.push({
     key: 'walletConnect',
-    connector: new WalletConnectConnector({
+    logo: walletConnectLogo.src,
+    params: {
       rpc: { [walletConnectChainId]: walletConnectRpcUrl },
-    }),
+    },
   })
 }
 
 const fortmaticApiKey = process.env.NEXT_PUBLIC_FORTMATIC_API_KEY
 const fortmaticChainId = process.env.NEXT_PUBLIC_FORTMATIC_CHAIN_ID
 if (typeof fortmaticApiKey === 'string' && typeof fortmaticChainId === 'string') {
-  connectors.push({
+  ethereumConnectors.push({
     key: 'fortmatic',
-    connector: new FortmaticConnector({
+    logo: fortmaticLogo.src,
+    params: {
       apiKey: fortmaticApiKey,
-      chainId: parseInt(fortmaticChainId, 10),
-    }),
+    },
   })
 }
 
 const portisDappId = process.env.NEXT_PUBLIC_PORTIS_DAPP_ID
-const portisNetworks = process.env.NEXT_PUBLIC_PORTIS_NETWORKS
-if (typeof portisDappId === 'string' && typeof portisNetworks === 'string') {
-  connectors.push({
+const portisNetwork = process.env.NEXT_PUBLIC_PORTIS_NETWORK
+if (typeof portisDappId === 'string' && typeof portisNetwork === 'string') {
+  ethereumConnectors.push({
     key: 'portis',
-    connector: new PortisConnector({
+    logo: portisLogo.src,
+    params: {
       dAppId: portisDappId,
-      networks: portisNetworks.split(',').map((v) => parseInt(v, 10)),
-    }),
+      network: portisNetwork,
+    },
   })
 }
 
-const torusChainId = process.env.NEXT_PUBLIC_TORUS_CHAIN_ID
-if (typeof torusChainId === 'string') {
-  connectors.push({
+const torusNetworkHost = process.env.NEXT_PUBLIC_TORUS_NETWORK_HOST
+if (typeof torusNetworkHost === 'string') {
+  ethereumConnectors.push({
     key: 'torus',
-    connector: new TorusConnector({
-      chainId: parseInt(torusChainId, 10),
-      initOptions: { showTorusButton: false },
-    }),
+    logo: torusLogo.src,
+    params: {
+      network: { host: torusNetworkHost },
+    },
   })
 }
+
+export const networks: Array<PartialNetworkConfig> = [
+  {
+    key: 'ethereum',
+    logo: ethereumLogo.src,
+    connectors: ethereumConnectors,
+  },
+]

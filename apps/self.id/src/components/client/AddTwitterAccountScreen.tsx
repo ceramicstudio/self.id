@@ -1,4 +1,4 @@
-import { useAuthentication } from '@self.id/framework'
+import { useConnection } from '@self.id/framework'
 import type { SelfID } from '@self.id/framework'
 import { Box, Button, Heading, Spinner, Text } from 'grommet'
 import { useRouter } from 'next/router'
@@ -145,14 +145,12 @@ function AddTwitterAccount({ selfID }: Props) {
 }
 
 export default function AddTwitterAccountScreen() {
-  const [authState] = useAuthentication()
+  const [connection] = useConnection()
 
   return (
     <AddSocialAccountContainer>
       <Heading margin={{ horizontal: 'none', vertical: 'small' }}>Verify Twitter account</Heading>
-      {authState.status === 'authenticated' ? (
-        <AddTwitterAccount selfID={authState.selfID} />
-      ) : null}
+      {connection.status === 'connected' ? <AddTwitterAccount selfID={connection.selfID} /> : null}
     </AddSocialAccountContainer>
   )
 }

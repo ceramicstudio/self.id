@@ -13,6 +13,13 @@ export function getCookieViewerID(cookie?: string): string | null {
 export type RequestClientParams<ModelTypes extends CoreModelTypes = CoreModelTypes> =
   CoreParams<ModelTypes> & { cookie?: string }
 
+/**
+ * Extends {@linkcode core.Core}
+ *
+ * ```sh
+ * import { RequestClient } from '@self.id/react'
+ * ```
+ */
 export class RequestClient<
   ModelTypes extends CoreModelTypes = CoreModelTypes,
   Alias extends keyof ModelTypes['definitions'] = keyof ModelTypes['definitions']
@@ -20,10 +27,10 @@ export class RequestClient<
   #queryClient: QueryClient
   #viewerID: string | null
 
-  constructor({ cookie, ...params }: RequestClientParams<ModelTypes>) {
+  constructor(params: RequestClientParams<ModelTypes>) {
     super(params)
     this.#queryClient = new QueryClient()
-    this.#viewerID = getCookieViewerID(cookie)
+    this.#viewerID = getCookieViewerID(params.cookie)
   }
 
   get viewerID(): string | null {

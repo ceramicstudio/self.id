@@ -2,6 +2,8 @@
 
 [web](../modules/web.md).WebClient
 
+Extends [`core.Core`](core.Core.md)
+
 ```sh
 import { WebClient } from '@self.id/web'
 ```

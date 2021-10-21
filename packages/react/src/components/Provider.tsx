@@ -22,7 +22,8 @@ export type ProviderConfig = {
 
 export type ProviderProps = ProviderConfig & { children: ReactNode }
 
-export function Provider({ children, client, queryOptions, state }: ProviderProps): JSX.Element {
+export function Provider(props: ProviderProps): JSX.Element {
+  const { children, client, queryOptions, state } = props
   const [queryClient] = useState(() => {
     return new QueryClient({
       defaultOptions: {

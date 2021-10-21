@@ -2,6 +2,12 @@
 
 [react](../modules/react.md).RequestClient
 
+Extends [`core.Core`](core.Core.md)
+
+```sh
+import { RequestClient } from '@self.id/react'
+```
+
 ## Type parameters
 
 | Name | Type |
@@ -19,7 +25,7 @@
 
 ### constructor
 
-• **new RequestClient**<`ModelTypes`, `Alias`\>(`__namedParameters`)
+• **new RequestClient**<`ModelTypes`, `Alias`\>(`params`)
 
 #### Type parameters
 
@@ -32,7 +38,7 @@
 
 | Name | Type |
 | :------ | :------ |
-| `__namedParameters` | [`RequestClientParams`](../modules/react.md#requestclientparams)<`ModelTypes`\> |
+| `params` | [`RequestClientParams`](../modules/react.md#requestclientparams)<`ModelTypes`\> |
 
 #### Overrides
 
