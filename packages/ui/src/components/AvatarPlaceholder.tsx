@@ -2,7 +2,7 @@ import BoringAvatars from 'boring-avatars'
 import React from 'react'
 
 // @ts-ignore actual default import
-const Avatar = BoringAvatars.default
+const Avatar = BoringAvatars.default ?? BoringAvatars
 
 const COLORS = ['#FF0092', '#FFCA1B', '#B6FF00', '#228DFF', '#BA01FF']
 

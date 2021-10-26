@@ -66,7 +66,7 @@ export function useViewerConnection(): [
         return null
       }
     },
-    [connection, setConnection, setViewerID]
+    [connection.status, setConnection, setViewerID]
   )
 
   const reset = useCallback(() => {

@@ -29,7 +29,7 @@ const CHAIN_IDS: Record<string, string> = {
 }
 
 /** @internal */
-function toChainID(id: ChainID | ChainIDParams | string | number): ChainID {
+export function toChainID(id: ChainID | ChainIDParams | string | number): ChainID {
   if (id instanceof ChainID) {
     return id
   }

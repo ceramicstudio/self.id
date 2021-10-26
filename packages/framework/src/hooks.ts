@@ -52,9 +52,9 @@ export function useConnection(): [
       try {
         if (switchAccount) {
           disconnect()
-          auth = await authenticate({ mode: 'force' })
+          auth = await authenticate({ mode: 'reset' })
         } else {
-          auth = await authenticate({ mode: 'use' })
+          auth = await authenticate({ mode: 'reuse' })
         }
       } catch (err) {
         console.warn('Failed to login:', err)

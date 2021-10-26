@@ -11,9 +11,9 @@ export function useAuthState(): [AuthState, (state: AuthState) => void] {
 }
 
 export type AuthenticateMode =
-  | 'force' // Reset current account and show modal
   | 'select' // Show selection modal
-  | 'use' // Re-use current account if already authenticated
+  | 'reset' // Reset current account and show modal
+  | 'reuse' // Re-use current account if already authenticated
 
 export type AuthenticateOptions = {
   mode?: AuthenticateMode
@@ -40,11 +40,8 @@ export function useMultiAuth(): [
   }, [setAuthState])
 
   const connect = useCallback(
-    async ({ mode = 'use', showModal }: AuthenticateOptions = {}) => {
+    async ({ mode = 'reuse', showModal }: AuthenticateOptions = {}) => {
       switch (mode) {
-        case 'force':
-          internalDisconnect()
-          return await showConnectModal()
         case 'select':
           if (authState.status === 'authenticating') {
             if (!authState.modal) {
@@ -53,7 +50,10 @@ export function useMultiAuth(): [
             return await authState.promise
           }
           return await showConnectModal()
-        case 'use':
+        case 'reset':
+          internalDisconnect()
+          return await showConnectModal()
+        case 'reuse':
           switch (authState.status) {
             case 'authenticated':
               return authState.auth

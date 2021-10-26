@@ -13,17 +13,17 @@
     "react-dom": "^17.0.2"
   },
   "devDependencies": {
-    "@types/node": "^16.10.9",
-    "@types/react": "^17.0.29",
-    "@types/react-dom": "^17.0.2",
+    "@types/node": "^16.11.1",
+    "@types/react": "^17.0.31",
+    "@types/react-dom": "^17.0.10",
     "del-cli": "^4.0.1",
     "esbuild-loader": "^2.16.0",
-    "html-webpack-plugin": "^5.3.2",
+    "html-webpack-plugin": "^5.4.0",
     "serve": "^12.0.1",
     "stream-browserify": "^3.0.0",
     "typescript": "^4.4.4",
-    "webpack": "^5.58.2",
-    "webpack-cli": "^4.9.0",
+    "webpack": "^5.59.1",
+    "webpack-cli": "^4.9.1",
     "webpack-dev-server": "^4.1.1"
   }
 }
