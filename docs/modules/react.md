@@ -87,7 +87,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `children` | `ReactNode` |
-| `renderFallback` | (`connectionState`: [`ViewerConnectionState`](react.md#viewerconnectionstate)) => ``null`` \| `Element` |
+| `renderFallback?` | (`connectionState`: [`ViewerConnectionState`](react.md#viewerconnectionstate)) => ``null`` \| `Element` |
 
 ___
 

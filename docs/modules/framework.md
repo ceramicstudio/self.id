@@ -59,7 +59,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `children` | `ReactNode` |
-| `renderFallback` | (`connectionState`: [`ConnectionState`](framework.md#connectionstate)) => ``null`` \| `Element` |
+| `renderFallback?` | (`connectionState`: [`ConnectionState`](framework.md#connectionstate)) => ``null`` \| `Element` |
 
 ___
 

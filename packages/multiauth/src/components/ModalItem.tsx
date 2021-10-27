@@ -20,7 +20,7 @@ function LogoImage({ children, src }: LogoImageProps) {
         height: '70px',
         marginBottom: '10px',
         borderRadius: '10px',
-        backgroundColor: '#949494',
+        backgroundColor: '#D8D8D8',
         backgroundSize: 'cover',
         backgroundImage: `url(${src})`,
       }}>

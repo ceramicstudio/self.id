@@ -3,21 +3,10 @@ import type { Dimensions, ImageSources } from '@self.id/framework'
 
 import { IPFS_URL } from './constants'
 
-export interface Deferred<T> extends Promise<T> {
-  resolve: (value?: T | PromiseLike<T>) => void
-  reject: (reason?: any) => void
-}
-
-export function deferred<T>(): Deferred<T> {
-  let methods
-  const promise = new Promise<T>((resolve, reject): void => {
-    methods = { resolve, reject }
-  })
-  return Object.assign(promise, methods) as Deferred<T>
-}
-
-export function formatDID(did: string): string {
-  return did.length <= 20 ? did : `${did.slice(0, 10)}...${did.slice(-6)}`
+export function formatDID(did: string, maxLength = 20): string {
+  const half = Math.floor(maxLength / 2)
+  const remaining = half - 3 - maxLength
+  return did.length <= maxLength ? did : `${did.slice(0, half)}...${did.slice(remaining)}`
 }
 
 const ethAddressRegex = /^0x[0-9a-f]{40}$/i

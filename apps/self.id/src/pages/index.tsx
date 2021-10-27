@@ -234,11 +234,11 @@ export default function Home() {
                 label="Ceramic Network"
                 style={{ textDecoration: 'underline' }}
               />
-              , and{' '}
+              , and the{' '}
               <Anchor
                 color="text"
-                href="https://idx.xyz"
-                label="IDX"
+                href="https://developers.ceramic.network/tools/self-id/overview/#sdk"
+                label="Self.ID SDK"
                 style={{ textDecoration: 'underline' }}
               />
             </Text>

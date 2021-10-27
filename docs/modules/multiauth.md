@@ -62,7 +62,7 @@ ___
 
 ### AuthenticateMode
 
-Ƭ **AuthenticateMode**: ``"force"`` \| ``"select"`` \| ``"use"``
+Ƭ **AuthenticateMode**: ``"select"`` \| ``"reset"`` \| ``"reuse"``
 
 ___
 
