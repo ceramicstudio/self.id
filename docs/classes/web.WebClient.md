@@ -52,6 +52,10 @@ Core&lt;ModelTypes\&gt;.constructor
 
 `CeramicClient`
 
+#### Inherited from
+
+Core.ceramic
+
 ___
 
 ### dataModel
@@ -61,6 +65,10 @@ ___
 #### Returns
 
 `DataModel`<`ModelTypes`, `ModelTypesToAliases`<`ModelTypes`\>\>
+
+#### Inherited from
+
+Core.dataModel
 
 ___
 
@@ -72,6 +80,10 @@ ___
 
 `DIDDataStore`<`ModelTypes`, keyof `ModelTypes`[``"definitions"``]\>
 
+#### Inherited from
+
+Core.dataStore
+
 ___
 
 ### resolver
@@ -81,6 +93,10 @@ ___
 #### Returns
 
 `Resolver`
+
+#### Inherited from
+
+Core.resolver
 
 ___
 

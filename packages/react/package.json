@@ -38,10 +38,10 @@
     "prepublishOnly": "package-check"
   },
   "dependencies": {
-    "@self.id/core": "^0.1.0",
+    "@self.id/core": "^0.2.0",
     "@self.id/web": "^0.2.0",
-    "jotai": "^1.4.2",
-    "react-query": "^3.29.0"
+    "jotai": "^1.4.3",
+    "react-query": "^3.32.1"
   },
   "peerDependencies": {
     "react": "^17.0.2"

@@ -206,6 +206,41 @@ ___
 
 ___
 
+### formatDID
+
+▸ **formatDID**(`did`, `maxLength?`): `string`
+
+#### Parameters
+
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `did` | `string` | `undefined` |
+| `maxLength` | `number` | `20` |
+
+#### Returns
+
+`string`
+
+___
+
+### getImageURL
+
+▸ **getImageURL**(`ipfsPrefix`, `sources`, `dimensions`): `string` \| `undefined`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ipfsPrefix` | `string` |
+| `sources` | `undefined` \| `ImageSources` |
+| `dimensions` | [`Dimensions`](framework.md#dimensions) |
+
+#### Returns
+
+`string` \| `undefined`
+
+___
+
 ### isCAIP10string
 
 ▸ **isCAIP10string**(`account`): `boolean`

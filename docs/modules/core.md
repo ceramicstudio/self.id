@@ -39,7 +39,9 @@ ___
 
 | Name | Type |
 | :------ | :------ |
+| `cache?` | `TileCache` \| `boolean` |
 | `ceramic` | [`CeramicNetwork`](core.md#ceramicnetwork) \| `string` |
+| `loader?` | `TileLoader` |
 | `model?` | `ModelTypesToAliases`<`ModelTypes`\> |
 
 ___

@@ -14,7 +14,7 @@ export function ViewerConnectedContainer(props: ViewerConnectedContainerProps): 
 
   return connection.status === 'connected' ? (
     <>{props.children}</>
-  ) : (
+  ) : props.renderFallback ? (
     props.renderFallback(connection)
-  )
+  ) : null
 }

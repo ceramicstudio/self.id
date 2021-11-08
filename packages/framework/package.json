@@ -40,7 +40,7 @@
   "dependencies": {
     "@datamodels/identity-accounts-web": "^0.1.2",
     "@datamodels/identity-profile-basic": "^0.1.2",
-    "@self.id/core": "^0.1.0",
+    "@self.id/core": "^0.2.0",
     "@self.id/image-utils": "^0.1.0",
     "@self.id/multiauth": "^0.1.0",
     "@self.id/react": "^0.1.0",

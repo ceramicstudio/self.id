@@ -4,6 +4,8 @@ import { Caip10Link } from '@ceramicnetwork/stream-caip10-link'
 import { DataModel } from '@glazed/datamodel'
 import { DIDDataStore } from '@glazed/did-datastore'
 import type { DefinitionContentType } from '@glazed/did-datastore'
+import { TileLoader } from '@glazed/tile-loader'
+import type { TileCache } from '@glazed/tile-loader'
 import type { ModelTypesToAliases } from '@glazed/types'
 import { Resolver } from 'did-resolver'
 import { getResolver as getKeyResolver } from 'key-did-resolver'
@@ -20,7 +22,9 @@ export const CERAMIC_URLS: Record<CeramicNetwork, string> = {
 }
 
 export type CoreParams<ModelTypes extends CoreModelTypes = CoreModelTypes> = {
+  cache?: TileCache | boolean
   ceramic: CeramicNetwork | string
+  loader?: TileLoader
   model?: ModelTypesToAliases<ModelTypes>
 }
 
@@ -39,16 +43,21 @@ export class Core<
   #resolver: Resolver
 
   constructor(params: CoreParams<ModelTypes>) {
-    const ceramicURL = CERAMIC_URLS[params.ceramic as CeramicNetwork] ?? params.ceramic
-    this.#ceramic = new CeramicClient(ceramicURL)
+    const ceramic = new CeramicClient(
+      CERAMIC_URLS[params.ceramic as CeramicNetwork] ?? params.ceramic
+    )
+    const loader = params.loader ?? new TileLoader({ ceramic, cache: params.cache })
+
+    this.#ceramic = ceramic
     this.#dataModel = new DataModel<ModelTypes>({
       autopin: true,
-      ceramic: this.#ceramic,
+      loader,
       model: params.model ?? (coreModel as ModelTypesToAliases<ModelTypes>),
     })
     this.#dataStore = new DIDDataStore<ModelTypes>({
       autopin: true,
-      ceramic: this.#ceramic,
+      ceramic,
+      loader,
       model: this.#dataModel,
     })
     this.#resolver = new Resolver({ ...getKeyResolver(), ...get3IDResolver(this.#ceramic) })

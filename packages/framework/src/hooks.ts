@@ -73,7 +73,7 @@ export function useConnection(): [
       const authProvider = new EthereumAuthProvider(provider, auth.state.account)
       return await connectViewer(authProvider)
     },
-    [state, connectViewer, disconnect]
+    [state, authenticate, connectViewer, disconnect]
   )
 
   return [state, connect, disconnect]

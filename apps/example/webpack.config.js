@@ -12,6 +12,7 @@ module.exports = {
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.json'],
     fallback: {
+      crypto: false,
       stream: require.resolve('stream-browserify'),
     },
   },

@@ -15,6 +15,7 @@ module.exports = function () {
         return {
           resolve: {
             fallback: {
+              crypto: false,
               stream: require.resolve('stream-browserify'),
             },
           },
