@@ -53,6 +53,15 @@ Self.ID packages are organized in the following stack:
 | [`@self.id/framework`](./packages/framework)     | [React framework for decentralized apps](https://developers.ceramic.network/reference/self-id/modules/framework/)                            | ![npm version](https://img.shields.io/npm/v/@self.id/framework.svg)   |
 | [`@self.id/3box-legacy`](./packages/3box-legacy) | [Load legacy 3Box profiles](https://developers.ceramic.network/reference/self-id/modules/3box_legacy/)                                       | ![npm version](https://img.shields.io/npm/v/@self.id/3box-legacy.svg) |
 
+## Templates
+
+Predefined
+
+| Name                                                   | Description                                                                                                                            | Installation                                                   |
+| ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| [`vite-basic`](./templates/vite-basic)                 | Basic [Vite](https://vitejs.dev/) setup                                                                                                | `npx degit ceramicstudio/self.id/templates/vite-basic`         |
+| [`webpack-typescript`](./templates/webpack-typescript) | [Webpack](https://webpack.js.org/) setup using [TypeScript](https://www.typescriptlang.org/) and [esbuild](https://esbuild.github.io/) | `npx degit ceramicstudio/self.id/templates/webpack-typescript` |
+
 ## Maintainers
 
 - Paul Le Cam ([@paullecam](http://github.com/paullecam))

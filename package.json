@@ -3,7 +3,8 @@
   "private": true,
   "workspaces": [
     "apps/*",
-    "packages/*"
+    "packages/*",
+    "templates/*"
   ],
   "scripts": {
     "docs": "typedoc --tsconfig tsconfig.docs.json",
