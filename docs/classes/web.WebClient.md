@@ -12,7 +12,7 @@ import { WebClient } from '@self.id/web'
 
 | Name | Type |
 | :------ | :------ |
-| `ModelTypes` | extends `CoreModelTypes``CoreModelTypes` |
+| `ModelTypes` | extends `ModelTypeAliases` = `CoreModelTypes` |
 
 ## Hierarchy
 
@@ -30,7 +30,7 @@ import { WebClient } from '@self.id/web'
 
 | Name | Type |
 | :------ | :------ |
-| `ModelTypes` | extends `ModelTypes``ModelTypes` |
+| `ModelTypes` | extends `ModelTypeAliases`<`Record`<`string`, `any`\>, `Record`<`string`, `string`\>, `Record`<`string`, `string`\>\> = `ModelTypes` |
 
 #### Parameters
 
@@ -107,6 +107,20 @@ ___
 #### Returns
 
 `ThreeIdConnect`
+
+___
+
+### tileLoader
+
+• `get` **tileLoader**(): `TileLoader`
+
+#### Returns
+
+`TileLoader`
+
+#### Inherited from
+
+Core.tileLoader
 
 ## Methods
 

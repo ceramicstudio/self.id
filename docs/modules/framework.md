@@ -59,13 +59,19 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `children` | `ReactNode` |
-| `renderFallback?` | (`connectionState`: [`ConnectionState`](framework.md#connectionstate)) => ``null`` \| `Element` |
+| `renderFallback?` | (`connectionState`: [`ConnectionState`](framework.md#connectionstate)<`ModelTypes`\>) => ``null`` \| `Element` |
 
 ___
 
 ### ConnectionState
 
-Ƭ **ConnectionState**: { `status`: ``"disconnected"``  } \| { `status`: ``"connecting"``  } \| { `selfID`: `SelfID` ; `status`: ``"connected"``  } \| { `error?`: `Error` ; `status`: ``"failed"``  }
+Ƭ **ConnectionState**<`ModelTypes`\>: { `status`: ``"disconnected"``  } \| { `status`: ``"connecting"``  } \| { `selfID`: `SelfID`<`ModelTypes`\> ; `status`: ``"connected"``  } \| { `error?`: `Error` ; `status`: ``"failed"``  }
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ModelTypes` | extends `ModelTypeAliases` = `CoreModelTypes` |
 
 ___
 
@@ -84,7 +90,13 @@ ___
 
 ### ProviderProps
 
-Ƭ **ProviderProps**: `ReactProviderProps` & { `auth?`: `MultiAuthProviderConfig` ; `ui?`: `UIProviderProps`  }
+Ƭ **ProviderProps**<`ModelTypes`\>: `ReactProviderProps`<`ModelTypes`\> & { `auth?`: `MultiAuthProviderConfig` ; `ui?`: `UIProviderProps`  }
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ModelTypes` | extends `ModelTypeAliases` = `CoreModelTypes` |
 
 ___
 
@@ -117,7 +129,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `ModelTypes` | extends `CoreModelTypes``CoreModelTypes` |
+| `ModelTypes` | extends `ModelTypeAliases` = `CoreModelTypes` |
 
 ___
 
@@ -136,7 +148,7 @@ ___
 
 ### ViewerRecord
 
-Ƭ **ViewerRecord**<`ContentType`\>: { `content?`: `never` ; `error?`: `never` ; `isError`: ``false`` ; `isLoadable`: ``false`` ; `isLoading`: ``false`` ; `isMutable`: ``false`` ; `isMutating`: ``false`` ; `merge?`: `never` ; `set?`: `never`  } \| { `content?`: `ContentType` ; `error?`: `unknown` ; `isError`: `boolean` ; `isLoadable`: ``true`` ; `isLoading`: `boolean`  } & { `isMutable`: ``false`` ; `isMutating`: ``false``  } \| { `isMutable`: ``true`` ; `isMutating`: `boolean` ; `merge`: (`content`: `ContentType`) => `Promise`<`void`\> ; `set`: (`content`: `ContentType`) => `Promise`<`void`\>  }
+Ƭ **ViewerRecord**<`ContentType`\>: { `content?`: `never` ; `error?`: `never` ; `isError`: ``false`` ; `isLoadable`: ``false`` ; `isLoading`: ``false`` ; `isMutable`: ``false`` ; `isMutating`: ``false`` ; `merge?`: `never` ; `set?`: `never`  } \| { `content?`: `ContentType` ; `error?`: `unknown` ; `isError`: `boolean` ; `isLoadable`: ``true`` ; `isLoading`: `boolean` ; `isMutable`: `boolean` ; `isMutating`: `boolean` ; `merge`: (`content`: `ContentType`) => `Promise`<`void`\> ; `set`: (`content`: `ContentType`) => `Promise`<`void`\>  }
 
 #### Type parameters
 
@@ -192,13 +204,19 @@ ___
 
 ### Provider
 
-▸ **Provider**(`props`): `JSX.Element`
+▸ **Provider**<`ModelTypes`\>(`props`): `JSX.Element`
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ModelTypes` | extends `ModelTypeAliases`<`Record`<`string`, `any`\>, `Record`<`string`, `string`\>, `Record`<`string`, `string`\>\> = `ModelTypes` |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `props` | [`ProviderProps`](framework.md#providerprops) |
+| `props` | [`ProviderProps`](framework.md#providerprops)<`ModelTypes`\> |
 
 #### Returns
 
@@ -295,11 +313,17 @@ ___
 
 ### useConnection
 
-▸ **useConnection**(): [[`ConnectionState`](framework.md#connectionstate), (`options?`: [`ConnectOptions`](framework.md#connectoptions)) => `Promise`<`SelfID` \| ``null``\>, () => `void`]
+▸ **useConnection**<`ModelTypes`\>(): [[`ConnectionState`](framework.md#connectionstate)<`ModelTypes`\>, (`options?`: [`ConnectOptions`](framework.md#connectoptions)) => `Promise`<`SelfID`<`ModelTypes`\> \| ``null``\>, () => `void`]
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ModelTypes` | extends `ModelTypeAliases`<`Record`<`string`, `any`\>, `Record`<`string`, `string`\>, `Record`<`string`, `string`\>\> = `ModelTypes` |
 
 #### Returns
 
-[[`ConnectionState`](framework.md#connectionstate), (`options?`: [`ConnectOptions`](framework.md#connectoptions)) => `Promise`<`SelfID` \| ``null``\>, () => `void`]
+[[`ConnectionState`](framework.md#connectionstate)<`ModelTypes`\>, (`options?`: [`ConnectOptions`](framework.md#connectoptions)) => `Promise`<`SelfID`<`ModelTypes`\> \| ``null``\>, () => `void`]
 
 ___
 
@@ -311,7 +335,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `ModelTypes` | extends `ModelTypes``ModelTypes` |
+| `ModelTypes` | extends `ModelTypeAliases`<`Record`<`string`, `any`\>, `Record`<`string`, `string`\>, `Record`<`string`, `string`\>\> = `ModelTypes` |
 
 #### Returns
 
@@ -327,8 +351,8 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `ModelTypes` | extends `ModelTypes``ModelTypes` |
-| `Alias` | extends `string` \| `number` \| `symbol`keyof `ModelTypes`[``"definitions"``] |
+| `ModelTypes` | extends `ModelTypeAliases`<`Record`<`string`, `any`\>, `Record`<`string`, `string`\>, `Record`<`string`, `string`\>\> = `ModelTypes` |
+| `Alias` | extends `string` \| `number` \| `symbol` = keyof `ModelTypes`[``"definitions"``] |
 | `ContentType` | `DefinitionContentType`<`ModelTypes`, `Alias`\> |
 
 #### Parameters
@@ -352,7 +376,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `ModelTypes` | extends `ModelTypes``ModelTypes` |
+| `ModelTypes` | extends `ModelTypeAliases`<`Record`<`string`, `any`\>, `Record`<`string`, `string`\>, `Record`<`string`, `string`\>\> = `ModelTypes` |
 
 #### Returns
 
@@ -368,8 +392,8 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `ModelTypes` | extends `ModelTypes``ModelTypes` |
-| `Alias` | extends `string` \| `number` \| `symbol`keyof `ModelTypes`[``"definitions"``] |
+| `ModelTypes` | extends `ModelTypeAliases`<`Record`<`string`, `any`\>, `Record`<`string`, `string`\>, `Record`<`string`, `string`\>\> = `ModelTypes` |
+| `Alias` | extends `string` \| `number` \| `symbol` = keyof `ModelTypes`[``"definitions"``] |
 | `ContentType` | `DefinitionContentType`<`ModelTypes`, `Alias`\> |
 
 #### Parameters

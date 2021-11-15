@@ -1,4 +1,5 @@
 import type { DefinitionContentType } from '@glazed/did-datastore'
+import type { ModelTypeAliases } from '@glazed/types'
 import { PublicID } from '@self.id/core'
 import type { Core, CoreModelTypes } from '@self.id/core'
 import type { AuthenticateParams, EthereumAuthProvider, SelfID } from '@self.id/web'
@@ -11,28 +12,30 @@ import { stateScope, connectionAtom, clientConfigAtom, coreAtom, viewerIDAtom } 
 import type { ViewerConnectionState } from './types'
 import { abortable } from './utils'
 
-async function authenticateSelfID<ModelTypes extends CoreModelTypes = CoreModelTypes>(
+async function authenticateSelfID<ModelTypes extends ModelTypeAliases = CoreModelTypes>(
   params: AuthenticateParams<ModelTypes>
 ): Promise<SelfID<ModelTypes>> {
   const { SelfID } = await import('@self.id/web')
   return await SelfID.authenticate<ModelTypes>(params)
 }
 
-export function useCore<ModelTypes extends CoreModelTypes = CoreModelTypes>(): Core<ModelTypes> {
-  return useAtomValue(coreAtom, stateScope)
+export function useCore<ModelTypes extends ModelTypeAliases = CoreModelTypes>(): Core<ModelTypes> {
+  return useAtomValue(coreAtom, stateScope) as unknown as Core<ModelTypes>
 }
 
-export type ViewerID<ModelTypes extends CoreModelTypes> = PublicID<ModelTypes> | SelfID<ModelTypes>
+export type ViewerID<ModelTypes extends ModelTypeAliases> =
+  | PublicID<ModelTypes>
+  | SelfID<ModelTypes>
 
 export function useViewerID<
-  ModelTypes extends CoreModelTypes = CoreModelTypes
+  ModelTypes extends ModelTypeAliases = CoreModelTypes
 >(): ViewerID<ModelTypes> | null {
-  return useAtomValue(viewerIDAtom, stateScope)
+  return useAtomValue(viewerIDAtom, stateScope) as unknown as ViewerID<ModelTypes> | null
 }
 
-export function useViewerConnection(): [
+export function useViewerConnection<ModelTypes extends ModelTypeAliases = CoreModelTypes>(): [
   ViewerConnectionState,
-  (provider: EthereumAuthProvider) => Promise<SelfID | null>,
+  (provider: EthereumAuthProvider) => Promise<SelfID<ModelTypes> | null>,
   () => void
 ] {
   const config = useAtomValue(clientConfigAtom, stateScope)
@@ -40,9 +43,9 @@ export function useViewerConnection(): [
   const setViewerID = useUpdateAtom(viewerIDAtom, stateScope)
 
   const connect = useCallback(
-    async (provider: EthereumAuthProvider): Promise<SelfID | null> => {
+    async (provider: EthereumAuthProvider): Promise<SelfID<ModelTypes> | null> => {
       if (connection.status === 'connecting' && connection.provider === provider) {
-        return await connection.promise
+        return (await connection.promise) as SelfID<ModelTypes> | null
       }
 
       if (connection.status === 'connecting') {
@@ -50,7 +53,10 @@ export function useViewerConnection(): [
       }
       try {
         const promise = abortable(
-          authenticateSelfID({ ...config, authProvider: provider }).then((selfID) => {
+          authenticateSelfID<ModelTypes>({
+            ...config,
+            authProvider: provider,
+          } as AuthenticateParams<ModelTypes>).then((selfID) => {
             if (promise.signal.aborted) {
               void setConnection({ status: 'idle' })
               return null
@@ -66,7 +72,7 @@ export function useViewerConnection(): [
         return null
       }
     },
-    [connection.status, setConnection, setViewerID]
+    [config, connection, setConnection, setViewerID]
   )
 
   const reset = useCallback(() => {
@@ -89,26 +95,22 @@ export type ViewerRecord<ContentType> =
       set?: never
       merge?: never
     }
-  | ({
+  | {
       // With viewerID -> loadable
       isLoadable: true
       isLoading: boolean
       content?: ContentType
       isError: boolean
       error?: unknown
-    } & (
-      | { isMutable: false; isMutating: false } // Read-only (PublicID)
-      | {
-          // Read/write (SelfID)
-          isMutable: true
-          isMutating: boolean
-          set(content: ContentType): Promise<void>
-          merge(content: ContentType): Promise<void>
-        }
-    ))
+      // Only mutable if SelfID
+      isMutable: boolean
+      isMutating: boolean
+      set(content: ContentType): Promise<void>
+      merge(content: ContentType): Promise<void>
+    }
 
 export function useViewerRecord<
-  ModelTypes extends CoreModelTypes = CoreModelTypes,
+  ModelTypes extends ModelTypeAliases = CoreModelTypes,
   Alias extends keyof ModelTypes['definitions'] = keyof ModelTypes['definitions'],
   ContentType = DefinitionContentType<ModelTypes, Alias>
 >(alias: Alias): ViewerRecord<ContentType | null> {
@@ -144,41 +146,23 @@ export function useViewerRecord<
     return newContent
   }, mutationOptions)
 
-  if (viewerID == null) {
-    return {
-      isLoadable: false,
-      isLoading: false,
-      isError: false,
-      isMutable: false,
-      isMutating: false,
-    }
-  }
-  if (viewerID instanceof PublicID) {
-    return {
-      content: data,
-      isLoadable: true,
-      isLoading,
-      isError,
-      error,
-      isMutable: false,
-      isMutating: false,
-    }
-  }
-  return {
-    content: data,
-    isLoadable: true,
-    isLoading,
-    isError,
-    error,
-    isMutable: true,
-    isMutating: setMutation.isLoading || mergeMutation.isLoading,
-    set: async (content: ContentType) => {
-      await setMutation.mutateAsync(content)
-    },
-    merge: async (content: ContentType) => {
-      await mergeMutation.mutateAsync(content)
-    },
-  }
+  return viewerID == null
+    ? { isLoadable: false, isLoading: false, isError: false, isMutable: false, isMutating: false }
+    : {
+        content: data,
+        isLoadable: true,
+        isLoading,
+        isError,
+        error,
+        isMutable: !(viewerID instanceof PublicID),
+        isMutating: setMutation.isLoading || mergeMutation.isLoading,
+        set: async (content: ContentType) => {
+          await setMutation.mutateAsync(content)
+        },
+        merge: async (content: ContentType) => {
+          await mergeMutation.mutateAsync(content)
+        },
+      }
 }
 
 export type PublicRecord<ContentType> = {
@@ -189,7 +173,7 @@ export type PublicRecord<ContentType> = {
 }
 
 export function usePublicRecord<
-  ModelTypes extends CoreModelTypes = CoreModelTypes,
+  ModelTypes extends ModelTypeAliases = CoreModelTypes,
   Alias extends keyof ModelTypes['definitions'] = keyof ModelTypes['definitions'],
   ContentType = DefinitionContentType<ModelTypes, Alias>
 >(alias: Alias, id: string): PublicRecord<ContentType | null> {

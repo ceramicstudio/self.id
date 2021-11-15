@@ -16,7 +16,7 @@ npm install @self.id/multiauth
 
 | Name | Type |
 | :------ | :------ |
-| `Key` | extends [`ProviderKey`](multiauth.md#providerkey)[`ProviderKey`](multiauth.md#providerkey) |
+| `Key` | extends [`ProviderKey`](multiauth.md#providerkey) = [`ProviderKey`](multiauth.md#providerkey) |
 
 #### Type declaration
 
@@ -36,7 +36,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `Key` | extends [`NetworkKey`](multiauth.md#networkkey)[`NetworkKey`](multiauth.md#networkkey) |
+| `Key` | extends [`NetworkKey`](multiauth.md#networkkey) = [`NetworkKey`](multiauth.md#networkkey) |
 
 #### Type declaration
 
@@ -55,8 +55,8 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `Key` | extends [`NetworkKey`](multiauth.md#networkkey)[`NetworkKey`](multiauth.md#networkkey) |
-| `Provider` | extends [`NetworkProvider`](multiauth.md#networkprovider)<`Key`\>[`NetworkProvider`](multiauth.md#networkprovider)<`Key`\> |
+| `Key` | extends [`NetworkKey`](multiauth.md#networkkey) = [`NetworkKey`](multiauth.md#networkkey) |
+| `Provider` | extends [`NetworkProvider`](multiauth.md#networkprovider)<`Key`\> = [`NetworkProvider`](multiauth.md#networkprovider)<`Key`\> |
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `Key` | extends [`ProviderKey`](multiauth.md#providerkey)[`ProviderKey`](multiauth.md#providerkey) |
+| `Key` | extends [`ProviderKey`](multiauth.md#providerkey) = [`ProviderKey`](multiauth.md#providerkey) |
 
 ___
 
@@ -111,7 +111,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `Key` | extends [`ConnectorKey`](multiauth.md#connectorkey)[`ConnectorKey`](multiauth.md#connectorkey) |
+| `Key` | extends [`ConnectorKey`](multiauth.md#connectorkey) = [`ConnectorKey`](multiauth.md#connectorkey) |
 
 ___
 
@@ -160,7 +160,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `Key` | extends [`ProviderKey`](multiauth.md#providerkey)[`ProviderKey`](multiauth.md#providerkey) |
+| `Key` | extends [`ProviderKey`](multiauth.md#providerkey) = [`ProviderKey`](multiauth.md#providerkey) |
 
 #### Type declaration
 
@@ -238,7 +238,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `Key` | extends [`NetworkKey`](multiauth.md#networkkey)[`NetworkKey`](multiauth.md#networkkey) |
+| `Key` | extends [`NetworkKey`](multiauth.md#networkkey) = [`NetworkKey`](multiauth.md#networkkey) |
 
 ___
 
@@ -332,7 +332,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `Key` | extends [`ConnectorKey`](multiauth.md#connectorkey)[`ConnectorKey`](multiauth.md#connectorkey) |
+| `Key` | extends [`ConnectorKey`](multiauth.md#connectorkey) = [`ConnectorKey`](multiauth.md#connectorkey) |
 
 ___
 
@@ -344,7 +344,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `Key` | extends [`NetworkKey`](multiauth.md#networkkey)[`NetworkKey`](multiauth.md#networkkey) |
+| `Key` | extends [`NetworkKey`](multiauth.md#networkkey) = [`NetworkKey`](multiauth.md#networkkey) |
 
 ___
 

@@ -14,13 +14,19 @@ npm install @self.id/react
 
 ### ProviderConfig
 
-Ƭ **ProviderConfig**: `Object`
+Ƭ **ProviderConfig**<`ModelTypes`\>: `Object`
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ModelTypes` | extends `ModelTypeAliases` = `CoreModelTypes` |
 
 #### Type declaration
 
 | Name | Type |
 | :------ | :------ |
-| `client?` | `WebClientParams` |
+| `client?` | `WebClientParams`<`ModelTypes`\> |
 | `queryOptions?` | `QueryObserverOptions` |
 | `state?` | [`RequestState`](react.md#requeststate) |
 
@@ -28,7 +34,13 @@ ___
 
 ### ProviderProps
 
-Ƭ **ProviderProps**: [`ProviderConfig`](react.md#providerconfig) & { `children`: `ReactNode`  }
+Ƭ **ProviderProps**<`ModelTypes`\>: [`ProviderConfig`](react.md#providerconfig)<`ModelTypes`\> & { `children`: `ReactNode`  }
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ModelTypes` | extends `ModelTypeAliases` = `CoreModelTypes` |
 
 ___
 
@@ -61,7 +73,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `ModelTypes` | extends `CoreModelTypes``CoreModelTypes` |
+| `ModelTypes` | extends `ModelTypeAliases` = `CoreModelTypes` |
 
 ___
 
@@ -87,13 +99,19 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `children` | `ReactNode` |
-| `renderFallback?` | (`connectionState`: [`ViewerConnectionState`](react.md#viewerconnectionstate)) => ``null`` \| `Element` |
+| `renderFallback?` | (`connectionState`: [`ViewerConnectionState`](react.md#viewerconnectionstate)<`ModelTypes`\>) => ``null`` \| `Element` |
 
 ___
 
 ### ViewerConnectionState
 
-Ƭ **ViewerConnectionState**: { `status`: ``"idle"``  } \| { `promise`: `Abortable`<`SelfID` \| ``null``\> ; `provider`: `EthereumAuthProvider` ; `status`: ``"connecting"``  } \| { `selfID`: `SelfID` ; `status`: ``"connected"``  } \| { `error`: `Error` ; `status`: ``"failed"``  }
+Ƭ **ViewerConnectionState**<`ModelTypes`\>: { `status`: ``"idle"``  } \| { `promise`: `Abortable`<`SelfID`<`ModelTypes`\> \| ``null``\> ; `provider`: `EthereumAuthProvider` ; `status`: ``"connecting"``  } \| { `selfID`: `SelfID`<`ModelTypes`\> ; `status`: ``"connected"``  } \| { `error`: `Error` ; `status`: ``"failed"``  }
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ModelTypes` | extends `ModelTypeAliases` = `CoreModelTypes` |
 
 ___
 
@@ -105,13 +123,13 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `ModelTypes` | extends `CoreModelTypes` |
+| `ModelTypes` | extends `ModelTypeAliases` |
 
 ___
 
 ### ViewerRecord
 
-Ƭ **ViewerRecord**<`ContentType`\>: { `content?`: `never` ; `error?`: `never` ; `isError`: ``false`` ; `isLoadable`: ``false`` ; `isLoading`: ``false`` ; `isMutable`: ``false`` ; `isMutating`: ``false`` ; `merge?`: `never` ; `set?`: `never`  } \| { `content?`: `ContentType` ; `error?`: `unknown` ; `isError`: `boolean` ; `isLoadable`: ``true`` ; `isLoading`: `boolean`  } & { `isMutable`: ``false`` ; `isMutating`: ``false``  } \| { `isMutable`: ``true`` ; `isMutating`: `boolean` ; `merge`: (`content`: `ContentType`) => `Promise`<`void`\> ; `set`: (`content`: `ContentType`) => `Promise`<`void`\>  }
+Ƭ **ViewerRecord**<`ContentType`\>: { `content?`: `never` ; `error?`: `never` ; `isError`: ``false`` ; `isLoadable`: ``false`` ; `isLoading`: ``false`` ; `isMutable`: ``false`` ; `isMutating`: ``false`` ; `merge?`: `never` ; `set?`: `never`  } \| { `content?`: `ContentType` ; `error?`: `unknown` ; `isError`: `boolean` ; `isLoadable`: ``true`` ; `isLoading`: `boolean` ; `isMutable`: `boolean` ; `isMutating`: `boolean` ; `merge`: (`content`: `ContentType`) => `Promise`<`void`\> ; `set`: (`content`: `ContentType`) => `Promise`<`void`\>  }
 
 #### Type parameters
 
@@ -123,13 +141,19 @@ ___
 
 ### Provider
 
-▸ **Provider**(`props`): `JSX.Element`
+▸ **Provider**<`ModelTypes`\>(`props`): `JSX.Element`
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ModelTypes` | extends `ModelTypeAliases`<`Record`<`string`, `any`\>, `Record`<`string`, `string`\>, `Record`<`string`, `string`\>\> = `ModelTypes` |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `props` | [`ProviderProps`](react.md#providerprops) |
+| `props` | [`ProviderProps`](react.md#providerprops)<`ModelTypes`\> |
 
 #### Returns
 
@@ -177,7 +201,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `ModelTypes` | extends `ModelTypes``ModelTypes` |
+| `ModelTypes` | extends `ModelTypeAliases`<`Record`<`string`, `any`\>, `Record`<`string`, `string`\>, `Record`<`string`, `string`\>\> = `ModelTypes` |
 
 #### Returns
 
@@ -193,8 +217,8 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `ModelTypes` | extends `ModelTypes``ModelTypes` |
-| `Alias` | extends `string` \| `number` \| `symbol`keyof `ModelTypes`[``"definitions"``] |
+| `ModelTypes` | extends `ModelTypeAliases`<`Record`<`string`, `any`\>, `Record`<`string`, `string`\>, `Record`<`string`, `string`\>\> = `ModelTypes` |
+| `Alias` | extends `string` \| `number` \| `symbol` = keyof `ModelTypes`[``"definitions"``] |
 | `ContentType` | `DefinitionContentType`<`ModelTypes`, `Alias`\> |
 
 #### Parameters
@@ -212,11 +236,17 @@ ___
 
 ### useViewerConnection
 
-▸ **useViewerConnection**(): [[`ViewerConnectionState`](react.md#viewerconnectionstate), (`provider`: `EthereumAuthProvider`) => `Promise`<`SelfID` \| ``null``\>, () => `void`]
+▸ **useViewerConnection**<`ModelTypes`\>(): [[`ViewerConnectionState`](react.md#viewerconnectionstate), (`provider`: `EthereumAuthProvider`) => `Promise`<`SelfID`<`ModelTypes`\> \| ``null``\>, () => `void`]
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ModelTypes` | extends `ModelTypeAliases`<`Record`<`string`, `any`\>, `Record`<`string`, `string`\>, `Record`<`string`, `string`\>\> = `ModelTypes` |
 
 #### Returns
 
-[[`ViewerConnectionState`](react.md#viewerconnectionstate), (`provider`: `EthereumAuthProvider`) => `Promise`<`SelfID` \| ``null``\>, () => `void`]
+[[`ViewerConnectionState`](react.md#viewerconnectionstate), (`provider`: `EthereumAuthProvider`) => `Promise`<`SelfID`<`ModelTypes`\> \| ``null``\>, () => `void`]
 
 ___
 
@@ -228,7 +258,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `ModelTypes` | extends `ModelTypes``ModelTypes` |
+| `ModelTypes` | extends `ModelTypeAliases`<`Record`<`string`, `any`\>, `Record`<`string`, `string`\>, `Record`<`string`, `string`\>\> = `ModelTypes` |
 
 #### Returns
 
@@ -244,8 +274,8 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `ModelTypes` | extends `ModelTypes``ModelTypes` |
-| `Alias` | extends `string` \| `number` \| `symbol`keyof `ModelTypes`[``"definitions"``] |
+| `ModelTypes` | extends `ModelTypeAliases`<`Record`<`string`, `any`\>, `Record`<`string`, `string`\>, `Record`<`string`, `string`\>\> = `ModelTypes` |
+| `Alias` | extends `string` \| `number` \| `symbol` = keyof `ModelTypes`[``"definitions"``] |
 | `ContentType` | `DefinitionContentType`<`ModelTypes`, `Alias`\> |
 
 #### Parameters

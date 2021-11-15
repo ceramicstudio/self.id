@@ -6,7 +6,7 @@ import { DIDDataStore } from '@glazed/did-datastore'
 import type { DefinitionContentType } from '@glazed/did-datastore'
 import { TileLoader } from '@glazed/tile-loader'
 import type { TileCache } from '@glazed/tile-loader'
-import type { ModelTypesToAliases } from '@glazed/types'
+import type { ModelTypeAliases, ModelTypesToAliases } from '@glazed/types'
 import { Resolver } from 'did-resolver'
 import { getResolver as getKeyResolver } from 'key-did-resolver'
 
@@ -21,7 +21,7 @@ export const CERAMIC_URLS: Record<CeramicNetwork, string> = {
   'testnet-clay-gateway': 'https://gateway-clay.ceramic.network',
 }
 
-export type CoreParams<ModelTypes extends CoreModelTypes = CoreModelTypes> = {
+export type CoreParams<ModelTypes extends ModelTypeAliases = CoreModelTypes> = {
   cache?: TileCache | boolean
   ceramic: CeramicNetwork | string
   loader?: TileLoader
@@ -34,13 +34,14 @@ export type CoreParams<ModelTypes extends CoreModelTypes = CoreModelTypes> = {
  * ```
  */
 export class Core<
-  ModelTypes extends CoreModelTypes = CoreModelTypes,
+  ModelTypes extends ModelTypeAliases = CoreModelTypes,
   Alias extends keyof ModelTypes['definitions'] = keyof ModelTypes['definitions']
 > {
   #ceramic: CeramicClient
   #dataModel: DataModel<ModelTypes>
   #dataStore: DIDDataStore<ModelTypes>
   #resolver: Resolver
+  #tileLoader: TileLoader
 
   constructor(params: CoreParams<ModelTypes>) {
     const ceramic = new CeramicClient(
@@ -61,6 +62,7 @@ export class Core<
       model: this.#dataModel,
     })
     this.#resolver = new Resolver({ ...getKeyResolver(), ...get3IDResolver(this.#ceramic) })
+    this.#tileLoader = loader
   }
 
   get ceramic(): CeramicClient {
@@ -77,6 +79,10 @@ export class Core<
 
   get resolver(): Resolver {
     return this.#resolver
+  }
+
+  get tileLoader(): TileLoader {
+    return this.#tileLoader
   }
 
   async getAccountDID(account: string): Promise<string> {

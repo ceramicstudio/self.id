@@ -49,6 +49,9 @@
     "boring-avatars": "^1.5.8",
     "grommet": "^2.18.0"
   },
+  "devDependencies": {
+    "@glazed/types": "^0.1.3"
+  },
   "peerDependencies": {
     "react": "^17.0.2"
   },

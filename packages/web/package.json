@@ -42,8 +42,9 @@
     "dids": "^2.4.0"
   },
   "devDependencies": {
-    "@ceramicnetwork/streamid": "^1.3.2",
-    "@glazed/did-datastore": "^0.2.0"
+    "@ceramicnetwork/streamid": "^1.3.3",
+    "@glazed/did-datastore": "^0.2.0",
+    "@glazed/types": "^0.1.3"
   },
   "jest": {
     "preset": "ts-jest"

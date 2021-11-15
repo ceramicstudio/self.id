@@ -1,3 +1,5 @@
+import type { ModelTypeAliases } from '@glazed/types'
+import type { CoreModelTypes } from '@self.id/core'
 import type { WebClientParams } from '@self.id/web'
 import { Provider as StateProvider } from 'jotai'
 import React, { useState } from 'react'
@@ -14,15 +16,18 @@ const DEFAULT_QUERY_OPTIONS: QueryObserverOptions = {
   refetchOnWindowFocus: false,
 }
 
-export type ProviderConfig = {
-  client?: WebClientParams
+export type ProviderConfig<ModelTypes extends ModelTypeAliases = CoreModelTypes> = {
+  client?: WebClientParams<ModelTypes>
   queryOptions?: QueryObserverOptions
   state?: RequestState
 }
 
-export type ProviderProps = ProviderConfig & { children: ReactNode }
+export type ProviderProps<ModelTypes extends ModelTypeAliases = CoreModelTypes> =
+  ProviderConfig<ModelTypes> & { children: ReactNode }
 
-export function Provider(props: ProviderProps): JSX.Element {
+export function Provider<ModelTypes extends ModelTypeAliases = CoreModelTypes>(
+  props: ProviderProps<ModelTypes>
+): JSX.Element {
   const { children, client, queryOptions, state } = props
   const [queryClient] = useState(() => {
     return new QueryClient({

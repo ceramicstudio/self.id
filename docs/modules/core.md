@@ -33,7 +33,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `ModelTypes` | extends [`CoreModelTypes`](core.md#coremodeltypes)[`CoreModelTypes`](core.md#coremodeltypes) |
+| `ModelTypes` | extends `ModelTypeAliases` = [`CoreModelTypes`](core.md#coremodeltypes) |
 
 #### Type declaration
 
@@ -54,7 +54,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `ModelTypes` | extends [`CoreModelTypes`](core.md#coremodeltypes)[`CoreModelTypes`](core.md#coremodeltypes) |
+| `ModelTypes` | extends `ModelTypeAliases` = [`CoreModelTypes`](core.md#coremodeltypes) |
 
 #### Type declaration
 

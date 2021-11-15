@@ -23,18 +23,17 @@ export const DEFAULT_CLIENT_CONFIG = {
 // Clients state
 
 /** @internal */
-export const clientConfigAtom = atom<WebClientParams>(DEFAULT_CLIENT_CONFIG)
+export const clientConfigAtom = atom<WebClientParams<any>>(DEFAULT_CLIENT_CONFIG)
 
 /** @internal */
-export const coreAtom = atom<Core>((get) => {
-  const { ceramic } = get(clientConfigAtom)
-  return new Core({ ceramic })
+export const coreAtom = atom<Core<any>>((get) => {
+  return new Core(get(clientConfigAtom))
 })
 
 // Viewer lifecycle
 
 /** @internal */
-export const connectionAtom = atom<ViewerConnectionState>({ status: 'idle' })
+export const connectionAtom = atom<ViewerConnectionState<any>>({ status: 'idle' })
 
 /**
  * Viewer ID can be injected by server
@@ -67,7 +66,7 @@ export const viewerIDAtom = atom(
     const id = get(requestViewerIDAtom) ?? get(localViewerIDAtom)
     return id == null ? null : new PublicID({ core: get(coreAtom), id })
   },
-  (get, set, selfID: SelfID | null) => {
+  (get, set, selfID: SelfID<any> | null) => {
     // Always discard viewer ID from request when it is set() by client to support expected get() logic above
     void set(requestViewerIDAtom, null)
     if (selfID == null) {
