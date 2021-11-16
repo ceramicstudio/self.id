@@ -14,14 +14,13 @@ type Props = {
 export default function Layout({ children }: Props) {
   return (
     <Box direction="column" flex>
-      <Box direction="row" flex pad="small">
+      <Box direction="row" elevation="medium" pad="small">
         <Box>
           <Link href="/new" passHref>
             <Button label="New note" />
           </Link>
         </Box>
-        <Box flex />
-        <Box>
+        <Box align="flex-end" flex>
           <AccountButton />
         </Box>
       </Box>

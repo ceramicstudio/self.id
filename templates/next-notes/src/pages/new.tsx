@@ -20,24 +20,28 @@ export default function NewNotePage() {
     }
   }, [draft, router])
 
-  const sidebar = viewer ? <NotesList did={viewer.id} /> : <Text>Not connected</Text>
+  const sidebar = viewer ? (
+    <NotesList did={viewer.id} />
+  ) : (
+    <Box direction="column" width="medium" pad="medium">
+      <Text>Not connected</Text>
+    </Box>
+  )
 
   return (
-    <Box direction="row">
-      <Box direction="column" width="medium">
-        {sidebar}
-      </Box>
-      <Box direction="column" flex>
+    <Box direction="row" flex>
+      {sidebar}
+      <Box direction="column" flex pad="medium">
         <Form
           value={draft.value}
           onChange={(nextValue) => draft.setValue(nextValue)}
           onReset={() => draft.resetValue()}
           onSubmit={onSubmit}>
           <FormField name="title" htmlFor="text-input-title" label="Title">
-            <TextInput id="text-input-title" name="title" />
+            <TextInput autoFocus disabled={isLoading} id="text-input-title" name="title" />
           </FormField>
           <FormField name="text" htmlFor="text-input-text" label="Contents">
-            <TextArea id="text-input-text" name="text" />
+            <TextArea disabled={isLoading} id="text-input-text" name="text" />
           </FormField>
           <Box direction="row" gap="medium">
             <Button

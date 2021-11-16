@@ -1,15 +1,10 @@
-import {
-  AvatarPlaceholder,
-  formatDID,
-  getImageURL,
-  useConnection,
-  useViewerID,
-  useViewerRecord,
-} from '@self.id/framework'
+import { AvatarPlaceholder, useConnection, useViewerID, useViewerRecord } from '@self.id/framework'
 import { Avatar, Box, Button, DropButton, Text } from 'grommet'
 import Link from 'next/link'
+import { useState } from 'react'
 
-import { IPFS_URL } from '../constants'
+import { getProfileInfo } from '../utils'
+
 import DisplayAvatar from './DisplayAvatar'
 
 type MenuButtonProps = {
@@ -38,17 +33,23 @@ export default function AccountButton() {
   const [connection, connect, disconnect] = useConnection()
   const viewerID = useViewerID()
   const profileRecord = useViewerRecord('basicProfile')
+  const [isMenuOpen, setMenuOpen] = useState(false)
 
   if (viewerID != null) {
-    const displayName = profileRecord.content?.name ?? formatDID(viewerID.id)
-    const avatarSrc = getImageURL(IPFS_URL, profileRecord.content?.image, { height: 60, width: 60 })
+    const { avatarSrc, displayName } = getProfileInfo(viewerID.id, profileRecord.content)
 
     const buttons =
       connection.status === 'connected' ? (
         <MenuButton label="Disconnect" onClick={() => disconnect()} />
       ) : (
         <>
-          <MenuButton label="Connect" onClick={() => connect()} />
+          <MenuButton
+            label="Connect"
+            onClick={() => {
+              connect()
+              setMenuOpen(false)
+            }}
+          />
           <MenuButton label="Clear" onClick={() => disconnect()} />
         </>
       )
@@ -56,7 +57,7 @@ export default function AccountButton() {
     const content = (
       <Box
         border={{ color: 'neutral-5' }}
-        margin={{ top: 'small' }}
+        margin={{ top: 'medium' }}
         round={{ size: 'small' }}
         width="250px">
         <Box
@@ -84,6 +85,9 @@ export default function AccountButton() {
                     My notes
                   </Text>
                 }
+                onClick={() => {
+                  setMenuOpen(false)
+                }}
                 plain
               />
             </Link>
@@ -97,7 +101,14 @@ export default function AccountButton() {
       <DropButton
         dropAlign={{ top: 'bottom', right: 'right' }}
         dropContent={content}
-        dropProps={{ plain: true }}>
+        dropProps={{ plain: true }}
+        onClose={() => {
+          setMenuOpen(false)
+        }}
+        onOpen={() => {
+          setMenuOpen(true)
+        }}
+        open={isMenuOpen}>
         <DisplayAvatar
           did={viewerID.id}
           label={displayName}

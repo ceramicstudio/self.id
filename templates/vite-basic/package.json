@@ -1,5 +1,5 @@
 {
-  "name": "self.id-template-vite",
+  "name": "self.id-template-vite-basic",
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",

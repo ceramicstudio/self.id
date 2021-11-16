@@ -77,6 +77,9 @@ export const viewerIDAtom = atom(
       void set(localViewerIDAtom, null)
       void set(connectionAtom, { status: 'idle' })
     } else {
+      // We need to attach the authenticated DID to the core instance to ensure streams can be updated
+      const core = get(coreAtom)
+      core.ceramic.did = selfID.did
       void set(localViewerIDAtom, selfID.id)
       void set(connectionAtom, { status: 'connected', selfID })
     }

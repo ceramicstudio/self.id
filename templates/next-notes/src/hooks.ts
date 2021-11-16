@@ -11,11 +11,11 @@ import {
 import type { PublicRecord } from '@self.id/framework'
 import { useAtom } from 'jotai'
 import { useResetAtom } from 'jotai/utils'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 import { draftNoteAtom, editionStateAtom } from './state'
-import type { ModelTypes, Notes } from './types'
+import type { EditionState, ModelTypes, Note, Notes } from './types'
 
 export type TileDoc<ContentType> = {
   isLoading: boolean
@@ -118,4 +118,81 @@ export function useDraftNote() {
   }, [connect, isValid, state, setState, value])
 
   return { isValid, publish, resetValue, setValue, state, value }
+}
+
+export function useNote(did: string, id: string) {
+  const connect = useConnection<ModelTypes>()[1]
+  const notesRecord = useNotesRecord(did)
+  const noteDoc = useTileDoc<Note>(id)
+  const [editingText, setEditingText] = useState<string>('')
+  const [editionState, setEditionState] = useState<EditionState | null>(null)
+
+  const isValid = editingText !== ''
+  const noteItem = notesRecord.content?.notes.find((item) => item.id === `ceramic://${id}`)
+  const content =
+    noteDoc.content == null || noteItem == null
+      ? null
+      : { title: noteItem.title, text: noteDoc.content.text }
+  const isEditable = content != null && noteDoc.isController
+  const isEditing = editionState != null
+
+  const resetEditingText = useCallback(() => {
+    setEditingText(content?.text ?? '')
+  }, [content])
+
+  const toggleEditing = useCallback(
+    (editing: boolean = !isEditing) => {
+      if (editing) {
+        resetEditingText()
+        setEditionState({ status: 'pending' })
+      } else {
+        setEditionState(null)
+      }
+    },
+    [isEditing, resetEditingText, setEditionState]
+  )
+
+  const update = useCallback(async () => {
+    if (
+      noteDoc.content == null ||
+      editionState == null ||
+      editionState.status === 'loading' ||
+      !isValid
+    ) {
+      return false
+    }
+    setEditionState({ status: 'loading' })
+
+    try {
+      const selfID = await connect()
+      if (selfID == null) {
+        setEditionState({ status: 'pending' })
+        return false
+      }
+
+      if (editingText !== noteDoc.content.text) {
+        await noteDoc.update({ ...noteDoc.content, text: editingText })
+      }
+      setEditionState(null)
+    } catch (error) {
+      setEditionState({ status: 'failed', error })
+    }
+  }, [connect, editionState, isValid, editingText, noteDoc, setEditionState])
+
+  return {
+    isEditable,
+    isEditing,
+    isError: notesRecord.isError || noteDoc.isError,
+    isLoading: notesRecord.isLoading || noteDoc.isLoading,
+    isMutable: noteDoc.isMutable,
+    isMutating: noteDoc.isMutating,
+    isValid,
+    content,
+    editingText,
+    error: notesRecord.error ?? noteDoc.error,
+    resetEditingText,
+    setEditingText,
+    toggleEditing,
+    update,
+  }
 }
