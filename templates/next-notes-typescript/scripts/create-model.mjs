@@ -11,6 +11,8 @@ if (!process.env.SEED) {
   throw new Error('Missing SEED environment variable')
 }
 
+const CERAMIC_URL = process.env.CERAMIC_URL || 'https://ceramic-clay.3boxlabs.com'
+
 // The seed must be provided as an environment variable
 const seed = fromString(process.env.SEED, 'base16')
 // Create and authenticate the DID
@@ -20,8 +22,8 @@ const did = new DID({
 })
 await did.authenticate()
 
-// Connect to the local Ceramic node
-const ceramic = new CeramicClient('http://localhost:7007')
+// Connect to the Ceramic node
+const ceramic = new CeramicClient(CERAMIC_URL)
 ceramic.did = did
 
 // Create a manager for the model

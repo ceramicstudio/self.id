@@ -1,28 +1,29 @@
 import { useConnection } from '@self.id/framework'
+import { Anchor, Button, Paragraph } from 'grommet'
 import React from 'react'
 
 export default function ConnectButton() {
   const [connection, connect, disconnect] = useConnection()
 
   return connection.status === 'connected' ? (
-    <button
+    <Button
+      label={`Disconnect (${connection.selfID.id})`}
       onClick={() => {
         disconnect()
-      }}>
-      Disconnect ({connection.selfID.id})
-    </button>
+      }}
+    />
   ) : 'ethereum' in window ? (
-    <button
+    <Button
       disabled={connection.status === 'connecting'}
+      label="Connect"
       onClick={() => {
         connect()
-      }}>
-      Connect
-    </button>
+      }}
+    />
   ) : (
-    <p>
-      An injected Ethereum provider such as <a href="https://metamask.io/">MetaMask</a> is needed to
-      authenticate.
-    </p>
+    <Paragraph>
+      An injected Ethereum provider such as <Anchor href="https://metamask.io/">MetaMask</Anchor> is
+      needed to authenticate.
+    </Paragraph>
   )
 }

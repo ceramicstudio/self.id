@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@self.id/framework": "^0.1.0",
+    "grommet": "^2.18.0",
     "react": "^17.0.0",
     "react-dom": "^17.0.0"
   },

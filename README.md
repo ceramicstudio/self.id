@@ -55,12 +55,14 @@ Self.ID packages are organized in the following stack:
 
 ## Templates
 
-Predefined
+Predefined setups using common technologies to build applications using the Self.ID SDK.
 
-| Name                                                   | Description                                                                                                                            | Installation                                                   |
-| ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
-| [`vite-basic`](./templates/vite-basic)                 | Basic [Vite](https://vitejs.dev/) setup                                                                                                | `npx degit ceramicstudio/self.id/templates/vite-basic`         |
-| [`webpack-typescript`](./templates/webpack-typescript) | [Webpack](https://webpack.js.org/) setup using [TypeScript](https://www.typescriptlang.org/) and [esbuild](https://esbuild.github.io/) | `npx degit ceramicstudio/self.id/templates/webpack-typescript` |
+| Name                                                               | Description                                                                                                           |
+| ------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------- |
+| [`next-notes-typescript`](./templates/next-notes-typescript)       | Notes taking application setup using [Next.js](https://nextjs.org/) and [TypeScript](https://www.typescriptlang.org/) |
+| [`vite-basic`](./templates/vite-basic)                             | Basic [Vite](https://vitejs.dev/) setup                                                                               |
+| [`webpack-basic`](./templates/webpack-basic)                       | Basic [Webpack](https://webpack.js.org/) setup                                                                        |
+| [`webpack-basic-typescript`](./templates/webpack-basic-typescript) | Basic [Webpack](https://webpack.js.org/) setup using [TypeScript](https://www.typescriptlang.org/)                    |
 
 ## Maintainers
 
@@ -68,4 +70,4 @@ Predefined
 
 ## License
 
-The SDK packages and apps are dual licensed under [MIT](LICENSE-MIT) and [Apache 2](LICENSE-APACHE).
+The SDK packages, templates and apps are dual licensed under [MIT](LICENSE-MIT) and [Apache 2](LICENSE-APACHE).

@@ -41,7 +41,7 @@
     "@self.id/core": "^0.2.0",
     "@self.id/web": "^0.2.0",
     "jotai": "^1.4.3",
-    "react-query": "^3.32.3"
+    "react-query": "^3.33.0"
   },
   "devDependencies": {
     "@glazed/did-datastore": "^0.2.1",

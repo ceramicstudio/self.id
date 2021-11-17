@@ -1,8 +1,5 @@
-const { ESBuildMinifyPlugin } = require('esbuild-loader')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const path = require('path')
-
-const target = 'es2020'
 
 module.exports = {
   entry: path.resolve(__dirname, 'src', 'index.tsx'),
@@ -23,11 +20,8 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        loader: 'esbuild-loader',
-        options: {
-          loader: 'tsx',
-          target,
-        },
+        loader: 'swc-loader',
+        exclude: /(node_modules)/,
       },
     ],
   },
@@ -36,7 +30,4 @@ module.exports = {
       template: path.resolve(__dirname, 'src', 'index.html'),
     }),
   ],
-  optimization: {
-    minimizer: [new ESBuildMinifyPlugin({ target })],
-  },
 }
