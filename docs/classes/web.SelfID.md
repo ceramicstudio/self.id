@@ -10,8 +10,8 @@ import { SelfID } from '@self.id/web'
 
 | Name | Type |
 | :------ | :------ |
-| `ModelTypes` | extends `CoreModelTypes``CoreModelTypes` |
-| `Alias` | extends keyof `ModelTypes`[``"definitions"``]keyof `ModelTypes`[``"definitions"``] |
+| `ModelTypes` | extends `ModelTypeAliases` = `CoreModelTypes` |
+| `Alias` | extends keyof `ModelTypes`[``"definitions"``] = keyof `ModelTypes`[``"definitions"``] |
 
 ## Constructors
 
@@ -23,14 +23,14 @@ import { SelfID } from '@self.id/web'
 
 | Name | Type |
 | :------ | :------ |
-| `ModelTypes` | extends `ModelTypes``ModelTypes` |
-| `Alias` | extends `string` \| `number` \| `symbol`keyof `ModelTypes`[``"definitions"``] |
+| `ModelTypes` | extends `ModelTypeAliases`<`Record`<`string`, `any`\>, `Record`<`string`, `string`\>, `Record`<`string`, `string`\>\> = `ModelTypes` |
+| `Alias` | extends `string` \| `number` \| `symbol` = keyof `ModelTypes`[``"definitions"``] |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `params` | [`SelfIDParams`](../modules/web.md#selfidparams) |
+| `params` | [`SelfIDParams`](../modules/web.md#selfidparams)<`ModelTypes`\> |
 
 ## Accessors
 
@@ -41,6 +41,16 @@ import { SelfID } from '@self.id/web'
 #### Returns
 
 [`WebClient`](web.WebClient.md)<`ModelTypes`\>
+
+___
+
+### did
+
+• `get` **did**(): `DID`
+
+#### Returns
+
+`DID`
 
 ___
 
@@ -77,6 +87,30 @@ ___
 
 ___
 
+### merge
+
+▸ **merge**<`Key`, `ContentType`\>(`key`, `content`): `Promise`<`StreamID`\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `Key` | extends `string` \| `number` \| `symbol` |
+| `ContentType` | `DefinitionContentType`<`ModelTypes`, `Key`\> |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `key` | `Key` |
+| `content` | `ContentType` |
+
+#### Returns
+
+`Promise`<`StreamID`\>
+
+___
+
 ### set
 
 ▸ **set**<`Key`, `ContentType`\>(`key`, `content`): `Promise`<`StreamID`\>
@@ -103,13 +137,13 @@ ___
 
 ### authenticate
 
-▸ `Static` **authenticate**<`ModelTypes`\>(`params`): `Promise`<[`SelfID`](web.SelfID.md)<`ModelTypes`, ``"alsoKnownAs"`` \| ``"basicProfile"`` \| ``"cryptoAccounts"``\>\>
+▸ `Static` **authenticate**<`ModelTypes`\>(`params`): `Promise`<[`SelfID`](web.SelfID.md)<`ModelTypes`, keyof `ModelTypes`[``"definitions"``]\>\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `ModelTypes` | extends `ModelTypes``ModelTypes` |
+| `ModelTypes` | extends `ModelTypeAliases`<`Record`<`string`, `any`\>, `Record`<`string`, `string`\>, `Record`<`string`, `string`\>\> = `ModelTypes` |
 
 #### Parameters
 
@@ -119,4 +153,4 @@ ___
 
 #### Returns
 
-`Promise`<[`SelfID`](web.SelfID.md)<`ModelTypes`, ``"alsoKnownAs"`` \| ``"basicProfile"`` \| ``"cryptoAccounts"``\>\>
+`Promise`<[`SelfID`](web.SelfID.md)<`ModelTypes`, keyof `ModelTypes`[``"definitions"``]\>\>

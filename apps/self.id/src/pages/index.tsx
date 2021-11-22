@@ -1,4 +1,6 @@
+import { colors } from '@self.id/framework'
 import { Anchor, Box, Heading, Spinner, Text, TextInput } from 'grommet'
+import type { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
@@ -17,13 +19,17 @@ import footerTwitterIcon from '../images/icons/social-twitter.svg'
 
 import Navbar from '../components/Navbar'
 import OpenGraphMeta from '../components/OpenGraphMeta'
-import { BRAND_COLOR } from '../theme'
 import { withMediaQuery } from '../components/media-query/with-media-query'
 
 const ResponsiveHeading = withMediaQuery(Heading)
 const ResponsiveText = withMediaQuery(Text)
 const ResponsiveTextInput = withMediaQuery(TextInput)
 const ResponsiveBox = withMediaQuery(Box)
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { getRequestState } = await import('../server')
+  return { props: { state: await getRequestState(ctx) } }
+}
 
 export default function Home() {
   const router = useRouter()
@@ -119,7 +125,7 @@ export default function Home() {
                       borderRadius: 30,
                       padding: 18,
                       paddingLeft: 60,
-                      boxShadow: `0 2px 20px ${focus ? BRAND_COLOR : 'rgba(0,0,0,0.5)'}`,
+                      boxShadow: `0 2px 20px ${focus ? colors.brand : 'rgba(0,0,0,0.5)'}`,
                       width: '100%',
                     }}
                     value={value}
@@ -228,11 +234,11 @@ export default function Home() {
                 label="Ceramic Network"
                 style={{ textDecoration: 'underline' }}
               />
-              , and{' '}
+              , and the{' '}
               <Anchor
                 color="text"
-                href="https://idx.xyz"
-                label="IDX"
+                href="https://developers.ceramic.network/tools/self-id/overview/#sdk"
+                label="Self.ID SDK"
                 style={{ textDecoration: 'underline' }}
               />
             </Text>

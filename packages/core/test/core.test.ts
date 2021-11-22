@@ -2,6 +2,7 @@ import { CeramicClient } from '@ceramicnetwork/http-client'
 import { Caip10Link } from '@ceramicnetwork/stream-caip10-link'
 import { DataModel } from '@glazed/datamodel'
 import { DIDDataStore } from '@glazed/did-datastore'
+import { TileLoader } from '@glazed/tile-loader'
 import type { ModelTypesToAliases } from '@glazed/types'
 import { Resolver } from 'did-resolver'
 
@@ -44,7 +45,7 @@ describe('Core', () => {
       } as ModelTypesToAliases<CoreModelTypes>
       new Core({ ceramic: 'http://example.com', model })
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      expect(DataModel).toBeCalledWith({ ceramic: expect.any(CeramicClient), model, autopin: true })
+      expect(DataModel).toBeCalledWith({ loader: expect.any(TileLoader), model, autopin: true })
     })
   })
 

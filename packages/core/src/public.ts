@@ -1,9 +1,10 @@
 import type { DefinitionContentType } from '@glazed/did-datastore'
+import type { ModelTypeAliases } from '@glazed/types'
 
 import type { ModelTypes as CoreModelTypes } from './__generated__/model'
 import type { Core } from './core'
 
-export type PublicIDParams<ModelTypes extends CoreModelTypes = CoreModelTypes> = {
+export type PublicIDParams<ModelTypes extends ModelTypeAliases = CoreModelTypes> = {
   core: Core<ModelTypes>
   id: string
 }
@@ -14,7 +15,7 @@ export type PublicIDParams<ModelTypes extends CoreModelTypes = CoreModelTypes> =
  * ```
  */
 export class PublicID<
-  ModelTypes extends CoreModelTypes = CoreModelTypes,
+  ModelTypes extends ModelTypeAliases = CoreModelTypes,
   Alias extends keyof ModelTypes['definitions'] = keyof ModelTypes['definitions']
 > {
   #core: Core<ModelTypes, Alias>
