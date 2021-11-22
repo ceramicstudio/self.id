@@ -7,7 +7,7 @@ import Navbar from '../../../../components/Navbar'
 import OpenGraphMeta from '../../../../components/OpenGraphMeta'
 
 const AddGitHubAccountScreen = dynamic(
-  () => import('../../../../client/components/AddGitHubAccountScreen'),
+  () => import('../../../../components/client/AddGitHubAccountScreen'),
   { ssr: false }
 )
 

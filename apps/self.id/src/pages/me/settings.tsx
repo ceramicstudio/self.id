@@ -6,7 +6,7 @@ import Layout from '../../components/Layout'
 import Navbar from '../../components/Navbar'
 import OpenGraphMeta from '../../components/OpenGraphMeta'
 
-const SettingsScreen = dynamic(() => import('../../client/components/SettingsScreen'), {
+const SettingsScreen = dynamic(() => import('../../components/client/SettingsScreen'), {
   ssr: false,
 })
 

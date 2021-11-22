@@ -1,6 +1,6 @@
 {
   "version": "0.0.0",
-  "packages": ["apps/*", "packages/*"],
+  "packages": ["apps/*", "packages/*", "templates/*"],
   "publishConfig": {
     "access": "public"
   },

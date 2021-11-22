@@ -1,37 +1,32 @@
-import type { Account as AlsoKnownAsAccount } from '@datamodels/identity-accounts-web'
-import type { BasicProfile } from '@datamodels/identity-profile-basic'
-import { getLegacy3BoxProfileAsBasicProfile } from '@self.id/3box-legacy'
-import { PublicID, isCAIP10string, isDIDstring } from '@self.id/core'
+import {
+  AvatarPlaceholder,
+  colors,
+  isCAIP10string,
+  isDIDstring,
+  useViewerID,
+} from '@self.id/framework'
+import type { BasicProfile, RequestState } from '@self.id/framework'
 import { Anchor, Box, Paragraph, Text } from 'grommet'
 import type { GetServerSideProps } from 'next'
-import dynamic from 'next/dynamic'
 import Head from 'next/head'
+import Link from 'next/link'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 
 import Layout from '../components/Layout'
 import Navbar from '../components/Navbar'
-import AvatarPlaceholder from '../components/AvatarPlaceholder'
+import { useProfile, useSocialAccounts } from '../hooks'
 import { GITHUB_HOST, TWITTER_HOST } from '../identity-link'
 import countryIcon from '../images/icons/country.png'
 import linkIcon from '../images/icons/link.svg'
 import locationIcon from '../images/icons/location.png'
 import githubIcon from '../images/icons/social-github.svg'
 import twitterIcon from '../images/icons/social-twitter.svg'
-import { BRAND_COLOR, PLACEHOLDER_COLOR } from '../theme'
 import { formatDID, getImageURL, isEthereumAddress, isSupportedDID } from '../utils'
 
+import ConnectSettingsButton from '../components/ConnectSettingsButton'
+
 const ETH_CHAIN_ID = `@eip155:1`
-
-const ConnectSettingsButton = dynamic(() => import('../client/components/ConnectSettingsButton'), {
-  ssr: false,
-})
-
-const ConnectEditSocialAccountsButton = dynamic(
-  () => import('../client/components/ConnectEditSocialAccountsButton'),
-  { ssr: false }
-)
 
 type Support =
   | 'invalid' // not a DID or CAIP-10
@@ -44,9 +39,9 @@ function canEditProfile(support: Support): boolean {
 }
 
 type Props = {
-  id: string | null
-  loadedProfile: BasicProfile | null
-  socialAccounts: Array<AlsoKnownAsAccount>
+  fallbackProfile: BasicProfile | null
+  id: string
+  state: RequestState
   support: Support
 }
 
@@ -58,22 +53,19 @@ export const getServerSideProps: GetServerSideProps<Props, { id: string }> = asy
     }
   }
 
-  let loadedProfile = null
-  let socialAccounts: Array<AlsoKnownAsAccount> = []
+  const { createRequestClient } = await import('../server')
+  const requestClient = createRequestClient(ctx)
+  const prefetch: Array<Promise<unknown>> = []
+
+  let fallbackProfile: BasicProfile | null = null
   let support: Support = 'unsupported'
 
   if (isDIDstring(id)) {
     if (isSupportedDID(id)) {
       // Main case: we expect a DID to be provided
       support = 'supported'
-      const { core } = await import('../server')
-      const publicID = new PublicID({ core, id })
-      const [profile, aka] = await Promise.all([
-        publicID.get('basicProfile'),
-        publicID.get('alsoKnownAs'),
-      ])
-      loadedProfile = profile
-      socialAccounts = aka?.accounts ?? []
+      prefetch.push(requestClient.prefetch('basicProfile', id))
+      prefetch.push(requestClient.prefetch('alsoKnownAs', id))
     } else {
       support = 'unsupported'
     }
@@ -100,19 +92,25 @@ export const getServerSideProps: GetServerSideProps<Props, { id: string }> = asy
     if (id.endsWith(ETH_CHAIN_ID)) {
       // Fallback for legacy 3Box profiles
       support = 'legacy'
+      const { getLegacy3BoxProfileAsBasicProfile } = await import('@self.id/3box-legacy')
       const address = id.slice(0, -ETH_CHAIN_ID.length)
-      loadedProfile = await getLegacy3BoxProfileAsBasicProfile(address)
+      fallbackProfile = await getLegacy3BoxProfileAsBasicProfile(address)
     }
   }
 
+  if (requestClient.viewerID != null) {
+    prefetch.push(requestClient.prefetch('basicProfile', requestClient.viewerID))
+  }
+  await Promise.all(prefetch)
+
   return {
-    props: { id, loadedProfile, socialAccounts, support },
+    props: { id, fallbackProfile, state: requestClient.getState(), support },
   }
 }
 
 const Header = styled.div<{ url?: string }>`
   height: 310px;
-  background-color: ${PLACEHOLDER_COLOR};
+  background-color: ${colors.placeholder};
   ${(props) =>
     props.url &&
     css`
@@ -129,7 +127,7 @@ const Header = styled.div<{ url?: string }>`
 const AvatarContainer = styled.div`
   width: 146px;
   height: 146px;
-  background-color: ${PLACEHOLDER_COLOR};
+  background-color: ${colors.placeholder};
   border: 3px solid white;
   border-radius: 78px;
   margin-top: -78px;
@@ -146,13 +144,13 @@ const Avatar = styled.div<{ url: string }>`
 `
 
 const Name = styled.h1`
-  color: ${BRAND_COLOR};
+  color: ${colors.brand};
   font-size: 28px;
   font-weight: 500;
 `
 
 type NoProfileProps = {
-  id: string | null
+  id: string
   support: Support
 }
 
@@ -166,13 +164,13 @@ function NoProfile({ id, support }: NoProfileProps) {
   ) : null
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>No profile | self.ID</title>
       </Head>
       <Navbar />
       <Header />
-      <Box alignSelf="center" width="large">
+      <Box alignSelf="center" width="large" pad="medium">
         <Box direction="row" flex>
           <AvatarContainer>
             <AvatarPlaceholder did={id} size={146} />
@@ -181,19 +179,18 @@ function NoProfile({ id, support }: NoProfileProps) {
         </Box>
         <Name>No profile</Name>
       </Box>
-    </Layout>
+    </>
   )
 }
 
-export default function ProfilePage({ id, loadedProfile, socialAccounts, support }: Props) {
-  const [profile, setProfile] = useState<BasicProfile | null>(loadedProfile)
-  useEffect(() => {
-    setProfile(loadedProfile)
-  }, [loadedProfile])
+type DisplayProfileProps = {
+  id: string
+  profile: BasicProfile
+}
 
-  if (id == null || profile == null || !canEditProfile(support)) {
-    return <NoProfile id={id} support={support} />
-  }
+function DisplayProfile({ id, profile }: DisplayProfileProps) {
+  const viewerID = useViewerID()
+  const socialAccounts = useSocialAccounts(id)
 
   const name = profile.name ?? '(no name)'
 
@@ -309,7 +306,11 @@ export default function ProfilePage({ id, loadedProfile, socialAccounts, support
               Social
             </Text>
           </Box>
-          <ConnectEditSocialAccountsButton did={id} />
+          {viewerID?.id === id ? (
+            <Link href="/me/social-accounts" passHref>
+              <Anchor color="brand" label="Edit" />
+            </Link>
+          ) : null}
         </Box>
         {socialItems}
       </Box>
@@ -317,7 +318,7 @@ export default function ProfilePage({ id, loadedProfile, socialAccounts, support
   }
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>{name} | Self.ID</title>
         <meta name="twitter:site" content="@mySelfID" />
@@ -347,6 +348,33 @@ export default function ProfilePage({ id, loadedProfile, socialAccounts, support
         {locationContainer}
         {socialContainer}
       </Box>
-    </Layout>
+    </>
   )
+}
+
+type LoadProfileProps = {
+  id: string
+  support: Support
+}
+
+function LoadProfile({ id, support }: LoadProfileProps) {
+  const profile = useProfile(id)
+  return profile ? (
+    <DisplayProfile id={id} profile={profile} />
+  ) : (
+    <NoProfile id={id} support={support} />
+  )
+}
+
+export default function ProfilePage({ fallbackProfile, id, support }: Props) {
+  const content =
+    support === 'supported' ? (
+      <LoadProfile id={id} support={support} />
+    ) : fallbackProfile ? (
+      <DisplayProfile id={id} profile={fallbackProfile} />
+    ) : (
+      <NoProfile id={id} support={support} />
+    )
+
+  return <Layout>{content}</Layout>
 }

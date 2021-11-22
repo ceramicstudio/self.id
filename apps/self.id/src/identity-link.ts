@@ -1,5 +1,5 @@
-import type { Account as AlsoKnownAsAccount } from '@datamodels/identity-accounts-web'
-import type { DagJWS } from 'dids'
+import type { AlsoKnownAsAccount } from '@self.id/framework'
+import type { DagJWS, DID } from 'dids'
 
 import { APP_NETWORK } from './constants'
 
@@ -47,6 +47,47 @@ export function findTwitter(
 }
 export function findTwitterIndex(accounts: Array<AlsoKnownAsAccount>, username: string): number {
   return accounts.findIndex((a) => a.host === TWITTER_HOST && a.id === username)
+}
+
+export function removeGitHubAccount(
+  accounts: Array<AlsoKnownAsAccount>,
+  username: string
+): Array<AlsoKnownAsAccount> {
+  const index = findGitHubIndex(accounts, username)
+  if (index !== -1) {
+    const cloned = [...accounts]
+    cloned.splice(index, 1)
+    return cloned
+  }
+  return accounts
+}
+
+export function removeTwitterAccount(
+  accounts: Array<AlsoKnownAsAccount>,
+  username: string
+): Array<AlsoKnownAsAccount> {
+  const index = findTwitterIndex(accounts, username)
+  if (index !== -1) {
+    const cloned = [...accounts]
+    cloned.splice(index, 1)
+    return cloned
+  }
+  return accounts
+}
+
+export function removeSocialAccount(
+  accounts: Array<AlsoKnownAsAccount>,
+  host: string | undefined,
+  id: string
+): Array<AlsoKnownAsAccount> {
+  switch (host) {
+    case GITHUB_HOST:
+      return removeGitHubAccount(accounts, id)
+    case TWITTER_HOST:
+      return removeTwitterAccount(accounts, id)
+    default:
+      throw new Error(`Unsupported host: ${host ?? 'undefined'}`)
+  }
 }
 
 export type AttestationResponse = {
@@ -99,6 +140,11 @@ export class IdentityLink {
     return res.data.attestation
   }
 
+  async confirmGitHubChallenge(did: DID, challengeCode: string): Promise<string> {
+    const jws = await did.createJWS({ challengeCode })
+    return await this.confirmGitHub(jws)
+  }
+
   async requestTwitter(did: string, username: string): Promise<string> {
     const res = await this._post<ChallengeResponse>('/api/v0/request-twitter', {
       did,
@@ -110,5 +156,10 @@ export class IdentityLink {
   async confirmTwitter(jws: DagJWS): Promise<string> {
     const res = await this._post<AttestationResponse>('/api/v0/confirm-twitter', { jws })
     return res.data.attestation
+  }
+
+  async confirmTwitterChallenge(did: DID, challengeCode: string): Promise<string> {
+    const jws = await did.createJWS({ challengeCode })
+    return await this.confirmTwitter(jws)
   }
 }

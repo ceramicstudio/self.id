@@ -10,8 +10,8 @@ import { Core } from '@self.id/core'
 
 | Name | Type |
 | :------ | :------ |
-| `ModelTypes` | extends [`CoreModelTypes`](../modules/core.md#coremodeltypes)[`CoreModelTypes`](../modules/core.md#coremodeltypes) |
-| `Alias` | extends keyof `ModelTypes`[``"definitions"``]keyof `ModelTypes`[``"definitions"``] |
+| `ModelTypes` | extends `ModelTypeAliases` = [`CoreModelTypes`](../modules/core.md#coremodeltypes) |
+| `Alias` | extends keyof `ModelTypes`[``"definitions"``] = keyof `ModelTypes`[``"definitions"``] |
 
 ## Constructors
 
@@ -23,8 +23,8 @@ import { Core } from '@self.id/core'
 
 | Name | Type |
 | :------ | :------ |
-| `ModelTypes` | extends [`CoreModelTypes`](../modules/core.md#coremodeltypes)[`CoreModelTypes`](../modules/core.md#coremodeltypes) |
-| `Alias` | extends `string` \| `number` \| `symbol`keyof `ModelTypes`[``"definitions"``] |
+| `ModelTypes` | extends `ModelTypeAliases`<`Record`<`string`, `any`\>, `Record`<`string`, `string`\>, `Record`<`string`, `string`\>\> = [`CoreModelTypes`](../modules/core.md#coremodeltypes) |
+| `Alias` | extends `string` \| `number` \| `symbol` = keyof `ModelTypes`[``"definitions"``] |
 
 #### Parameters
 
@@ -71,6 +71,16 @@ ___
 #### Returns
 
 `Resolver`
+
+___
+
+### tileLoader
+
+• `get` **tileLoader**(): `TileLoader`
+
+#### Returns
+
+`TileLoader`
 
 ## Methods
 

@@ -8,7 +8,11 @@
   "include": [
     "./packages/3box-legacy/src",
     "./packages/core/src",
+    "./packages/framework/src",
     "./packages/image-utils/src",
+    "./packages/multiauth/src",
+    "./packages/react/src",
+    "./packages/ui/src",
     "./packages/web/src"
   ],
   "typedocOptions": {
@@ -18,9 +22,14 @@
     "entryPoints": [
       "./packages/3box-legacy/src/index.ts",
       "./packages/core/src/index.ts",
+      "./packages/framework/src/index.ts",
       "./packages/image-utils/src/index.ts",
+      "./packages/multiauth/src/index.ts",
+      "./packages/react/src/index.ts",
+      "./packages/ui/src/index.ts",
       "./packages/web/src/index.ts"
     ],
+    "githubPages": false,
     "disableSources": true,
     "excludeExternals": true,
     "excludeInternal": true,

@@ -56,7 +56,7 @@ ___
 | Name | Type | Default value |
 | :------ | :------ | :------ |
 | `image` | `HTMLImageElement` | `undefined` |
-| `dimensions` | [`Dimensions`](image_utils.md#dimensions) | `undefined` |
+| `dimensions` | [`Dimensions`](image_utils.md#dimensions) | `DEFAULT_DIMENSIONS` |
 | `mode` | [`SizeMode`](image_utils.md#sizemode) | `'cover'` |
 
 #### Returns

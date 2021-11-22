@@ -9,7 +9,7 @@ module.exports = {
     {
       type: 'category',
       label: 'Guides',
-      items: ['guides/public-data'],
+      items: ['guides/public-data', 'guides/authentication'],
     },
   ],
   // API: require('./typedoc-sidebar.js'),
