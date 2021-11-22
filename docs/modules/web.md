@@ -21,7 +21,7 @@ npm install @self.id/web
 
 | Name | Type |
 | :------ | :------ |
-| `ModelTypes` | extends `CoreModelTypes``CoreModelTypes` |
+| `ModelTypes` | extends `ModelTypeAliases` = `CoreModelTypes` |
 
 ___
 
@@ -33,13 +33,19 @@ ___
 
 ### SelfIDParams
 
-Ƭ **SelfIDParams**: `Object`
+Ƭ **SelfIDParams**<`ModelTypes`\>: `Object`
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ModelTypes` | extends `ModelTypeAliases` = `CoreModelTypes` |
 
 #### Type declaration
 
 | Name | Type |
 | :------ | :------ |
-| `client` | [`WebClient`](../classes/web.WebClient.md) |
+| `client` | [`WebClient`](../classes/web.WebClient.md)<`ModelTypes`\> |
 
 ___
 
@@ -51,4 +57,4 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `ModelTypes` | extends `CoreModelTypes``CoreModelTypes` |
+| `ModelTypes` | extends `ModelTypeAliases` = `CoreModelTypes` |

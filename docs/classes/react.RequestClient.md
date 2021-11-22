@@ -12,8 +12,8 @@ import { RequestClient } from '@self.id/react'
 
 | Name | Type |
 | :------ | :------ |
-| `ModelTypes` | extends `CoreModelTypes``CoreModelTypes` |
-| `Alias` | extends keyof `ModelTypes`[``"definitions"``]keyof `ModelTypes`[``"definitions"``] |
+| `ModelTypes` | extends `ModelTypeAliases` = `CoreModelTypes` |
+| `Alias` | extends keyof `ModelTypes`[``"definitions"``] = keyof `ModelTypes`[``"definitions"``] |
 
 ## Hierarchy
 
@@ -31,8 +31,8 @@ import { RequestClient } from '@self.id/react'
 
 | Name | Type |
 | :------ | :------ |
-| `ModelTypes` | extends `ModelTypes``ModelTypes` |
-| `Alias` | extends `string` \| `number` \| `symbol`keyof `ModelTypes`[``"definitions"``] |
+| `ModelTypes` | extends `ModelTypeAliases`<`Record`<`string`, `any`\>, `Record`<`string`, `string`\>, `Record`<`string`, `string`\>\> = `ModelTypes` |
+| `Alias` | extends `string` \| `number` \| `symbol` = keyof `ModelTypes`[``"definitions"``] |
 
 #### Parameters
 
@@ -54,6 +54,10 @@ Core&lt;ModelTypes\&gt;.constructor
 
 `CeramicClient`
 
+#### Inherited from
+
+Core.ceramic
+
 ___
 
 ### dataModel
@@ -63,6 +67,10 @@ ___
 #### Returns
 
 `DataModel`<`ModelTypes`, `ModelTypesToAliases`<`ModelTypes`\>\>
+
+#### Inherited from
+
+Core.dataModel
 
 ___
 
@@ -74,6 +82,10 @@ ___
 
 `DIDDataStore`<`ModelTypes`, keyof `ModelTypes`[``"definitions"``]\>
 
+#### Inherited from
+
+Core.dataStore
+
 ___
 
 ### resolver
@@ -83,6 +95,24 @@ ___
 #### Returns
 
 `Resolver`
+
+#### Inherited from
+
+Core.resolver
+
+___
+
+### tileLoader
+
+• `get` **tileLoader**(): `TileLoader`
+
+#### Returns
+
+`TileLoader`
+
+#### Inherited from
+
+Core.tileLoader
 
 ___
 

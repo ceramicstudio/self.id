@@ -15,6 +15,10 @@ module.exports = function () {
         return {
           resolve: {
             fallback: {
+              crypto: false,
+              http: false,
+              https: false,
+              os: false,
               stream: require.resolve('stream-browserify'),
             },
           },

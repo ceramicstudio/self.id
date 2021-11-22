@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "boring-avatars": "^1.5.8",
-    "grommet": "^2.18.0"
+    "grommet": "^2.19.1"
   },
   "peerDependencies": {
     "react": "^17.0.2"

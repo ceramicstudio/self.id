@@ -124,6 +124,8 @@ describe('hooks', () => {
         isError: false,
         isMutable: false,
         isMutating: false,
+        set: expect.any(Function),
+        merge: expect.any(Function),
       })
 
       await waitForValueToChange(() => !result.current.isLoading)
@@ -135,6 +137,8 @@ describe('hooks', () => {
         isError: false,
         isMutable: false,
         isMutating: false,
+        set: expect.any(Function),
+        merge: expect.any(Function),
       })
     })
 

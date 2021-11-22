@@ -1,3 +1,4 @@
+import type { ModelTypeAliases } from '@glazed/types'
 import { Core } from '@self.id/core'
 import type { CoreModelTypes, CoreParams } from '@self.id/core'
 import { dehydrate, QueryClient } from 'react-query'
@@ -10,7 +11,7 @@ export function getCookieViewerID(cookie?: string): string | null {
   return (cookie && getCookieValue(cookie, VIEWER_ID_STORAGE_KEY)) || null
 }
 
-export type RequestClientParams<ModelTypes extends CoreModelTypes = CoreModelTypes> =
+export type RequestClientParams<ModelTypes extends ModelTypeAliases = CoreModelTypes> =
   CoreParams<ModelTypes> & { cookie?: string }
 
 /**
@@ -21,7 +22,7 @@ export type RequestClientParams<ModelTypes extends CoreModelTypes = CoreModelTyp
  * ```
  */
 export class RequestClient<
-  ModelTypes extends CoreModelTypes = CoreModelTypes,
+  ModelTypes extends ModelTypeAliases = CoreModelTypes,
   Alias extends keyof ModelTypes['definitions'] = keyof ModelTypes['definitions']
 > extends Core<ModelTypes> {
   #queryClient: QueryClient

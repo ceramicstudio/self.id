@@ -6,7 +6,7 @@ import type { ConnectionState } from '../types'
 
 export type ConnectedContainerProps = {
   children: ReactNode
-  renderFallback: (connectionState: ConnectionState) => JSX.Element | null
+  renderFallback?: (connectionState: ConnectionState) => JSX.Element | null
 }
 
 export function ConnectedContainer(props: ConnectedContainerProps): JSX.Element | null {

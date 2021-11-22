@@ -12,7 +12,7 @@ import { WebClient } from '@self.id/web'
 
 | Name | Type |
 | :------ | :------ |
-| `ModelTypes` | extends `CoreModelTypes``CoreModelTypes` |
+| `ModelTypes` | extends `ModelTypeAliases` = `CoreModelTypes` |
 
 ## Hierarchy
 
@@ -30,7 +30,7 @@ import { WebClient } from '@self.id/web'
 
 | Name | Type |
 | :------ | :------ |
-| `ModelTypes` | extends `ModelTypes``ModelTypes` |
+| `ModelTypes` | extends `ModelTypeAliases`<`Record`<`string`, `any`\>, `Record`<`string`, `string`\>, `Record`<`string`, `string`\>\> = `ModelTypes` |
 
 #### Parameters
 
@@ -52,6 +52,10 @@ Core&lt;ModelTypes\&gt;.constructor
 
 `CeramicClient`
 
+#### Inherited from
+
+Core.ceramic
+
 ___
 
 ### dataModel
@@ -61,6 +65,10 @@ ___
 #### Returns
 
 `DataModel`<`ModelTypes`, `ModelTypesToAliases`<`ModelTypes`\>\>
+
+#### Inherited from
+
+Core.dataModel
 
 ___
 
@@ -72,6 +80,10 @@ ___
 
 `DIDDataStore`<`ModelTypes`, keyof `ModelTypes`[``"definitions"``]\>
 
+#### Inherited from
+
+Core.dataStore
+
 ___
 
 ### resolver
@@ -82,6 +94,10 @@ ___
 
 `Resolver`
 
+#### Inherited from
+
+Core.resolver
+
 ___
 
 ### threeId
@@ -91,6 +107,20 @@ ___
 #### Returns
 
 `ThreeIdConnect`
+
+___
+
+### tileLoader
+
+• `get` **tileLoader**(): `TileLoader`
+
+#### Returns
+
+`TileLoader`
+
+#### Inherited from
+
+Core.tileLoader
 
 ## Methods
 

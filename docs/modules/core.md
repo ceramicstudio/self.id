@@ -21,7 +21,7 @@ ___
 
 ### CoreModelTypes
 
-Ƭ **CoreModelTypes**: `ModelTypeAliases`<`Object`, `Object`\>
+Ƭ **CoreModelTypes**: `ModelTypeAliases`<{ `AlsoKnownAs`: `AlsoKnownAs` ; `BasicProfile`: `BasicProfile` ; `CryptoAccounts`: `CryptoAccountLinks`  }, { `alsoKnownAs`: ``"AlsoKnownAs"`` ; `basicProfile`: ``"BasicProfile"`` ; `cryptoAccounts`: ``"CryptoAccounts"``  }\>
 
 ___
 
@@ -33,13 +33,15 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `ModelTypes` | extends [`CoreModelTypes`](core.md#coremodeltypes)[`CoreModelTypes`](core.md#coremodeltypes) |
+| `ModelTypes` | extends `ModelTypeAliases` = [`CoreModelTypes`](core.md#coremodeltypes) |
 
 #### Type declaration
 
 | Name | Type |
 | :------ | :------ |
+| `cache?` | `TileCache` \| `boolean` |
 | `ceramic` | [`CeramicNetwork`](core.md#ceramicnetwork) \| `string` |
+| `loader?` | `TileLoader` |
 | `model?` | `ModelTypesToAliases`<`ModelTypes`\> |
 
 ___
@@ -52,7 +54,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `ModelTypes` | extends [`CoreModelTypes`](core.md#coremodeltypes)[`CoreModelTypes`](core.md#coremodeltypes) |
+| `ModelTypes` | extends `ModelTypeAliases` = [`CoreModelTypes`](core.md#coremodeltypes) |
 
 #### Type declaration
 

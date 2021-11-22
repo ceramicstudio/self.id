@@ -1,17 +1,18 @@
 import type { EthereumAuthProvider } from '@3id/connect'
 import type { StreamID } from '@ceramicnetwork/streamid'
 import type { DefinitionContentType } from '@glazed/did-datastore'
+import type { ModelTypeAliases } from '@glazed/types'
 import type { CoreModelTypes } from '@self.id/core'
 import type { DID } from 'dids'
 
 import { WebClient } from './client'
 import type { WebClientParams } from './client'
 
-export type AuthenticateParams<ModelTypes extends CoreModelTypes = CoreModelTypes> =
+export type AuthenticateParams<ModelTypes extends ModelTypeAliases = CoreModelTypes> =
   WebClientParams<ModelTypes> & { authProvider: EthereumAuthProvider }
 
-export type SelfIDParams = {
-  client: WebClient
+export type SelfIDParams<ModelTypes extends ModelTypeAliases = CoreModelTypes> = {
+  client: WebClient<ModelTypes>
 }
 
 /**
@@ -20,21 +21,21 @@ export type SelfIDParams = {
  * ```
  */
 export class SelfID<
-  ModelTypes extends CoreModelTypes = CoreModelTypes,
+  ModelTypes extends ModelTypeAliases = CoreModelTypes,
   Alias extends keyof ModelTypes['definitions'] = keyof ModelTypes['definitions']
 > {
-  static async authenticate<ModelTypes extends CoreModelTypes = CoreModelTypes>(
+  static async authenticate<ModelTypes extends ModelTypeAliases = CoreModelTypes>(
     params: AuthenticateParams<ModelTypes>
-  ): Promise<SelfID> {
+  ): Promise<SelfID<ModelTypes>> {
     const { authProvider, ...clientParams } = params
-    const client = new WebClient<ModelTypes>(clientParams)
+    const client = new WebClient(clientParams)
     await client.authenticate(authProvider, true)
     return new SelfID({ client })
   }
 
-  #client: WebClient
+  #client: WebClient<ModelTypes>
 
-  constructor(params: SelfIDParams) {
+  constructor(params: SelfIDParams<ModelTypes>) {
     if (!params.client.ceramic.did?.authenticated) {
       throw new Error(
         'Input DID must be authenticated, use SelfID.authenticate() instead of new SelfID()'
@@ -43,7 +44,7 @@ export class SelfID<
     this.#client = params.client
   }
 
-  get client(): WebClient {
+  get client(): WebClient<ModelTypes> {
     return this.#client
   }
 

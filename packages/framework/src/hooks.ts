@@ -1,3 +1,5 @@
+import type { ModelTypeAliases } from '@glazed/types'
+import type { CoreModelTypes } from '@self.id/core'
 import { useMultiAuth } from '@self.id/multiauth'
 import type { AuthAccount, EIP1193Provider, NetworkProvider } from '@self.id/multiauth'
 import { useViewerConnection } from '@self.id/react'
@@ -12,22 +14,22 @@ export type ConnectOptions = {
   switchAccount?: boolean
 }
 
-export function useConnection(): [
-  ConnectionState,
-  (options?: ConnectOptions) => Promise<SelfID | null>,
+export function useConnection<ModelTypes extends ModelTypeAliases = CoreModelTypes>(): [
+  ConnectionState<ModelTypes>,
+  (options?: ConnectOptions) => Promise<SelfID<ModelTypes> | null>,
   () => void
 ] {
   const [authState, authenticate, resetAuthentication] = useMultiAuth()
-  const [viewerConnection, connectViewer, disconnectViewer] = useViewerConnection()
+  const [viewerConnection, connectViewer, disconnectViewer] = useViewerConnection<ModelTypes>()
 
-  const state = useMemo((): ConnectionState => {
+  const state = useMemo((): ConnectionState<ModelTypes> => {
     // Connecting status has priority if there is any in progress
     if (viewerConnection.status === 'connecting' || authState.status === 'authenticating') {
       return { status: 'connecting' }
     }
     // Settled (connected or failed) viewer connection
     if (viewerConnection.status === 'connected' || viewerConnection.status === 'failed') {
-      return viewerConnection
+      return viewerConnection as ConnectionState<ModelTypes>
     }
     // Authentication failed
     if (authState.status === 'failed') {
@@ -73,7 +75,7 @@ export function useConnection(): [
       const authProvider = new EthereumAuthProvider(provider, auth.state.account)
       return await connectViewer(authProvider)
     },
-    [state, connectViewer, disconnect]
+    [state, authenticate, connectViewer, disconnect]
   )
 
   return [state, connect, disconnect]
