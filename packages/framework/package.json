@@ -47,7 +47,7 @@
     "@self.id/ui": "^0.1.0",
     "@self.id/web": "^0.2.0",
     "boring-avatars": "^1.5.8",
-    "grommet": "^2.18.0"
+    "grommet": "^2.19.1"
   },
   "devDependencies": {
     "@glazed/types": "^0.1.3"

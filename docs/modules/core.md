@@ -21,7 +21,7 @@ ___
 
 ### CoreModelTypes
 
-Ƭ **CoreModelTypes**: `ModelTypeAliases`<`Object`, `Object`\>
+Ƭ **CoreModelTypes**: `ModelTypeAliases`<{ `AlsoKnownAs`: `AlsoKnownAs` ; `BasicProfile`: `BasicProfile` ; `CryptoAccounts`: `CryptoAccountLinks`  }, { `alsoKnownAs`: ``"AlsoKnownAs"`` ; `basicProfile`: ``"BasicProfile"`` ; `cryptoAccounts`: ``"CryptoAccounts"``  }\>
 
 ___
 

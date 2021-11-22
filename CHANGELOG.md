@@ -1,4 +1,4 @@
-## master (unreleased)
+## 2021-11-22
 
 ### `@self.id/core` v0.2.0
 
