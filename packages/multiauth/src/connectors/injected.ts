@@ -1,6 +1,6 @@
-import type { EIP1193Provider, ProviderType } from '../providers/types'
+import type { EIP1193Provider, ProviderType } from '../providers/types.js'
 
-import type { ConnectorConfigDefaults } from '../types'
+import type { ConnectorConfigDefaults } from '../types.js'
 
 declare global {
   interface Window {
@@ -11,7 +11,7 @@ declare global {
 /** @internal */
 export const injected: ConnectorConfigDefaults = {
   label: 'MetaMask',
-  logo: new URL('../assets/metamask.png', import.meta.url).href,
+  logo: new URL('../../assets/metamask.png', import.meta.url).href,
   getNetworkProvider(key) {
     return key === 'ethereum' && typeof window !== 'undefined' && window.ethereum != null
       ? 'eip1193'

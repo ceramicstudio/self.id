@@ -5,8 +5,8 @@ import type { ModelTypeAliases } from '@glazed/types'
 import type { CoreModelTypes } from '@self.id/core'
 import type { DID } from 'dids'
 
-import { WebClient } from './client'
-import type { WebClientParams } from './client'
+import { WebClient } from './client.js'
+import type { WebClientParams } from './client.js'
 
 export type AuthenticateParams<ModelTypes extends ModelTypeAliases = CoreModelTypes> =
   WebClientParams<ModelTypes> & { authProvider: EthereumAuthProvider }

@@ -7,9 +7,9 @@ import {
   DEFAULT_CERAMIC_NETWORK,
   DEFAULT_CONNECT_NETWORK,
   VIEWER_ID_STORAGE_KEY,
-} from './constants'
-import { CookieStorage } from './storage'
-import type { ViewerConnectionState } from './types'
+} from './constants.js'
+import { CookieStorage } from './storage.js'
+import type { ViewerConnectionState } from './types.js'
 
 /** @internal */
 export const stateScope = Symbol()

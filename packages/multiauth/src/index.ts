@@ -64,14 +64,14 @@
  * @module multiauth
  */
 
-export type { ModalConfig } from './components/Modal'
-export { Provider } from './components/Provider'
+export type { ModalConfig } from './components/Modal.js'
+export { Provider } from './components/Provider.js'
 export type {
   ProviderConfig as MultiAuthProviderConfig,
   ProviderProps,
-} from './components/Provider'
-export * from './connectors'
-export * from './hooks'
-export * from './networks'
-export * from './providers/types'
-export * from './types'
+} from './components/Provider.js'
+export * from './connectors.js'
+export * from './hooks.js'
+export * from './networks.js'
+export * from './providers/types.js'
+export * from './types.js'

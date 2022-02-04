@@ -3,7 +3,6 @@
  */
 
 import { act, renderHook } from '@testing-library/react-hooks'
-import React from 'react'
 import type { ReactNode } from 'react'
 
 import { Provider, useConnection } from '../src'

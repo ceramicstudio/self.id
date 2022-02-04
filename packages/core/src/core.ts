@@ -10,9 +10,9 @@ import type { ModelTypeAliases, ModelTypesToAliases } from '@glazed/types'
 import { Resolver } from 'did-resolver'
 import { getResolver as getKeyResolver } from 'key-did-resolver'
 
-import { model as coreModel } from './__generated__/model'
-import type { CeramicNetwork, CoreModelTypes } from './types'
-import { isCAIP10string } from './utils'
+import { model as coreModel } from './__generated__/model.js'
+import type { CeramicNetwork, CoreModelTypes } from './types.js'
+import { isCAIP10string } from './utils.js'
 
 /** @internal */
 export const CERAMIC_URLS: Record<CeramicNetwork, string> = {

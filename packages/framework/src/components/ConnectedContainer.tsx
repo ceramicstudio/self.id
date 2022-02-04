@@ -1,8 +1,7 @@
-import React from 'react'
 import type { ReactNode } from 'react'
 
-import { useConnection } from '../hooks'
-import type { ConnectionState } from '../types'
+import { useConnection } from '../hooks.js'
+import type { ConnectionState } from '../types.js'
 
 export type ConnectedContainerProps = {
   children: ReactNode

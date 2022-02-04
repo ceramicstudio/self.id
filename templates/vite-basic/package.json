@@ -7,7 +7,7 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "@self.id/framework": "^0.1.0",
+    "@self.id/framework": "^0.2.0-alpha.0",
     "grommet": "^2.19.1",
     "react": "^17.0.0",
     "react-dom": "^17.0.0"

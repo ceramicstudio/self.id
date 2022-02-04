@@ -3,7 +3,7 @@ import type { CoreModelTypes } from '@self.id/core'
 import type { EthereumAuthProvider, SelfID } from '@self.id/web'
 import type { DehydratedState } from 'react-query'
 
-import type { Abortable } from './utils'
+import type { Abortable } from './utils.js'
 
 export type ViewerConnectionState<ModelTypes extends ModelTypeAliases = CoreModelTypes> =
   | { status: 'idle' }

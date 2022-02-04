@@ -1,6 +1,6 @@
 import { atom } from 'jotai'
 
-import type { AuthState } from './types'
+import type { AuthState } from './types.js'
 
 /** @internal */
 export const stateScope = Symbol()

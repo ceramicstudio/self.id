@@ -1,4 +1,4 @@
-import { getCookieValue } from './utils'
+import { getCookieValue } from './utils.js'
 
 /** @internal */
 export const canUseBrowserCookie = typeof document !== 'undefined' && 'cookie' in document

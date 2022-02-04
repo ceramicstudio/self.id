@@ -1,7 +1,7 @@
-import type { AccountID, ChainID, ChainIDParams } from 'caip'
+import type { AccountId, ChainId, ChainIdParams } from 'caip'
 
-import type { ProviderKey, ProviderType, ProviderTypes } from './providers/types'
-import type { Deferred } from './utils'
+import type { ProviderKey, ProviderType, ProviderTypes } from './providers/types.js'
+import type { Deferred } from './utils.js'
 
 export type DisplayDefaults = {
   label: string
@@ -67,12 +67,12 @@ export type PartialConfig = {
 
 export type NetworkStateParams = {
   account?: string
-  chainID?: ChainID | ChainIDParams | string | number
+  chainID?: ChainId | ChainIdParams | string | number
 }
 
 export type NetworkState<Key extends ProviderKey> = {
   account: string | null
-  chainID: ChainID
+  chainID: ChainId
   providerKey: Key
   provider: ProviderType<Key>
 }
@@ -87,7 +87,7 @@ export type AuthMethod<Key extends NetworkKey = NetworkKey> = {
 }
 
 export type AuthAccount<Key extends ProviderKey = ProviderKey> = {
-  accountID: AccountID
+  accountID: AccountId
   method: AuthMethod
   state: AuthenticatedState<Key>
 }

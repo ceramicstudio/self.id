@@ -54,7 +54,7 @@
  * @module image-utils
  */
 
-export * from './ipfs'
-export * from './loading'
-export * from './selection'
-export * from './types'
+export * from './ipfs.js'
+export * from './loading.js'
+export * from './selection.js'
+export * from './types.js'

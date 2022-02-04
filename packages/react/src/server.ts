@@ -3,9 +3,9 @@ import { Core } from '@self.id/core'
 import type { CoreModelTypes, CoreParams } from '@self.id/core'
 import { dehydrate, QueryClient } from 'react-query'
 
-import { VIEWER_ID_STORAGE_KEY } from './constants'
-import type { RequestState } from './types'
-import { getCookieValue } from './utils'
+import { VIEWER_ID_STORAGE_KEY } from './constants.js'
+import type { RequestState } from './types.js'
+import { getCookieValue } from './utils.js'
 
 export function getCookieViewerID(cookie?: string): string | null {
   return (cookie && getCookieValue(cookie, VIEWER_ID_STORAGE_KEY)) || null
@@ -42,6 +42,7 @@ export class RequestClient<
     if (id == null) {
       return false
     }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     await this.#queryClient.prefetchQuery([id, key], async () => await this.get(key, id))
     return true
   }

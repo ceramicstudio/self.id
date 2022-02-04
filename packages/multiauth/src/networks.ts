@@ -1,11 +1,11 @@
-import { getConnectorsConfig } from './connectors'
-import { getEthereumProviderState } from './networks/ethereum'
+import { getConnectorsConfig } from './connectors.js'
+import { getEthereumProviderState } from './networks/ethereum.js'
 import type {
   NetworkKey,
   NetworkConfig,
   NetworkConfigDefaults,
   PartialNetworkConfig,
-} from './types'
+} from './types.js'
 
 /** @internal */
 export const networksDefaults: Record<NetworkKey, NetworkConfigDefaults> = {

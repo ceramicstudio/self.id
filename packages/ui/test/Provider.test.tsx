@@ -5,7 +5,7 @@
 import { render } from '@testing-library/react'
 import { defaultProps } from 'grommet'
 import { deepMerge } from 'grommet/utils'
-import React, { useContext } from 'react'
+import { type Context, useContext } from 'react'
 import { ThemeContext } from 'styled-components'
 
 import { Provider, theme } from '../src'
@@ -16,7 +16,7 @@ describe('AvatarPlaceholder', () => {
     const injectedTheme = { global: { colors: { brand: 'test-color' } } }
 
     function Child() {
-      const providedTheme = useContext<ThemeType>(ThemeContext)
+      const providedTheme = useContext<ThemeType>(ThemeContext as Context<ThemeType>)
       expect(providedTheme).toEqual(deepMerge({}, defaultProps.theme, injectedTheme))
       return null
     }
@@ -30,7 +30,7 @@ describe('AvatarPlaceholder', () => {
 
   test('uses the default theme', () => {
     function Child() {
-      const providedTheme = useContext<ThemeType>(ThemeContext)
+      const providedTheme = useContext<ThemeType>(ThemeContext as Context<ThemeType>)
       expect(providedTheme).toEqual(deepMerge({}, defaultProps.theme, theme))
       return null
     }

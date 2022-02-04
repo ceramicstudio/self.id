@@ -1,13 +1,12 @@
-import { AccountID } from 'caip'
+import { AccountId } from 'caip'
 import { Box, Button, Heading, Layer, Text } from 'grommet'
-import React from 'react'
 import type { ReactElement, ReactNode } from 'react'
 
-import { useAuthState } from '../hooks'
-import type { AuthAccount, AuthenticatedState, AuthMethod, NetworkConfig } from '../types'
-import { deferred } from '../utils'
+import { useAuthState } from '../hooks.js'
+import type { AuthAccount, AuthenticatedState, AuthMethod, NetworkConfig } from '../types.js'
+import { deferred } from '../utils.js'
 
-import { ModalItem } from './ModalItem'
+import { ModalItem } from './ModalItem.js'
 
 type ModalGridProps = {
   children: ReactNode
@@ -17,7 +16,7 @@ function ModalGrid({ children }: ModalGridProps) {
   return <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)' }}>{children}</div>
 }
 
-const defaultCloseIconSrc = new URL('../assets/icon-close.svg', import.meta.url).href
+const defaultCloseIconSrc = new URL('../../assets/icon-close.svg', import.meta.url).href
 
 export type ModalConfig = {
   closeIcon?: string | ReactElement
@@ -79,7 +78,7 @@ export function Modal({
               }
               setAuthState({ status: 'idle' })
             } else {
-              const accountID = new AccountID({ address: state.account, chainId: state.chainID })
+              const accountID = new AccountId({ address: state.account, chainId: state.chainID })
               const auth: AuthAccount<Provider> = {
                 accountID,
                 method,

@@ -83,7 +83,7 @@
  * @module core
  */
 
-export * from './core'
-export * from './public'
-export * from './types'
-export * from './utils'
+export * from './core.js'
+export * from './public.js'
+export * from './types.js'
+export * from './utils.js'

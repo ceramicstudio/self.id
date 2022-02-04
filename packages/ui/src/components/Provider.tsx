@@ -1,8 +1,7 @@
 import { Grommet } from 'grommet'
 import type { GrommetExtendedProps } from 'grommet'
-import React from 'react'
 
-import { theme } from '../theme'
+import { theme } from '../theme.js'
 
 export type ProviderProps = GrommetExtendedProps
 

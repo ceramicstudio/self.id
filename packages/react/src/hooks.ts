@@ -8,9 +8,9 @@ import { useAtomValue, useUpdateAtom } from 'jotai/utils'
 import { useCallback } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 
-import { stateScope, connectionAtom, clientConfigAtom, coreAtom, viewerIDAtom } from './state'
-import type { ViewerConnectionState } from './types'
-import { abortable } from './utils'
+import { stateScope, connectionAtom, clientConfigAtom, coreAtom, viewerIDAtom } from './state.js'
+import type { ViewerConnectionState } from './types.js'
+import { abortable } from './utils.js'
 
 async function authenticateSelfID<ModelTypes extends ModelTypeAliases = CoreModelTypes>(
   params: AuthenticateParams<ModelTypes>

@@ -1,11 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 
-import crossFetch from 'cross-fetch'
+import { jest } from '@jest/globals'
 
 import { loadLegacy3BoxProfile, getLegacy3BoxProfileAsBasicProfile } from '../src'
-
-jest.mock('cross-fetch')
-const fetch = crossFetch as jest.Mock
 
 const TEST_PROFILE = {
   description: 'linktr.ee/xray9876543210',
@@ -31,51 +28,61 @@ const TEST_PROFILE = {
 describe('3box', () => {
   describe('loadLegacy3BoxProfile', () => {
     test('successful response', async () => {
-      fetch.mockResolvedValue({
-        ok: true,
-        json: () => {
-          return Promise.resolve(TEST_PROFILE)
-        },
+      const fetchFunc = jest.fn(() => {
+        return Promise.resolve({
+          ok: true,
+          json: () => {
+            return Promise.resolve(TEST_PROFILE)
+          },
+        } as unknown as Response)
       })
-      await expect(loadLegacy3BoxProfile('success')).resolves.toMatchSnapshot()
-      expect(fetch).toBeCalledWith('https://ipfs.3box.io/profile?address=success')
+      await expect(loadLegacy3BoxProfile('success', fetchFunc)).resolves.toMatchSnapshot()
+      expect(fetchFunc).toBeCalledWith('https://ipfs.3box.io/profile?address=success')
     })
 
     test('error response', async () => {
-      fetch.mockResolvedValue({ ok: false })
-      await expect(loadLegacy3BoxProfile('error')).resolves.toMatchSnapshot()
-      expect(fetch).toBeCalledWith('https://ipfs.3box.io/profile?address=error')
+      const fetchFunc = jest.fn(() => Promise.resolve({ ok: false } as unknown as Response))
+      await expect(loadLegacy3BoxProfile('error', fetchFunc)).resolves.toMatchSnapshot()
+      expect(fetchFunc).toBeCalledWith('https://ipfs.3box.io/profile?address=error')
     })
 
     test('fetch error', async () => {
-      fetch.mockRejectedValue(new Error('Failed'))
-      await expect(loadLegacy3BoxProfile('failed')).resolves.toMatchSnapshot()
-      expect(fetch).toBeCalledWith('https://ipfs.3box.io/profile?address=failed')
+      const fetchFunc = jest.fn(() => Promise.reject(new Error('Failed')))
+      await expect(loadLegacy3BoxProfile('failed', fetchFunc)).resolves.toMatchSnapshot()
+      expect(fetchFunc).toBeCalledWith('https://ipfs.3box.io/profile?address=failed')
     })
   })
 
   describe('getLegacy3BoxProfileAsBasicProfile', () => {
     test('successful response', async () => {
-      fetch.mockResolvedValue({
-        ok: true,
-        json: () => {
-          return Promise.resolve(TEST_PROFILE)
-        },
+      const fetchFunc = jest.fn(() => {
+        return Promise.resolve({
+          ok: true,
+          json: () => {
+            return Promise.resolve(TEST_PROFILE)
+          },
+        } as unknown as Response)
       })
-      await expect(getLegacy3BoxProfileAsBasicProfile('')).resolves.toMatchSnapshot()
-      expect(fetch).toBeCalledWith('https://ipfs.3box.io/profile?address=success')
+      await expect(
+        getLegacy3BoxProfileAsBasicProfile('success', fetchFunc)
+      ).resolves.toMatchSnapshot()
+      expect(fetchFunc).toBeCalledWith('https://ipfs.3box.io/profile?address=success')
     })
 
     test('error response', async () => {
-      fetch.mockResolvedValue({ ok: false })
-      await expect(getLegacy3BoxProfileAsBasicProfile('')).resolves.toMatchSnapshot()
-      expect(fetch).toBeCalledWith('https://ipfs.3box.io/profile?address=error')
+      const fetchFunc = jest.fn(() => Promise.resolve({ ok: false } as unknown as Response))
+      await expect(
+        getLegacy3BoxProfileAsBasicProfile('error', fetchFunc)
+      ).resolves.toMatchSnapshot()
+      expect(fetchFunc).toBeCalledWith('https://ipfs.3box.io/profile?address=error')
     })
 
     test('fetch error', async () => {
-      fetch.mockRejectedValue(new Error('Failed'))
-      await expect(getLegacy3BoxProfileAsBasicProfile('')).resolves.toMatchSnapshot()
-      expect(fetch).toBeCalledWith('https://ipfs.3box.io/profile?address=failed')
+      const fetchFunc = jest.fn(() => Promise.reject(new Error('Failed')))
+      await expect(
+        getLegacy3BoxProfileAsBasicProfile('failed', fetchFunc)
+      ).resolves.toMatchSnapshot()
+      expect(fetchFunc).toBeCalledWith('https://ipfs.3box.io/profile?address=failed')
     })
   })
 })

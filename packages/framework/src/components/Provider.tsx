@@ -6,7 +6,6 @@ import { Provider as ReactProvider } from '@self.id/react'
 import type { ProviderProps as ReactProviderProps } from '@self.id/react'
 import { Provider as UIProvider } from '@self.id/ui'
 import type { ProviderProps as UIProviderProps } from '@self.id/ui'
-import React from 'react'
 
 export type ProviderProps<ModelTypes extends ModelTypeAliases = CoreModelTypes> =
   ReactProviderProps<ModelTypes> & {

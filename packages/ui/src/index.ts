@@ -47,9 +47,9 @@
  * @module ui
  */
 
-export { AvatarPlaceholder } from './components/AvatarPlaceholder'
-export type { AvatarPlaceholderProps } from './components/AvatarPlaceholder'
-export { Provider } from './components/Provider'
-export type { ProviderProps } from './components/Provider'
-export { colors, theme } from './theme'
-export type { Colors, ColorType, ThemeType } from './theme'
+export { AvatarPlaceholder } from './components/AvatarPlaceholder.js'
+export type { AvatarPlaceholderProps } from './components/AvatarPlaceholder.js'
+export { Provider } from './components/Provider.js'
+export type { ProviderProps } from './components/Provider.js'
+export { colors, theme } from './theme.js'
+export type { Colors, ColorType, ThemeType } from './theme.js'

@@ -1,6 +1,6 @@
-import type { ProviderType } from '../providers/types'
+import type { ProviderType } from '../providers/types.js'
 
-import type { ConnectorConfigDefaults } from '../types'
+import type { ConnectorConfigDefaults } from '../types.js'
 
 export type PortisParams = {
   dAppId: string
@@ -10,7 +10,7 @@ export type PortisParams = {
 /** @internal */
 export const portis: ConnectorConfigDefaults = {
   label: 'Portis',
-  logo: new URL('../assets/portis.png', import.meta.url).href,
+  logo: new URL('../../assets/portis.png', import.meta.url).href,
   getNetworkProvider(key, params?: PortisParams) {
     return key === 'ethereum' && params != null && params.dAppId != null && params.network != null
       ? 'web3'

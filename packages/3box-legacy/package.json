@@ -1,6 +1,6 @@
 {
   "name": "@self.id/3box-legacy",
-  "version": "0.1.0",
+  "version": "0.2.0-alpha.0",
   "author": "3Box Labs",
   "license": "(Apache-2.0 OR MIT)",
   "homepage": "https://github.com/ceramicstudio/self.id#readme",
@@ -13,26 +13,26 @@
     "url": "https://github.com/ceramicstudio/self.id",
     "directory": "packages/3box-legacy"
   },
-  "main": "dist/lib.cjs",
-  "module": "dist/lib.mjs",
-  "typings": "dist/index.d.ts",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "exports": {
-    "import": "./dist/lib.mjs",
-    "require": "./dist/lib.cjs",
-    "default": "./dist/lib.cjs"
+    ".": "./dist/index.js"
   },
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "engines": {
-    "node": ">=14"
+    "node": ">=16"
   },
   "sideEffects": false,
   "scripts": {
-    "build": "del dist && tsc --emitDeclarationOnly --skipLibCheck && rollup -c ../../rollup.config.js",
-    "lint": "eslint --fix",
-    "test": "jest",
+    "build:clean": "del dist",
+    "build:js": "swc src -d ./dist --config-file ../../.swcrc",
+    "build:types": "tsc --emitDeclarationOnly --skipLibCheck",
+    "build": "yarn build:clean && yarn build:types && yarn build:js",
+    "lint": "eslint src test --fix",
+    "test": "node --experimental-vm-modules $(yarn bin jest)",
     "prepare": "yarn build",
     "prepublishOnly": "package-check"
   },
@@ -41,9 +41,22 @@
   },
   "devDependencies": {
     "@datamodels/identity-profile-basic": "^0.1.2",
-    "@glazed/types": "^0.1.2"
+    "@glazed/types": "^0.2.0-alpha.0"
   },
   "jest": {
-    "preset": "ts-jest"
+    "extensionsToTreatAsEsm": [
+      ".ts"
+    ],
+    "moduleNameMapper": {
+      "^(\\.{1,2}/.*)\\.js$": "$1"
+    },
+    "transform": {
+      "^.+\\.(t|j)s$": [
+        "@swc/jest",
+        {
+          "root": "../.."
+        }
+      ]
+    }
   }
 }

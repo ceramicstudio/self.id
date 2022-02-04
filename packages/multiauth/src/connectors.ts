@@ -1,8 +1,8 @@
-import { fortmatic } from './connectors/fortmatic'
-import { injected } from './connectors/injected'
-import { portis } from './connectors/portis'
-import { torus } from './connectors/torus'
-import { walletConnect } from './connectors/walletConnect'
+import { fortmatic } from './connectors/fortmatic.js'
+import { injected } from './connectors/injected.js'
+import { portis } from './connectors/portis.js'
+// import { torus } from './connectors/torus.js'
+import { walletConnect } from './connectors/walletConnect.js'
 
 import type {
   ConnectorConfig,
@@ -10,14 +10,14 @@ import type {
   ConnectorKey,
   PartialConnectorConfig,
   NetworkKey,
-} from './types'
+} from './types.js'
 
 /** @internal */
 export const connectorsDefaults: Record<string, ConnectorConfigDefaults> = {
   fortmatic,
   injected,
   portis,
-  torus,
+  // torus,
   walletConnect,
 }
 

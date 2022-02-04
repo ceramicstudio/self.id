@@ -1,8 +1,8 @@
 import type { DefinitionContentType } from '@glazed/did-datastore'
 import type { ModelTypeAliases } from '@glazed/types'
 
-import type { ModelTypes as CoreModelTypes } from './__generated__/model'
-import type { Core } from './core'
+import type { ModelTypes as CoreModelTypes } from './__generated__/model.js'
+import type { Core } from './core.js'
 
 export type PublicIDParams<ModelTypes extends ModelTypeAliases = CoreModelTypes> = {
   core: Core<ModelTypes>

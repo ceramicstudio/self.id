@@ -1,9 +1,9 @@
 import { useAtom } from 'jotai'
 import { useCallback } from 'react'
 
-import { authStateAtom, stateScope } from './state'
-import type { AuthAccount, AuthState } from './types'
-import { deferred } from './utils'
+import { authStateAtom, stateScope } from './state.js'
+import type { AuthAccount, AuthState } from './types.js'
+import { deferred } from './utils.js'
 
 /** @internal */
 export function useAuthState(): [AuthState, (state: AuthState) => void] {

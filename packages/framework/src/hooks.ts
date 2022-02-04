@@ -7,8 +7,8 @@ import { EthereumAuthProvider } from '@self.id/web'
 import type { SelfID } from '@self.id/web'
 import { useCallback, useMemo } from 'react'
 
-import type { ConnectionState } from './types'
-import { wrapEIP1193asWeb3Provider } from './utils'
+import type { ConnectionState } from './types.js'
+import { wrapEIP1193asWeb3Provider } from './utils.js'
 
 export type ConnectOptions = {
   switchAccount?: boolean

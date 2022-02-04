@@ -1,8 +1,8 @@
 import Pica from 'pica'
 
-import { uploadFile } from './ipfs'
-import { getDimensions } from './selection'
-import type { Dimensions, ImageMetadata, ImageSources, SizedImage, SizeMode } from './types'
+import { uploadFile } from './ipfs.js'
+import { getDimensions } from './selection.js'
+import type { Dimensions, ImageMetadata, ImageSources, SizedImage, SizeMode } from './types.js'
 
 const pica = new Pica()
 

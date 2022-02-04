@@ -1,4 +1,4 @@
-import type { Dimensions, ImageMetadata, ImageSources, SizeMode } from './types'
+import type { Dimensions, ImageMetadata, ImageSources, SizeMode } from './types.js'
 
 const DEFAULT_DIMENSIONS: Dimensions = {
   height: 512,

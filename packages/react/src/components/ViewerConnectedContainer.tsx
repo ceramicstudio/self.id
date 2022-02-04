@@ -1,8 +1,7 @@
-import React from 'react'
 import type { ReactNode } from 'react'
 
-import { useViewerConnection } from '../hooks'
-import type { ViewerConnectionState } from '../types'
+import { useViewerConnection } from '../hooks.js'
+import type { ViewerConnectionState } from '../types.js'
 
 export type ViewerConnectedContainerProps = {
   children: ReactNode

@@ -78,7 +78,7 @@ function useWallet() {
 
 | Name | Type |
 | :------ | :------ |
-| `accountID` | `AccountID` |
+| `accountID` | `AccountId` |
 | `method` | [`AuthMethod`](multiauth.md#authmethod) |
 | `state` | [`AuthenticatedState`](multiauth.md#authenticatedstate)<`Key`\> |
 
@@ -337,7 +337,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `account` | `string` \| ``null`` |
-| `chainID` | `ChainID` |
+| `chainID` | `ChainId` |
 | `provider` | [`ProviderType`](multiauth.md#providertype)<`Key`\> |
 | `providerKey` | `Key` |
 
@@ -352,7 +352,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `account?` | `string` |
-| `chainID?` | `ChainID` \| `ChainIDParams` \| `string` \| `number` |
+| `chainID?` | `ChainId` \| `ChainIdParams` \| `string` \| `number` |
 
 ___
 

@@ -52,5 +52,5 @@
 export { EthereumAuthProvider } from '@3id/connect'
 export type { EthereumProvider } from '@3id/connect'
 
-export * from './client'
-export * from './self'
+export * from './client.js'
+export * from './self.js'

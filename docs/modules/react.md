@@ -18,7 +18,7 @@ npm install @self.id/react
 
 ### Configure the Provider
 
-The [`Provider`](framework.md#provider) component must be added at the root of the
+The [`Provider`](react.md#provider) component must be added at the root of the
 application tree in order to use the hooks described below. It can be used to provide a custom
 configuration for the Self.ID clients and queries, as well as initial state.
 
@@ -78,7 +78,7 @@ function ConnectButton() {
 
 ### Read a viewer record
 
-The [`useViewerRecord`](framework.md#useviewerrecord) hook loads the record for a given
+The [`useViewerRecord`](react.md#useviewerrecord) hook loads the record for a given
 definition in the index of the current viewer, with the following variants:
 
 - If no viewer is set, no record can be loaded
@@ -102,7 +102,7 @@ function ShowViewerName() {
 
 ### Read a public record
 
-The [`usePublicRecord`](framework.md#usepublicrecord) hook is similar to the
+The [`usePublicRecord`](react.md#usepublicrecord) hook is similar to the
 `useViewerRecord` hook described above, but reading from the index of an explicitly provided
 account rather than the viewer. Public records are read-only, `useViewerRecord` must be used in
  case mutations are needed.

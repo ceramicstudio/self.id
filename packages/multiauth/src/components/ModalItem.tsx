@@ -1,8 +1,7 @@
 import { Box, Spinner, Text } from 'grommet'
-import React from 'react'
 import type { ReactElement, ReactNode } from 'react'
 
-const defaultSelectedIconSrc = new URL('../assets/icon-selected.svg', import.meta.url).href
+const defaultSelectedIconSrc = new URL('../../assets/icon-selected.svg', import.meta.url).href
 
 function noop() {
   // Do nothing

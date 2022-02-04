@@ -4,7 +4,6 @@
 
 import { render } from '@testing-library/react'
 import { Provider as JotaiProvider } from 'jotai'
-import React from 'react'
 
 import { ViewerConnectedContainer, connectionAtom, stateScope } from '../src'
 

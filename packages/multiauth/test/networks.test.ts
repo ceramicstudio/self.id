@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { ChainID } from 'caip'
+import { ChainId } from 'caip'
 
 import {
   getEIP1193Account,
@@ -80,24 +80,24 @@ describe('networks', () => {
     describe('toChainID()', () => {
       test('with number input', () => {
         const id = toChainID(1)
-        expect(id).toBeInstanceOf(ChainID)
+        expect(id).toBeInstanceOf(ChainId)
         expect(id.toString()).toBe('eip155:1')
       })
 
       test('with string input', () => {
         const id = toChainID('0x03')
-        expect(id).toBeInstanceOf(ChainID)
+        expect(id).toBeInstanceOf(ChainId)
         expect(id.toString()).toBe('eip155:3')
       })
 
-      test('with ChainIDParams input', () => {
+      test('with ChainIdParams input', () => {
         const id = toChainID({ namespace: 'eip155', reference: '4' })
-        expect(id).toBeInstanceOf(ChainID)
+        expect(id).toBeInstanceOf(ChainId)
         expect(id.toString()).toBe('eip155:4')
       })
 
-      test('with ChainID input', () => {
-        const id = new ChainID({ namespace: 'eip155', reference: '4' })
+      test('with ChainId input', () => {
+        const id = new ChainId({ namespace: 'eip155', reference: '4' })
         const same = toChainID(id)
         expect(same).toBe(id)
       })
@@ -167,7 +167,7 @@ describe('networks', () => {
       })
       const state = await getEIP1193ProviderState({ request } as unknown as EIP1193Provider)
       expect(state.account).toBe('0x123')
-      expect(state.chainID).toBeInstanceOf(ChainID)
+      expect(state.chainID).toBeInstanceOf(ChainId)
       expect(state.chainID.toString()).toBe('eip155:3')
       expect(request).toBeCalledTimes(2)
     })
@@ -179,7 +179,7 @@ describe('networks', () => {
       })
       const state = await getWeb3ProviderState({ enable, sendAsync } as unknown as Web3Provider)
       expect(state.account).toBe('0x123')
-      expect(state.chainID).toBeInstanceOf(ChainID)
+      expect(state.chainID).toBeInstanceOf(ChainId)
       expect(state.chainID.toString()).toBe('eip155:3')
       expect(enable).toBeCalled()
       expect(sendAsync).toBeCalled()
@@ -200,7 +200,7 @@ describe('networks', () => {
         await expect(getEthereumProviderState('eip1193', provider)).resolves.toEqual({
           account: '0x123',
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          chainID: expect.any(ChainID),
+          chainID: expect.any(ChainId),
           provider,
           providerKey: 'eip1193',
         })
@@ -215,7 +215,7 @@ describe('networks', () => {
         await expect(getEthereumProviderState('web3', provider)).resolves.toEqual({
           account: '0x123',
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          chainID: expect.any(ChainID),
+          chainID: expect.any(ChainId),
           provider,
           providerKey: 'web3',
         })

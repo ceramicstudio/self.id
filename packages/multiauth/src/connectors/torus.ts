@@ -1,8 +1,8 @@
 import type { NetworkInterface } from '@toruslabs/torus-embed'
 
-import type { ProviderType } from '../providers/types'
+import type { ProviderType } from '../providers/types.js'
 
-import type { ConnectorConfigDefaults } from '../types'
+import type { ConnectorConfigDefaults } from '../types.js'
 
 export type TorusParams = {
   network: NetworkInterface
@@ -12,7 +12,7 @@ export type TorusParams = {
 /** @internal */
 export const torus: ConnectorConfigDefaults = {
   label: 'Torus',
-  logo: new URL('../assets/torus.png', import.meta.url).href,
+  logo: new URL('../../assets/torus.png', import.meta.url).href,
   getNetworkProvider(key, params?: TorusParams) {
     return key === 'ethereum' && params?.network != null ? 'eip1193' : null
   },

@@ -3,7 +3,6 @@
  */
 
 import { act, renderHook } from '@testing-library/react-hooks'
-import React from 'react'
 import type { ReactNode } from 'react'
 
 // Use compiled files for tests as Jest doesn't support ESM/import.meta

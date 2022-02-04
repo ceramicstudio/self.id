@@ -1,6 +1,5 @@
 import { AvatarPlaceholder, useConnection } from '@self.id/framework'
 import { Anchor, Box, Heading, Paragraph } from 'grommet'
-import React from 'react'
 
 import ConnectButton from './ConnectButton'
 

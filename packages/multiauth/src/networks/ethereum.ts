@@ -1,13 +1,13 @@
-import { ChainID } from 'caip'
-import type { ChainIDParams } from 'caip'
+import { ChainId } from 'caip'
+import type { ChainIdParams } from 'caip'
 
-import type { EIP1193Provider, ProviderType, Web3Provider } from '../providers/types'
-import { web3ProviderRequest } from '../providers/utils'
-import type { NetworkProvider, NetworkState, NetworkStateParams } from '../types'
+import type { EIP1193Provider, ProviderType, Web3Provider } from '../providers/types.js'
+import { web3ProviderRequest } from '../providers/utils.js'
+import type { NetworkProvider, NetworkState, NetworkStateParams } from '../types.js'
 
 type NetworkStateData = {
   account: string | null
-  chainID: ChainID
+  chainID: ChainId
 }
 
 /** @internal */
@@ -29,8 +29,8 @@ const CHAIN_IDS: Record<string, string> = {
 }
 
 /** @internal */
-export function toChainID(id: ChainID | ChainIDParams | string | number): ChainID {
-  if (id instanceof ChainID) {
+export function toChainID(id: ChainId | ChainIdParams | string | number): ChainId {
+  if (id instanceof ChainId) {
     return id
   }
 
@@ -41,7 +41,7 @@ export function toChainID(id: ChainID | ChainIDParams | string | number): ChainI
           namespace: 'eip155',
           reference: typeof id === 'number' ? id.toString() : CHAIN_IDS[id] || id,
         }
-  return new ChainID(params)
+  return new ChainId(params)
 }
 
 /** @internal */

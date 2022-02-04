@@ -1,6 +1,6 @@
-import type { ProviderType } from '../providers/types'
+import type { ProviderType } from '../providers/types.js'
 
-import type { ConnectorConfigDefaults } from '../types'
+import type { ConnectorConfigDefaults } from '../types.js'
 
 export type FortmaticParams = {
   apiKey: string
@@ -9,7 +9,7 @@ export type FortmaticParams = {
 /** @internal */
 export const fortmatic: ConnectorConfigDefaults = {
   label: 'Fortmatic',
-  logo: new URL('../assets/fortmatic.png', import.meta.url).href,
+  logo: new URL('../../assets/fortmatic.png', import.meta.url).href,
   getNetworkProvider(key, params?: FortmaticParams) {
     return key === 'ethereum' && params?.apiKey != null ? 'web3' : null
   },

@@ -1,4 +1,4 @@
-import type { RequestArguments, Web3Provider } from './types'
+import type { RequestArguments, Web3Provider } from './types.js'
 
 export async function web3ProviderRequest<Result = unknown>(
   provider: Web3Provider,
