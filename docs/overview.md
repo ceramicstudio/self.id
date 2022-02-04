@@ -1,4 +1,4 @@
-# Self.ID API
+# Self.ID SDK
 
 ## Modules
 

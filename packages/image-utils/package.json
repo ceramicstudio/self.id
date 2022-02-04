@@ -36,7 +36,7 @@
     "prepublishOnly": "package-check"
   },
   "dependencies": {
-    "pica": "^7.1.0"
+    "pica": "^8.0.0"
   },
   "devDependencies": {
     "@datamodels/identity-profile-basic": "^0.1.2"

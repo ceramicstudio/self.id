@@ -1,8 +1,28 @@
 /**
- * 3Box legacy utilities
+ * Load legacy 3Box profiles.
+ *
+ * ## Purpose
+ *
+ * The`3box-legacy` module provides utility functions to load legacy 3Box profiles.
+ *
+ * ## Installation
  *
  * ```sh
  * npm install @self.id/3box-legacy
+ * ```
+ *
+ * ## Common use-cases
+ *
+ * ### Load a legacy 3Box profile as a Self.ID basic profile
+ *
+ * ```ts
+ * import { getLegacy3BoxProfileAsBasicProfile } from '@self.id/3box-legacy'
+ *
+ * async function getProfile() {
+ *   // Ethereum address to load the profile of
+ *   const address = '0x123efad...'
+ *   return await getLegacy3BoxProfileAsBasicProfile(address)
+ * }
  * ```
  *
  * @module 3box-legacy
