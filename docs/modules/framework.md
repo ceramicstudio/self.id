@@ -9,7 +9,7 @@ helping developers to quickly get started with building decentralized apps using
 React.
 
 The framework is built on top of the [`core`](core.md), [`web`](web.md), [`react`](react.md),
-[`ui`](ui.md) and [`multiauth`](multiauth.md) modules to provides APIs and UI components to easily
+[`ui`](ui.md) and [`multiauth`](multiauth.md) modules to provide APIs and UI components to easily
 authenticate users based on Wallet providers, keep track of the current user and interact with
 both public (read-only) and user-owned (mutable) records.
 
