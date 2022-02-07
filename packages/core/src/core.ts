@@ -14,6 +14,7 @@ import { model as coreModel } from './__generated__/model'
 import type { CeramicNetwork, CoreModelTypes } from './types'
 import { isCAIP10string } from './utils'
 
+/** @internal */
 export const CERAMIC_URLS: Record<CeramicNetwork, string> = {
   local: 'http://localhost:7007',
   'mainnet-gateway': 'https://gateway.ceramic.network',
