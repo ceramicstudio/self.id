@@ -5,7 +5,7 @@ React framework for decentralized apps.
 ## Purpose
 
 The `framework` module is the highest-level abstraction provided by the Self.ID SDK, aimed at
-helping developers quickly getting started with building decentralized apps using Ceramic with
+helping developers to quickly get started with building decentralized apps using Ceramic with
 React.
 
 The framework is built on top of the [`core`](core.md), [`web`](web.md), [`react`](react.md),
