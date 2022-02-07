@@ -5,8 +5,8 @@ Image utilities for Self.ID profiles.
 ## Purpose
 
 The `image-utils` module provides various utility functions for images, such as selecting the
-most suitable format among sources, resizing and uploading, mostly meant to be used in a Web
-browser context.
+most suitable format among sources, resizing and uploading, and is mostly meant to be used in a
+Web browser context.
 
 ## Installation
 

@@ -40,8 +40,8 @@
   "dependencies": {
     "@self.id/core": "^0.3.0-alpha.0",
     "@self.id/web": "^0.3.0-alpha.0",
-    "jotai": "^1.4.6",
-    "react-query": "^3.33.7"
+    "jotai": "^1.5.3",
+    "react-query": "^3.34.14"
   },
   "devDependencies": {
     "@glazed/did-datastore": "^0.3.0-alpha.0",

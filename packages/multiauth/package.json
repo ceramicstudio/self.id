@@ -44,11 +44,11 @@
   },
   "dependencies": {
     "@portis/web3": "^4.0.6",
-    "@toruslabs/torus-embed": "^1.18.3",
+    "@toruslabs/torus-embed": "^1.20.4",
     "@walletconnect/ethereum-provider": "^1.6.6",
     "caip": "^1.0.0",
     "fortmatic": "^2.2.1",
-    "jotai": "^1.4.6"
+    "jotai": "^1.5.3"
   },
   "peerDependencies": {
     "grommet": "^2.18.0",
