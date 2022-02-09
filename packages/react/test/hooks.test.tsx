@@ -2,9 +2,10 @@
  * @jest-environment ./jest-environment-jsdom-fix
  */
 
-import { DIDDataStore } from '@glazed/did-datastore'
-import { Core, PublicID } from '@self.id/core'
-import { EthereumAuthProvider, SelfID } from '@self.id/web'
+import type { DIDDataStore } from '@glazed/did-datastore'
+import { jest } from '@jest/globals'
+import { PublicID } from '@self.id/core'
+import type { EthereumAuthProvider, SelfID, WebClientParams } from '@self.id/web'
 import { act, renderHook } from '@testing-library/react-hooks'
 import { Provider as JotaiProvider } from 'jotai'
 import type { ReactNode } from 'react'
@@ -12,30 +13,24 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 
 import {
   Provider,
+  ReactClient,
   connectionAtom,
   stateScope,
-  useCore,
+  useClient,
   usePublicRecord,
   useViewerConnection,
   useViewerID,
   useViewerRecord,
 } from '../src'
 
-const AuthProviderMock = EthereumAuthProvider as jest.MockedClass<typeof EthereumAuthProvider>
-const DataStoreMock = DIDDataStore as jest.MockedClass<typeof DIDDataStore>
-const SelfIDMock = SelfID as jest.MockedClass<typeof SelfID>
-
-jest.mock('@glazed/did-datastore')
-jest.mock('@self.id/web')
-
 type ChildrenProps = { children: ReactNode }
 
 describe('hooks', () => {
   const wrapper = ({ children }: ChildrenProps) => <Provider>{children}</Provider>
 
-  test('useCore() returns the Core instance', () => {
-    const { result } = renderHook(() => useCore(), { wrapper })
-    expect(result.current).toBeInstanceOf(Core)
+  test('useClient() returns the ReactClient instance', () => {
+    const { result } = renderHook(() => useClient(), { wrapper })
+    expect(result.current).toBeInstanceOf(ReactClient)
   })
 
   describe('useViewerID()', () => {
@@ -57,15 +52,20 @@ describe('hooks', () => {
   describe('useViewerConnection()', () => {
     test('with successful connection', async () => {
       const selfID = { id: 'did:test:123' }
-      const authenticate = jest.fn(() => selfID)
-      // @ts-ignore
-      SelfIDMock.authenticate = authenticate
+      const authenticate = jest.fn(() => Promise.resolve(selfID as SelfID))
+      const client = new ReactClient({} as WebClientParams)
+      client.authenticate = authenticate
 
-      const { result, waitForValueToChange } = renderHook(() => useViewerConnection(), { wrapper })
+      const clientWrapper = ({ children }: ChildrenProps) => (
+        <Provider client={client}>{children}</Provider>
+      )
+      const { result, waitForValueToChange } = renderHook(() => useViewerConnection(), {
+        wrapper: clientWrapper,
+      })
       expect(result.current[0]).toEqual({ status: 'idle' })
 
       act(() => {
-        void result.current[1](new AuthProviderMock({}, '123456'))
+        void result.current[1]({} as EthereumAuthProvider)
       })
       await waitForValueToChange(() => result.current[0].status === 'connected')
 
@@ -75,16 +75,20 @@ describe('hooks', () => {
 
     test('with authentication error', async () => {
       const error = new Error('Failed')
-      // @ts-ignore
-      SelfIDMock.authenticate = jest.fn(() => {
-        throw error
-      })
+      const authenticate = jest.fn(() => Promise.reject(error))
+      const client = new ReactClient({} as WebClientParams)
+      client.authenticate = authenticate
 
-      const { result, waitForValueToChange } = renderHook(() => useViewerConnection(), { wrapper })
+      const clientWrapper = ({ children }: ChildrenProps) => (
+        <Provider client={client}>{children}</Provider>
+      )
+      const { result, waitForValueToChange } = renderHook(() => useViewerConnection(), {
+        wrapper: clientWrapper,
+      })
       expect(result.current[0]).toEqual({ status: 'idle' })
 
       act(() => {
-        void result.current[1](new AuthProviderMock({}, '123456'))
+        void result.current[1]({} as EthereumAuthProvider)
       })
       await waitForValueToChange(() => result.current[0].status === 'failed')
 
@@ -107,10 +111,13 @@ describe('hooks', () => {
     test('with PublicID viewer', async () => {
       const profile = { name: 'Alice' }
       const get = jest.fn(() => profile)
-      DataStoreMock.mockImplementationOnce(() => ({ get } as unknown as DIDDataStore))
+      const client = new ReactClient({} as WebClientParams)
+      client._dataStore = { get } as unknown as DIDDataStore
 
       const stateWrapper = ({ children }: ChildrenProps) => (
-        <Provider state={{ viewerID: 'did:test:123' }}>{children}</Provider>
+        <Provider client={client} state={{ viewerID: 'did:test:123' }}>
+          {children}
+        </Provider>
       )
       const { result, waitForValueToChange } = renderHook(() => useViewerRecord('basicProfile'), {
         wrapper: stateWrapper,
@@ -208,11 +215,15 @@ describe('hooks', () => {
   test('usePublicRecord()', async () => {
     const profile = { name: 'Alice' }
     const get = jest.fn(() => profile)
-    DataStoreMock.mockImplementationOnce(() => ({ get } as unknown as DIDDataStore))
+    const client = new ReactClient({} as WebClientParams)
+    client._dataStore = { get } as unknown as DIDDataStore
 
+    const clientWrapper = ({ children }: ChildrenProps) => (
+      <Provider client={client}>{children}</Provider>
+    )
     const { result, waitForValueToChange } = renderHook(
       () => usePublicRecord('basicProfile', 'did:test:123'),
-      { wrapper }
+      { wrapper: clientWrapper }
     )
     expect(result.current).toEqual({
       content: undefined,

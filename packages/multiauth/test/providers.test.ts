@@ -1,3 +1,5 @@
+import { jest } from '@jest/globals'
+
 import { web3ProviderRequest } from '../src/providers/utils'
 import type { Web3Provider } from '../src/providers/types'
 

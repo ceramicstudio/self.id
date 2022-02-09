@@ -163,6 +163,7 @@
 export * from './components/Provider.js'
 export * from './components/ViewerConnectedContainer.js'
 export * from './constants.js'
+export * from './client.js'
 export * from './hooks.js'
 export * from './server.js'
 export * from './state.js'

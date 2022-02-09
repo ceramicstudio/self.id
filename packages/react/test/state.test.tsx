@@ -2,52 +2,40 @@
  * @jest-environment ./jest-environment-jsdom-fix
  */
 
-import { CeramicClient } from '@ceramicnetwork/http-client'
+import type { WebClientParams } from '@self.id/web'
 import { renderHook } from '@testing-library/react-hooks'
 import { useAtom } from 'jotai'
 import type { ReactNode } from 'react'
 
 import {
-  DEFAULT_CLIENT_CONFIG,
   Provider,
-  clientConfigAtom,
+  ReactClient,
+  clientAtom,
   connectionAtom,
-  coreAtom,
   localViewerIDAtom,
   requestViewerIDAtom,
   stateScope,
 } from '../src'
-
-const CeramicMock = CeramicClient as jest.MockedClass<typeof CeramicClient>
-
-jest.mock('@ceramicnetwork/http-client')
 
 type ChildrenProps = { children: ReactNode }
 
 describe('state', () => {
   const wrapper = ({ children }: ChildrenProps) => <Provider>{children}</Provider>
 
-  test('clientConfigAtom has a default value', () => {
-    const { result } = renderHook(() => useAtom(clientConfigAtom, stateScope), { wrapper })
-    expect(result.current[0]).toBe(DEFAULT_CLIENT_CONFIG)
+  test('clientAtom has a default value', () => {
+    const { result } = renderHook(() => useAtom(clientAtom, stateScope), { wrapper })
+    expect(result.current[0]).toBeInstanceOf(ReactClient)
   })
 
-  test('coreAtom derives its value from clientConfigAtom', () => {
-    CeramicMock.mockImplementation(
-      (url: string | undefined) => ({ url } as unknown as CeramicClient)
-    )
+  test('clientAtom instance can be injected in provider', () => {
+    const client = new ReactClient({} as WebClientParams)
     const stateWrapper = ({ children }: ChildrenProps) => (
-      <Provider client={{ ceramic: 'foo' }}>{children}</Provider>
+      <Provider client={client}>{children}</Provider>
     )
-    const { result: config } = renderHook(() => useAtom(clientConfigAtom, stateScope), {
+    const { result } = renderHook(() => useAtom(clientAtom, stateScope), {
       wrapper: stateWrapper,
     })
-    const { result: core } = renderHook(() => useAtom(coreAtom, stateScope), {
-      wrapper: stateWrapper,
-    })
-
-    expect(config.current[0]).toEqual({ ceramic: 'foo' })
-    expect(core.current[0].ceramic).toEqual({ url: 'foo' })
+    expect(result.current[0]).toBe(client)
   })
 
   test('connectionAtom has a default value', () => {

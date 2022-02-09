@@ -1,8 +1,9 @@
-import { Core, PublicID } from '@self.id/core'
-import type { SelfID, WebClientParams } from '@self.id/web'
+import { PublicID } from '@self.id/core'
+import type { SelfID } from '@self.id/web'
 import { atom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 
+import { ReactClient } from './client.js'
 import {
   DEFAULT_CERAMIC_NETWORK,
   DEFAULT_CONNECT_NETWORK,
@@ -23,12 +24,7 @@ export const DEFAULT_CLIENT_CONFIG = {
 // Clients state
 
 /** @internal */
-export const clientConfigAtom = atom<WebClientParams<any>>(DEFAULT_CLIENT_CONFIG)
-
-/** @internal */
-export const coreAtom = atom<Core<any>>((get) => {
-  return new Core(get(clientConfigAtom))
-})
+export const clientAtom = atom<ReactClient<any>>(new ReactClient(DEFAULT_CLIENT_CONFIG))
 
 // Viewer lifecycle
 
@@ -64,7 +60,7 @@ export const viewerIDAtom = atom(
 
     // Get viewer ID from injected request or local storage
     const id = get(requestViewerIDAtom) ?? get(localViewerIDAtom)
-    return id == null ? null : new PublicID({ core: get(coreAtom), id })
+    return id == null ? null : new PublicID({ core: get(clientAtom), id })
   },
   (get, set, selfID: SelfID<any> | null) => {
     // Always discard viewer ID from request when it is set() by client to support expected get() logic above
@@ -77,9 +73,6 @@ export const viewerIDAtom = atom(
       void set(localViewerIDAtom, null)
       void set(connectionAtom, { status: 'idle' })
     } else {
-      // We need to attach the authenticated DID to the core instance to ensure streams can be updated
-      const core = get(coreAtom)
-      core.ceramic.did = selfID.did
       void set(localViewerIDAtom, selfID.id)
       void set(connectionAtom, { status: 'connected', selfID })
     }

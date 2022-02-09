@@ -1,26 +1,22 @@
 import type { DefinitionContentType } from '@glazed/did-datastore'
 import type { ModelTypeAliases } from '@glazed/types'
 import { PublicID } from '@self.id/core'
-import type { Core, CoreModelTypes } from '@self.id/core'
-import type { AuthenticateParams, EthereumAuthProvider, SelfID } from '@self.id/web'
+import type { CoreModelTypes } from '@self.id/core'
+import type { EthereumAuthProvider, SelfID } from '@self.id/web'
 import { useAtom } from 'jotai'
 import { useAtomValue, useUpdateAtom } from 'jotai/utils'
 import { useCallback } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 
-import { stateScope, connectionAtom, clientConfigAtom, coreAtom, viewerIDAtom } from './state.js'
+import type { ReactClient } from './client.js'
+import { stateScope, connectionAtom, clientAtom, viewerIDAtom } from './state.js'
 import type { ViewerConnectionState } from './types.js'
 import { abortable } from './utils.js'
 
-async function authenticateSelfID<ModelTypes extends ModelTypeAliases = CoreModelTypes>(
-  params: AuthenticateParams<ModelTypes>
-): Promise<SelfID<ModelTypes>> {
-  const { SelfID } = await import('@self.id/web')
-  return await SelfID.authenticate<ModelTypes>(params)
-}
-
-export function useCore<ModelTypes extends ModelTypeAliases = CoreModelTypes>(): Core<ModelTypes> {
-  return useAtomValue(coreAtom, stateScope) as unknown as Core<ModelTypes>
+export function useClient<
+  ModelTypes extends ModelTypeAliases = CoreModelTypes
+>(): ReactClient<ModelTypes> {
+  return useAtomValue(clientAtom, stateScope) as unknown as ReactClient<ModelTypes>
 }
 
 export type ViewerID<ModelTypes extends ModelTypeAliases> =
@@ -38,7 +34,7 @@ export function useViewerConnection<ModelTypes extends ModelTypeAliases = CoreMo
   (provider: EthereumAuthProvider) => Promise<SelfID<ModelTypes> | null>,
   () => void
 ] {
-  const config = useAtomValue(clientConfigAtom, stateScope)
+  const client = useClient<ModelTypes>()
   const [connection, setConnection] = useAtom(connectionAtom, stateScope)
   const setViewerID = useUpdateAtom(viewerIDAtom, stateScope)
 
@@ -53,10 +49,7 @@ export function useViewerConnection<ModelTypes extends ModelTypeAliases = CoreMo
       }
       try {
         const promise = abortable(
-          authenticateSelfID<ModelTypes>({
-            ...config,
-            authProvider: provider,
-          } as AuthenticateParams<ModelTypes>).then((selfID) => {
+          client.authenticate(provider).then((selfID) => {
             if (promise.signal.aborted) {
               void setConnection({ status: 'idle' })
               return null
@@ -72,7 +65,7 @@ export function useViewerConnection<ModelTypes extends ModelTypeAliases = CoreMo
         return null
       }
     },
-    [config, connection, setConnection, setViewerID]
+    [client, connection, setConnection, setViewerID]
   )
 
   const reset = useCallback(() => {
@@ -177,10 +170,10 @@ export function usePublicRecord<
   Alias extends keyof ModelTypes['definitions'] = keyof ModelTypes['definitions'],
   ContentType = DefinitionContentType<ModelTypes, Alias>
 >(alias: Alias, id: string): PublicRecord<ContentType | null> {
-  const core = useCore<ModelTypes>()
+  const client = useClient<ModelTypes>()
   const { data, isLoading, isError, error } = useQuery<ContentType | null>(
     [id, alias],
-    async () => (await core.get(alias, id)) as unknown as ContentType | null
+    async () => (await client.get(alias, id)) as unknown as ContentType | null
   )
   return { content: data, isLoading, isError, error }
 }

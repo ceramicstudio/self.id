@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals'
 import type { EIP1193Provider } from '@self.id/multiauth'
 
 import { wrapEIP1193asWeb3Provider } from '../src/utils'

@@ -2,17 +2,11 @@ import type { ModelTypeAliases } from '@glazed/types'
 import type { CoreModelTypes } from '@self.id/core'
 import type { WebClientParams } from '@self.id/web'
 import { Provider as StateProvider } from 'jotai'
-import { useState } from 'react'
 import type { ReactNode } from 'react'
-import { Hydrate, QueryClient, QueryClientProvider } from 'react-query'
-import type { QueryObserverOptions } from 'react-query'
+import { Hydrate, QueryClient, QueryClientProvider, type QueryObserverOptions } from 'react-query'
 
-import {
-  DEFAULT_CLIENT_CONFIG,
-  clientConfigAtom,
-  requestViewerIDAtom,
-  stateScope,
-} from '../state.js'
+import { ReactClient } from '../client.js'
+import { DEFAULT_CLIENT_CONFIG, clientAtom, requestViewerIDAtom, stateScope } from '../state.js'
 import type { RequestState } from '../types.js'
 
 /** @internal */
@@ -22,7 +16,7 @@ const DEFAULT_QUERY_OPTIONS: QueryObserverOptions = {
 }
 
 export type ProviderConfig<ModelTypes extends ModelTypeAliases = CoreModelTypes> = {
-  client?: WebClientParams<ModelTypes>
+  client?: ReactClient<ModelTypes> | WebClientParams<ModelTypes>
   queryOptions?: QueryObserverOptions
   state?: RequestState
 }
@@ -34,20 +28,19 @@ export function Provider<ModelTypes extends ModelTypeAliases = CoreModelTypes>(
   props: ProviderProps<ModelTypes>
 ): JSX.Element {
   const { children, client, queryOptions, state } = props
-  const [queryClient] = useState(() => {
-    return new QueryClient({
-      defaultOptions: {
-        queries: queryOptions
-          ? { ...DEFAULT_QUERY_OPTIONS, ...queryOptions }
-          : DEFAULT_QUERY_OPTIONS,
-      },
-    })
+
+  const reactClient =
+    client instanceof ReactClient ? client : new ReactClient(client ?? DEFAULT_CLIENT_CONFIG)
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: queryOptions ? { ...DEFAULT_QUERY_OPTIONS, ...queryOptions } : DEFAULT_QUERY_OPTIONS,
+    },
   })
 
   return (
     <StateProvider
       initialValues={[
-        [clientConfigAtom, client ?? DEFAULT_CLIENT_CONFIG],
+        [clientAtom, reactClient],
         [requestViewerIDAtom, state?.viewerID ?? null],
       ]}
       scope={stateScope}>

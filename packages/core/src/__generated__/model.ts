@@ -18,7 +18,7 @@ export type ModelTypes = ModelTypeAliases<
   }
 >
 
-export const model: PublishedModel<ModelTypes> = {
+export const aliases: PublishedModel<ModelTypes> = {
   definitions: {
     cryptoAccounts: 'kjzl6cwe1jw149z4rvwzi56mjjukafta30kojzktd9dsrgqdgz4wlnceu59f95f',
     alsoKnownAs: 'kjzl6cwe1jw146zfmqa10a5x1vry6au3t362p44uttz4l0k4hi88o41zplhmxnf',

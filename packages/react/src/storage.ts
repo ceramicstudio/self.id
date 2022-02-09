@@ -46,6 +46,9 @@ export function deleteBrowserCookie(name: string, path = '/'): boolean {
  * */
 export const CookieStorage = {
   getItem: (key: string): string | null => getBrowserCookie(key) ?? null,
+  removeItem: (key: string): void => {
+    deleteBrowserCookie(key)
+  },
   setItem: (key: string, value: string | null): void => {
     if (value == null) {
       deleteBrowserCookie(key)

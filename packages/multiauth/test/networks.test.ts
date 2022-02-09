@@ -2,6 +2,7 @@
  * @jest-environment jsdom
  */
 
+import { jest } from '@jest/globals'
 import { ChainId } from 'caip'
 
 import {

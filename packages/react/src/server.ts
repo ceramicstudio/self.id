@@ -25,12 +25,13 @@ export class RequestClient<
   ModelTypes extends ModelTypeAliases = CoreModelTypes,
   Alias extends keyof ModelTypes['definitions'] = keyof ModelTypes['definitions']
 > extends Core<ModelTypes> {
-  #queryClient: QueryClient
+  // Make internal QueryClient instance writable for tests
+  _queryClient: QueryClient
   #viewerID: string | null
 
   constructor(params: RequestClientParams<ModelTypes>) {
     super(params)
-    this.#queryClient = new QueryClient()
+    this._queryClient = new QueryClient()
     this.#viewerID = getCookieViewerID(params.cookie)
   }
 
@@ -43,13 +44,13 @@ export class RequestClient<
       return false
     }
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    await this.#queryClient.prefetchQuery([id, key], async () => await this.get(key, id))
+    await this._queryClient.prefetchQuery([id, key], async () => await this.get(key, id))
     return true
   }
 
   getState(): RequestState {
     return {
-      hydrate: dehydrate(this.#queryClient),
+      hydrate: dehydrate(this._queryClient),
       viewerID: this.#viewerID,
     }
   }

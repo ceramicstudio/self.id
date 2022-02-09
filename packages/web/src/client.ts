@@ -20,15 +20,16 @@ export type WebClientParams<ModelTypes extends ModelTypeAliases = CoreModelTypes
 export class WebClient<
   ModelTypes extends ModelTypeAliases = CoreModelTypes
 > extends Core<ModelTypes> {
-  #threeId: ThreeIdConnect
+  // Make internal ThreeIdConnect instance writable for tests
+  _threeId: ThreeIdConnect
 
   constructor(params: WebClientParams<ModelTypes>) {
     super(params)
-    this.#threeId = new ThreeIdConnect(params.connectNetwork ?? params.ceramic)
+    this._threeId = new ThreeIdConnect(params.connectNetwork ?? params.ceramic)
   }
 
   get threeId(): ThreeIdConnect {
-    return this.#threeId
+    return this._threeId
   }
 
   async authenticate(authProvider: EthereumAuthProvider, attachToCeramic = true): Promise<DID> {
@@ -41,9 +42,9 @@ export class WebClient<
   }
 
   async connect(authProvider: EthereumAuthProvider): Promise<DID> {
-    await this.#threeId.connect(authProvider)
+    await this._threeId.connect(authProvider)
     return new DID({
-      provider: this.#threeId.getDidProvider(),
+      provider: this._threeId.getDidProvider(),
       resolver: this.resolver,
     })
   }
