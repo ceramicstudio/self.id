@@ -1,4 +1,5 @@
 import BoringAvatars from 'boring-avatars'
+import React from 'react'
 
 // @ts-ignore actual default import
 const Avatar = BoringAvatars.default ?? BoringAvatars

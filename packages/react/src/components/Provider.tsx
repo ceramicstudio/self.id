@@ -2,6 +2,7 @@ import type { ModelTypeAliases } from '@glazed/types'
 import type { CoreModelTypes } from '@self.id/core'
 import type { WebClientParams } from '@self.id/web'
 import { Provider as StateProvider } from 'jotai'
+import React from 'react'
 import type { ReactNode } from 'react'
 import { Hydrate, QueryClient, QueryClientProvider, type QueryObserverOptions } from 'react-query'
 

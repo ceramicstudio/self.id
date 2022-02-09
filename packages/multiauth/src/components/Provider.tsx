@@ -1,5 +1,5 @@
 import { Provider as JotaiProvider } from 'jotai'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import type { ReactElement, ReactNode } from 'react'
 
 import { getNetworksConfig } from '../networks.js'

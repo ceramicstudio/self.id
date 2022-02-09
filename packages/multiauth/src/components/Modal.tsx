@@ -1,5 +1,6 @@
 import { AccountId } from 'caip'
 import { Box, Button, Heading, Layer, Text } from 'grommet'
+import React from 'react'
 import type { ReactElement, ReactNode } from 'react'
 
 import { useAuthState } from '../hooks.js'
