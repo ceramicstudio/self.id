@@ -160,6 +160,7 @@ export default function Home({ state }) {
 
 ## Classes
 
+- [ReactClient](../classes/react.ReactClient.md)
 - [RequestClient](../classes/react.RequestClient.md)
 
 ## Type aliases
@@ -178,7 +179,7 @@ export default function Home({ state }) {
 
 | Name | Type |
 | :------ | :------ |
-| `client?` | `WebClientParams`<`ModelTypes`\> |
+| `client?` | [`ReactClient`](../classes/react.ReactClient.md)<`ModelTypes`\> \| `WebClientParams`<`ModelTypes`\> |
 | `queryOptions?` | `QueryObserverOptions` |
 | `state?` | [`RequestState`](react.md#requeststate) |
 
@@ -345,9 +346,9 @@ ___
 
 ___
 
-### useCore
+### useClient
 
-▸ **useCore**<`ModelTypes`\>(): `Core`<`ModelTypes`\>
+▸ **useClient**<`ModelTypes`\>(): [`ReactClient`](../classes/react.ReactClient.md)<`ModelTypes`\>
 
 #### Type parameters
 
@@ -357,7 +358,7 @@ ___
 
 #### Returns
 
-`Core`<`ModelTypes`\>
+[`ReactClient`](../classes/react.ReactClient.md)<`ModelTypes`\>
 
 ___
 

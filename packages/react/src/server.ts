@@ -1,3 +1,5 @@
+import type { CeramicClient } from '@ceramicnetwork/http-client'
+import type { DIDDataStore } from '@glazed/did-datastore'
 import type { ModelTypeAliases } from '@glazed/types'
 import { Core } from '@self.id/core'
 import type { CoreModelTypes, CoreParams } from '@self.id/core'
@@ -25,7 +27,16 @@ export class RequestClient<
   ModelTypes extends ModelTypeAliases = CoreModelTypes,
   Alias extends keyof ModelTypes['definitions'] = keyof ModelTypes['definitions']
 > extends Core<ModelTypes> {
+  // Internal properties from parent class need to be copied over here an marked as internal
+  // to prevent from being displayed in docs
+  /** @internal */
+  // @ts-ignore initialization in parent class
+  _ceramic: CeramicClient
+  /** @internal */
+  // @ts-ignore initialization in parent class
+  _dataStore: DIDDataStore<ModelTypes>
   // Make internal QueryClient instance writable for tests
+  /** @internal */
   _queryClient: QueryClient
   #viewerID: string | null
 

@@ -2,8 +2,8 @@ import type { StreamMetadata } from '@ceramicnetwork/common'
 import type { TileDocument } from '@ceramicnetwork/stream-tile'
 import {
   PublicID,
+  useClient,
   useConnection,
-  useCore,
   usePublicRecord,
   useViewerID,
   useViewerRecord,
@@ -30,8 +30,8 @@ export type TileDoc<ContentType> = {
 }
 
 export function useTileDoc<ContentType>(id: string): TileDoc<ContentType> {
+  const client = useClient()
   const queryClient = useQueryClient()
-  const core = useCore()
   const viewerID = useViewerID()
 
   const {
@@ -41,7 +41,7 @@ export function useTileDoc<ContentType>(id: string): TileDoc<ContentType> {
     error,
   } = useQuery<TileDocument<ContentType>>(
     id,
-    async () => await core.tileLoader.load<ContentType>(id)
+    async () => await client.tileLoader.load<ContentType>(id)
   )
 
   const isController = viewerID != null && doc?.metadata.controllers[0] === viewerID.id

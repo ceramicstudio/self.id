@@ -453,6 +453,22 @@ ___
 
 ___
 
+### useClient
+
+▸ **useClient**<`ModelTypes`\>(): `ReactClient`<`ModelTypes`\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ModelTypes` | extends `ModelTypeAliases`<`Record`<`string`, `any`\>, `Record`<`string`, `string`\>, `Record`<`string`, `string`\>\> = `ModelTypes` |
+
+#### Returns
+
+`ReactClient`<`ModelTypes`\>
+
+___
+
 ### useConnection
 
 ▸ **useConnection**<`ModelTypes`\>(): [[`ConnectionState`](framework.md#connectionstate)<`ModelTypes`\>, (`options?`: [`ConnectOptions`](framework.md#connectoptions)) => `Promise`<`SelfID`<`ModelTypes`\> \| ``null``\>, () => `void`]
@@ -466,22 +482,6 @@ ___
 #### Returns
 
 [[`ConnectionState`](framework.md#connectionstate)<`ModelTypes`\>, (`options?`: [`ConnectOptions`](framework.md#connectoptions)) => `Promise`<`SelfID`<`ModelTypes`\> \| ``null``\>, () => `void`]
-
-___
-
-### useCore
-
-▸ **useCore**<`ModelTypes`\>(): `Core`<`ModelTypes`\>
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `ModelTypes` | extends `ModelTypeAliases`<`Record`<`string`, `any`\>, `Record`<`string`, `string`\>, `Record`<`string`, `string`\>\> = `ModelTypes` |
-
-#### Returns
-
-`Core`<`ModelTypes`\>
 
 ___
 

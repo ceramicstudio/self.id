@@ -45,7 +45,7 @@
  * ```ts
  * import { Core } from '@self.id/core'
  *
- * const model = {
+ * const aliases = {
  *   definitions: {
  *     basicProfile: 'kjzl6cwe1jw145cjbeko9kil8g9bxszjhyde21ob8epxuxkaon1izyqsu8wgcic',
  *     notes: 'kjzl6cwe1jw14688v7zhf5eo1uiblt0thkgdedb5gaiq99isj224g6v8uza2r4m',
@@ -59,7 +59,7 @@
  *     placeholderNote: 'kjzl6cwe1jw148snra9bmyf32y5pj2ysnvenqx59k7n2lz3gnri72axvp25fo1v',
  *   },
  * }
- * const core = new Core({ ceramic: 'testnet-clay', model })
+ * const core = new Core({ ceramic: 'testnet-clay', aliases })
  *
  * async function getNotes(did) {
  *   return await core.get('notes', did)

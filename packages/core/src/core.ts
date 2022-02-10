@@ -39,9 +39,11 @@ export class Core<
   Alias extends keyof ModelTypes['definitions'] = keyof ModelTypes['definitions']
 > {
   // Make internal CeramicClient instance writable for tests
+  /** @internal */
   _ceramic: CeramicClient
   #dataModel: DataModel<ModelTypes>
   // Make internal DIDDataStore instance writable for tests
+  /** @internal */
   _dataStore: DIDDataStore<ModelTypes>
   #resolver: Resolver
   #tileLoader: TileLoader

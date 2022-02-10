@@ -1,5 +1,7 @@
 import { ThreeIdConnect } from '@3id/connect'
 import type { EthereumAuthProvider } from '@3id/connect'
+import type { CeramicClient } from '@ceramicnetwork/http-client'
+import type { DIDDataStore } from '@glazed/did-datastore'
 import type { ModelTypeAliases } from '@glazed/types'
 import { Core } from '@self.id/core'
 import type { CoreModelTypes, CoreParams } from '@self.id/core'
@@ -20,7 +22,16 @@ export type WebClientParams<ModelTypes extends ModelTypeAliases = CoreModelTypes
 export class WebClient<
   ModelTypes extends ModelTypeAliases = CoreModelTypes
 > extends Core<ModelTypes> {
+  // Internal properties from parent class need to be copied over here an marked as internal
+  // to prevent from being displayed in docs
+  /** @internal */
+  // @ts-ignore initialization in parent class
+  _ceramic: CeramicClient
+  /** @internal */
+  // @ts-ignore initialization in parent class
+  _dataStore: DIDDataStore<ModelTypes>
   // Make internal ThreeIdConnect instance writable for tests
+  /** @internal */
   _threeId: ThreeIdConnect
 
   constructor(params: WebClientParams<ModelTypes>) {

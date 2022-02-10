@@ -6,6 +6,12 @@ import { jest } from '@jest/globals'
 import { ChainId } from 'caip'
 
 import {
+  getDefaultNetworkConfig,
+  getNetworkConfig,
+  getNetworksConfig,
+  networksDefaults,
+} from '../src'
+import {
   getEIP1193Account,
   getEIP1193ProviderState,
   getEthereumProviderState,
@@ -14,9 +20,6 @@ import {
   toChainID,
 } from '../src/networks/ethereum'
 import type { EIP1193Provider, Web3Provider } from '../src/providers/types'
-
-// Use compiled files for tests as Jest doesn't support ESM/import.meta
-import { getDefaultNetworkConfig, getNetworkConfig, getNetworksConfig, networksDefaults } from '..'
 
 describe('networks', () => {
   describe('getDefaultNetworkConfig()', () => {

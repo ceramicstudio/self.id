@@ -15,4 +15,4 @@ const manager = ModelManager.fromJSON(ceramic, JSON.parse(bytes.toString()))
 const model = await manager.toPublished()
 await writeFile(new URL('../src/model.json', import.meta.url), JSON.stringify(model))
 
-console.log('Model written to src/model.json file:', model)
+console.log('Published model aliases written to src/model.json file:', model)
