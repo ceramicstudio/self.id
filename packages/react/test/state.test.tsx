@@ -5,6 +5,7 @@
 import type { WebClientParams } from '@self.id/web'
 import { renderHook } from '@testing-library/react-hooks'
 import { useAtom } from 'jotai'
+import React from 'react'
 import type { ReactNode } from 'react'
 
 import {

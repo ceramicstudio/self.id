@@ -8,6 +8,7 @@ import { PublicID } from '@self.id/core'
 import type { EthereumAuthProvider, SelfID, WebClientParams } from '@self.id/web'
 import { act, renderHook } from '@testing-library/react-hooks'
 import { Provider as JotaiProvider } from 'jotai'
+import React from 'react'
 import type { ReactNode } from 'react'
 import { QueryClient, QueryClientProvider } from 'react-query'
 

@@ -5,7 +5,7 @@
 import { render } from '@testing-library/react'
 import { defaultProps } from 'grommet'
 import { deepMerge } from 'grommet/utils'
-import { type Context, useContext } from 'react'
+import React, { type Context, useContext } from 'react'
 import { ThemeContext } from 'styled-components'
 
 import { Provider, theme } from '../src'

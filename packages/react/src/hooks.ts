@@ -3,8 +3,7 @@ import type { ModelTypeAliases } from '@glazed/types'
 import { PublicID } from '@self.id/core'
 import type { CoreModelTypes } from '@self.id/core'
 import type { EthereumAuthProvider, SelfID } from '@self.id/web'
-import { useAtom } from 'jotai'
-import { useAtomValue, useUpdateAtom } from 'jotai/utils'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { useCallback } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 
@@ -36,7 +35,7 @@ export function useViewerConnection<ModelTypes extends ModelTypeAliases = CoreMo
 ] {
   const client = useClient<ModelTypes>()
   const [connection, setConnection] = useAtom(connectionAtom, stateScope)
-  const setViewerID = useUpdateAtom(viewerIDAtom, stateScope)
+  const setViewerID = useSetAtom(viewerIDAtom, stateScope)
 
   const connect = useCallback(
     async (provider: EthereumAuthProvider): Promise<SelfID<ModelTypes> | null> => {
