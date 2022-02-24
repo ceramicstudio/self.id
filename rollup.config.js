@@ -8,27 +8,15 @@ function external(id) {
   return !id.startsWith('.') && !id.startsWith(root)
 }
 
-const input = 'src/index.ts'
-
-const plugins = [
-  esbuild({
-    minify: true,
-    target: 'es2020',
-    tsconfig: path.join(cwd, 'tsconfig.json'),
-  }),
-]
-
-export default [
-  {
-    external,
-    input,
-    output: { file: 'dist/lib.cjs', format: 'cjs', sourcemap: true },
-    plugins,
-  },
-  {
-    external,
-    input,
-    output: { file: 'dist/lib.mjs', format: 'esm', sourcemap: true },
-    plugins,
-  },
-]
+export default {
+  external,
+  input: 'src/index.ts',
+  output: { file: 'dist/lib.cjs', format: 'cjs', sourcemap: true },
+  plugins: [
+    esbuild({
+      minify: true,
+      target: 'es2020',
+      tsconfig: path.join(cwd, 'tsconfig.json'),
+    }),
+  ],
+}

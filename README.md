@@ -1,6 +1,6 @@
 # SelfID
 
-Monorepo for the SelfID [application](#application) and [SDK](#sdk).
+Monorepo for the SelfID [SDK](#sdk) and [reference application](#application).
 
 ## Installation
 
@@ -60,9 +60,10 @@ Predefined setups using common technologies to build applications using the Self
 | Name                                                               | Description                                                                                                           |
 | ------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------- |
 | [`next-notes-typescript`](./templates/next-notes-typescript)       | Notes taking application setup using [Next.js](https://nextjs.org/) and [TypeScript](https://www.typescriptlang.org/) |
-| [`vite-basic`](./templates/vite-basic)                             | Basic [Vite](https://vitejs.dev/) setup                                                                               |
 | [`webpack-basic`](./templates/webpack-basic)                       | Basic [Webpack](https://webpack.js.org/) setup                                                                        |
 | [`webpack-basic-typescript`](./templates/webpack-basic-typescript) | Basic [Webpack](https://webpack.js.org/) setup using [TypeScript](https://www.typescriptlang.org/)                    |
+
+<!-- | [`vite-basic`](./templates/vite-basic)                             | Basic [Vite](https://vitejs.dev/) setup                                                                               | -->
 
 ## Maintainers
 

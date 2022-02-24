@@ -1,6 +1,6 @@
 {
   "name": "self.id-template-webpack-basic",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "private": true,
   "scripts": {
     "dev": "webpack serve --mode development",
@@ -8,20 +8,22 @@
     "serve": "serve build"
   },
   "dependencies": {
-    "@self.id/framework": "^0.1.0",
-    "grommet": "^2.19.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "@self.id/framework": "0.2.0",
+    "grommet": "2.21.0",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "styled-components": "5.3.3"
   },
   "devDependencies": {
-    "@swc/core": "^1.2.114",
-    "del-cli": "^4.0.1",
-    "html-webpack-plugin": "^5.5.0",
-    "serve": "^13.0.2",
-    "stream-browserify": "^3.0.0",
-    "swc-loader": "^0.1.15",
-    "webpack": "^5.64.4",
-    "webpack-cli": "^4.9.1",
-    "webpack-dev-server": "^4.6.0"
+    "@swc/core": "1.2.145",
+    "assert": "2.0.0",
+    "del-cli": "4.0.1",
+    "html-webpack-plugin": "5.5.0",
+    "serve": "13.0.2",
+    "stream-browserify": "3.0.0",
+    "swc-loader": "0.1.15",
+    "webpack": "5.69.1",
+    "webpack-cli": "4.9.2",
+    "webpack-dev-server": "4.7.4"
   }
 }

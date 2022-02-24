@@ -1,6 +1,6 @@
 {
   "name": "@self.id/ui",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "3Box Labs",
   "license": "(Apache-2.0 OR MIT)",
   "homepage": "https://github.com/ceramicstudio/self.id#readme",
@@ -15,10 +15,8 @@
     "directory": "packages/ui"
   },
   "main": "dist/lib.cjs",
-  "module": "dist/lib.mjs",
   "typings": "dist/index.d.ts",
   "exports": {
-    "import": "./dist/lib.mjs",
     "require": "./dist/lib.cjs",
     "default": "./dist/lib.cjs"
   },
@@ -34,15 +32,15 @@
     "build": "del dist && tsc --emitDeclarationOnly --skipLibCheck && rollup -c ../../rollup.config.js",
     "lint": "eslint --fix",
     "test": "jest",
-    "prepare": "yarn build",
-    "prepublishOnly": "package-check"
+    "prepare": "yarn build"
   },
   "dependencies": {
     "boring-avatars": "^1.5.8",
-    "grommet": "^2.19.1"
+    "grommet": "^2.21.0"
   },
   "peerDependencies": {
-    "react": "^17.0.2"
+    "react": "^17.0.2",
+    "styled-components": "^5.3.3"
   },
   "jest": {
     "preset": "ts-jest"

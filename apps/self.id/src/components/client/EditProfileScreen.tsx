@@ -30,15 +30,27 @@ function profileToForm({ nationalities, ...profile }: BasicProfile): FormValue {
   return { ...profile, nationality: nationalities?.[0] }
 }
 
-function changeProfile(profile: BasicProfile, { nationality, ...value }: FormValue): BasicProfile {
+function changeProfile(
+  profile: BasicProfile,
+  { nationality, residenceCountry, ...value }: FormValue
+): BasicProfile {
   const changed = { ...profile, ...value }
 
+  // Turn single-value nationality into array, with uppercase value
   const nationalities = profile.nationalities
-  if (nationality && Array.isArray(nationalities) && !nationalities.includes(nationality)) {
-    nationalities.unshift(nationality)
+  if (nationality && Array.isArray(nationalities)) {
+    const formattedNationality = nationality.toUpperCase()
+    if (!nationalities.includes(formattedNationality)) {
+      nationalities.unshift(formattedNationality)
+    }
   }
   if (nationalities?.length) {
     changed.nationalities = nationalities
+  }
+
+  // Residence country code must be uppercase
+  if (residenceCountry != null && residenceCountry !== '') {
+    changed.residenceCountry = residenceCountry.toUpperCase()
   }
 
   return changed
