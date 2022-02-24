@@ -27,6 +27,7 @@
   },
   "sideEffects": false,
   "scripts": {
+    "build:model": "node ./scripts/deploy-model.mjs",
     "build:clean": "del dist",
     "build:js": "swc src -d ./dist --config-file ../../.swcrc",
     "build:types": "tsc --emitDeclarationOnly --skipLibCheck",

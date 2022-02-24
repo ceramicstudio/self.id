@@ -40,7 +40,8 @@
   },
   "dependencies": {
     "boring-avatars": "^1.5.8",
-    "grommet": "^2.19.1"
+    "grommet": "^2.19.1",
+    "styled-components": "^5.3.3"
   },
   "peerDependencies": {
     "react": "^17.0.2"

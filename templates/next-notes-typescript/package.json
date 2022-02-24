@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "create-model": "node --experimental-json-modules ./scripts/create-model.mjs",
-    "publish-model": "node --experimental-json-modules ./scripts/publish-model.mjs",
+    "create-model": "node ./scripts/create-model.mjs",
+    "deploy-model": "node ./scripts/deploy-model.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
