@@ -16,7 +16,7 @@
     "./packages/web/src"
   ],
   "typedocOptions": {
-    "name": "Self.ID API",
+    "name": "Self.ID SDK",
     "readme": "none",
     "entryDocument": "overview.md",
     "entryPoints": [
