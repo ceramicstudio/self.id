@@ -7,7 +7,7 @@ import Torus from '@toruslabs/torus-embed'
 import WalletConnect from '@walletconnect/ethereum-provider'
 import Fortmatic from 'fortmatic'
 
-// Use compiled files for tests as Jest doesn't support ESM/import.meta
+// Use compiled files for tests as Jest doesn't support image imports
 import {
   connectorsDefaults,
   getConnectorConfig,

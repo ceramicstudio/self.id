@@ -53,4 +53,7 @@ export const CookieStorage = {
       setBrowserCookie(key, value)
     }
   },
+  removeItem: (key: string): void => {
+    deleteBrowserCookie(key)
+  },
 }

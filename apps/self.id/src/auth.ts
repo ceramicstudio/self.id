@@ -1,12 +1,21 @@
 import type { PartialConnectorConfig, PartialNetworkConfig } from '@self.id/multiauth'
+import ethereumLogo from '@self.id/multiauth/assets/ethereum.png'
+import fortmaticLogo from '@self.id/multiauth/assets/fortmatic.png'
+import metaMaskLogo from '@self.id/multiauth/assets/metamask.png'
+import portisLogo from '@self.id/multiauth/assets/portis.png'
+import torusLogo from '@self.id/multiauth/assets/torus.png'
+import walletConnectLogo from '@self.id/multiauth/assets/walletconnect.png'
 
-const ethereumConnectors: Array<PartialConnectorConfig> = [{ key: 'injected' }]
+const ethereumConnectors: Array<PartialConnectorConfig> = [
+  { key: 'injected', logo: metaMaskLogo.src },
+]
 
 const walletConnectChainId = process.env.NEXT_PUBLIC_WALLETCONNECT_CHAIN_ID
 const walletConnectRpcUrl = process.env.NEXT_PUBLIC_WALLETCONNECT_RPC_URL
 if (typeof walletConnectChainId === 'string' && typeof walletConnectRpcUrl === 'string') {
   ethereumConnectors.push({
     key: 'walletConnect',
+    logo: walletConnectLogo.src,
     params: {
       rpc: { [walletConnectChainId]: walletConnectRpcUrl },
     },
@@ -18,6 +27,7 @@ const fortmaticChainId = process.env.NEXT_PUBLIC_FORTMATIC_CHAIN_ID
 if (typeof fortmaticApiKey === 'string' && typeof fortmaticChainId === 'string') {
   ethereumConnectors.push({
     key: 'fortmatic',
+    logo: fortmaticLogo.src,
     params: {
       apiKey: fortmaticApiKey,
     },
@@ -29,6 +39,7 @@ const portisNetwork = process.env.NEXT_PUBLIC_PORTIS_NETWORK
 if (typeof portisDappId === 'string' && typeof portisNetwork === 'string') {
   ethereumConnectors.push({
     key: 'portis',
+    logo: portisLogo.src,
     params: {
       dAppId: portisDappId,
       network: portisNetwork,
@@ -40,6 +51,7 @@ const torusNetworkHost = process.env.NEXT_PUBLIC_TORUS_NETWORK_HOST
 if (typeof torusNetworkHost === 'string') {
   ethereumConnectors.push({
     key: 'torus',
+    logo: torusLogo.src,
     params: {
       network: { host: torusNetworkHost },
     },
@@ -49,6 +61,7 @@ if (typeof torusNetworkHost === 'string') {
 export const networks: Array<PartialNetworkConfig> = [
   {
     key: 'ethereum',
+    logo: ethereumLogo.src,
     connectors: ethereumConnectors,
   },
 ]
