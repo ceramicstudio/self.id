@@ -27,6 +27,9 @@ export const theme: ThemeType = {
         color: 'neutral-5',
       },
     },
+    font: {
+      family: 'sans-serif',
+    },
   },
   anchor: {
     fontWeight: 400,

@@ -1,6 +1,6 @@
 {
   "name": "@self.id/core",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": "3Box Labs",
   "license": "(Apache-2.0 OR MIT)",
   "homepage": "https://github.com/ceramicstudio/self.id#readme",
@@ -14,10 +14,8 @@
     "directory": "packages/core"
   },
   "main": "dist/lib.cjs",
-  "module": "dist/lib.mjs",
   "typings": "dist/index.d.ts",
   "exports": {
-    "import": "./dist/lib.mjs",
     "require": "./dist/lib.cjs",
     "default": "./dist/lib.cjs"
   },
@@ -34,8 +32,7 @@
     "build": "del dist && tsc --emitDeclarationOnly --skipLibCheck && rollup -c ../../rollup.config.js",
     "lint": "eslint --fix",
     "test": "jest",
-    "prepare": "yarn build",
-    "prepublishOnly": "package-check"
+    "prepare": "yarn build"
   },
   "dependencies": {
     "@ceramicnetwork/3id-did-resolver": "^1.4.9",

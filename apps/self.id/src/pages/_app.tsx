@@ -1,5 +1,6 @@
 import { Provider } from '@self.id/framework'
-
+import closeIcon from '@self.id/multiauth/assets/icon-close.svg'
+import selectedIcon from '@self.id/multiauth/assets/icon-selected.svg'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { Toaster } from 'react-hot-toast'
@@ -50,7 +51,7 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
 
   return (
     <Provider
-      auth={{ networks }}
+      auth={{ networks, modal: { closeIcon: closeIcon.src, selectedIcon: selectedIcon.src } }}
       client={{ ceramic: CERAMIC_URL, connectNetwork: CONNECT_NETWORK }}
       state={state}
       ui={{ full: true }}>
