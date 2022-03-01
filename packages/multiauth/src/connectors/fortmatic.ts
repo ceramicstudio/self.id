@@ -9,7 +9,7 @@ export type FortmaticParams = {
 /** @internal */
 export const fortmatic: ConnectorConfigDefaults = {
   label: 'Fortmatic',
-  logo: new URL('../assets/fortmatic.png', import.meta.url).href,
+  logo: require('../assets/fortmatic.png'),
   getNetworkProvider(key, params?: FortmaticParams) {
     return key === 'ethereum' && params?.apiKey != null ? 'web3' : null
   },

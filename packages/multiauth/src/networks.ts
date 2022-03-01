@@ -11,7 +11,7 @@ import type {
 export const networksDefaults: Record<NetworkKey, NetworkConfigDefaults> = {
   ethereum: {
     label: 'Ethereum',
-    logo: new URL('../assets/ethereum.png', import.meta.url).href,
+    logo: require('../assets/ethereum.png'),
     connectors: ['injected'],
     getState: getEthereumProviderState,
   },
