@@ -33,16 +33,18 @@ export function wrapEIP1193asWeb3Provider(provider: EIP1193Provider): Web3Provid
     return await provider.request({ method: 'eth_requestAccounts' })
   }
 
-  async function sendAsync<Result = unknown>(
+  function sendAsync<Result = unknown>(
     req: RequestArguments,
     cb: Web3ProviderSendCallback<Result>
-  ): Promise<void> {
-    try {
-      const result = await provider.request<Result>(req)
-      cb(undefined, { id: undefined, jsonrpc: '2.0', method: req.method, result })
-    } catch (error) {
-      cb(error as Error)
-    }
+  ): void {
+    provider.request<Result>(req).then(
+      (result) => {
+        cb(undefined, { id: undefined, jsonrpc: '2.0', method: req.method, result })
+      },
+      (error: Error) => {
+        cb(error)
+      }
+    )
   }
 
   return { enable, sendAsync }

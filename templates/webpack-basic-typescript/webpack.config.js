@@ -9,6 +9,7 @@ module.exports = {
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.json'],
     fallback: {
+      assert: require.resolve('assert/'),
       crypto: false,
       http: false,
       https: false,
@@ -18,6 +19,10 @@ module.exports = {
   },
   module: {
     rules: [
+      {
+        test: /\.(png|svg)/,
+        type: 'asset/resource',
+      },
       {
         test: /\.tsx?$/,
         loader: 'swc-loader',
