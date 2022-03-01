@@ -6,7 +6,7 @@ import { wrapEIP1193asWeb3Provider } from '../src/utils'
 describe('utils', () => {
   describe('wrapEIP1193asWeb3Provider()', () => {
     test('enable() sends an "eth_requestAccounts" request', async () => {
-      const request = jest.fn(() => ['0x123'])
+      const request = jest.fn(() => Promise.resolve(['0x123']))
       const provider = wrapEIP1193asWeb3Provider({ request } as unknown as EIP1193Provider)
       await expect(provider.enable()).resolves.toEqual(['0x123'])
       expect(request).toBeCalledWith({ method: 'eth_requestAccounts' })
@@ -14,7 +14,7 @@ describe('utils', () => {
 
     describe('sendAsync()', () => {
       test('with successful request', (done) => {
-        const request = jest.fn(() => 'OK')
+        const request = jest.fn(() => Promise.resolve('OK'))
         const provider = wrapEIP1193asWeb3Provider({ request } as unknown as EIP1193Provider)
         const req = { method: 'test_result', params: { foo: 'bar' } }
         provider.sendAsync(req, (err, res) => {
@@ -32,9 +32,7 @@ describe('utils', () => {
 
       test('with failed request', (done) => {
         const error = new Error('Request failed')
-        const request = jest.fn(() => {
-          throw error
-        })
+        const request = jest.fn(() => Promise.reject(error))
         const provider = wrapEIP1193asWeb3Provider({ request } as unknown as EIP1193Provider)
         provider.sendAsync({ method: 'test_error' }, (err, res) => {
           expect(err).toBe(error)
