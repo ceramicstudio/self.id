@@ -1,11 +1,5 @@
 import type { Dimensions, ImageSources } from '@self.id/image-utils'
 import { selectImageSource } from '@self.id/image-utils'
-import type {
-  EIP1193Provider,
-  RequestArguments,
-  Web3Provider,
-  Web3ProviderSendCallback,
-} from '@self.id/multiauth'
 
 export function formatDID(did: string, maxLength = 20): string {
   if (maxLength < 12) {
@@ -26,26 +20,4 @@ export function getImageURL(
   }
   const image = selectImageSource(sources, dimensions)
   return image.src.replace('ipfs://', ipfsPrefix)
-}
-
-export function wrapEIP1193asWeb3Provider(provider: EIP1193Provider): Web3Provider {
-  async function enable(): Promise<Array<string>> {
-    return await provider.request({ method: 'eth_requestAccounts' })
-  }
-
-  function sendAsync<Result = unknown>(
-    req: RequestArguments,
-    cb: Web3ProviderSendCallback<Result>
-  ): void {
-    provider.request<Result>(req).then(
-      (result) => {
-        cb(undefined, { id: undefined, jsonrpc: '2.0', method: req.method, result })
-      },
-      (error: Error) => {
-        cb(error)
-      }
-    )
-  }
-
-  return { enable, sendAsync }
 }

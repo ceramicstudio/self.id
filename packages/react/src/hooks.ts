@@ -29,7 +29,7 @@ export function useViewerID<
 }
 
 export function useViewerConnection<ModelTypes extends ModelTypeAliases = CoreModelTypes>(): [
-  ViewerConnectionState,
+  ViewerConnectionState<ModelTypes>,
   (provider: EthereumAuthProvider) => Promise<SelfID<ModelTypes> | null>,
   () => void
 ] {

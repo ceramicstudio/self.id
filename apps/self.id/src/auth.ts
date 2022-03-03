@@ -1,4 +1,4 @@
-import type { PartialConnectorConfig, PartialNetworkConfig } from '@self.id/multiauth'
+import type { PartialConnectorConfig, PartialNetworkConfig } from './multiauth/types'
 
 const ethereumConnectors: Array<PartialConnectorConfig> = [{ key: 'injected' }]
 

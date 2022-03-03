@@ -7,10 +7,9 @@
  * helping developers to quickly get started with building decentralized apps using Ceramic with
  * React.
  *
- * The framework is built on top of the {@linkcode core}, {@linkcode web}, {@linkcode react},
- * {@linkcode ui} and {@linkcode multiauth} modules to provide APIs and UI components to easily
- * authenticate users based on Wallet providers, keep track of the current user and interact with
- * both public (read-only) and user-owned (mutable) records.
+ * The framework is built on top of the {@linkcode core}, {@linkcode web} and {@linkcode react}
+ * modules to provide APIs to easily authenticate users, keep track of the current user and
+ * interact with both public (read-only) and user-owned (mutable) records.
  *
  * ## Installation
  *
@@ -67,7 +66,7 @@
  *     <button
  *       disabled={connection.status === 'connecting'}
  *       onClick={() => {
- *         connect()
+ *         connect(window.ethereum)
  *       }}>
  *       Connect
  *     </button>
@@ -171,9 +170,6 @@
  * - {@linkcode web.SelfID}
  * - `EthereumAuthProvider` from 3ID Connect
  *
- * ## Re-exported components
- *
- * - {@linkcode ui.AvatarPlaceholder}
  *
  * @module framework
  */
@@ -188,28 +184,31 @@ export { Core, PublicID } from '@self.id/core'
 /** @ignore */
 export { RequestClient } from '@self.id/react'
 /** @ignore */
-export { AvatarPlaceholder } from '@self.id/ui'
-/** @ignore */
-export type { AvatarPlaceholderProps } from '@self.id/ui'
-/** @ignore */
 export { EthereumAuthProvider, SelfID } from '@self.id/web'
 
 // Documented SDK re-exports
 export { isCAIP10string, isDIDstring } from '@self.id/core'
 export { selectImageSource, uploadImage } from '@self.id/image-utils'
 export type { Dimensions, ImageSources } from '@self.id/image-utils'
-export { useClient, usePublicRecord, useViewerID, useViewerRecord } from '@self.id/react'
-export type { RequestClientParams, RequestState, PublicRecord, ViewerRecord } from '@self.id/react'
-export { colors, theme } from '@self.id/ui'
-export type { Colors, ColorType, ThemeType } from '@self.id/ui'
+export {
+  Provider,
+  ViewerConnectedContainer,
+  useClient,
+  usePublicRecord,
+  useViewerConnection,
+  useViewerID,
+  useViewerRecord,
+} from '@self.id/react'
+export type {
+  ProviderProps,
+  PublicRecord,
+  RequestClientParams,
+  RequestState,
+  ViewerConnectedContainerProps,
+  ViewerConnectionState,
+  ViewerRecord,
+} from '@self.id/react'
 export type { ConnectNetwork, EthereumProvider } from '@self.id/web'
 
 // Local exports
-export { ConnectedContainer } from './components/ConnectedContainer.js'
-export type { ConnectedContainerProps } from './components/ConnectedContainer.js'
-export { Provider } from './components/Provider.js'
-export type { ProviderProps } from './components/Provider.js'
-export { useConnection } from './hooks.js'
-export type { ConnectOptions } from './hooks.js'
-export type { ConnectionState } from './types.js'
 export { formatDID, getImageURL } from './utils.js'
