@@ -1,20 +1,19 @@
-import { AvatarPlaceholder, useConnection } from '@self.id/framework'
+import { useViewerConnection } from '@self.id/framework'
 import { Anchor, Box, Heading, Paragraph } from 'grommet'
 import React from 'react'
 
 import ConnectButton from './ConnectButton'
 
 export default function App() {
-  const [connection] = useConnection()
+  const [connection] = useViewerConnection()
 
   return (
     <Box align="center" flex pad="large">
       <Heading>Self.ID example app</Heading>
       <Box pad="medium">
-        <AvatarPlaceholder
-          did={connection.status === 'connected' ? connection.selfID.id : 'self.id'}
-          size={120}
-        />
+        <Paragraph>
+          {connection.status === 'connected' ? connection.selfID.id : 'Connect to dislay your DID'}
+        </Paragraph>
       </Box>
       <ConnectButton />
       <Paragraph>

@@ -6,7 +6,7 @@ import App from './App'
 
 render(
   <StrictMode>
-    <Provider ui={{ full: true, style: { display: 'flex' } }}>
+    <Provider client={{ ceramic: 'dev-unstable' }}>
       <App />
     </Provider>
   </StrictMode>,

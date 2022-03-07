@@ -6,7 +6,6 @@ import { useCallback, useMemo } from 'react'
 
 import { useMultiAuth } from '../multiauth/hooks'
 import type { AuthAccount } from '../multiauth/types'
-import type { EIP1193Provider, Web3Provider } from '../multiauth/providers/types'
 
 export type ConnectionState<ModelTypes extends ModelTypeAliases = CoreModelTypes> =
   | { status: 'disconnected' }
@@ -62,21 +61,9 @@ export function useAuthConnection<ModelTypes extends ModelTypeAliases = CoreMode
         console.warn('Failed to login:', err)
       }
 
-      if (auth == null) {
-        return null
-      }
-
-      const { provider, providerKey } = auth.state
-      const accounts =
-        providerKey === 'eip1193'
-          ? await (provider as EIP1193Provider).request<Array<string>>({
-              method: 'eth_requestAccounts',
-            })
-          : await (provider as Web3Provider).enable()
-
-      return typeof accounts[0] === 'string'
-        ? await connectViewer(new EthereumAuthProvider(provider, accounts[0]))
-        : null
+      return auth == null
+        ? null
+        : await connectViewer(new EthereumAuthProvider(auth.state.provider, auth.accountID.address))
     },
     [state, authenticate, connectViewer, disconnect]
   )

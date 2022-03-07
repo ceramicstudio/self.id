@@ -1,9 +1,14 @@
-import { useConnection } from '@self.id/framework'
+import { EthereumAuthProvider, useViewerConnection } from '@self.id/framework'
 import { Anchor, Button, Paragraph } from 'grommet'
-import React from 'react'
+import React, { useCallback } from 'react'
 
 export default function ConnectButton() {
-  const [connection, connect, disconnect] = useConnection()
+  const [connection, connect, disconnect] = useViewerConnection()
+
+  const onClickConnect = useCallback(async () => {
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
+    await connect(new EthereumAuthProvider(window.ethereum, accounts[0]))
+  }, [connect])
 
   return connection.status === 'connected' ? (
     <Button
@@ -16,9 +21,7 @@ export default function ConnectButton() {
     <Button
       disabled={connection.status === 'connecting'}
       label="Connect"
-      onClick={() => {
-        connect()
-      }}
+      onClick={onClickConnect}
     />
   ) : (
     <Paragraph>
