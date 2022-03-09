@@ -70,7 +70,7 @@ ___
 
 ### transformProfile
 
-▸ `Const` **transformProfile**(`profile`): `BasicProfile`
+▸ **transformProfile**(`profile`): `BasicProfile`
 
 #### Parameters
 

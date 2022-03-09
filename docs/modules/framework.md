@@ -318,13 +318,13 @@ ___
 
 ### colors
 
-• **colors**: [`Colors`](framework.md#colors)
+• `Const` **colors**: [`Colors`](framework.md#colors)
 
 ___
 
 ### theme
 
-• **theme**: `ThemeType`
+• `Const` **theme**: `ThemeType`
 
 ## Functions
 

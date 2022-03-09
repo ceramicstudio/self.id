@@ -80,13 +80,13 @@ ___
 
 ### colors
 
-• **colors**: [`Colors`](ui.md#colors)
+• `Const` **colors**: [`Colors`](ui.md#colors)
 
 ___
 
 ### theme
 
-• **theme**: `ThemeType`
+• `Const` **theme**: `ThemeType`
 
 ## Functions
 
