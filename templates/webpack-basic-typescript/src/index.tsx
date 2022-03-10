@@ -6,7 +6,7 @@ import App from './App'
 
 render(
   <StrictMode>
-    <Provider client={{ ceramic: 'dev-unstable' }}>
+    <Provider client={{ ceramic: 'local', connectNetwork: 'dev-unstable' }}>
       <App />
     </Provider>
   </StrictMode>,
