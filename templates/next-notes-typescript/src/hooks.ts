@@ -1,14 +1,15 @@
 import type { StreamMetadata } from '@ceramicnetwork/common'
 import type { TileDocument } from '@ceramicnetwork/stream-tile'
 import {
+  EthereumAuthProvider,
   PublicID,
   useClient,
-  useConnection,
   usePublicRecord,
+  useViewerConnection,
   useViewerID,
   useViewerRecord,
 } from '@self.id/framework'
-import type { PublicRecord } from '@self.id/framework'
+import type { PublicRecord, SelfID } from '@self.id/framework'
 import { useAtom } from 'jotai'
 import { useResetAtom } from 'jotai/utils'
 import { useCallback, useState } from 'react'
@@ -16,6 +17,16 @@ import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 import { draftNoteAtom, editionStateAtom } from './state'
 import type { EditionState, ModelTypes, Note, Notes } from './types'
+
+function useConnect(): () => Promise<SelfID<ModelTypes> | null> {
+  const connect = useViewerConnection<ModelTypes>()[1]
+  return useCallback(async () => {
+    // @ts-ignore
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
+    // @ts-ignore
+    return await connect(new EthereumAuthProvider(window.ethereum, accounts[0]))
+  }, [connect])
+}
 
 export type TileDoc<ContentType> = {
   isLoading: boolean
@@ -81,7 +92,7 @@ export function useNotesRecord(did: string): PublicRecord<Notes | null> {
 }
 
 export function useDraftNote() {
-  const connect = useConnection<ModelTypes>()[1]
+  const connect = useConnect()
   const notesRecord = useViewerRecord<ModelTypes, 'notes'>('notes')
   const [value, setValue] = useAtom(draftNoteAtom)
   const resetValue = useResetAtom(draftNoteAtom)
@@ -121,7 +132,7 @@ export function useDraftNote() {
 }
 
 export function useNote(did: string, id: string) {
-  const connect = useConnection<ModelTypes>()[1]
+  const connect = useConnect()
   const notesRecord = useNotesRecord(did)
   const noteDoc = useTileDoc<Note>(id)
   const [editingText, setEditingText] = useState<string>('')

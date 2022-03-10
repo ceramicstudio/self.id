@@ -389,7 +389,7 @@ ___
 
 ### useViewerConnection
 
-▸ **useViewerConnection**<`ModelTypes`\>(): [[`ViewerConnectionState`](react.md#viewerconnectionstate), (`provider`: `EthereumAuthProvider`) => `Promise`<`SelfID`<`ModelTypes`\> \| ``null``\>, () => `void`]
+▸ **useViewerConnection**<`ModelTypes`\>(): [[`ViewerConnectionState`](react.md#viewerconnectionstate)<`ModelTypes`\>, (`provider`: `EthereumAuthProvider`) => `Promise`<`SelfID`<`ModelTypes`\> \| ``null``\>, () => `void`]
 
 #### Type parameters
 
@@ -399,7 +399,7 @@ ___
 
 #### Returns
 
-[[`ViewerConnectionState`](react.md#viewerconnectionstate), (`provider`: `EthereumAuthProvider`) => `Promise`<`SelfID`<`ModelTypes`\> \| ``null``\>, () => `void`]
+[[`ViewerConnectionState`](react.md#viewerconnectionstate)<`ModelTypes`\>, (`provider`: `EthereumAuthProvider`) => `Promise`<`SelfID`<`ModelTypes`\> \| ``null``\>, () => `void`]
 
 ___
 

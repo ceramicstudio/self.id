@@ -1,11 +1,10 @@
-import { useConnection } from '@self.id/framework'
 import type { SelfID } from '@self.id/framework'
 import { Box, Button, Heading, Spinner, Text } from 'grommet'
 import { useRouter } from 'next/router'
 import { useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
 
-import { useAddTwitterAttestation, useIdentityLink } from '../../hooks'
+import { useConnectionState, useAddTwitterAttestation, useIdentityLink } from '../../hooks'
 
 import AddSocialAccountContainer from './AddSocialAccountContainer'
 
@@ -145,7 +144,7 @@ function AddTwitterAccount({ selfID }: Props) {
 }
 
 export default function AddTwitterAccountScreen() {
-  const [connection] = useConnection()
+  const connection = useConnectionState()
 
   return (
     <AddSocialAccountContainer>

@@ -1,4 +1,3 @@
-import { colors } from '@self.id/framework'
 import { Anchor, Box, Heading, Spinner, Text, TextInput } from 'grommet'
 import type { GetServerSideProps } from 'next'
 import Head from 'next/head'
@@ -20,6 +19,7 @@ import footerTwitterIcon from '../images/icons/social-twitter.svg'
 import Navbar from '../components/Navbar'
 import OpenGraphMeta from '../components/OpenGraphMeta'
 import { withMediaQuery } from '../components/media-query/with-media-query'
+import { colors } from '../theme'
 
 const ResponsiveHeading = withMediaQuery(Heading)
 const ResponsiveText = withMediaQuery(Text)
