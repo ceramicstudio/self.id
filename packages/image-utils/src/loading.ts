@@ -6,6 +6,7 @@ import type { Dimensions, ImageMetadata, ImageSources, SizedImage, SizeMode } fr
 
 const pica = new Pica()
 
+/** Load a `blob` image to an HTML Image element. */
 export async function loadImage(blob: Blob): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     function onError() {
@@ -31,6 +32,7 @@ export async function loadImage(blob: Blob): Promise<HTMLImageElement> {
   })
 }
 
+/** @internal */
 export async function resizeImageElement(
   type: string,
   image: HTMLImageElement,
@@ -47,6 +49,7 @@ export async function resizeImageElement(
   return { blob: await pica.toBlob(res, type), height, width }
 }
 
+/** Resize an image and upload it to IPFS. */
 export async function uploadResizedImage(
   url: string,
   type: string,
@@ -64,6 +67,7 @@ export async function uploadResizedImage(
   }
 }
 
+/** Upload an image to IPFS, optionally with additional alternative `sizes`. */
 export async function uploadImage(
   url: string,
   file: File,

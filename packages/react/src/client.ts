@@ -4,6 +4,16 @@ import type { ModelTypeAliases } from '@glazed/types'
 import { Core, type CoreModelTypes } from '@self.id/core'
 import type { EthereumAuthProvider, SelfID, WebClientParams } from '@self.id/web'
 
+/**
+ * ReactClient extends the {@linkcode core.Core Core class} with authentication support in browser
+ * environments.
+ *
+ * It is exported by the {@linkcode react} module.
+ *
+ * ```sh
+ * import { ReactClient } from '@self.id/react'
+ * ```
+ */
 export class ReactClient<
   ModelTypes extends ModelTypeAliases = CoreModelTypes
 > extends Core<ModelTypes> {
@@ -22,6 +32,10 @@ export class ReactClient<
     this.#params = params
   }
 
+  /**
+   * Create a {@linkcode web.SelfID SelfID} instance using the given `authProvider` and attach the
+   * associated DID instance to the internal Ceramic client instance.
+   */
   async authenticate(authProvider: EthereumAuthProvider): Promise<SelfID<ModelTypes>> {
     const { SelfID } = await import('@self.id/web')
     const selfID = await SelfID.authenticate<ModelTypes>({ ...this.#params, authProvider })

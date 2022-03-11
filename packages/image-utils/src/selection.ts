@@ -43,6 +43,7 @@ function selectContain(
   return selected
 }
 
+/** Select the best option from the given `sources` to match the wanted `dimensions` and `mode`. */
 export function selectImageSource(
   sources: ImageSources,
   dimensions: Dimensions,
@@ -58,6 +59,7 @@ export function selectImageSource(
   return alternative ?? sources.original
 }
 
+/** @internal */
 export function getDimensions(
   image: HTMLImageElement,
   dimensions: Dimensions = DEFAULT_DIMENSIONS,

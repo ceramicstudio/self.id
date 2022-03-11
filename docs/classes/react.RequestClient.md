@@ -2,7 +2,10 @@
 
 [react](../modules/react.md).RequestClient
 
-Extends [`core.Core`](core.Core.md)
+The RequestClient extends the [`Core`](core.Core.md) class as a server-side client for
+prefetching and serializing records so they can be hydrated on the browser side.
+
+It is exported by the [`react`](../modules/react.md) module.
 
 ```sh
 import { RequestClient } from '@self.id/react'
@@ -120,6 +123,8 @@ ___
 
 • `get` **viewerID**(): ``null`` \| `string`
 
+Viewer ID associated to the request, if found in cookie string.
+
 #### Returns
 
 ``null`` \| `string`
@@ -178,6 +183,9 @@ ___
 
 ▸ **getState**(): [`RequestState`](../modules/react.md#requeststate)
 
+Return a serialized request state possibly containing the current viewer ID and prefetched
+records so they can be injected on the browser side, notably in the [`Provider`](../modules/react.md#provider).
+
 #### Returns
 
 [`RequestState`](../modules/react.md#requeststate)
@@ -187,6 +195,8 @@ ___
 ### prefetch
 
 ▸ **prefetch**<`Key`\>(`key`, `id?`): `Promise`<`boolean`\>
+
+Prefetch loading a record so it can be exported using [`getState`](react.RequestClient.md#getstate).
 
 #### Type parameters
 

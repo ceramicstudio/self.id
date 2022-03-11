@@ -9,6 +9,7 @@ import { VIEWER_ID_STORAGE_KEY } from './constants.js'
 import type { RequestState } from './types.js'
 import { getCookieValue } from './utils.js'
 
+/** Extract the possible viewer ID value from the given cookie string value. */
 export function getCookieViewerID(cookie?: string): string | null {
   return (cookie && getCookieValue(cookie, VIEWER_ID_STORAGE_KEY)) || null
 }
@@ -17,7 +18,10 @@ export type RequestClientParams<ModelTypes extends ModelTypeAliases = CoreModelT
   CoreParams<ModelTypes> & { cookie?: string }
 
 /**
- * Extends {@linkcode core.Core}
+ * The RequestClient extends the {@linkcode core.Core Core} class as a server-side client for
+ * prefetching and serializing records so they can be hydrated on the browser side.
+ *
+ * It is exported by the {@linkcode react} module.
  *
  * ```sh
  * import { RequestClient } from '@self.id/react'
@@ -46,10 +50,12 @@ export class RequestClient<
     this.#viewerID = getCookieViewerID(params.cookie)
   }
 
+  /** Viewer ID associated to the request, if found in cookie string. */
   get viewerID(): string | null {
     return this.#viewerID
   }
 
+  /** Prefetch loading a record so it can be exported using {@linkcode getState}. */
   async prefetch<Key extends Alias>(key: Key, id = this.#viewerID): Promise<boolean> {
     if (id == null) {
       return false
@@ -59,6 +65,10 @@ export class RequestClient<
     return true
   }
 
+  /**
+   * Return a serialized request state possibly containing the current viewer ID and prefetched
+   * records so they can be injected on the browser side, notably in the {@linkcode Provider}.
+   */
   getState(): RequestState {
     return {
       hydrate: dehydrate(this._queryClient),

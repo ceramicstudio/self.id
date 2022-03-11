@@ -16,15 +16,24 @@ const DEFAULT_QUERY_OPTIONS: QueryObserverOptions = {
   refetchOnWindowFocus: false,
 }
 
-export type ProviderConfig<ModelTypes extends ModelTypeAliases = CoreModelTypes> = {
+/**
+ * Provider component properties, including its `children` and the following optional configuration
+ * properties:
+ *
+ * - `client`: an instance of {@linkcode ReactClient} or
+ * {@linkcode web.WebClientParams client configuration parameters}.
+ * - `queryOptions`: custom options for the internal
+ * {@link https://react-query.tanstack.com/ react-query} configuration.
+ * - `state`: {@linkcode RequestState} emitted by a {@linkcode RequestClient} instance.
+ */
+export type ProviderProps<ModelTypes extends ModelTypeAliases = CoreModelTypes> = {
+  children: ReactNode
   client?: ReactClient<ModelTypes> | WebClientParams<ModelTypes>
   queryOptions?: QueryObserverOptions
   state?: RequestState
 }
 
-export type ProviderProps<ModelTypes extends ModelTypeAliases = CoreModelTypes> =
-  ProviderConfig<ModelTypes> & { children: ReactNode }
-
+/** Top-level provider component for using Self.ID's React APIs. */
 export function Provider<ModelTypes extends ModelTypeAliases = CoreModelTypes>(
   props: ProviderProps<ModelTypes>
 ): JSX.Element {

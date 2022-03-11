@@ -92,11 +92,20 @@ async function getCurrentUserProfile() {
 
 Ƭ **CeramicNetwork**: ``"local"`` \| ``"mainnet-gateway"`` \| ``"testnet-clay"`` \| ``"testnet-clay-gateway"``
 
+Configured Ceramic endpoints:
+
+- "local" -> http://localhost:7007
+- "mainnet-gateway" -> https://gateway.ceramic.network (read-only)
+- "testnet-clay" -> https://ceramic-clay.3boxlabs.com
+- "testnet-clay-gateway" -> https://gateway-clay.ceramic.network (read-only)
+
 ___
 
 ### CoreModelTypes
 
 Ƭ **CoreModelTypes**: `ModelTypeAliases`<{ `AlsoKnownAs`: `AlsoKnownAs` ; `BasicProfile`: `BasicProfile` ; `CryptoAccounts`: `CryptoAccountLinks`  }, { `alsoKnownAs`: ``"AlsoKnownAs"`` ; `basicProfile`: ``"BasicProfile"`` ; `cryptoAccounts`: ``"CryptoAccounts"``  }\>
+
+Default model types provided by the Self.ID SDK.
 
 ___
 

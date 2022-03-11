@@ -70,6 +70,8 @@ ___
 
 Ƭ **ConnectNetwork**: ``"dev-unstable"`` \| ``"mainnet"`` \| ``"testnet-clay"``
 
+Ceramic networks supported by 3ID Connect.
+
 ___
 
 ### SelfIDParams

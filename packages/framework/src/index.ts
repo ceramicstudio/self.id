@@ -21,7 +21,7 @@
  *
  * ### Configure the Provider
  *
- * The {@linkcode framework.Provider Provider} component must be added at the root of the
+ * The {@linkcode react.Provider Provider} component must be added at the root of the
  * application tree in order to use the hooks described below. It can be used to provide a custom
  * configuration for the Self.ID clients, authentication, state and UI options.
  *
@@ -38,22 +38,22 @@
  * The framework provides a React hook to easily initiate an authentication flow for the Viewer
  * (the "current user" of the app). This flow is made of the following steps:
  *
- * 1. A modal prompts the user to select a Wallet to connect with
- * 1. Selecting a Wallet initiates the connection to access the Ethereum provider
- * 1. An `EthereumAuthProvider` instance is created using the Ethereum provider
- * 1. The authentication flow with 3ID Connect starts, using the `EthereumAuthProvider` instance
- * 1. A {@linkcode web.SelfID SelfID} instance is created and stored in the application state
+ * The user authentication flow consists of the following steps:
+ *
+ * 1. An [Ethereum authentication provider](https://developers.ceramic.network/reference/typescript/classes/_ceramicnetwork_blockchain_utils_linking.ethereumauthprovider-1.html) is created using the Ethereum provider.
+ * 1. The auth flow with 3ID Connect starts, using the [Ethereum authentication provider](https://developers.ceramic.network/reference/typescript/classes/_ceramicnetwork_blockchain_utils_linking.ethereumauthprovider-1.html).
+ * 1. A {@linkcode web.SelfID SelfID} instance is created and stored in application state.
  *
  * Once this flow is successfully applied, the Viewer's cookie is set to the authenticated DID and
  * writing records associated to the Viewer becomes possible.
  *
  * ```ts
- * import { useConnection } from '@self.id/framework'
+ * import { useViewerConnection } from '@self.id/framework'
  *
  * // A simple button to initiate the connection flow. A Provider must be present at a higher level
- * // in the component tree for the `useConnection()` hook to work.
+ * // in the component tree for the `useViewerConnection()` hook to work.
  * function ConnectButton() {
- *   const [connection, connect, disconnect] = useConnection()
+ *   const [connection, connect, disconnect] = useViewerConnection()
  *
  *   return connection.status === 'connected' ? (
  *     <button
@@ -65,8 +65,11 @@
  *   ) : 'ethereum' in window ? (
  *     <button
  *       disabled={connection.status === 'connecting'}
- *       onClick={() => {
- *         connect(window.ethereum)
+ *       onClick={async () => {
+ *         const accounts = await window.ethereum.request({
+ *           method: 'eth_requestAccounts',
+ *         })
+ *         await connect(new EthereumAuthProvider(window.ethereum, accounts[0]))
  *       }}>
  *       Connect
  *     </button>
@@ -79,7 +82,7 @@
  * }
  * ```
  *
- * ### Read a viewer record
+ * ### Interact with a viewer record
  *
  * The {@linkcode react.useViewerRecord useViewerRecord} hook loads the record for a given
  * definition in the index of the current viewer, with the following variants:
@@ -91,6 +94,7 @@
  * ```ts
  * import { useViewerRecord } from '@self.id/framework'
  *
+ * // Load and display the record contents
  * function ShowViewerName() {
  *   const record = useViewerRecord('basicProfile')
  *
@@ -100,6 +104,21 @@
  *     ? `Hello ${record.content.name || 'stranger'}`
  *     : 'No profile to load'
  *   return <p>{text}</p>
+ * }
+ *
+ * // Mutate the record
+ * function SetViewerName() {
+ *   const record = useViewerRecord('basicProfile')
+ *
+ *   return (
+ *     <button
+ *       disabled={!record.isMutable || record.isMutating}
+ *       onClick={async () => {
+ *         await record.merge({ name: 'Alice' })
+ *       }}>
+ *       Set name
+ *     </button>
+ *   )
  * }
  * ```
  *
@@ -166,6 +185,7 @@
  *
  * - {@linkcode core.Core}
  * - {@linkcode core.PublicID}
+ * - {@linkcode react.ReactClient}
  * - {@linkcode react.RequestClient}
  * - {@linkcode web.SelfID}
  * - `EthereumAuthProvider` from 3ID Connect
@@ -182,7 +202,7 @@ export type { BasicProfile } from '@datamodels/identity-profile-basic'
 /** @ignore */
 export { Core, PublicID } from '@self.id/core'
 /** @ignore */
-export { RequestClient } from '@self.id/react'
+export { ReactClient, RequestClient } from '@self.id/react'
 /** @ignore */
 export { EthereumAuthProvider, SelfID } from '@self.id/web'
 

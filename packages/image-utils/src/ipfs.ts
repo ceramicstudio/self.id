@@ -1,9 +1,13 @@
+/** @internal */
 export type LinkData = {
   Name: string
   Hash: string
   Size: number
 }
 
+/**
+ * Upload the `blob` file to the given IPFS server `url`, using the optionally given `fileName`.
+ */
 export async function uploadFile(url: string, blob: Blob, fileName?: string): Promise<string> {
   const body = new FormData()
   body.append('path', blob, fileName)

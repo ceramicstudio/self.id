@@ -18,6 +18,10 @@ export function useClient<
   return useAtomValue(clientAtom, stateScope) as unknown as ReactClient<ModelTypes>
 }
 
+/**
+ * A ViewerID can be either a {@linkcode web.SelfID SelfID} or {@linkcode core.PublicID PublicID}
+ * instance depending on the current {@linkcode ViewerConnectionState}.
+ */
 export type ViewerID<ModelTypes extends ModelTypeAliases> =
   | PublicID<ModelTypes>
   | SelfID<ModelTypes>
@@ -28,6 +32,13 @@ export function useViewerID<
   return useAtomValue(viewerIDAtom, stateScope) as unknown as ViewerID<ModelTypes> | null
 }
 
+/**
+ * Hook for handling the viewer's connection lifecycle, returning the following elements:
+ *
+ * 1. The current {@linkcode ViewerConnectionState} object.
+ * 2. A connection attempt function, taking an `EthereumAuthProvider` argument.
+ * 3. A reset function, clearing the current {@linkcode ViewerID}.
+ */
 export function useViewerConnection<ModelTypes extends ModelTypeAliases = CoreModelTypes>(): [
   ViewerConnectionState<ModelTypes>,
   (provider: EthereumAuthProvider) => Promise<SelfID<ModelTypes> | null>,
@@ -74,6 +85,31 @@ export function useViewerConnection<ModelTypes extends ModelTypeAliases = CoreMo
   return [connection, connect, reset]
 }
 
+/**
+ * A ViewerRecord provides an interface for interacting with record stored on Ceramic, depending on
+ * the current {@linkcode ViewerID} value:
+ *
+ * - If `null`, no interaction is possible with the record.
+ * - If it is an instance of {@linkcode core.PublicID PublicID}, only reads are possible.
+ * - If it is an instance of {@linkcode web.SelfID SelfID}, all interactions (reads and mutations)
+ * are possible.
+ *
+ * The ViewerRecord object contains the following properties:
+ *
+ * - `isLoadable`: `false` if the viewer ID is `null`, `true` otherwise.
+ * - `isLoading`: `true` when the record is being loaded, `false` otherwise.
+ * - `content`: the record contents, if loaded.
+ * - `isError`: `true` when the record failed to load, `false` otherwise.
+ * - `error`: possible error raised when attempting to load the record,
+ * - `isMutable`: `true` if the viewer ID is an instance of {@linkcode web.SelfID SelfID},
+ * `false` otherwise.
+ * - `isMutating`: `true` when the record is being mutated as the result of calling the
+ * ViewerRecord object `merge` or `set` function, `false` otherwise.
+ * - `set`: function used to replace the record contents using the {@linkcode web.SelfID.set set}
+ * method, only available if `isMutating` is `true`.
+ * - `merge`: function used to merge the record contents using the
+ * {@linkcode web.SelfID.merge merge} method, only available if `isMutating` is `true`.
+ */
 export type ViewerRecord<ContentType> =
   | {
       // No viewerID -> not loadable
@@ -101,6 +137,9 @@ export type ViewerRecord<ContentType> =
       merge(content: ContentType): Promise<void>
     }
 
+/**
+ * Hook for accessing the {@linkcode ViewerRecord} for a given alias.
+ */
 export function useViewerRecord<
   ModelTypes extends ModelTypeAliases = CoreModelTypes,
   Alias extends keyof ModelTypes['definitions'] = keyof ModelTypes['definitions'],
@@ -157,6 +196,15 @@ export function useViewerRecord<
       }
 }
 
+/**
+ * A PublicRecord provides an interface for interacting with record stored on Ceramic, associated
+ * to a given DID string. It contains the following properties:
+ *
+ * - `isLoading`: `true` when the record is being loaded, `false` otherwise.
+ * - `content`: the record contents, if loaded.
+ * - `isError`: `true` when the record failed to load, `false` otherwise.
+ * - `error`: possible error raised when attempting to load the record,
+ */
 export type PublicRecord<ContentType> = {
   isLoading: boolean
   content?: ContentType
@@ -164,6 +212,9 @@ export type PublicRecord<ContentType> = {
   error?: unknown
 }
 
+/**
+ * Hook for accessing the {@linkcode PublicRecord} for a given alias and account (DID or CAIP-10).
+ */
 export function usePublicRecord<
   ModelTypes extends ModelTypeAliases = CoreModelTypes,
   Alias extends keyof ModelTypes['definitions'] = keyof ModelTypes['definitions'],

@@ -30,6 +30,8 @@ export type CoreParams<ModelTypes extends ModelTypeAliases = CoreModelTypes> = {
 }
 
 /**
+ * Core client for the Self.ID SDK, exported by the {@linkcode core} module.
+ *
  * ```sh
  * import { Core } from '@self.id/core'
  * ```
@@ -68,26 +70,35 @@ export class Core<
     this.#tileLoader = loader
   }
 
+  /** Ceramic HTTP Client instance used internally. */
   get ceramic(): CeramicClient {
     return this._ceramic
   }
 
+  /** DataModel runtime instance used internally. */
   get dataModel(): DataModel<ModelTypes> {
     return this.#dataModel
   }
 
+  /** DID DataStore instance used internally. */
   get dataStore(): DIDDataStore<ModelTypes> {
     return this._dataStore
   }
 
+  /** DID resolver instance used internally. */
   get resolver(): Resolver {
     return this.#resolver
   }
 
+  /** Tile loader instance used internally. */
   get tileLoader(): TileLoader {
     return this.#tileLoader
   }
 
+  /**
+   * Load the DID string for a given CAIP-10 account using a CAIP-10 link, or throw an error if
+   * not linked.
+   */
   async getAccountDID(account: string): Promise<string> {
     const link = await Caip10Link.fromAccount(this._ceramic, account)
     if (link.did == null) {
@@ -96,6 +107,12 @@ export class Core<
     return link.did
   }
 
+  /**
+   * Turn a DID or CAIP-10 string into a DID string.
+   *
+   * If the input is a DID string, it will be returned as-is, otherwise
+   * {@linkcode getAccountDID} will be used.
+   */
   async toDID(accountOrDID: string): Promise<string> {
     if (isDIDstring(accountOrDID)) {
       return accountOrDID
@@ -103,6 +120,11 @@ export class Core<
     return isCAIP10string(accountOrDID) ? await this.getAccountDID(accountOrDID) : accountOrDID
   }
 
+  /**
+   * Load the record content for a given definition alias and account.
+   *
+   * Uses {@linkcode toDID} to resolve the account.
+   */
   async get<Key extends Alias, ContentType = DefinitionContentType<ModelTypes, Key>>(
     key: Key,
     id: string

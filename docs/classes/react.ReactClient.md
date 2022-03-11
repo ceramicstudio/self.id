@@ -2,6 +2,15 @@
 
 [react](../modules/react.md).ReactClient
 
+ReactClient extends the [`Core class`](core.Core.md) with authentication support in browser
+environments.
+
+It is exported by the [`react`](../modules/react.md) module.
+
+```sh
+import { ReactClient } from '@self.id/react'
+```
+
 ## Type parameters
 
 | Name | Type |
@@ -111,6 +120,9 @@ Core.tileLoader
 ### authenticate
 
 ▸ **authenticate**(`authProvider`): `Promise`<`SelfID`<`ModelTypes`, keyof `ModelTypes`[``"definitions"``]\>\>
+
+Create a [`SelfID`](web.SelfID.md) instance using the given `authProvider` and attach the
+associated DID instance to the internal Ceramic client instance.
 
 #### Parameters
 
