@@ -100,7 +100,7 @@ export function useViewerConnection<ModelTypes extends ModelTypeAliases = CoreMo
  * - `isLoading`: `true` when the record is being loaded, `false` otherwise.
  * - `content`: the record contents, if loaded.
  * - `isError`: `true` when the record failed to load, `false` otherwise.
- * - `error`: possible error raised when attempting to load the record,
+ * - `error`: possible error raised when attempting to load the record.
  * - `isMutable`: `true` if the viewer ID is an instance of {@linkcode web.SelfID SelfID},
  * `false` otherwise.
  * - `isMutating`: `true` when the record is being mutated as the result of calling the
@@ -198,17 +198,16 @@ export function useViewerRecord<
 
 /**
  * A PublicRecord provides an interface for interacting with record stored on Ceramic, associated
- * to a given DID string. It contains the following properties:
- *
- * - `isLoading`: `true` when the record is being loaded, `false` otherwise.
- * - `content`: the record contents, if loaded.
- * - `isError`: `true` when the record failed to load, `false` otherwise.
- * - `error`: possible error raised when attempting to load the record,
+ * to a given DID string.
  */
 export type PublicRecord<ContentType> = {
+  /** `true` when the record is being loaded, `false` otherwise. */
   isLoading: boolean
+  /** Record contents, if loaded. */
   content?: ContentType
+  /** `true` when the record failed to load, `false` otherwise. */
   isError: boolean
+  /** Possible error raised when attempting to load the record. */
   error?: unknown
 }
 

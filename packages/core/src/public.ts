@@ -5,7 +5,9 @@ import type { ModelTypes as CoreModelTypes } from './__generated__/model.js'
 import type { Core } from './core.js'
 
 export type PublicIDParams<ModelTypes extends ModelTypeAliases = CoreModelTypes> = {
+  /** {@linkcode Core} instance to use. */
   core: Core<ModelTypes>
+  /** DID string. */
   id: string
 }
 

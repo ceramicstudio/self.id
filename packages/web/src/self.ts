@@ -9,9 +9,13 @@ import { WebClient } from './client.js'
 import type { WebClientParams } from './client.js'
 
 export type AuthenticateParams<ModelTypes extends ModelTypeAliases = CoreModelTypes> =
-  WebClientParams<ModelTypes> & { authProvider: EthereumAuthProvider }
+  WebClientParams<ModelTypes> & {
+    /** Authentication provider. */
+    authProvider: EthereumAuthProvider
+  }
 
 export type SelfIDParams<ModelTypes extends ModelTypeAliases = CoreModelTypes> = {
+  /** {@linkcode WebClient} instance to use. It must have an authenticated DID attached to it. */
   client: WebClient<ModelTypes>
 }
 

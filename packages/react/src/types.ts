@@ -25,6 +25,8 @@ export type ViewerConnectionState<ModelTypes extends ModelTypeAliases = CoreMode
   | { status: 'failed'; error: Error }
 
 export type RequestState = {
+  /** Serialized records to hydrate. */
   hydrate?: DehydratedState
+  /** Viewer ID extracted from cookie value. */
   viewerID?: string | null
 }

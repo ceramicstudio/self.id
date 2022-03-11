@@ -23,9 +23,16 @@ export const CERAMIC_URLS: Record<CeramicNetwork, string> = {
 }
 
 export type CoreParams<ModelTypes extends ModelTypeAliases = CoreModelTypes> = {
+  /** Data model aliases to use instead of the default ones. */
   aliases?: ModelTypesToAliases<ModelTypes>
+  /**
+   * Cache interface to use or `true` to use a default cache. If `false` or undefined (default),
+   * no cache is used.
+   */
   cache?: TileCache | boolean
+  /** Predefined {@linkcode CeramicNetwork} configuration value of Ceramic server URL. */
   ceramic: CeramicNetwork | string
+  /** Tile loader instance to use. If provided, the `cache` parameter will be ignored. */
   loader?: TileLoader
 }
 

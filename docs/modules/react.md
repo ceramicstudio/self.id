@@ -169,15 +169,6 @@ export default function Home({ state }) {
 
 Ƭ **ProviderProps**<`ModelTypes`\>: `Object`
 
-Provider component properties, including its `children` and the following optional configuration
-properties:
-
-- `client`: an instance of [`ReactClient`](../classes/react.ReactClient.md) or
-[`client configuration parameters`](web.md#webclientparams).
-- `queryOptions`: custom options for the internal
-[react-query](https://react-query.tanstack.com/) configuration.
-- `state`: [`RequestState`](react.md#requeststate) emitted by a [`RequestClient`](../classes/react.RequestClient.md) instance.
-
 #### Type parameters
 
 | Name | Type |
@@ -186,12 +177,12 @@ properties:
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `children` | `ReactNode` |
-| `client?` | [`ReactClient`](../classes/react.ReactClient.md)<`ModelTypes`\> \| `WebClientParams`<`ModelTypes`\> |
-| `queryOptions?` | `QueryObserverOptions` |
-| `state?` | [`RequestState`](react.md#requeststate) |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `children` | `ReactNode` | - |
+| `client?` | [`ReactClient`](../classes/react.ReactClient.md)<`ModelTypes`\> \| `WebClientParams`<`ModelTypes`\> | An instance of [`ReactClient`](../classes/react.ReactClient.md) or [`client configuration parameters`](web.md#webclientparams). |
+| `queryOptions?` | `QueryObserverOptions` | Custom options for the internal [react-query](https://react-query.tanstack.com/) configuration. |
+| `state?` | [`RequestState`](react.md#requeststate) | [`RequestState`](react.md#requeststate) emitted by a [`RequestClient`](../classes/react.RequestClient.md) instance. |
 
 ___
 
@@ -200,12 +191,7 @@ ___
 Ƭ **PublicRecord**<`ContentType`\>: `Object`
 
 A PublicRecord provides an interface for interacting with record stored on Ceramic, associated
-to a given DID string. It contains the following properties:
-
-- `isLoading`: `true` when the record is being loaded, `false` otherwise.
-- `content`: the record contents, if loaded.
-- `isError`: `true` when the record failed to load, `false` otherwise.
-- `error`: possible error raised when attempting to load the record,
+to a given DID string.
 
 #### Type parameters
 
@@ -215,12 +201,12 @@ to a given DID string. It contains the following properties:
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `content?` | `ContentType` |
-| `error?` | `unknown` |
-| `isError` | `boolean` |
-| `isLoading` | `boolean` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `content?` | `ContentType` | Record contents, if loaded. |
+| `error?` | `unknown` | Possible error raised when attempting to load the record. |
+| `isError` | `boolean` | `true` when the record failed to load, `false` otherwise. |
+| `isLoading` | `boolean` | `true` when the record is being loaded, `false` otherwise. |
 
 ___
 
@@ -242,10 +228,10 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `hydrate?` | `DehydratedState` |
-| `viewerID?` | `string` \| ``null`` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `hydrate?` | `DehydratedState` | Serialized records to hydrate. |
+| `viewerID?` | `string` \| ``null`` | Viewer ID extracted from cookie value. |
 
 ___
 
@@ -315,7 +301,7 @@ The ViewerRecord object contains the following properties:
 - `isLoading`: `true` when the record is being loaded, `false` otherwise.
 - `content`: the record contents, if loaded.
 - `isError`: `true` when the record failed to load, `false` otherwise.
-- `error`: possible error raised when attempting to load the record,
+- `error`: possible error raised when attempting to load the record.
 - `isMutable`: `true` if the viewer ID is an instance of [`SelfID`](../classes/web.SelfID.md),
 `false` otherwise.
 - `isMutating`: `true` when the record is being mutated as the result of calling the

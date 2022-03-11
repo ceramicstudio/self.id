@@ -16,20 +16,19 @@ const DEFAULT_QUERY_OPTIONS: QueryObserverOptions = {
   refetchOnWindowFocus: false,
 }
 
-/**
- * Provider component properties, including its `children` and the following optional configuration
- * properties:
- *
- * - `client`: an instance of {@linkcode ReactClient} or
- * {@linkcode web.WebClientParams client configuration parameters}.
- * - `queryOptions`: custom options for the internal
- * {@link https://react-query.tanstack.com/ react-query} configuration.
- * - `state`: {@linkcode RequestState} emitted by a {@linkcode RequestClient} instance.
- */
 export type ProviderProps<ModelTypes extends ModelTypeAliases = CoreModelTypes> = {
   children: ReactNode
+  /**
+   * An instance of {@linkcode ReactClient} or
+   * {@linkcode web.WebClientParams client configuration parameters}.
+   */
   client?: ReactClient<ModelTypes> | WebClientParams<ModelTypes>
+  /**
+   * Custom options for the internal
+   * {@link https://react-query.tanstack.com/ react-query} configuration.
+   */
   queryOptions?: QueryObserverOptions
+  /** {@linkcode RequestState} emitted by a {@linkcode RequestClient} instance. */
   state?: RequestState
 }
 

@@ -15,7 +15,10 @@ export function getCookieViewerID(cookie?: string): string | null {
 }
 
 export type RequestClientParams<ModelTypes extends ModelTypeAliases = CoreModelTypes> =
-  CoreParams<ModelTypes> & { cookie?: string }
+  CoreParams<ModelTypes> & {
+    /** Request cookie string to parse in order to extract the viewer ID. */
+    cookie?: string
+  }
 
 /**
  * The RequestClient extends the {@linkcode core.Core Core} class as a server-side client for

@@ -121,12 +121,12 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `aliases?` | `ModelTypesToAliases`<`ModelTypes`\> |
-| `cache?` | `TileCache` \| `boolean` |
-| `ceramic` | [`CeramicNetwork`](core.md#ceramicnetwork) \| `string` |
-| `loader?` | `TileLoader` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `aliases?` | `ModelTypesToAliases`<`ModelTypes`\> | Data model aliases to use instead of the default ones. |
+| `cache?` | `TileCache` \| `boolean` | Cache interface to use or `true` to use a default cache. If `false` or undefined (default), no cache is used. |
+| `ceramic` | [`CeramicNetwork`](core.md#ceramicnetwork) \| `string` | Predefined [`CeramicNetwork`](core.md#ceramicnetwork) configuration value of Ceramic server URL. |
+| `loader?` | `TileLoader` | Tile loader instance to use. If provided, the `cache` parameter will be ignored. |
 
 ___
 
@@ -142,7 +142,7 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `core` | [`Core`](../classes/core.Core.md)<`ModelTypes`\> |
-| `id` | `string` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `core` | [`Core`](../classes/core.Core.md)<`ModelTypes`\> | [`Core`](../classes/core.Core.md) instance to use. |
+| `id` | `string` | DID string. |

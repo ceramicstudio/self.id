@@ -11,7 +11,10 @@ import { DID } from 'dids'
 export type ConnectNetwork = 'dev-unstable' | 'mainnet' | 'testnet-clay'
 
 export type WebClientParams<ModelTypes extends ModelTypeAliases = CoreModelTypes> =
-  CoreParams<ModelTypes> & { connectNetwork?: ConnectNetwork }
+  CoreParams<ModelTypes> & {
+    /** Ceramic network used for authentication. */
+    connectNetwork?: ConnectNetwork
+  }
 
 /**
  * WebClient extends the {@linkcode core.Core Core class} with authentication support in browser
