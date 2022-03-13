@@ -10,7 +10,7 @@ export type PortisParams = {
 /** @internal */
 export const portis: ConnectorConfigDefaults = {
   label: 'Portis',
-  logo: require('../assets/portis.png'),
+  // logo: require('../assets/portis.png'),
   getNetworkProvider(key, params?: PortisParams) {
     return key === 'ethereum' && params != null && params.dAppId != null && params.network != null
       ? 'web3'

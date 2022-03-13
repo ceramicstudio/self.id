@@ -2,7 +2,8 @@ import { Box, Spinner, Text } from 'grommet'
 import React from 'react'
 import type { ReactElement, ReactNode } from 'react'
 
-const defaultSelectedIconSrc = require('../assets/icon-selected.svg')
+// const defaultSelectedIconSrc = require('../assets/icon-selected.svg')
+const defaultSelectedIconSrc = ''
 
 function noop() {
   // Do nothing

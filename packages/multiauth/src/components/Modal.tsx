@@ -17,7 +17,8 @@ function ModalGrid({ children }: ModalGridProps) {
   return <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)' }}>{children}</div>
 }
 
-const defaultCloseIconSrc = require('../assets/icon-close.svg')
+// const defaultCloseIconSrc = require('../assets/icon-close.svg')
+const defaultCloseIconSrc =''
 
 export type ModalConfig = {
   closeIcon?: string | ReactElement

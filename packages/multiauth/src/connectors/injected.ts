@@ -11,7 +11,7 @@ declare global {
 /** @internal */
 export const injected: ConnectorConfigDefaults = {
   label: 'MetaMask',
-  logo: require('../assets/metamask.png'),
+  // logo: require('../assets/metamask.png'),
   getNetworkProvider(key) {
     return key === 'ethereum' && typeof window !== 'undefined' && window.ethereum != null
       ? 'eip1193'
