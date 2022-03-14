@@ -12,7 +12,6 @@ export type TorusParams = {
 /** @internal */
 export const torus: ConnectorConfigDefaults = {
   label: 'Torus',
-  logo: require('../assets/torus.png'),
   getNetworkProvider(key, params?: TorusParams) {
     return key === 'ethereum' && params?.network != null ? 'eip1193' : null
   },

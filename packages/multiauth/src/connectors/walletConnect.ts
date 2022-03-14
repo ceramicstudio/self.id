@@ -10,7 +10,6 @@ export type WalletConnectParams = {
 /** @internal */
 export const walletConnect: ConnectorConfigDefaults = {
   label: 'WalletConnect',
-  logo: require('../assets/walletconnect.png'),
   getNetworkProvider(key, params?: WalletConnectParams) {
     return key === 'ethereum' && params != null && (params.infuraId != null || params.rpc != null)
       ? 'eip1193'
