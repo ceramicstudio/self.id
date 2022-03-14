@@ -1,32 +1,30 @@
 import { Box, Spinner, Text } from 'grommet'
 import React from 'react'
-import type { ReactElement, ReactNode } from 'react'
-
-const defaultSelectedIconSrc = require('../assets/icon-selected.svg')
+import type { CSSProperties, ReactElement, ReactNode } from 'react'
 
 function noop() {
   // Do nothing
 }
 
-type LogoImageProps = { children: ReactNode; src: string }
+const IMAGE_STYLES: CSSProperties = {
+  position: 'relative',
+  display: 'inline-block',
+  width: '70px',
+  height: '70px',
+  marginBottom: '10px',
+  borderRadius: '10px',
+  backgroundColor: '#D8D8D8',
+  backgroundSize: 'cover',
+}
+
+type LogoImageProps = { children: ReactNode; src?: string }
 
 function LogoImage({ children, src }: LogoImageProps) {
-  return (
-    <div
-      style={{
-        position: 'relative',
-        display: 'inline-block',
-        width: '70px',
-        height: '70px',
-        marginBottom: '10px',
-        borderRadius: '10px',
-        backgroundColor: '#D8D8D8',
-        backgroundSize: 'cover',
-        backgroundImage: `url(${src})`,
-      }}>
-      {children}
-    </div>
-  )
+  const style = { ...IMAGE_STYLES }
+  if (src != null) {
+    style.backgroundImage = `url(${src})`
+  }
+  return <div style={style}>{children}</div>
 }
 
 type ChildrenProps = { children: ReactNode }
@@ -62,7 +60,7 @@ function SelectedImage({ children }: ChildrenProps) {
 
 export type ProviderDisplay = {
   label: string
-  logo: string
+  logo?: string
 }
 
 export type ModalItemProps = ProviderDisplay & {
@@ -85,10 +83,10 @@ export function ModalItem({
   let displaySelected = null
   if (selected) {
     const icon =
-      selectedIcon == null || typeof selectedIcon === 'string' ? (
-        <img alt="✓" src={selectedIcon ?? defaultSelectedIconSrc} />
+      typeof selectedIcon === 'string' ? (
+        <img alt="✓" src={selectedIcon} />
       ) : (
-        selectedIcon
+        selectedIcon ?? <span>✓</span>
       )
     displaySelected = <SelectedImage>{icon}</SelectedImage>
   }

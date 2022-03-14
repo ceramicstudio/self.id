@@ -5,7 +5,7 @@ import type { Deferred } from './utils'
 
 export type DisplayDefaults = {
   label: string
-  logo: string
+  logo?: string
 }
 
 export type Networks = {
