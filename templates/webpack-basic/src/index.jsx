@@ -1,4 +1,6 @@
 import { Provider } from '@self.id/framework'
+import closeIcon from '@self.id/multiauth/assets/icon-close.svg'
+import selectedIcon from '@self.id/multiauth/assets/icon-selected.svg'
 import ethereumLogo from '@self.id/multiauth/assets/ethereum.png'
 import metaMaskLogo from '@self.id/multiauth/assets/metamask.png'
 import React, { StrictMode } from 'react'
@@ -10,6 +12,7 @@ render(
   <StrictMode>
     <Provider
       auth={{
+        modal: { closeIcon, selectedIcon },
         networks: [
           {
             key: 'ethereum',

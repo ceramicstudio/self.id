@@ -17,8 +17,6 @@ function ModalGrid({ children }: ModalGridProps) {
   return <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)' }}>{children}</div>
 }
 
-const defaultCloseIconSrc = require('../assets/icon-close.svg')
-
 export type ModalConfig = {
   closeIcon?: string | ReactElement
   selectedIcon?: string | ReactElement
@@ -118,13 +116,7 @@ export function Modal({
   })
 
   const closeIconElement =
-    typeof closeIcon === 'string' ? (
-      <img alt="x" src={closeIcon} />
-    ) : closeIcon == null ? (
-      <img alt="x" src={defaultCloseIconSrc} />
-    ) : (
-      closeIcon
-    )
+    typeof closeIcon === 'string' ? <img alt="x" src={closeIcon} /> : closeIcon ?? <span>x</span>
 
   const onCloseModal = () => {
     if (authState.status === 'authenticating') {
