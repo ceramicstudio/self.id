@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@self.id/framework": "0.2.0",
-    "@self.id/multiauth": "0.2.1",
+    "@self.id/multiauth": "0.2.2",
     "grommet": "2.21.0",
     "jotai": "1.6.1",
     "next": "12.1.0",

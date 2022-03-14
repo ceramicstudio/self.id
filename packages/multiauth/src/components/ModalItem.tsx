@@ -2,8 +2,6 @@ import { Box, Spinner, Text } from 'grommet'
 import React from 'react'
 import type { CSSProperties, ReactElement, ReactNode } from 'react'
 
-const defaultSelectedIconSrc = require('../assets/icon-selected.svg')
-
 function noop() {
   // Do nothing
 }
@@ -85,10 +83,10 @@ export function ModalItem({
   let displaySelected = null
   if (selected) {
     const icon =
-      selectedIcon == null || typeof selectedIcon === 'string' ? (
-        <img alt="✓" src={selectedIcon ?? defaultSelectedIconSrc} />
+      typeof selectedIcon === 'string' ? (
+        <img alt="✓" src={selectedIcon} />
       ) : (
-        selectedIcon
+        selectedIcon ?? <span>✓</span>
       )
     displaySelected = <SelectedImage>{icon}</SelectedImage>
   }
