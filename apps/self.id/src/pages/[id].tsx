@@ -4,7 +4,7 @@ import { Anchor, Box, Paragraph, Text } from 'grommet'
 import type { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
-import Image from 'next/image'
+import Image, { type StaticImageData } from 'next/image'
 import styled, { css } from 'styled-components'
 
 import Layout from '../components/Layout'

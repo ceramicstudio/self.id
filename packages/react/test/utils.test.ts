@@ -1,3 +1,12 @@
+import * as polyfill from 'abort-controller'
+
+if (!globalThis.AbortController) {
+  globalThis.AbortController = polyfill.AbortController
+}
+if (!globalThis.AbortSignal) {
+  globalThis.AbortSignal = polyfill.AbortSignal
+}
+
 import { abortable, getCookieValue } from '../src/utils'
 
 describe('utils', () => {

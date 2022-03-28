@@ -1,7 +1,7 @@
 import { Anchor, Box, Heading, Spinner, Text, TextInput } from 'grommet'
 import type { GetServerSideProps } from 'next'
 import Head from 'next/head'
-import Image from 'next/image'
+import Image, { type StaticImageData } from 'next/image'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import type { FormEvent } from 'react'
