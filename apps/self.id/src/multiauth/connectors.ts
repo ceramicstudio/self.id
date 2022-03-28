@@ -1,7 +1,7 @@
 import { fortmatic } from './connectors/fortmatic'
 import { injected } from './connectors/injected'
 import { portis } from './connectors/portis'
-// import { torus } from './connectors/torus.js'
+import { torus } from './connectors/torus'
 import { walletConnect } from './connectors/walletConnect'
 
 import type {
@@ -17,7 +17,7 @@ export const connectorsDefaults: Record<string, ConnectorConfigDefaults> = {
   fortmatic,
   injected,
   portis,
-  // torus,
+  torus,
   walletConnect,
 }
 
