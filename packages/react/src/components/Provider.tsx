@@ -2,13 +2,13 @@ import type { ModelTypeAliases } from '@glazed/types'
 import type { CoreModelTypes } from '@self.id/core'
 import type { WebClientParams } from '@self.id/web'
 import { Provider as StateProvider } from 'jotai'
-import React, { useState } from 'react'
+import React from 'react'
 import type { ReactNode } from 'react'
-import { Hydrate, QueryClient, QueryClientProvider } from 'react-query'
-import type { QueryObserverOptions } from 'react-query'
+import { Hydrate, QueryClient, QueryClientProvider, type QueryObserverOptions } from 'react-query'
 
-import { DEFAULT_CLIENT_CONFIG, clientConfigAtom, requestViewerIDAtom, stateScope } from '../state'
-import type { RequestState } from '../types'
+import { ReactClient } from '../client.js'
+import { DEFAULT_CLIENT_CONFIG, clientAtom, requestViewerIDAtom, stateScope } from '../state.js'
+import type { RequestState } from '../types.js'
 
 /** @internal */
 const DEFAULT_QUERY_OPTIONS: QueryObserverOptions = {
@@ -16,33 +16,40 @@ const DEFAULT_QUERY_OPTIONS: QueryObserverOptions = {
   refetchOnWindowFocus: false,
 }
 
-export type ProviderConfig<ModelTypes extends ModelTypeAliases = CoreModelTypes> = {
-  client?: WebClientParams<ModelTypes>
+export type ProviderProps<ModelTypes extends ModelTypeAliases = CoreModelTypes> = {
+  children: ReactNode
+  /**
+   * An instance of {@linkcode ReactClient} or
+   * {@linkcode web.WebClientParams client configuration parameters}.
+   */
+  client?: ReactClient<ModelTypes> | WebClientParams<ModelTypes>
+  /**
+   * Custom options for the internal
+   * {@link https://react-query.tanstack.com/ react-query} configuration.
+   */
   queryOptions?: QueryObserverOptions
+  /** {@linkcode RequestState} emitted by a {@linkcode RequestClient} instance. */
   state?: RequestState
 }
 
-export type ProviderProps<ModelTypes extends ModelTypeAliases = CoreModelTypes> =
-  ProviderConfig<ModelTypes> & { children: ReactNode }
-
+/** Top-level provider component for using Self.ID's React APIs. */
 export function Provider<ModelTypes extends ModelTypeAliases = CoreModelTypes>(
   props: ProviderProps<ModelTypes>
 ): JSX.Element {
   const { children, client, queryOptions, state } = props
-  const [queryClient] = useState(() => {
-    return new QueryClient({
-      defaultOptions: {
-        queries: queryOptions
-          ? { ...DEFAULT_QUERY_OPTIONS, ...queryOptions }
-          : DEFAULT_QUERY_OPTIONS,
-      },
-    })
+
+  const reactClient =
+    client instanceof ReactClient ? client : new ReactClient(client ?? DEFAULT_CLIENT_CONFIG)
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: queryOptions ? { ...DEFAULT_QUERY_OPTIONS, ...queryOptions } : DEFAULT_QUERY_OPTIONS,
+    },
   })
 
   return (
     <StateProvider
       initialValues={[
-        [clientConfigAtom, client ?? DEFAULT_CLIENT_CONFIG],
+        [clientAtom, reactClient],
         [requestViewerIDAtom, state?.viewerID ?? null],
       ]}
       scope={stateScope}>

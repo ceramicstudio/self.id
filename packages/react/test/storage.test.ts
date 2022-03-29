@@ -11,7 +11,14 @@ describe('storage', () => {
       expect(CookieStorage.getItem('foo')).toBe('bar')
     })
 
-    test('delete value', () => {
+    test('delete value (explicit)', () => {
+      CookieStorage.setItem('bar', 'test')
+      expect(CookieStorage.getItem('bar')).toBe('test')
+      CookieStorage.removeItem('bar')
+      expect(CookieStorage.getItem('bar')).toBeNull()
+    })
+
+    test('delete value (implicit)', () => {
       CookieStorage.setItem('bar', 'test')
       expect(CookieStorage.getItem('bar')).toBe('test')
       CookieStorage.setItem('bar', null)

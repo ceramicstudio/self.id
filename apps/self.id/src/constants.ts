@@ -1,6 +1,6 @@
 import type { ConnectNetwork } from '@self.id/framework'
 
-export type AppNetwork = ConnectNetwork | 'local-clay'
+export type AppNetwork = ConnectNetwork | 'local-clay' | 'local-dev'
 
 type NetworkConfig = {
   ceramicURL: string
@@ -8,6 +8,10 @@ type NetworkConfig = {
 }
 
 const NETWORK_CONFIGS: Record<AppNetwork, NetworkConfig> = {
+  'local-dev': {
+    ceramicURL: 'http://localhost:7007',
+    connectNetwork: 'dev-unstable',
+  },
   'dev-unstable': {
     ceramicURL: 'https://ceramic-private-dev.3boxlabs.com',
     connectNetwork: 'dev-unstable',

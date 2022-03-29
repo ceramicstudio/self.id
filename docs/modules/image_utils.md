@@ -5,8 +5,8 @@ Image utilities for Self.ID profiles.
 ## Purpose
 
 The `image-utils` module provides various utility functions for images, such as selecting the
-most suitable format among sources, resizing and uploading, and is mostly meant to be used in a Web
-browser context.
+most suitable format among sources, resizing and uploading, and is mostly meant to be used in a
+Web browser context.
 
 ## Installation
 
@@ -67,23 +67,14 @@ async function getAvatarSource(did) {
 
 ___
 
-### LinkData
-
-Ƭ **LinkData**: `Object`
-
-#### Type declaration
-
-| Name | Type |
-| :------ | :------ |
-| `Hash` | `string` |
-| `Name` | `string` |
-| `Size` | `number` |
-
-___
-
 ### SizeMode
 
 Ƭ **SizeMode**: ``"contain"`` \| ``"cover"``
+
+Image size modes:
+
+- "contain" = the image fits in the container
+- "cover" = the image fills the container
 
 ___
 
@@ -93,27 +84,11 @@ ___
 
 ## Functions
 
-### getDimensions
-
-▸ **getDimensions**(`image`, `dimensions?`, `mode?`): [`Dimensions`](image_utils.md#dimensions)
-
-#### Parameters
-
-| Name | Type | Default value |
-| :------ | :------ | :------ |
-| `image` | `HTMLImageElement` | `undefined` |
-| `dimensions` | [`Dimensions`](image_utils.md#dimensions) | `DEFAULT_DIMENSIONS` |
-| `mode` | [`SizeMode`](image_utils.md#sizemode) | `'cover'` |
-
-#### Returns
-
-[`Dimensions`](image_utils.md#dimensions)
-
-___
-
 ### loadImage
 
 ▸ **loadImage**(`blob`): `Promise`<`HTMLImageElement`\>
+
+Load a `blob` image to an HTML Image element.
 
 #### Parameters
 
@@ -127,28 +102,11 @@ ___
 
 ___
 
-### resizeImageElement
-
-▸ **resizeImageElement**(`type`, `image`, `dimensions?`, `mode?`): `Promise`<[`SizedImage`](image_utils.md#sizedimage)\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `type` | `string` |
-| `image` | `HTMLImageElement` |
-| `dimensions?` | [`Dimensions`](image_utils.md#dimensions) |
-| `mode?` | [`SizeMode`](image_utils.md#sizemode) |
-
-#### Returns
-
-`Promise`<[`SizedImage`](image_utils.md#sizedimage)\>
-
-___
-
 ### selectImageSource
 
 ▸ **selectImageSource**(`sources`, `dimensions`, `mode?`): `ImageMetadata`
+
+Select the best option from the given `sources` to match the wanted `dimensions` and `mode`.
 
 #### Parameters
 
@@ -168,6 +126,8 @@ ___
 
 ▸ **uploadFile**(`url`, `blob`, `fileName?`): `Promise`<`string`\>
 
+Upload the `blob` file to the given IPFS server `url`, using the optionally given `fileName`.
+
 #### Parameters
 
 | Name | Type |
@@ -186,6 +146,8 @@ ___
 
 ▸ **uploadImage**(`url`, `file`, `sizes?`): `Promise`<`ImageSources`\>
 
+Upload an image to IPFS, optionally with additional alternative `sizes`.
+
 #### Parameters
 
 | Name | Type | Default value |
@@ -203,6 +165,8 @@ ___
 ### uploadResizedImage
 
 ▸ **uploadResizedImage**(`url`, `type`, `image`, `dimensions?`): `Promise`<`ImageMetadata`\>
+
+Resize an image and upload it to IPFS.
 
 #### Parameters
 

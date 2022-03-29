@@ -1,4 +1,3 @@
-import { useConnection } from '@self.id/framework'
 import type { SelfID } from '@self.id/framework'
 import copy from 'copy-to-clipboard'
 import { Box, Button, Heading, Spinner, Text } from 'grommet'
@@ -6,7 +5,7 @@ import { useRouter } from 'next/router'
 import { useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
 
-import { useAddGitHubAttestation, useIdentityLink } from '../../hooks'
+import { useConnectionState, useAddGitHubAttestation, useIdentityLink } from '../../hooks'
 
 import AddSocialAccountContainer from './AddSocialAccountContainer'
 
@@ -154,7 +153,7 @@ function AddGitHubAccount({ selfID }: Props) {
 }
 
 export default function AddGitHubAccountScreen() {
-  const [connection] = useConnection()
+  const connection = useConnectionState()
 
   return (
     <AddSocialAccountContainer>

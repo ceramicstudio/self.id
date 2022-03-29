@@ -1,6 +1,6 @@
 {
   "name": "@self.id/image-utils",
-  "version": "0.2.0",
+  "version": "0.3.0-alpha.0",
   "author": "3Box Labs",
   "license": "(Apache-2.0 OR MIT)",
   "homepage": "https://github.com/ceramicstudio/self.id#readme",
@@ -13,24 +13,27 @@
     "url": "https://github.com/ceramicstudio/self.id",
     "directory": "packages/image-utils"
   },
-  "main": "dist/lib.cjs",
-  "typings": "dist/index.d.ts",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "exports": {
-    "require": "./dist/lib.cjs",
-    "default": "./dist/lib.cjs"
+    ".": "./dist/index.js"
   },
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "engines": {
-    "node": ">=14"
+    "node": ">=14.14"
   },
   "sideEffects": false,
   "scripts": {
-    "build": "del dist && tsc --emitDeclarationOnly --skipLibCheck && rollup -c ../../rollup.config.js",
-    "lint": "eslint --fix",
-    "prepare": "yarn build"
+    "build:clean": "del dist",
+    "build:js": "swc src -d ./dist --config-file ../../.swcrc",
+    "build:types": "tsc --emitDeclarationOnly --skipLibCheck",
+    "build": "yarn build:clean && yarn build:types && yarn build:js",
+    "lint": "eslint src --fix",
+    "prepare": "yarn build",
+    "prepublishOnly": "package-check"
   },
   "dependencies": {
     "pica": "^9.0.1"

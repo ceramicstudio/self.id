@@ -30,13 +30,14 @@ async function getProfile() {
 
 ### getLegacy3BoxProfileAsBasicProfile
 
-▸ **getLegacy3BoxProfileAsBasicProfile**(`address`): `Promise`<`BasicProfile` \| ``null``\>
+▸ **getLegacy3BoxProfileAsBasicProfile**(`address`, `fetchFunc?`): `Promise`<`BasicProfile` \| ``null``\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `address` | `string` |
+| `fetchFunc?` | (`input`: `RequestInfo`, `init?`: `RequestInit`) => `Promise`<`Response`\> |
 
 #### Returns
 
@@ -46,7 +47,7 @@ ___
 
 ### loadLegacy3BoxProfile
 
-▸ **loadLegacy3BoxProfile**<`T`\>(`address`): `Promise`<`T` \| ``null``\>
+▸ **loadLegacy3BoxProfile**<`T`\>(`address`, `fetchFunc?`): `Promise`<`T` \| ``null``\>
 
 #### Type parameters
 
@@ -56,9 +57,10 @@ ___
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `address` | `string` |
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `address` | `string` | `undefined` |
+| `fetchFunc` | (`input`: `RequestInfo`, `init?`: `RequestInit`) => `Promise`<`Response`\> | `crossFetch` |
 
 #### Returns
 
@@ -68,7 +70,7 @@ ___
 
 ### transformProfile
 
-▸ `Const` **transformProfile**(`profile`): `BasicProfile`
+▸ **transformProfile**(`profile`): `BasicProfile`
 
 #### Parameters
 

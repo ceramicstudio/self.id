@@ -1,9 +1,9 @@
-import { useConnection, useViewerID } from '@self.id/framework'
+import { useViewerID } from '@self.id/framework'
 import { Button } from 'grommet'
 import { useRouter } from 'next/router'
 import { useCallback } from 'react'
 
-import { useLogin } from '../hooks'
+import { useConnectionState, useLogin } from '../hooks'
 
 export type Props = {
   did: string | null
@@ -11,7 +11,7 @@ export type Props = {
 
 export default function ConnectSettingsButton({ did }: Props) {
   const router = useRouter()
-  const [connection] = useConnection()
+  const connection = useConnectionState()
   const viewerID = useViewerID()
   const login = useLogin()
 

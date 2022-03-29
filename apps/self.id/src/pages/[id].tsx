@@ -1,16 +1,10 @@
-import {
-  AvatarPlaceholder,
-  colors,
-  isCAIP10string,
-  isDIDstring,
-  useViewerID,
-} from '@self.id/framework'
+import { isCAIP10string, isDIDstring, useViewerID } from '@self.id/framework'
 import type { BasicProfile, RequestState } from '@self.id/framework'
 import { Anchor, Box, Paragraph, Text } from 'grommet'
 import type { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
-import Image from 'next/image'
+import Image, { type StaticImageData } from 'next/image'
 import styled, { css } from 'styled-components'
 
 import Layout from '../components/Layout'
@@ -22,8 +16,10 @@ import linkIcon from '../images/icons/link.svg'
 import locationIcon from '../images/icons/location.png'
 import githubIcon from '../images/icons/social-github.svg'
 import twitterIcon from '../images/icons/social-twitter.svg'
+import { colors } from '../theme'
 import { formatDID, getImageURL, isEthereumAddress, isSupportedDID } from '../utils'
 
+import AvatarPlaceholder from '../components/AvatarPlaceholder'
 import ConnectSettingsButton from '../components/ConnectSettingsButton'
 
 const ETH_CHAIN_ID = `@eip155:1`

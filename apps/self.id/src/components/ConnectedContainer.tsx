@@ -1,5 +1,5 @@
-import { ConnectedContainer as BaseContainer } from '@self.id/framework'
-import type { ConnectionState } from '@self.id/framework'
+import { ViewerConnectedContainer } from '@self.id/framework'
+import type { ViewerConnectionState } from '@self.id/framework'
 import { Button, Text } from 'grommet'
 import type { ReactNode } from 'react'
 
@@ -8,7 +8,7 @@ import { useLogin } from '../hooks'
 const style = { color: 'white', marginTop: 10, width: 200 }
 
 type ConnectPromptProps = {
-  connection: ConnectionState
+  connection: ViewerConnectionState
 }
 
 function ConnectPrompt({ connection }: ConnectPromptProps): JSX.Element {
@@ -35,8 +35,9 @@ export type Props = {
 
 export default function ConnectedContainer({ children }: Props): JSX.Element {
   return (
-    <BaseContainer renderFallback={(connection) => <ConnectPrompt connection={connection} />}>
+    <ViewerConnectedContainer
+      renderFallback={(connection) => <ConnectPrompt connection={connection} />}>
       {children}
-    </BaseContainer>
+    </ViewerConnectedContainer>
   )
 }

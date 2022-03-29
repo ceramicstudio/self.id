@@ -29,13 +29,14 @@
  */
 
 import type { BasicProfile } from '@datamodels/identity-profile-basic'
-import fetch from 'cross-fetch'
+import crossFetch from 'cross-fetch'
 
 export async function loadLegacy3BoxProfile<T = Record<string, any>>(
-  address: string
+  address: string,
+  fetchFunc: typeof crossFetch = crossFetch
 ): Promise<T | null> {
   try {
-    const res = await fetch(`https://ipfs.3box.io/profile?address=${address}`)
+    const res = await fetchFunc(`https://ipfs.3box.io/profile?address=${address}`)
     return res.ok ? ((await res.json()) as T) : null
   } catch (err) {
     return null
@@ -100,8 +101,9 @@ export const transformProfile = (profile: Record<string, any>): BasicProfile => 
 }
 
 export async function getLegacy3BoxProfileAsBasicProfile(
-  address: string
+  address: string,
+  fetchFunc?: typeof crossFetch
 ): Promise<BasicProfile | null> {
-  const profile = await loadLegacy3BoxProfile(address)
+  const profile = await loadLegacy3BoxProfile(address, fetchFunc)
   return profile ? transformProfile(profile) : null
 }
