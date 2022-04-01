@@ -2,41 +2,41 @@
 # yarn lockfile v1
 
 
-"@3id/common@^0.4.1-alpha.0":
-  version "0.4.1-alpha.1"
-  resolved "https://registry.yarnpkg.com/@3id/common/-/common-0.4.1-alpha.1.tgz#bf182469bed6962ec7b381a4155019b85878af17"
-  integrity sha512-in8h30/TuJmdF7eMK6ZkjOnP4xdqG5EtiC9vYCUFS+HmdQH8yRAaS+2Ndme6dUdApwwr1vKiFTLiBp2lfdPMdA==
+"@3id/common@^0.4.1-rc.0":
+  version "0.4.1-rc.0"
+  resolved "https://registry.yarnpkg.com/@3id/common/-/common-0.4.1-rc.0.tgz#4c25a8c43cf2573195b36d9b628d8ecd02607195"
+  integrity sha512-YD84UDZ+8NIuE54atZfFHUx1vGHNwbsDSwR1E8Ttc1bAs3GfBgLviIURT8kk77xtsTRzbKFVClxNrRuWZ+ew9w==
   dependencies:
     errors-utils "^0.2.0"
     uint8arrays "^3.0.0"
 
-"@3id/connect-display@^0.4.1-alpha.0":
-  version "0.4.1-alpha.1"
-  resolved "https://registry.yarnpkg.com/@3id/connect-display/-/connect-display-0.4.1-alpha.1.tgz#65b7b1e1917e5d10fc7a9a4e5b060e07bfc52ab4"
-  integrity sha512-zL+GPgODAk+DkH/Vd247C4R0CBJ8T5AGQ7E5YQ8l7+ytYB3J+01OqPJLOxyP2g8fsfWKvMPG6hJo2Lnnd43SLw==
+"@3id/connect-display@^0.4.1-rc.0":
+  version "0.4.1-rc.0"
+  resolved "https://registry.yarnpkg.com/@3id/connect-display/-/connect-display-0.4.1-rc.0.tgz#a6dfffecd2cba27435b2a3793edb22105c681fa0"
+  integrity sha512-XdfEZRFLbaDm3pgBxLYNqaMLS1PTT2RXlVMTbH5UUEeh4le2ibsAtDCg92+G4wXF5ByZqX/bF6JO9Om+LPBgZQ==
   dependencies:
     "@ceramicnetwork/rpc-window" "^0.6.0"
     "@ceramicnetwork/transport-postmessage" "^0.6.0"
     rxjs "^7.5.2"
 
 "@3id/connect@^0.4.1-alpha.0":
-  version "0.4.1-alpha.1"
-  resolved "https://registry.yarnpkg.com/@3id/connect/-/connect-0.4.1-alpha.1.tgz#5aedfe48ac8579e8bc943fbc15d4b5fbf9ff9bbc"
-  integrity sha512-K6XHuY6KMwnqM6uP8e1S0Pr9w+kzo+xZpTILFBzfv7dANNRKyCnHiwp5aIj447e9n5r7POSFjI9pZkjjcaXRWw==
+  version "0.4.1-rc.0"
+  resolved "https://registry.yarnpkg.com/@3id/connect/-/connect-0.4.1-rc.0.tgz#2e6c3911861b06ad4d366d2c529598ef989e70cb"
+  integrity sha512-2VC5hH5v6q+MtXpCDVqnd5GUITU4UFlzlhacUwvK9myfTQ8omfMI+YZDpj3yISpFSQymTxUklncN3yfvw1pMGg==
   dependencies:
-    "@3id/common" "^0.4.1-alpha.0"
-    "@3id/connect-display" "^0.4.1-alpha.0"
-    "@3id/window-auth-provider" "^0.4.1-alpha.0"
-    "@ceramicnetwork/blockchain-utils-linking" "^2.0.0-alpha.0"
+    "@3id/common" "^0.4.1-rc.0"
+    "@3id/connect-display" "^0.4.1-rc.0"
+    "@3id/window-auth-provider" "^0.4.1-rc.0"
+    "@ceramicnetwork/blockchain-utils-linking" "^2.0.0-rc.0"
     "@ceramicnetwork/rpc-window" "^0.6.0"
     dids "^3.0.0-alpha.0"
     rpc-utils "^0.6.1"
     rxjs "^7.5.2"
 
-"@3id/window-auth-provider@^0.4.1-alpha.0":
-  version "0.4.1-alpha.1"
-  resolved "https://registry.yarnpkg.com/@3id/window-auth-provider/-/window-auth-provider-0.4.1-alpha.1.tgz#412c9493e7cf5c1609162ad56b74a830ea8e8d56"
-  integrity sha512-qyFVNcgxJ9lCNBevAdZ/ok2chC63Bklyf3cMtbERFcfXrNxhchm8DZ/1J1tUjiL8Vy6upvenTYlr3nfXIJxiTQ==
+"@3id/window-auth-provider@^0.4.1-rc.0":
+  version "0.4.1-rc.0"
+  resolved "https://registry.yarnpkg.com/@3id/window-auth-provider/-/window-auth-provider-0.4.1-rc.0.tgz#8f85126c04ea1be37b45490c97ed60e4e8b52f45"
+  integrity sha512-QfoxwjqsdoW0xPl9t8haCQUyISDFjjUbpZdtXHMXSgQk5hcGnWgIoIMldLoOdY7X66fwQoPcP+4i/AxTMd+5gw==
   dependencies:
     "@ceramicnetwork/rpc-window" "^0.6.0"
     caip "^1.0.0"
@@ -1255,7 +1255,7 @@
     multiformats "^9.5.8"
     uint8arrays "^3.0.0"
 
-"@ceramicnetwork/blockchain-utils-linking@^2.0.0-alpha.0":
+"@ceramicnetwork/blockchain-utils-linking@^2.0.0-rc.0":
   version "2.0.0-rc.0"
   resolved "https://registry.yarnpkg.com/@ceramicnetwork/blockchain-utils-linking/-/blockchain-utils-linking-2.0.0-rc.0.tgz#ef2349d4c7d7f39e145c61c6eb380e3e27cf781e"
   integrity sha512-b7PpA5ADcqy0nh0ll3grdAbHc/IIqKbByPtWckgXQlSyFeZWcL4bi+Qvqrz51Flb5JrYQ/emDTzEv8WKcXfROg==
