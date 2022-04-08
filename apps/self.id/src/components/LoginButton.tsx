@@ -1,13 +1,11 @@
-import { useConnection } from '@self.id/framework'
 import { Button } from 'grommet'
 
-import { useLogin } from '../hooks'
+import { useAuthConnection } from '../hooks'
 
 const style = { color: 'white', width: 200 }
 
 export default function LoginButton() {
-  const [connection] = useConnection()
-  const login = useLogin()
+  const [connection, login] = useAuthConnection()
 
   if (connection.status === 'connected') {
     return null

@@ -46,7 +46,7 @@ const core = new Core({ ceramic: 'https://ceramic-clay.3boxlabs.com' })
 ```ts
 import { Core } from '@self.id/core'
 
-const model = {
+const aliases = {
   definitions: {
     basicProfile: 'kjzl6cwe1jw145cjbeko9kil8g9bxszjhyde21ob8epxuxkaon1izyqsu8wgcic',
     notes: 'kjzl6cwe1jw14688v7zhf5eo1uiblt0thkgdedb5gaiq99isj224g6v8uza2r4m',
@@ -60,7 +60,7 @@ const model = {
     placeholderNote: 'kjzl6cwe1jw148snra9bmyf32y5pj2ysnvenqx59k7n2lz3gnri72axvp25fo1v',
   },
 }
-const core = new Core({ ceramic: 'testnet-clay', model })
+const core = new Core({ ceramic: 'testnet-clay', aliases })
 
 async function getNotes(did) {
   return await core.get('notes', did)
@@ -92,11 +92,20 @@ async function getCurrentUserProfile() {
 
 Ƭ **CeramicNetwork**: ``"local"`` \| ``"mainnet-gateway"`` \| ``"testnet-clay"`` \| ``"testnet-clay-gateway"``
 
+Configured Ceramic endpoints:
+
+- "local" -> http://localhost:7007
+- "mainnet-gateway" -> https://gateway.ceramic.network (read-only)
+- "testnet-clay" -> https://ceramic-clay.3boxlabs.com
+- "testnet-clay-gateway" -> https://gateway-clay.ceramic.network (read-only)
+
 ___
 
 ### CoreModelTypes
 
 Ƭ **CoreModelTypes**: `ModelTypeAliases`<{ `AlsoKnownAs`: `AlsoKnownAs` ; `BasicProfile`: `BasicProfile` ; `CryptoAccounts`: `CryptoAccountLinks`  }, { `alsoKnownAs`: ``"AlsoKnownAs"`` ; `basicProfile`: ``"BasicProfile"`` ; `cryptoAccounts`: ``"CryptoAccounts"``  }\>
+
+Default model types provided by the Self.ID SDK.
 
 ___
 
@@ -112,12 +121,12 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `cache?` | `TileCache` \| `boolean` |
-| `ceramic` | [`CeramicNetwork`](core.md#ceramicnetwork) \| `string` |
-| `loader?` | `TileLoader` |
-| `model?` | `ModelTypesToAliases`<`ModelTypes`\> |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `aliases?` | `ModelTypesToAliases`<`ModelTypes`\> | Data model aliases to use instead of the default ones. |
+| `cache?` | `TileCache` \| `boolean` | Cache interface to use or `true` to use a default cache. If `false` or undefined (default), no cache is used. |
+| `ceramic` | [`CeramicNetwork`](core.md#ceramicnetwork) \| `string` | Predefined [`CeramicNetwork`](core.md#ceramicnetwork) configuration value of Ceramic server URL. |
+| `loader?` | `TileLoader` | Tile loader instance to use. If provided, the `cache` parameter will be ignored. |
 
 ___
 
@@ -133,7 +142,7 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `core` | [`Core`](../classes/core.Core.md)<`ModelTypes`\> |
-| `id` | `string` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `core` | [`Core`](../classes/core.Core.md)<`ModelTypes`\> | [`Core`](../classes/core.Core.md) instance to use. |
+| `id` | `string` | DID string. |

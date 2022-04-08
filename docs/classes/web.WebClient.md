@@ -2,7 +2,10 @@
 
 [web](../modules/web.md).WebClient
 
-Extends [`core.Core`](core.Core.md)
+WebClient extends the [`Core class`](core.Core.md) with authentication support in browser
+environments.
+
+It is exported by the [`web`](../modules/web.md) module.
 
 ```sh
 import { WebClient } from '@self.id/web'
@@ -104,6 +107,8 @@ ___
 
 • `get` **threeId**(): `ThreeIdConnect`
 
+3ID Connect instance used internally.
+
 #### Returns
 
 `ThreeIdConnect`
@@ -128,6 +133,11 @@ Core.tileLoader
 
 ▸ **authenticate**(`authProvider`, `attachToCeramic?`): `Promise`<`DID`\>
 
+Create and authenticate a DID instance using the given `authProvider`.
+
+By default, this also attaches the created DID instance to the internal Ceramic client
+instance. This behavior can be disabled by setting `attachToCeramic` to `false`.
+
 #### Parameters
 
 | Name | Type | Default value |
@@ -144,6 +154,11 @@ ___
 ### connect
 
 ▸ **connect**(`authProvider`): `Promise`<`DID`\>
+
+Create a DID instance using the given `authProvider`.
+
+⚠️ This method does **not** attempt to authenticate immediately, use [`authenticate`](web.WebClient.md#authenticate)
+instead if this is the wanted behavior.
 
 #### Parameters
 

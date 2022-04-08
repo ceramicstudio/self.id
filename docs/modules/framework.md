@@ -8,10 +8,9 @@ The `framework` module is the highest-level abstraction provided by the Self.ID 
 helping developers to quickly get started with building decentralized apps using Ceramic with
 React.
 
-The framework is built on top of the [`core`](core.md), [`web`](web.md), [`react`](react.md),
-[`ui`](ui.md) and [`multiauth`](multiauth.md) modules to provide APIs and UI components to easily
-authenticate users based on Wallet providers, keep track of the current user and interact with
-both public (read-only) and user-owned (mutable) records.
+The framework is built on top of the [`core`](core.md), [`web`](web.md) and [`react`](react.md)
+modules to provide APIs to easily authenticate users, keep track of the current user and
+interact with both public (read-only) and user-owned (mutable) records.
 
 ## Installation
 
@@ -23,7 +22,7 @@ npm install @self.id/framework
 
 ### Configure the Provider
 
-The [`Provider`](framework.md#provider) component must be added at the root of the
+The [`Provider`](react.md#provider) component must be added at the root of the
 application tree in order to use the hooks described below. It can be used to provide a custom
 configuration for the Self.ID clients, authentication, state and UI options.
 
@@ -40,22 +39,22 @@ function App({ children }) {
 The framework provides a React hook to easily initiate an authentication flow for the Viewer
 (the "current user" of the app). This flow is made of the following steps:
 
-1. A modal prompts the user to select a Wallet to connect with
-1. Selecting a Wallet initiates the connection to access the Ethereum provider
-1. An `EthereumAuthProvider` instance is created using the Ethereum provider
-1. The authentication flow with 3ID Connect starts, using the `EthereumAuthProvider` instance
-1. A [`SelfID`](../classes/web.SelfID.md) instance is created and stored in the application state
+The user authentication flow consists of the following steps:
+
+1. An [Ethereum authentication provider](https://developers.ceramic.network/reference/typescript/classes/_ceramicnetwork_blockchain_utils_linking.ethereumauthprovider-1.html) is created using the Ethereum provider.
+1. The auth flow with 3ID Connect starts, using the [Ethereum authentication provider](https://developers.ceramic.network/reference/typescript/classes/_ceramicnetwork_blockchain_utils_linking.ethereumauthprovider-1.html).
+1. A [`SelfID`](../classes/web.SelfID.md) instance is created and stored in application state.
 
 Once this flow is successfully applied, the Viewer's cookie is set to the authenticated DID and
 writing records associated to the Viewer becomes possible.
 
 ```ts
-import { useConnection } from '@self.id/framework'
+import { useViewerConnection } from '@self.id/framework'
 
 // A simple button to initiate the connection flow. A Provider must be present at a higher level
-// in the component tree for the `useConnection()` hook to work.
+// in the component tree for the `useViewerConnection()` hook to work.
 function ConnectButton() {
-  const [connection, connect, disconnect] = useConnection()
+  const [connection, connect, disconnect] = useViewerConnection()
 
   return connection.status === 'connected' ? (
     <button
@@ -67,8 +66,11 @@ function ConnectButton() {
   ) : 'ethereum' in window ? (
     <button
       disabled={connection.status === 'connecting'}
-      onClick={() => {
-        connect()
+      onClick={async () => {
+        const accounts = await window.ethereum.request({
+          method: 'eth_requestAccounts',
+        })
+        await connect(new EthereumAuthProvider(window.ethereum, accounts[0]))
       }}>
       Connect
     </button>
@@ -81,7 +83,7 @@ function ConnectButton() {
 }
 ```
 
-### Read a viewer record
+### Interact with a viewer record
 
 The [`useViewerRecord`](react.md#useviewerrecord) hook loads the record for a given
 definition in the index of the current viewer, with the following variants:
@@ -93,6 +95,7 @@ definition in the index of the current viewer, with the following variants:
 ```ts
 import { useViewerRecord } from '@self.id/framework'
 
+// Load and display the record contents
 function ShowViewerName() {
   const record = useViewerRecord('basicProfile')
 
@@ -102,6 +105,21 @@ function ShowViewerName() {
     ? `Hello ${record.content.name || 'stranger'}`
     : 'No profile to load'
   return <p>{text}</p>
+}
+
+// Mutate the record
+function SetViewerName() {
+  const record = useViewerRecord('basicProfile')
+
+  return (
+    <button
+      disabled={!record.isMutable || record.isMutating}
+      onClick={async () => {
+        await record.merge({ name: 'Alice' })
+      }}>
+      Set name
+    </button>
+  )
 }
 ```
 
@@ -168,68 +186,16 @@ export default function Home({ state }) {
 
 - [`core.Core`](../classes/core.Core.md)
 - [`core.PublicID`](../classes/core.PublicID.md)
+- [`react.ReactClient`](../classes/react.ReactClient.md)
 - [`react.RequestClient`](../classes/react.RequestClient.md)
 - [`web.SelfID`](../classes/web.SelfID.md)
 - `EthereumAuthProvider` from 3ID Connect
 
-## Re-exported components
-
-- [`ui.AvatarPlaceholder`](ui.md#avatarplaceholder)
-
 ## Type aliases
-
-### ColorType
-
-Ƭ **ColorType**: `string` \| { `dark?`: `string` ; `light?`: `string`  } \| `undefined`
-
-___
-
-### Colors
-
-Ƭ **Colors**: `Record`<`string`, [`ColorType`](framework.md#colortype)\>
-
-___
 
 ### ConnectNetwork
 
 Ƭ **ConnectNetwork**: ``"dev-unstable"`` \| ``"mainnet"`` \| ``"testnet-clay"``
-
-___
-
-### ConnectOptions
-
-Ƭ **ConnectOptions**: `Object`
-
-#### Type declaration
-
-| Name | Type |
-| :------ | :------ |
-| `switchAccount?` | `boolean` |
-
-___
-
-### ConnectedContainerProps
-
-Ƭ **ConnectedContainerProps**: `Object`
-
-#### Type declaration
-
-| Name | Type |
-| :------ | :------ |
-| `children` | `ReactNode` |
-| `renderFallback?` | (`connectionState`: [`ConnectionState`](framework.md#connectionstate)<`ModelTypes`\>) => ``null`` \| `Element` |
-
-___
-
-### ConnectionState
-
-Ƭ **ConnectionState**<`ModelTypes`\>: { `status`: ``"disconnected"``  } \| { `status`: ``"connecting"``  } \| { `selfID`: `SelfID`<`ModelTypes`\> ; `status`: ``"connected"``  } \| { `error?`: `Error` ; `status`: ``"failed"``  }
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `ModelTypes` | extends `ModelTypeAliases` = `CoreModelTypes` |
 
 ___
 
@@ -248,7 +214,7 @@ ___
 
 ### ProviderProps
 
-Ƭ **ProviderProps**<`ModelTypes`\>: `ReactProviderProps`<`ModelTypes`\> & { `auth?`: `MultiAuthProviderConfig` ; `ui?`: `UIProviderProps`  }
+Ƭ **ProviderProps**<`ModelTypes`\>: `ProviderConfig`<`ModelTypes`\> & { `children`: `ReactNode`  }
 
 #### Type parameters
 
@@ -304,6 +270,31 @@ ___
 
 ___
 
+### ViewerConnectedContainerProps
+
+Ƭ **ViewerConnectedContainerProps**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `children` | `ReactNode` |
+| `renderFallback?` | (`connectionState`: [`ViewerConnectionState`](framework.md#viewerconnectionstate)<`ModelTypes`\>) => ``null`` \| `Element` |
+
+___
+
+### ViewerConnectionState
+
+Ƭ **ViewerConnectionState**<`ModelTypes`\>: { `status`: ``"idle"``  } \| { `promise`: `Abortable`<`SelfID`<`ModelTypes`\> \| ``null``\> ; `provider`: `EthereumAuthProvider` ; `status`: ``"connecting"``  } \| { `selfID`: `SelfID`<`ModelTypes`\> ; `status`: ``"connected"``  } \| { `error`: `Error` ; `status`: ``"failed"``  }
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ModelTypes` | extends `ModelTypeAliases` = `CoreModelTypes` |
+
+___
+
 ### ViewerRecord
 
 Ƭ **ViewerRecord**<`ContentType`\>: { `content?`: `never` ; `error?`: `never` ; `isError`: ``false`` ; `isLoadable`: ``false`` ; `isLoading`: ``false`` ; `isMutable`: ``false`` ; `isMutating`: ``false`` ; `merge?`: `never` ; `set?`: `never`  } \| { `content?`: `ContentType` ; `error?`: `unknown` ; `isError`: `boolean` ; `isLoadable`: ``true`` ; `isLoading`: `boolean` ; `isMutable`: `boolean` ; `isMutating`: `boolean` ; `merge`: (`content`: `ContentType`) => `Promise`<`void`\> ; `set`: (`content`: `ContentType`) => `Promise`<`void`\>  }
@@ -314,51 +305,7 @@ ___
 | :------ |
 | `ContentType` |
 
-## Variables
-
-### colors
-
-• **colors**: [`Colors`](framework.md#colors)
-
-___
-
-### theme
-
-• **theme**: `ThemeType`
-
 ## Functions
-
-### AvatarPlaceholder
-
-▸ **AvatarPlaceholder**(`props`): `JSX.Element`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `props` | `AvatarPlaceholderProps` |
-
-#### Returns
-
-`JSX.Element`
-
-___
-
-### ConnectedContainer
-
-▸ **ConnectedContainer**(`props`): `JSX.Element` \| ``null``
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `props` | [`ConnectedContainerProps`](framework.md#connectedcontainerprops) |
-
-#### Returns
-
-`JSX.Element` \| ``null``
-
-___
 
 ### Provider
 
@@ -379,6 +326,22 @@ ___
 #### Returns
 
 `JSX.Element`
+
+___
+
+### ViewerConnectedContainer
+
+▸ **ViewerConnectedContainer**(`props`): `JSX.Element` \| ``null``
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `props` | [`ViewerConnectedContainerProps`](framework.md#viewerconnectedcontainerprops) |
+
+#### Returns
+
+`JSX.Element` \| ``null``
 
 ___
 
@@ -453,25 +416,9 @@ ___
 
 ___
 
-### useConnection
+### useClient
 
-▸ **useConnection**<`ModelTypes`\>(): [[`ConnectionState`](framework.md#connectionstate)<`ModelTypes`\>, (`options?`: [`ConnectOptions`](framework.md#connectoptions)) => `Promise`<`SelfID`<`ModelTypes`\> \| ``null``\>, () => `void`]
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `ModelTypes` | extends `ModelTypeAliases`<`Record`<`string`, `any`\>, `Record`<`string`, `string`\>, `Record`<`string`, `string`\>\> = `ModelTypes` |
-
-#### Returns
-
-[[`ConnectionState`](framework.md#connectionstate)<`ModelTypes`\>, (`options?`: [`ConnectOptions`](framework.md#connectoptions)) => `Promise`<`SelfID`<`ModelTypes`\> \| ``null``\>, () => `void`]
-
-___
-
-### useCore
-
-▸ **useCore**<`ModelTypes`\>(): `Core`<`ModelTypes`\>
+▸ **useClient**<`ModelTypes`\>(): `ReactClient`<`ModelTypes`\>
 
 #### Type parameters
 
@@ -481,7 +428,7 @@ ___
 
 #### Returns
 
-`Core`<`ModelTypes`\>
+`ReactClient`<`ModelTypes`\>
 
 ___
 
@@ -507,6 +454,22 @@ ___
 #### Returns
 
 [`PublicRecord`](framework.md#publicrecord)<`ContentType` \| ``null``\>
+
+___
+
+### useViewerConnection
+
+▸ **useViewerConnection**<`ModelTypes`\>(): [[`ViewerConnectionState`](framework.md#viewerconnectionstate)<`ModelTypes`\>, (`provider`: `EthereumAuthProvider`) => `Promise`<`SelfID`<`ModelTypes`\> \| ``null``\>, () => `void`]
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ModelTypes` | extends `ModelTypeAliases`<`Record`<`string`, `any`\>, `Record`<`string`, `string`\>, `Record`<`string`, `string`\>\> = `ModelTypes` |
+
+#### Returns
+
+[[`ViewerConnectionState`](framework.md#viewerconnectionstate)<`ModelTypes`\>, (`provider`: `EthereumAuthProvider`) => `Promise`<`SelfID`<`ModelTypes`\> \| ``null``\>, () => `void`]
 
 ___
 

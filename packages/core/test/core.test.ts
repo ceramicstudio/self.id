@@ -1,51 +1,39 @@
 import { CeramicClient } from '@ceramicnetwork/http-client'
-import { Caip10Link } from '@ceramicnetwork/stream-caip10-link'
 import { DataModel } from '@glazed/datamodel'
 import { DIDDataStore } from '@glazed/did-datastore'
-import { TileLoader } from '@glazed/tile-loader'
 import type { ModelTypesToAliases } from '@glazed/types'
+import { jest } from '@jest/globals'
 import { Resolver } from 'did-resolver'
 
 import { CERAMIC_URLS, Core } from '../src'
 import type { CoreModelTypes } from '../src'
 
-jest.mock('@ceramicnetwork/http-client')
-jest.mock('@ceramicnetwork/stream-caip10-link')
-jest.mock('@glazed/datamodel')
-jest.mock('@glazed/did-datastore')
-
-// eslint-disable-next-line @typescript-eslint/unbound-method
-const fromAccount = Caip10Link.fromAccount as jest.Mock<Promise<Caip10Link>>
-const DataStore = DIDDataStore as jest.Mock<DIDDataStore>
-
 describe('Core', () => {
-  beforeEach(() => {
-    jest.clearAllMocks()
-  })
-
   describe('constructor', () => {
     test('uses known Ceramic URL if alias is provided', () => {
       for (const [alias, url] of Object.entries(CERAMIC_URLS)) {
-        new Core({ ceramic: alias })
-        expect(CeramicClient).toBeCalledWith(url)
+        const core = new Core({ ceramic: alias })
+        // @ts-ignore private property
+        const ceramicURL = core.ceramic._apiUrl as string
+        expect(ceramicURL.startsWith(url)).toBe(true)
       }
-      expect(CeramicClient).toBeCalledTimes(4)
     })
 
     test('uses provided Ceramic URL if not an alias', () => {
-      new Core({ ceramic: 'http://example.com' })
-      expect(CeramicClient).toBeCalledWith('http://example.com')
+      const core = new Core({ ceramic: 'http://example.com' })
+      // @ts-ignore private property
+      const ceramicURL = core.ceramic._apiUrl as string
+      expect(ceramicURL.startsWith('http://example.com')).toBe(true)
     })
 
-    test('uses provided data model', () => {
-      const model = {
+    test('uses provided data model aliases', () => {
+      const aliases = {
         schemas: {},
         definitions: {},
         tiles: {},
       } as ModelTypesToAliases<CoreModelTypes>
-      new Core({ ceramic: 'http://example.com', model })
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      expect(DataModel).toBeCalledWith({ loader: expect.any(TileLoader), model, autopin: true })
+      const core = new Core({ ceramic: 'http://example.com', aliases })
+      expect(core.dataModel.aliases).toBe(aliases)
     })
   })
 
@@ -73,52 +61,58 @@ describe('Core', () => {
 
   describe('getAccountDID()', () => {
     test('throws an error if no DID is linked', async () => {
-      fromAccount.mockImplementationOnce(() => Promise.resolve({ did: null } as Caip10Link))
       const core = new Core({ ceramic: 'http://example.com' })
-      await expect(core.getAccountDID('0x123456@eip155:1')).rejects.toThrow(
-        'No DID found for 0x123456@eip155:1'
+      const createStreamFromGenesis = jest.fn(() => Promise.resolve({ did: null }))
+      core._ceramic = { createStreamFromGenesis } as unknown as CeramicClient
+      await expect(core.getAccountDID('eip155:1:0x123456')).rejects.toThrow(
+        'No DID found for eip155:1:0x123456'
       )
     })
 
     test('returns the linked DID', async () => {
-      fromAccount.mockImplementationOnce(() => Promise.resolve({ did: 'did:3:123' } as Caip10Link))
       const core = new Core({ ceramic: 'http://example.com' })
-      await expect(core.getAccountDID('0x123456@eip155:1')).resolves.toBe('did:3:123')
+      const createStreamFromGenesis = jest.fn(() => Promise.resolve({ did: 'did:3:123' }))
+      core._ceramic = { createStreamFromGenesis } as unknown as CeramicClient
+      await expect(core.getAccountDID('eip155:1:0x123456')).resolves.toBe('did:3:123')
     })
   })
 
   describe('toDID()', () => {
     test('throws an error if input is CAIP10 and no DID is linked', async () => {
-      fromAccount.mockImplementationOnce(() => Promise.resolve({ did: null } as Caip10Link))
       const core = new Core({ ceramic: 'http://example.com' })
-      await expect(core.toDID('0x123456@eip155:1')).rejects.toThrow(
-        'No DID found for 0x123456@eip155:1'
+      const createStreamFromGenesis = jest.fn(() => Promise.resolve({ did: null }))
+      core._ceramic = { createStreamFromGenesis } as unknown as CeramicClient
+      await expect(core.toDID('eip155:1:0x123456')).rejects.toThrow(
+        'No DID found for eip155:1:0x123456'
       )
-      expect(fromAccount).toBeCalled()
+      expect(createStreamFromGenesis).toBeCalled()
     })
 
     test('returns the linked DID in input is CAIP10', async () => {
-      fromAccount.mockImplementationOnce(() => Promise.resolve({ did: 'did:3:123' } as Caip10Link))
       const core = new Core({ ceramic: 'http://example.com' })
-      await expect(core.toDID('0x123456@eip155:1')).resolves.toBe('did:3:123')
-      expect(fromAccount).toBeCalled()
+      const createStreamFromGenesis = jest.fn(() => Promise.resolve({ did: 'did:3:123' }))
+      core._ceramic = { createStreamFromGenesis } as unknown as CeramicClient
+      await expect(core.toDID('eip155:1:0x123456')).resolves.toBe('did:3:123')
+      expect(createStreamFromGenesis).toBeCalled()
     })
 
-    test('returns the DID in input is DID', async () => {
+    test('returns the DID if input is DID', async () => {
       const core = new Core({ ceramic: 'http://example.com' })
+      const createStreamFromGenesis = jest.fn(() => Promise.resolve({ did: null }))
+      core._ceramic = { createStreamFromGenesis } as unknown as CeramicClient
       await expect(core.toDID('did:3:123')).resolves.toBe('did:3:123')
-      expect(fromAccount).not.toBeCalled()
+      expect(createStreamFromGenesis).not.toBeCalled()
     })
   })
 
   describe('get()', () => {
     test('calls toDID() and dataStore.get()', async () => {
-      fromAccount.mockImplementationOnce(() => Promise.resolve({ did: 'did:3:123' } as Caip10Link))
-      const get = jest.fn(() => Promise.resolve({ name: 'Bob' }))
-      DataStore.mockImplementationOnce(() => ({ get } as unknown as DIDDataStore))
-
       const core = new Core({ ceramic: 'http://example.com' })
-      await expect(core.get('basicProfile', '0x123456@eip155:1')).resolves.toEqual({ name: 'Bob' })
+      const createStreamFromGenesis = jest.fn(() => Promise.resolve({ did: 'did:3:123' }))
+      core._ceramic = { createStreamFromGenesis } as unknown as CeramicClient
+      const get = jest.fn(() => Promise.resolve({ name: 'Bob' }))
+      core._dataStore = { get } as unknown as DIDDataStore
+      await expect(core.get('basicProfile', 'eip155:1:0x123456')).resolves.toEqual({ name: 'Bob' })
       expect(get).toBeCalledWith('basicProfile', 'did:3:123')
     })
   })

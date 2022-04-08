@@ -1,10 +1,10 @@
 # Authentication
 
 ```tsx live noInline
-// import { useConnection } from '@self.id/framework'
+// import { useViewerConnection } from '@self.id/framework'
 
 function ConnectButton() {
-  const [connection, connect, disconnect] = useConnection()
+  const [connection, connect, disconnect] = useViewerConnection()
 
   return connection.status === 'connected' ? (
     <button
@@ -16,8 +16,11 @@ function ConnectButton() {
   ) : 'ethereum' in window ? (
     <button
       disabled={connection.status === 'connecting'}
-      onClick={() => {
-        connect()
+      onClick={async () => {
+        const accounts = await window.ethereum.request({
+          method: 'eth_requestAccounts',
+        })
+        await connect(new EthereumAuthProvider(window.ethereum, accounts[0]))
       }}>
       Connect
     </button>

@@ -2,6 +2,10 @@
 
 [core](../modules/core.md).PublicID
 
+A PublicID instance provides a client associated to a specific DID.
+
+It is exported by the [`core`](../modules/core.md) module.
+
 ```sh
 import { PublicID } from '@self.id/core'
 ```
@@ -38,6 +42,8 @@ import { PublicID } from '@self.id/core'
 
 • `get` **id**(): `string`
 
+DID string associated to the PublicID instance.
+
 #### Returns
 
 `string`
@@ -47,6 +53,8 @@ import { PublicID } from '@self.id/core'
 ### get
 
 ▸ **get**<`Key`, `ContentType`\>(`key`): `Promise`<``null`` \| `ContentType`\>
+
+Load the record contents for a given definition alias.
 
 #### Type parameters
 

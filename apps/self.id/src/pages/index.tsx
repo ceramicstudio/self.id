@@ -1,8 +1,7 @@
-import { colors } from '@self.id/framework'
 import { Anchor, Box, Heading, Spinner, Text, TextInput } from 'grommet'
 import type { GetServerSideProps } from 'next'
 import Head from 'next/head'
-import Image from 'next/image'
+import Image, { type StaticImageData } from 'next/image'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import type { FormEvent } from 'react'
@@ -20,6 +19,7 @@ import footerTwitterIcon from '../images/icons/social-twitter.svg'
 import Navbar from '../components/Navbar'
 import OpenGraphMeta from '../components/OpenGraphMeta'
 import { withMediaQuery } from '../components/media-query/with-media-query'
+import { colors } from '../theme'
 
 const ResponsiveHeading = withMediaQuery(Heading)
 const ResponsiveText = withMediaQuery(Text)

@@ -70,6 +70,8 @@ ___
 
 Ƭ **ConnectNetwork**: ``"dev-unstable"`` \| ``"mainnet"`` \| ``"testnet-clay"``
 
+Ceramic networks supported by 3ID Connect.
+
 ___
 
 ### SelfIDParams
@@ -84,9 +86,9 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `client` | [`WebClient`](../classes/web.WebClient.md)<`ModelTypes`\> |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `client` | [`WebClient`](../classes/web.WebClient.md)<`ModelTypes`\> | [`WebClient`](../classes/web.WebClient.md) instance to use. It must have an authenticated DID attached to it. |
 
 ___
 
