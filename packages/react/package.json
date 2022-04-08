@@ -41,7 +41,7 @@
   "dependencies": {
     "@self.id/core": "^0.4.0-rc.0",
     "@self.id/web": "^0.4.0-rc.0",
-    "jotai": "^1.6.0",
+    "jotai": "^1.6.2",
     "react-query": "^3.34.14"
   },
   "devDependencies": {

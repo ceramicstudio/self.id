@@ -53,7 +53,9 @@ export function Provider<ModelTypes extends ModelTypeAliases = CoreModelTypes>(
         [requestViewerIDAtom, state?.viewerID ?? null],
       ]}
       scope={stateScope}>
+      {/* @ts-ignore typedef missing children prop */}
       <QueryClientProvider client={queryClient}>
+        {/* @ts-ignore typedef missing children prop */}
         <Hydrate state={state?.hydrate}>{children}</Hydrate>
       </QueryClientProvider>
     </StateProvider>
