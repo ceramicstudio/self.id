@@ -53,6 +53,8 @@ Core&lt;ModelTypes\&gt;.constructor
 
 • `get` **ceramic**(): `CeramicClient`
 
+Ceramic HTTP Client instance used internally.
+
 #### Returns
 
 `CeramicClient`
@@ -66,6 +68,8 @@ ___
 ### dataModel
 
 • `get` **dataModel**(): `DataModel`<`ModelTypes`, `ModelTypesToAliases`<`ModelTypes`\>\>
+
+DataModel runtime instance used internally.
 
 #### Returns
 
@@ -81,6 +85,8 @@ ___
 
 • `get` **dataStore**(): `DIDDataStore`<`ModelTypes`, keyof `ModelTypes`[``"definitions"``]\>
 
+DID DataStore instance used internally.
+
 #### Returns
 
 `DIDDataStore`<`ModelTypes`, keyof `ModelTypes`[``"definitions"``]\>
@@ -95,6 +101,8 @@ ___
 
 • `get` **resolver**(): `Resolver`
 
+DID resolver instance used internally.
+
 #### Returns
 
 `Resolver`
@@ -108,6 +116,8 @@ ___
 ### tileLoader
 
 • `get` **tileLoader**(): `TileLoader`
+
+Tile loader instance used internally.
 
 #### Returns
 
@@ -134,6 +144,10 @@ Viewer ID associated to the request, if found in cookie string.
 ### get
 
 ▸ **get**<`Key`, `ContentType`\>(`key`, `id`): `Promise`<``null`` \| `ContentType`\>
+
+Load the record content for a given definition alias and account.
+
+Uses [`toDID`](react.RequestClient.md#todid) to resolve the account.
 
 #### Type parameters
 
@@ -162,6 +176,9 @@ ___
 ### getAccountDID
 
 ▸ **getAccountDID**(`account`): `Promise`<`string`\>
+
+Load the DID string for a given CAIP-10 account using a CAIP-10 link, or throw an error if
+not linked.
 
 #### Parameters
 
@@ -220,6 +237,11 @@ ___
 ### toDID
 
 ▸ **toDID**(`accountOrDID`): `Promise`<`string`\>
+
+Turn a DID or CAIP-10 string into a DID string.
+
+If the input is a DID string, it will be returned as-is, otherwise
+[`getAccountDID`](react.RequestClient.md#getaccountdid) will be used.
 
 #### Parameters
 

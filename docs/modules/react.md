@@ -288,7 +288,7 @@ ___
 Ƭ **ViewerRecord**<`ContentType`\>: { `content?`: `never` ; `error?`: `never` ; `isError`: ``false`` ; `isLoadable`: ``false`` ; `isLoading`: ``false`` ; `isMutable`: ``false`` ; `isMutating`: ``false`` ; `merge?`: `never` ; `set?`: `never`  } \| { `content?`: `ContentType` ; `error?`: `unknown` ; `isError`: `boolean` ; `isLoadable`: ``true`` ; `isLoading`: `boolean` ; `isMutable`: `boolean` ; `isMutating`: `boolean` ; `merge`: (`content`: `ContentType`) => `Promise`<`void`\> ; `set`: (`content`: `ContentType`) => `Promise`<`void`\>  }
 
 A ViewerRecord provides an interface for interacting with record stored on Ceramic, depending on
-the current [`ViewerID`](react.md#viewerid) value:
+the current [`ViewerID`](react.md#viewerid-1) value:
 
 - If `null`, no interaction is possible with the record.
 - If it is an instance of [`PublicID`](../classes/core.PublicID.md), only reads are possible.
@@ -433,7 +433,7 @@ Hook for handling the viewer's connection lifecycle, returning the following ele
 
 1. The current [`ViewerConnectionState`](react.md#viewerconnectionstate) object.
 2. A connection attempt function, taking an `EthereumAuthProvider` argument.
-3. A reset function, clearing the current [`ViewerID`](react.md#viewerid).
+3. A reset function, clearing the current [`ViewerID`](react.md#viewerid-1).
 
 #### Type parameters
 
@@ -449,7 +449,7 @@ ___
 
 ### useViewerID
 
-▸ **useViewerID**<`ModelTypes`\>(): [`ViewerID`](react.md#viewerid)<`ModelTypes`\> \| ``null``
+▸ **useViewerID**<`ModelTypes`\>(): [`ViewerID`](react.md#viewerid-1)<`ModelTypes`\> \| ``null``
 
 #### Type parameters
 
@@ -459,7 +459,7 @@ ___
 
 #### Returns
 
-[`ViewerID`](react.md#viewerid)<`ModelTypes`\> \| ``null``
+[`ViewerID`](react.md#viewerid-1)<`ModelTypes`\> \| ``null``
 
 ___
 

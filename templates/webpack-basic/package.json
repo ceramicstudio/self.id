@@ -8,7 +8,7 @@
     "serve": "serve build"
   },
   "dependencies": {
-    "@self.id/framework": "^0.3.0-rc.1",
+    "@self.id/framework": "^0.3.0",
     "grommet": "^2.22.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
