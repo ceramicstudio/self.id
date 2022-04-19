@@ -2,6 +2,10 @@
 
 Using the [Self.ID Framework](https://developers.ceramic.network/tools/self-id/framework/) with [Vite](https://vitejs.dev/).
 
+## ⚠️ dependency issue
+
+This template is currently not supported, compilation fails [due to the `caip` dependency](https://github.com/ChainAgnostic/caip-js/issues/22).
+
 ## Getting Started
 
 ### 1. Copy this template

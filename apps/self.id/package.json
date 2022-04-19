@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "@portis/web3": "^4.0.6",
-    "@self.id/3box-legacy": "^0.3.0-rc.0",
-    "@self.id/framework": "^0.3.0-rc.0",
+    "@self.id/3box-legacy": "^0.3.0-rc.1",
+    "@self.id/framework": "^0.3.0-rc.1",
     "@toruslabs/torus-embed": "^1.20.4",
     "@walletconnect/ethereum-provider": "^1.6.6",
     "boring-avatars": "^1.6.3",

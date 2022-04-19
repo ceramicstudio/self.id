@@ -1,6 +1,6 @@
 {
   "name": "@self.id/core",
-  "version": "0.4.0-rc.0",
+  "version": "0.4.0-rc.1",
   "author": "3Box Labs",
   "license": "(Apache-2.0 OR MIT)",
   "homepage": "https://github.com/ceramicstudio/self.id#readme",
@@ -43,8 +43,8 @@
     "@ceramicnetwork/http-client": "^2.0.0-rc.0",
     "@ceramicnetwork/stream-caip10-link": "^2.0.0-rc.0",
     "@glazed/datamodel": "^0.3.0-rc.0",
-    "@glazed/did-datastore": "^0.3.0-rc.0",
-    "@glazed/tile-loader": "^0.2.0-rc.0",
+    "@glazed/did-datastore": "^0.3.0-rc.1",
+    "@glazed/tile-loader": "^0.2.0-rc.1",
     "caip": "^1.0.0",
     "did-resolver": "^3.2.0",
     "key-did-resolver": "^2.0.0-rc.0"
@@ -53,8 +53,8 @@
     "@datamodels/identity-accounts-crypto": "^0.2.0-rc.0",
     "@datamodels/identity-accounts-web": "^0.2.0-rc.0",
     "@datamodels/identity-profile-basic": "^0.2.0-rc.0",
-    "@glazed/devtools": "^0.2.0-rc.0",
-    "@glazed/types": "^0.2.0-rc.0"
+    "@glazed/devtools": "^0.2.0-rc.1",
+    "@glazed/types": "^0.2.0-rc.1"
   },
   "jest": {
     "extensionsToTreatAsEsm": [
