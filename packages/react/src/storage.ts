@@ -1,4 +1,4 @@
-import { getCookieValue } from './utils'
+import { getCookieValue } from './utils.js'
 
 /** @internal */
 export const canUseBrowserCookie = typeof document !== 'undefined' && 'cookie' in document
@@ -43,7 +43,7 @@ export function deleteBrowserCookie(name: string, path = '/'): boolean {
  * Implements Jotai's Storage interface
  *
  * @internal
- * */
+ */
 export const CookieStorage = {
   getItem: (key: string): string | null => getBrowserCookie(key) ?? null,
   setItem: (key: string, value: string | null): void => {

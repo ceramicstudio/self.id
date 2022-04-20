@@ -27,7 +27,7 @@ const ceramic = new CeramicClient(CERAMIC_URL)
 ceramic.did = did
 
 // Create a manager for the model
-const manager = new ModelManager(ceramic)
+const manager = new ModelManager({ ceramic })
 
 // Add basicProfile to the model
 manager.addJSONModel(profileModel)

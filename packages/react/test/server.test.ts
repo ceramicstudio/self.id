@@ -1,13 +1,8 @@
+import { jest } from '@jest/globals'
 import { Core } from '@self.id/core'
-import { QueryClient, dehydrate } from 'react-query'
+import { QueryClient } from 'react-query'
 
 import { VIEWER_ID_STORAGE_KEY, RequestClient } from '../src'
-
-const Client = QueryClient as jest.MockedClass<typeof QueryClient>
-const dehydrateClient = dehydrate as jest.MockedFunction<typeof dehydrate>
-
-jest.mock('@ceramicnetwork/http-client')
-jest.mock('react-query')
 
 describe('server', () => {
   describe('RequestClient', () => {
@@ -31,8 +26,8 @@ describe('server', () => {
 
       test('uses the viewer ID', async () => {
         const prefetchQuery = jest.fn()
-        Client.mockImplementationOnce(() => ({ prefetchQuery } as unknown as QueryClient))
         const client = new RequestClient({ ceramic: 'local', cookie })
+        client._queryClient = { prefetchQuery } as unknown as QueryClient
 
         await expect(client.prefetch('basicProfile')).resolves.toBe(true)
         expect(prefetchQuery).toBeCalledWith(['did:test:123', 'basicProfile'], expect.any(Function))
@@ -40,8 +35,8 @@ describe('server', () => {
 
       test('uses the provided ID', async () => {
         const prefetchQuery = jest.fn()
-        Client.mockImplementationOnce(() => ({ prefetchQuery } as unknown as QueryClient))
         const client = new RequestClient({ ceramic: 'local', cookie })
+        client._queryClient = { prefetchQuery } as unknown as QueryClient
         const id = 'did:test:provided'
 
         await expect(client.prefetch('basicProfile', id)).resolves.toBe(true)
@@ -50,14 +45,11 @@ describe('server', () => {
     })
 
     test('getState() returns the viewer ID and serialized data', () => {
-      const serialized = { queries: [], mutations: [] }
-      dehydrateClient.mockImplementationOnce(() => serialized)
       const client = new RequestClient({ ceramic: 'local', cookie })
       expect(client.getState()).toEqual({
-        hydrate: serialized,
+        hydrate: { queries: [], mutations: [] },
         viewerID: 'did:test:123',
       })
-      expect(dehydrate).toBeCalled()
     })
   })
 })

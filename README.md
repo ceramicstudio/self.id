@@ -28,18 +28,18 @@ The SelfID application is available using Ceramic's mainnet on [self.id](https:/
 Self.ID packages are organized in the following stack:
 
 ```sh
-┌─────────────────────────────────────────────┐ ┌─────────────┐
-│                  framework                  │ │ 3box-legacy │
-├─────────────┬─┬─────────────┬─┬─────────────┤ └─────────────┘
-├─────────────┤ ├─────────────┤ ├─────────────┤
-│  multiauth  │ │    react    │ │ image-utils │
-├─────────────┤ ├─────────────┤ └─────────────┘
+┌─────────────────────────────┐ ┌─────────────┐
+│          framework          │ │ 3box-legacy │
+├─────────────┬─┬─────────────┤ └─────────────┘
 ├─────────────┤ ├─────────────┤
-│     ui      │ │     web     │
-└─────────────┘ ├─────────────┤
-                ├─────────────┤
-                │    core     │
-                └─────────────┘
+│    react    │ │ image-utils │
+├─────────────┤ └─────────────┘
+├─────────────┤
+│     web     │
+├─────────────┤
+├─────────────┤
+│    core     │
+└─────────────┘
 ```
 
 | Name                                             | Description                                                                                                                                  | Version                                                               |
@@ -47,8 +47,6 @@ Self.ID packages are organized in the following stack:
 | [`@self.id/core`](./packages/core)               | [Read public records in Node and browsers environments](https://developers.ceramic.network/reference/self-id/modules/core/)                  | ![npm version](https://img.shields.io/npm/v/@self.id/core.svg)        |
 | [`@self.id/web`](./packages/web)                 | [Read and write records in browsers environments](https://developers.ceramic.network/reference/self-id/modules/web/)                         | ![npm version](https://img.shields.io/npm/v/@self.id/web.svg)         |
 | [`@self.id/react`](./packages/react)             | [React hooks and utilities for authentication and records interactions](https://developers.ceramic.network/reference/self-id/modules/react/) | ![npm version](https://img.shields.io/npm/v/@self.id/react.svg)       |
-| [`@self.id/ui`](./packages/ui)                   | [React UI theme and components](https://developers.ceramic.network/reference/self-id/modules/ui/)                                            | ![npm version](https://img.shields.io/npm/v/@self.id/ui.svg)          |
-| [`@self.id/multiauth`](./packages/multiauth)     | [Blockchain authentication for React apps](https://developers.ceramic.network/reference/self-id/modules/multiauth/)                          | ![npm version](https://img.shields.io/npm/v/@self.id/multiauth.svg)   |
 | [`@self.id/image-utils`](./packages/image-utils) | [Image utilities for Self.ID profiles](https://developers.ceramic.network/reference/self-id/modules/image_utils/)                            | ![npm version](https://img.shields.io/npm/v/@self.id/image-utils.svg) |
 | [`@self.id/framework`](./packages/framework)     | [React framework for decentralized apps](https://developers.ceramic.network/reference/self-id/modules/framework/)                            | ![npm version](https://img.shields.io/npm/v/@self.id/framework.svg)   |
 | [`@self.id/3box-legacy`](./packages/3box-legacy) | [Load legacy 3Box profiles](https://developers.ceramic.network/reference/self-id/modules/3box_legacy/)                                       | ![npm version](https://img.shields.io/npm/v/@self.id/3box-legacy.svg) |

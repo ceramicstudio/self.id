@@ -1,4 +1,4 @@
-import { AvatarPlaceholder, useConnection, useViewerID } from '@self.id/framework'
+import { useViewerID } from '@self.id/framework'
 import { Avatar, Box, Button, DropButton, Spinner, Text } from 'grommet'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -6,9 +6,11 @@ import { useRouter } from 'next/router'
 import { forwardRef, useCallback, useMemo, useState } from 'react'
 import type { ForwardedRef } from 'react'
 
-import { useLogin, useLogout, useViewerProfile } from '../../hooks'
+import { useAuthConnection, useViewerProfile } from '../../hooks'
 import linkIcon from '../../images/icons/link.svg'
 import { formatDID, getImageURL } from '../../utils'
+
+import AvatarPlaceholder from '../AvatarPlaceholder'
 
 type DisplayAvatarProps = {
   did?: string
@@ -81,11 +83,9 @@ const MenuButton = forwardRef(function MenuButtonComponent(
 
 export default function AccountButton() {
   const router = useRouter()
-  const [connection] = useConnection()
+  const [connection, login, logout] = useAuthConnection()
   const viewerID = useViewerID()
   const profileRecord = useViewerProfile()
-  const login = useLogin()
-  const logout = useLogout()
   const [isMenuOpen, setMenuOpen] = useState(false)
   const [isLoadingProfile, setLoadingProfile] = useState(false)
 

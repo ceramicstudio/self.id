@@ -160,10 +160,11 @@
  * @module react
  */
 
-export * from './components/Provider'
-export * from './components/ViewerConnectedContainer'
-export * from './constants'
-export * from './hooks'
-export * from './server'
-export * from './state'
-export * from './types'
+export * from './components/Provider.js'
+export * from './components/ViewerConnectedContainer.js'
+export * from './constants.js'
+export * from './client.js'
+export * from './hooks.js'
+export * from './server.js'
+export * from './state.js'
+export * from './types.js'

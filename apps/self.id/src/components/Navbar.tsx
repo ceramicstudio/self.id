@@ -1,6 +1,6 @@
 import { Box } from 'grommet'
 import dynamic from 'next/dynamic'
-import Image from 'next/image'
+import Image, { type StaticImageData } from 'next/image'
 import Link from 'next/link'
 import { forwardRef } from 'react'
 import type { ForwardedRef, MouseEventHandler } from 'react'
