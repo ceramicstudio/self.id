@@ -1,7 +1,12 @@
-import { AvatarPlaceholder, useConnection, useViewerID, useViewerRecord } from '@self.id/framework'
+import {
+  EthereumAuthProvider,
+  useViewerConnection,
+  useViewerID,
+  useViewerRecord,
+} from '@self.id/framework'
 import { Avatar, Box, Button, DropButton, Text } from 'grommet'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 
 import { getProfileInfo } from '../utils'
 
@@ -30,10 +35,17 @@ function MenuButton({ label, ...props }: MenuButtonProps) {
 }
 
 export default function AccountButton() {
-  const [connection, connect, disconnect] = useConnection()
+  const [connection, connect, disconnect] = useViewerConnection()
   const viewerID = useViewerID()
   const profileRecord = useViewerRecord('basicProfile')
   const [isMenuOpen, setMenuOpen] = useState(false)
+
+  const onClickConnect = useCallback(async () => {
+    // @ts-ignore
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
+    // @ts-ignore
+    await connect(new EthereumAuthProvider(window.ethereum, accounts[0]))
+  }, [connect])
 
   if (viewerID != null) {
     const { avatarSrc, displayName } = getProfileInfo(viewerID.id, profileRecord.content)
@@ -46,7 +58,7 @@ export default function AccountButton() {
           <MenuButton
             label="Connect"
             onClick={() => {
-              connect()
+              onClickConnect()
               setMenuOpen(false)
             }}
           />
@@ -66,11 +78,7 @@ export default function AccountButton() {
           gap="small"
           pad="medium"
           round={{ corner: 'top', size: 'small' }}>
-          {avatarSrc ? (
-            <Avatar size="60px" src={avatarSrc} />
-          ) : (
-            <AvatarPlaceholder did={viewerID.id} size={60} />
-          )}
+          {avatarSrc ? <Avatar size="60px" src={avatarSrc} /> : null}
           <Text size="medium" truncate weight="bold">
             {displayName}
           </Text>
@@ -126,7 +134,7 @@ export default function AccountButton() {
       primary
       color="black"
       label="Connect"
-      onClick={() => connect()}
+      onClick={onClickConnect}
       style={{ border: 0, color: 'white' }}
     />
   )

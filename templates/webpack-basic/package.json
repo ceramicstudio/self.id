@@ -8,19 +8,20 @@
     "serve": "serve build"
   },
   "dependencies": {
-    "@self.id/framework": "^0.3.0-rc.0",
-    "assert": "^2.0.0",
+    "@self.id/framework": "^0.3.0",
     "grommet": "^2.22.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
   },
   "devDependencies": {
     "@swc/core": "^1.2.164",
+    "assert": "^2.0.0",
     "del-cli": "^4.0.1",
     "html-webpack-plugin": "^5.5.0",
     "serve": "^13.0.2",
     "stream-browserify": "^3.0.0",
-    "swc-loader": "^0.1.15",
+    "swc-loader": "^0.2.0",
+    "url": "^0.11.0",
     "webpack": "^5.72.0",
     "webpack-cli": "^4.9.1",
     "webpack-dev-server": "^4.8.1"

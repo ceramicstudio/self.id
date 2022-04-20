@@ -1,6 +1,6 @@
 {
   "name": "@self.id/core",
-  "version": "0.4.0-rc.0",
+  "version": "0.4.0",
   "author": "3Box Labs",
   "license": "(Apache-2.0 OR MIT)",
   "homepage": "https://github.com/ceramicstudio/self.id#readme",
@@ -39,22 +39,22 @@
     "prepublishOnly": "package-check"
   },
   "dependencies": {
-    "@ceramicnetwork/3id-did-resolver": "^2.0.0-rc.0",
-    "@ceramicnetwork/http-client": "^2.0.0-rc.0",
-    "@ceramicnetwork/stream-caip10-link": "^2.0.0-rc.0",
-    "@glazed/datamodel": "^0.3.0-rc.0",
-    "@glazed/did-datastore": "^0.3.0-rc.0",
-    "@glazed/tile-loader": "^0.2.0-rc.0",
+    "@ceramicnetwork/3id-did-resolver": "^2.0.0",
+    "@ceramicnetwork/http-client": "^2.0.0",
+    "@ceramicnetwork/stream-caip10-link": "^2.0.0",
+    "@glazed/datamodel": "^0.3.0",
+    "@glazed/did-datastore": "^0.3.0",
+    "@glazed/tile-loader": "^0.2.0",
     "caip": "^1.0.0",
     "did-resolver": "^3.2.0",
-    "key-did-resolver": "^2.0.0-rc.0"
+    "key-did-resolver": "^2.0.0"
   },
   "devDependencies": {
-    "@datamodels/identity-accounts-crypto": "^0.2.0-rc.0",
-    "@datamodels/identity-accounts-web": "^0.2.0-rc.0",
-    "@datamodels/identity-profile-basic": "^0.2.0-rc.0",
-    "@glazed/devtools": "^0.2.0-rc.0",
-    "@glazed/types": "^0.2.0-rc.0"
+    "@datamodels/identity-accounts-crypto": "^0.2.0",
+    "@datamodels/identity-accounts-web": "^0.2.0",
+    "@datamodels/identity-profile-basic": "^0.2.0",
+    "@glazed/devtools": "^0.2.0",
+    "@glazed/types": "^0.2.0"
   },
   "jest": {
     "extensionsToTreatAsEsm": [
