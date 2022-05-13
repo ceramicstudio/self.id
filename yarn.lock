@@ -7596,6 +7596,14 @@ did-resolver@^3.1.5, did-resolver@^3.2.0:
   resolved "https://registry.yarnpkg.com/did-resolver/-/did-resolver-3.2.0.tgz#b89edd0dd70ad6f1c65ca1285472e021c2239707"
   integrity sha512-8YiTRitfGt9hJYDIzjc254gXgJptO4zq6Q2BMZMNqkbCf9EFkV6BD4QIh5BUF4YjBglBgJY+duQRzO3UZAlZsw==
 
+did-session@0.0.1-rc.0:
+  version "0.0.1-rc.0"
+  resolved "https://registry.yarnpkg.com/did-session/-/did-session-0.0.1-rc.0.tgz#bef6d737e34818096f008fc0f02775a34a1c20d0"
+  integrity sha512-LZIWj0s/Ae0jm1DQp9f906Hh61X/kxE3UgMGot5D2qyBIbV9O4WejDEHoYKpwmZRczF+TAVOvJQ7Z4BRyYo2ZQ==
+  dependencies:
+    "@ceramicnetwork/blockchain-utils-linking" "^2.0.0"
+    "@ceramicnetwork/stream-tile" "^2.0.0"
+
 dids@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/dids/-/dids-3.0.0.tgz#a82371ffe935f43ba76930ed63584663654f7496"
