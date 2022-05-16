@@ -16,7 +16,7 @@ import { DIDSession } from 'did-session'
 export class WebClientSession<
   ModelTypes extends ModelTypeAliases = CoreModelTypes
 > extends Core<ModelTypes> {
-  #session?: DIDSession 
+  #session?: DIDSession
 
   constructor(params: CoreParams<ModelTypes>) {
     super(params)
@@ -24,7 +24,7 @@ export class WebClientSession<
 
   async authenticate(authProvider: EthereumAuthProvider, attachToCeramic = true): Promise<DID> {
     this.#session = DIDSession.create({ authProvider })
-    const did = await this.#session.authorize() 
+    const did = await this.#session.authorize()
     if (attachToCeramic) {
       this.ceramic.did = did
     }
