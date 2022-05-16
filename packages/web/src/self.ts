@@ -71,7 +71,7 @@ export class SelfID<
 
   /** DID string associated to the SelfID instance. */
   get id(): string {
-    return this.did.id
+    return this.did.hasParent ? this.did.parent : this.did.id
   }
 
   // Definitions interactions

@@ -41,7 +41,7 @@
     "@3id/connect": "^0.4.1",
     "@self.id/core": "^0.4.0",
     "did-session": "0.0.1-rc.0",
-    "dids": "^3.0.0"
+    "dids": "^3.1.0"
   },
   "devDependencies": {
     "@ceramicnetwork/streamid": "^2.0.0",

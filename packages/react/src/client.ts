@@ -28,7 +28,7 @@ export class ReactClient<
   #params: WebClientParams<ModelTypes>
   #session: boolean
 
-  constructor(params: WebClientParams<ModelTypes>, session: boolean = false) {
+  constructor(params: WebClientParams<ModelTypes>, session = false) {
     super(params)
     this.#params = params
     this.#session = session
@@ -40,7 +40,11 @@ export class ReactClient<
    */
   async authenticate(authProvider: EthereumAuthProvider): Promise<SelfID<ModelTypes>> {
     const { SelfID } = await import('@self.id/web')
-    const selfID = await SelfID.authenticate<ModelTypes>({ ...this.#params, authProvider, session: this.#session })
+    const selfID = await SelfID.authenticate<ModelTypes>({
+      ...this.#params,
+      authProvider,
+      session: this.#session,
+    })
     // We need to attach the authenticated DID to the client instance to ensure streams can be updated
     this.ceramic.did = selfID.did
     return selfID
