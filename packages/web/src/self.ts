@@ -80,7 +80,7 @@ export class SelfID<
   async get<Key extends Alias, ContentType = DefinitionContentType<ModelTypes, Key>>(
     key: Key
   ): Promise<ContentType | null> {
-    return await this.#client.dataStore.get(key as any, this.did.id)
+    return await this.#client.dataStore.get(key as any, this.id)
   }
 
   /**
