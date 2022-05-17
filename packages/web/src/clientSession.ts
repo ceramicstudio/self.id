@@ -3,7 +3,7 @@ import { Core } from '@self.id/core'
 import type { ModelTypeAliases } from '@glazed/types'
 import type { CoreModelTypes, CoreParams } from '@self.id/core'
 import { DID } from 'dids'
-import { DIDSession } from 'did-session'
+import { DIDSession } from '@glazed/did-session'
 
 /**
  * Extends {@linkcode core.Core}
@@ -23,7 +23,7 @@ export class WebClientSession<
   }
 
   async authenticate(authProvider: EthereumAuthProvider, attachToCeramic = true): Promise<DID> {
-    this.#session = DIDSession.create({ authProvider })
+    this.#session = new DIDSession({ authProvider })
     const did = await this.#session.authorize()
     if (attachToCeramic) {
       this.ceramic.did = did
