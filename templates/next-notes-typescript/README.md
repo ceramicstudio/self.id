@@ -27,9 +27,9 @@ yarn install
 This application uses a custom [data model](https://developers.ceramic.network/tools/glaze/datamodel/) created by the [`create-model` script](./scripts/create-model.mjs). This model needs to be published to the Ceramic node before running the app.
 
 ```sh
-npm run publish-model
+npm run deploy-model
 # or
-yarn run publish-model
+yarn run deploy-model
 ```
 
 ### 4. Start the development server
