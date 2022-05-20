@@ -43,7 +43,7 @@
     "@ceramicnetwork/http-client": "^2.0.0",
     "@ceramicnetwork/stream-caip10-link": "^2.0.0",
     "@glazed/datamodel": "^0.3.0",
-    "@glazed/did-datastore": "^0.3.0",
+    "@glazed/did-datastore": "^0.3.1",
     "@glazed/tile-loader": "^0.2.0",
     "caip": "^1.0.0",
     "did-resolver": "^3.2.0",
