@@ -6,17 +6,19 @@ import type { CoreModelTypes } from '@self.id/core'
 import type { DID } from 'dids'
 
 import { WebClient } from './client.js'
+import { WebClientSession } from './clientSession.js'
 import type { WebClientParams } from './client.js'
 
 export type AuthenticateParams<ModelTypes extends ModelTypeAliases = CoreModelTypes> =
   WebClientParams<ModelTypes> & {
     /** Authentication provider. */
     authProvider: EthereumAuthProvider
+    session?: boolean
   }
 
 export type SelfIDParams<ModelTypes extends ModelTypeAliases = CoreModelTypes> = {
   /** {@linkcode WebClient} instance to use. It must have an authenticated DID attached to it. */
-  client: WebClient<ModelTypes>
+  client: WebClient<ModelTypes> | WebClientSession<ModelTypes>
 }
 
 /**
@@ -37,13 +39,13 @@ export class SelfID<
   static async authenticate<ModelTypes extends ModelTypeAliases = CoreModelTypes>(
     params: AuthenticateParams<ModelTypes>
   ): Promise<SelfID<ModelTypes>> {
-    const { authProvider, ...clientParams } = params
-    const client = new WebClient(clientParams)
+    const { authProvider, session, ...clientParams } = params
+    const client = session ? new WebClientSession(clientParams) : new WebClient(clientParams)
     await client.authenticate(authProvider, true)
     return new SelfID({ client })
   }
 
-  #client: WebClient<ModelTypes>
+  #client: WebClient<ModelTypes> | WebClientSession<ModelTypes>
 
   constructor(params: SelfIDParams<ModelTypes>) {
     if (!params.client.ceramic.did?.authenticated) {
@@ -54,8 +56,7 @@ export class SelfID<
     this.#client = params.client
   }
 
-  /** WebClient instance used internally. */
-  get client(): WebClient<ModelTypes> {
+  get client(): WebClient<ModelTypes> | WebClientSession<ModelTypes> {
     return this.#client
   }
 
@@ -70,7 +71,7 @@ export class SelfID<
 
   /** DID string associated to the SelfID instance. */
   get id(): string {
-    return this.did.id
+    return this.did.hasParent ? this.did.parent : this.did.id
   }
 
   // Definitions interactions
@@ -79,7 +80,7 @@ export class SelfID<
   async get<Key extends Alias, ContentType = DefinitionContentType<ModelTypes, Key>>(
     key: Key
   ): Promise<ContentType | null> {
-    return await this.#client.dataStore.get(key as any, this.did.id)
+    return await this.#client.dataStore.get(key as any, this.id)
   }
 
   /**
