@@ -26,12 +26,10 @@ export class ReactClient<
   // @ts-ignore initialization in parent class
   _dataStore: DIDDataStore<ModelTypes>
   #params: WebClientParams<ModelTypes>
-  #session: boolean
 
-  constructor(params: WebClientParams<ModelTypes>, session = false) {
+  constructor(params: WebClientParams<ModelTypes>) {
     super(params)
     this.#params = params
-    this.#session = session
   }
 
   /**
@@ -43,7 +41,6 @@ export class ReactClient<
     const selfID = await SelfID.authenticate<ModelTypes>({
       ...this.#params,
       authProvider,
-      session: this.#session,
     })
     // We need to attach the authenticated DID to the client instance to ensure streams can be updated
     this.ceramic.did = selfID.did

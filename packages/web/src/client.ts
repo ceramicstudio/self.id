@@ -14,6 +14,7 @@ export type WebClientParams<ModelTypes extends ModelTypeAliases = CoreModelTypes
   CoreParams<ModelTypes> & {
     /** Ceramic network used for authentication. */
     connectNetwork?: ConnectNetwork
+    session?: boolean
   }
 
 /**

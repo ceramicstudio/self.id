@@ -43,7 +43,7 @@ export function Provider<ModelTypes extends ModelTypeAliases = CoreModelTypes>(
   const reactClient =
     client instanceof ReactClient
       ? client
-      : new ReactClient(client ?? DEFAULT_CLIENT_CONFIG, session)
+      : new ReactClient(Object.assign(client ?? DEFAULT_CLIENT_CONFIG, { session }))
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: queryOptions ? { ...DEFAULT_QUERY_OPTIONS, ...queryOptions } : DEFAULT_QUERY_OPTIONS,
