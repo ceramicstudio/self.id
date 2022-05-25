@@ -13,7 +13,6 @@ export type AuthenticateParams<ModelTypes extends ModelTypeAliases = CoreModelTy
   WebClientParams<ModelTypes> & {
     /** Authentication provider. */
     authProvider: EthereumAuthProvider
-    session?: boolean
   }
 
 export type SelfIDParams<ModelTypes extends ModelTypeAliases = CoreModelTypes> = {
