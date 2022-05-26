@@ -1,6 +1,6 @@
 {
   "name": "@self.id/web",
-  "version": "0.4.0",
+  "version": "0.4.2",
   "author": "3Box Labs",
   "license": "(Apache-2.0 OR MIT)",
   "homepage": "https://github.com/ceramicstudio/self.id#readme",
@@ -40,7 +40,7 @@
   "dependencies": {
     "@3id/connect": "^0.4.1",
     "@glazed/did-session": "^0.0.1",
-    "@self.id/core": "^0.4.0",
+    "@self.id/core": "^0.4.1",
     "dids": "^3.1.0"
   },
   "devDependencies": {
