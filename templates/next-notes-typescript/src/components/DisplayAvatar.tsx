@@ -1,5 +1,5 @@
-import { AvatarPlaceholder } from '@self.id/framework'
 import { Avatar, Box, Spinner, Text } from 'grommet'
+import AvatarPlaceholder from './AvatarPlaceholder'
 
 type Props = {
   did?: string
