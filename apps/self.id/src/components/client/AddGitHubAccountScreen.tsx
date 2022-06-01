@@ -33,7 +33,7 @@ function AddGitHubAccount({ selfID }: Props) {
     identityLink.requestGitHub(selfID.id, username).then(
       (challenge) => {
         setChallenge(challenge)
-        if (copy(selfID.id)) {
+        if (copy(challenge)) {
           toast.success('Copied to clipboard!', { id: toastId })
         } else {
           toast.error('Failed to copy to clipboard', { id: toastId })
