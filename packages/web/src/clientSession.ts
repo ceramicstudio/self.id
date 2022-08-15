@@ -3,7 +3,7 @@ import { Core } from '@self.id/core'
 import type { ModelTypeAliases } from '@glazed/types'
 import type { CoreModelTypes } from '@self.id/core'
 import { DID } from 'dids'
-import { DIDSession } from '@glazed/did-session'
+import { DIDSession } from 'did-session'
 
 /**
  * Extends {@linkcode core.Core}
@@ -18,12 +18,16 @@ export class WebClientSession<
 > extends Core<ModelTypes> {
   #session?: DIDSession
 
-  async authenticate(authProvider: EthereumAuthProvider, attachToCeramic = true): Promise<DID> {
-    this.#session = new DIDSession({ authProvider })
-    const did = await this.#session.authorize()
+  async authenticate(authProvider: EthereumAuthProvider, attachToCeramic = true, sessionStr?: string): Promise<DID> {
+    this.#session = sessionStr ? await DIDSession.fromSession(sessionStr) : await DIDSession.authorize(authProvider)
+    const did = await this.#session.did
     if (attachToCeramic) {
       this.ceramic.did = did
     }
     return did
+  }
+
+  get session(): DIDSession | undefined {
+    return this.#session
   }
 }

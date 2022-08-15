@@ -13,6 +13,7 @@ export type AuthenticateParams<ModelTypes extends ModelTypeAliases = CoreModelTy
   WebClientParams<ModelTypes> & {
     /** Authentication provider. */
     authProvider: EthereumAuthProvider
+    sessionStr?: string
   }
 
 export type SelfIDParams<ModelTypes extends ModelTypeAliases = CoreModelTypes> = {
@@ -40,7 +41,7 @@ export class SelfID<
   ): Promise<SelfID<ModelTypes>> {
     const { authProvider, session, ...clientParams } = params
     const client = session ? new WebClientSession(clientParams) : new WebClient(clientParams)
-    await client.authenticate(authProvider, true)
+    await client.authenticate(authProvider, true, clientParams.sessionStr)
     return new SelfID({ client })
   }
 
