@@ -2493,14 +2493,6 @@
     "@glazed/datamodel" "^0.3.1"
     "@glazed/tile-loader" "^0.2.1"
 
-"@glazed/did-session@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@glazed/did-session/-/did-session-0.0.1.tgz#cc4768e8e80b41deb62fe784ccdc16cfc3610593"
-  integrity sha512-tI4yZYcUiwVIdFXYLM16B5koZ+Z6kxvDg56A4Kmfr3jLBtvDK7dKYw7ntY80ecKDTD9qoNgQjee7P0TNhQx4Vg==
-  dependencies:
-    "@ceramicnetwork/blockchain-utils-linking" "^2.0.0"
-    "@ceramicnetwork/stream-tile" "^2.0.0"
-
 "@glazed/tile-loader@^0.2.0", "@glazed/tile-loader@^0.2.1":
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/@glazed/tile-loader/-/tile-loader-0.2.1.tgz#8f1a27b72953068718771171bd84a6657b612833"
@@ -3961,37 +3953,37 @@
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.1.4.tgz#0c8b74c50f29ee44f423f7416829c0bf8bb5eb27"
   integrity sha512-LwzQKA4vzIct1zNZzBmRKI9QuNpLgTQMEjsQLf3BXuGYb3QPTP4Yjf6mkdX+X1mYttZ808QpOwAzZjv28kq7DA==
 
-"@self.id/framework@^0.3.0":
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/@self.id/framework/-/framework-0.3.2.tgz#067da3ddeffbda691aa7015ed719ff303c99ea77"
-  integrity sha512-zuA/NTgTtaCoAnMZ/p0MVzjwhNQUR2VPqZjrGt0BGnaluu1pa2eVDLZJZBqyDyS9/KvQ1hOXFhpXiGuVpJsLNA==
+"@self.id/framework@0.3.3-alpha.0":
+  version "0.3.3-alpha.0"
+  resolved "https://registry.yarnpkg.com/@self.id/framework/-/framework-0.3.3-alpha.0.tgz#58934354cf4b25b2fb5153eaae23464735f5be07"
+  integrity sha512-QpeQiTPsrBu63vo4vbryZaTecVy1rl1sbopikF+ImjUZdL6i6H4Y7HoGqO/9n8rWWHsuekjIxu7LLkWwpwieoA==
   dependencies:
     "@datamodels/identity-accounts-web" "^0.2.0"
     "@datamodels/identity-profile-basic" "^0.2.0"
     "@self.id/core" "^0.4.1"
     "@self.id/image-utils" "^0.3.0"
-    "@self.id/react" "^0.3.2"
-    "@self.id/web" "^0.4.2"
+    "@self.id/react" "0.3.3-alpha.0"
+    "@self.id/web" "0.4.3-alpha.0"
 
-"@self.id/react@^0.3.2":
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/@self.id/react/-/react-0.3.2.tgz#d92469b1eefb2d0b6a6f627c33172327fce34574"
-  integrity sha512-N0UP3p834NLc1jN2QilCAd3sw0Fl74gDI+7at/kDCqOfar4tLxE+dNgdIJG7gR6P3JSUYE/yJaiF1ZdHjFUV7A==
+"@self.id/react@0.3.3-alpha.0":
+  version "0.3.3-alpha.0"
+  resolved "https://registry.yarnpkg.com/@self.id/react/-/react-0.3.3-alpha.0.tgz#f04c531434efcd045efb57ba6f102ffd7df2b815"
+  integrity sha512-M2TOtKAmHkqlXTXVwQTTHb7DqSXrQGaxIKidIyDrf10iRh3JYMnckw/qbP4cEhaaGFxvK4a0l1T8lAcD/Ihb5g==
   dependencies:
     "@self.id/core" "^0.4.1"
-    "@self.id/web" "^0.4.2"
+    "@self.id/web" "0.4.3-alpha.0"
     jotai "^1.6.2"
     react-query "^3.35.0"
 
-"@self.id/web@^0.4.2":
-  version "0.4.2"
-  resolved "https://registry.yarnpkg.com/@self.id/web/-/web-0.4.2.tgz#4b63f5014a77c97a7cb1653429aebedd15cca77c"
-  integrity sha512-S/Mdsd4b0rJREE0rK2dc9qrq1YGtPO5gzrwlPjluYLfM2U67JWV4RZHY8wB0Szuzl5RHS5NDmcdQfzoDFwF3Ag==
+"@self.id/web@0.4.3-alpha.0":
+  version "0.4.3-alpha.0"
+  resolved "https://registry.yarnpkg.com/@self.id/web/-/web-0.4.3-alpha.0.tgz#91b099c7d424af4b68e6bb0f610fc5ba749e7b60"
+  integrity sha512-jh+lnZDWyQR8VFT6GfaTrz/q40/ZDYVSbls8cSWm4OlQBGLCEkU6s6TDQ9a6YdHM9cphEVsfvaeLsPbSpEagHw==
   dependencies:
     "@3id/connect" "^0.4.1"
-    "@glazed/did-session" "^0.0.1"
     "@self.id/core" "^0.4.1"
-    dids "^3.1.0"
+    did-session "^0.1.1"
+    dids "^3.2.0"
 
 "@sideway/address@^4.1.3":
   version "4.1.4"
