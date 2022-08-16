@@ -49,7 +49,10 @@ export function useViewerConnection<ModelTypes extends ModelTypeAliases = CoreMo
   const setViewerID = useSetAtom(viewerIDAtom, stateScope)
 
   const connect = useCallback(
-    async (provider: EthereumAuthProvider, sessionStr?: string): Promise<SelfID<ModelTypes> | null> => {
+    async (
+      provider: EthereumAuthProvider,
+      sessionStr?: string
+    ): Promise<SelfID<ModelTypes> | null> => {
       if (connection.status === 'connecting' && connection.provider === provider) {
         return (await connection.promise) as SelfID<ModelTypes> | null
       }

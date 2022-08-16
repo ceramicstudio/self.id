@@ -18,9 +18,15 @@ export class WebClientSession<
 > extends Core<ModelTypes> {
   #session?: DIDSession
 
-  async authenticate(authProvider: EthereumAuthProvider, attachToCeramic = true, sessionStr?: string): Promise<DID> {
-    this.#session = sessionStr ? await DIDSession.fromSession(sessionStr) : await DIDSession.authorize(authProvider)
-    const did = await this.#session.did
+  async authenticate(
+    authProvider: EthereumAuthProvider,
+    attachToCeramic = true,
+    sessionStr?: string
+  ): Promise<DID> {
+    this.#session = sessionStr
+      ? await DIDSession.fromSession(sessionStr)
+      : await DIDSession.authorize(authProvider)
+    const did = this.#session.did
     if (attachToCeramic) {
       this.ceramic.did = did
     }

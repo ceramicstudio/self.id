@@ -36,12 +36,15 @@ export class ReactClient<
    * Create a {@linkcode web.SelfID SelfID} instance using the given `authProvider` and attach the
    * associated DID instance to the internal Ceramic client instance.
    */
-  async authenticate(authProvider: EthereumAuthProvider, sessionStr?: string): Promise<SelfID<ModelTypes>> {
+  async authenticate(
+    authProvider: EthereumAuthProvider,
+    sessionStr?: string
+  ): Promise<SelfID<ModelTypes>> {
     const { SelfID } = await import('@self.id/web')
     const selfID = await SelfID.authenticate<ModelTypes>({
       ...this.#params,
       authProvider,
-      sessionStr
+      sessionStr,
     })
     // We need to attach the authenticated DID to the client instance to ensure streams can be updated
     this.ceramic.did = selfID.did
