@@ -14,16 +14,16 @@ describe('Core', () => {
       for (const [alias, url] of Object.entries(CERAMIC_URLS)) {
         const core = new Core({ ceramic: alias })
         // @ts-ignore private property
-        const ceramicURL = core.ceramic._apiUrl as string
-        expect(ceramicURL.startsWith(url)).toBe(true)
+        const ceramicURL = core.ceramic._apiUrl as URL
+        expect(ceramicURL.toString().startsWith(url)).toBe(true)
       }
     })
 
     test('uses provided Ceramic URL if not an alias', () => {
       const core = new Core({ ceramic: 'http://example.com' })
       // @ts-ignore private property
-      const ceramicURL = core.ceramic._apiUrl as string
-      expect(ceramicURL.startsWith('http://example.com')).toBe(true)
+      const ceramicURL = core.ceramic._apiUrl as URL
+      expect(ceramicURL.toString().startsWith('http://example.com')).toBe(true)
     })
 
     test('uses provided data model aliases', () => {
