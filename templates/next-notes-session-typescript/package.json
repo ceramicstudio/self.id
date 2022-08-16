@@ -11,7 +11,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@self.id/framework": "^0.3.0",
+    "@self.id/framework": "0.3.3-alpha.0",
+    "did-session": "^0.1.1",
     "grommet": "^2.22.0",
     "jotai": "^1.6.2",
     "next": "^12.0.4",
