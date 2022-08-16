@@ -25,7 +25,7 @@ export class WebClientSession<
   ): Promise<DID> {
     this.#session = sessionStr
       ? await DIDSession.fromSession(sessionStr)
-      : await DIDSession.authorize(authProvider)
+      : await DIDSession.authorize(authProvider, { resources: [`ceramic://*`]})
     const did = this.#session.did
     if (attachToCeramic) {
       this.ceramic.did = did
