@@ -39,8 +39,8 @@ export class SelfID<
   static async authenticate<ModelTypes extends ModelTypeAliases = CoreModelTypes>(
     params: AuthenticateParams<ModelTypes>
   ): Promise<SelfID<ModelTypes>> {
-    const { authProvider, session, ...clientParams } = params
-    const client = session ? new WebClientSession(clientParams) : new WebClient(clientParams)
+    const { authProvider, threeidConnect, ...clientParams } = params
+    const client = threeidConnect ? new WebClient(clientParams) : new WebClientSession(clientParams)
     await client.authenticate(authProvider, true, clientParams.sessionStr)
     return new SelfID({ client })
   }

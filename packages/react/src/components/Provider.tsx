@@ -30,20 +30,20 @@ export type ProviderProps<ModelTypes extends ModelTypeAliases = CoreModelTypes> 
   queryOptions?: QueryObserverOptions
   /** {@linkcode RequestState} emitted by a {@linkcode RequestClient} instance. */
   state?: RequestState
-  /** Enable did-session support, to use Sign-In with Ethereum and did:pkh, defaults to false  */
-  session?: boolean
+  /** Enable 3id-connect support, defaults to false  */
+  threeidConnect?: boolean
 }
 
 /** Top-level provider component for using Self.ID's React APIs. */
 export function Provider<ModelTypes extends ModelTypeAliases = CoreModelTypes>(
   props: ProviderProps<ModelTypes>
 ): JSX.Element {
-  const { children, client, queryOptions, state, session } = props
+  const { children, client, queryOptions, state, threeidConnect } = props
 
   const reactClient =
     client instanceof ReactClient
       ? client
-      : new ReactClient(Object.assign(client ?? DEFAULT_CLIENT_CONFIG, { session }))
+      : new ReactClient(Object.assign(client ?? DEFAULT_CLIENT_CONFIG, { threeidConnect }))
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: queryOptions ? { ...DEFAULT_QUERY_OPTIONS, ...queryOptions } : DEFAULT_QUERY_OPTIONS,
