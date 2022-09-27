@@ -14,7 +14,7 @@ export default function App({ Component, pageProps }: AppProps) {
   const { state, ...props } = pageProps
 
   return (
-    <SelfIDProvider client={{ ceramic: CERAMIC_NETWORK, aliases }} state={state} session={true}>
+    <SelfIDProvider client={{ ceramic: CERAMIC_NETWORK, aliases }} state={state}>
       <JotaiProvider>
         <Layout>
           <Component {...props} />

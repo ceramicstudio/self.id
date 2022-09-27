@@ -41,7 +41,7 @@ export function useViewerID<
  */
 export function useViewerConnection<ModelTypes extends ModelTypeAliases = CoreModelTypes>(): [
   ViewerConnectionState<ModelTypes>,
-  (provider: EthereumAuthProvider) => Promise<SelfID<ModelTypes> | null>,
+  (provider: EthereumAuthProvider, sessionStr?: string) => Promise<SelfID<ModelTypes> | null>,
   () => void
 ] {
   const client = useClient<ModelTypes>()

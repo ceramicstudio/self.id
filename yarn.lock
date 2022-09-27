@@ -3953,32 +3953,32 @@
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.1.4.tgz#0c8b74c50f29ee44f423f7416829c0bf8bb5eb27"
   integrity sha512-LwzQKA4vzIct1zNZzBmRKI9QuNpLgTQMEjsQLf3BXuGYb3QPTP4Yjf6mkdX+X1mYttZ808QpOwAzZjv28kq7DA==
 
-"@self.id/framework@0.3.3-alpha.0":
-  version "0.3.3-alpha.0"
-  resolved "https://registry.yarnpkg.com/@self.id/framework/-/framework-0.3.3-alpha.0.tgz#58934354cf4b25b2fb5153eaae23464735f5be07"
-  integrity sha512-QpeQiTPsrBu63vo4vbryZaTecVy1rl1sbopikF+ImjUZdL6i6H4Y7HoGqO/9n8rWWHsuekjIxu7LLkWwpwieoA==
+"@self.id/framework@^0.3.0":
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/@self.id/framework/-/framework-0.3.3.tgz#744545e5d3786c38bddd34784c7ed20e3fe76540"
+  integrity sha512-+8Sva81LZS4ueDMkktkeISRE/M2zCfwzu8cglsZgS4nkTx26Sv7AUWeQiTQpt1+7/NWYahz3QfPIFgf/j30ygA==
   dependencies:
     "@datamodels/identity-accounts-web" "^0.2.0"
     "@datamodels/identity-profile-basic" "^0.2.0"
     "@self.id/core" "^0.4.1"
     "@self.id/image-utils" "^0.3.0"
-    "@self.id/react" "0.3.3-alpha.0"
-    "@self.id/web" "0.4.3-alpha.0"
+    "@self.id/react" "^0.3.3"
+    "@self.id/web" "^0.4.3"
 
-"@self.id/react@0.3.3-alpha.0":
-  version "0.3.3-alpha.0"
-  resolved "https://registry.yarnpkg.com/@self.id/react/-/react-0.3.3-alpha.0.tgz#f04c531434efcd045efb57ba6f102ffd7df2b815"
-  integrity sha512-M2TOtKAmHkqlXTXVwQTTHb7DqSXrQGaxIKidIyDrf10iRh3JYMnckw/qbP4cEhaaGFxvK4a0l1T8lAcD/Ihb5g==
+"@self.id/react@^0.3.3":
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/@self.id/react/-/react-0.3.3.tgz#5ddc0f2a91846565d3a6f2cdf8d8192edf8ddd2f"
+  integrity sha512-1pNe8envqng13V2PXwYDHmqzYg8vwx+O8w/frEnnKy32XEW4nZvJUr3w1/XU9U3qzyo3ZcokCwS1WwU1n/6Gpg==
   dependencies:
     "@self.id/core" "^0.4.1"
-    "@self.id/web" "0.4.3-alpha.0"
+    "@self.id/web" "^0.4.3"
     jotai "^1.6.2"
     react-query "^3.35.0"
 
-"@self.id/web@0.4.3-alpha.0":
-  version "0.4.3-alpha.0"
-  resolved "https://registry.yarnpkg.com/@self.id/web/-/web-0.4.3-alpha.0.tgz#91b099c7d424af4b68e6bb0f610fc5ba749e7b60"
-  integrity sha512-jh+lnZDWyQR8VFT6GfaTrz/q40/ZDYVSbls8cSWm4OlQBGLCEkU6s6TDQ9a6YdHM9cphEVsfvaeLsPbSpEagHw==
+"@self.id/web@^0.4.3":
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/@self.id/web/-/web-0.4.3.tgz#108ba028ef52ff1b84a73260844ca5908943567d"
+  integrity sha512-Qfh26Kvt5Ew7svD6Nl5nQWzAWPvCH2PXdGcYy9BcS45Tz57wB/dMBT417gD6mye2bLRBe2s3zZ5ETRVW/3XtZw==
   dependencies:
     "@3id/connect" "^0.4.1"
     "@self.id/core" "^0.4.1"

@@ -51,7 +51,7 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
   const { state, ...props } = pageProps
 
   return (
-    <Provider client={{ ceramic: CERAMIC_URL, connectNetwork: CONNECT_NETWORK }} state={state}>
+    <Provider client={{ ceramic: CERAMIC_URL, connectNetwork: CONNECT_NETWORK }} state={state} threeidConnect={true}>
       <Grommet full theme={theme}>
         <GlobalStyle />
         <Head>
